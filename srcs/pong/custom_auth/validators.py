@@ -1,3 +1,9 @@
+# ================================
+# akolgano
+# ================================
+
+# My custom validation for password
+
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 

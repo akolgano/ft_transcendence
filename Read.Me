@@ -1,4 +1,12 @@
+# ================================
+# akolgano
+# ================================
+
+# How to test and etc
+
+
 docker-compose exec django python manage.py inspectdb
+docker-compose exec django python manage.py test pong.tests.tests
 
 
 curl -X POST http://127.0.0.1:8000/signup \
@@ -23,3 +31,11 @@ GET http://127.0.0.1:8000/test_token Content-Type: application/json Authorizatio
 
 curl -H "Authorization: Token 5644fccd75046dd83d01116deffdf2c4370f7aac" -H "Content-Type: application/json" http://127.0.0.1:8000/test_token
 
+
+
+-----------------------------------------------------------------
+if any changes with DB: docker-compose exec django python manage.py migrate
+
+
+django    | You have 22 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, authtoken, contenttypes, sessions.
+django    | Run 'python manage.py migrate' to apply them.

@@ -1,3 +1,8 @@
+# ================================
+# akolgano
+# ================================
+
+# Use local (debug=True) or prod settings
 import os
 
 def get_secret(secret_id, backup=None):

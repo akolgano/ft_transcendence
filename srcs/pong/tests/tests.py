@@ -1,3 +1,9 @@
+# ================================
+# akolgano
+# ================================
+
+# Unit tests: docker-compose exec django python manage.py test pong.tests.tests
+
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -50,36 +56,6 @@ class LoginApiTests(APITestCase):
         response = self.client.post(url, data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-
-
-
-
-
-
-"""
-    def test_signup(self):
-        url = reverse('signup')  # URL name for the signup endpoint
-        data = { 
-            "username": "anna", 
-            "password": "Pass1234!", 
-            "email": "anna@mail.com" 
-        }
-        response = self.client.post(url, data, format='json')
-
-        # Print debug information
-        print('Signup response:', response.data)
-        print('Response status code:', response.status_code)
-
-        # Introduce a delay to allow time for manual inspection
-        time.sleep(60)  # Sleep for 60 seconds
-
-        # Check if the response status code is 201 Created
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-        # Verify user creation in the test database
-        user_exists = User.objects.filter(username='anna').exists()
-        self.assertTrue(user_exists, "User should be created") """
 
 
 class SignupApiTests(APITestCase):

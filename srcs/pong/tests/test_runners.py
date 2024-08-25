@@ -1,4 +1,8 @@
-# pong/test_runners.py
+# ================================
+# akolgano
+# ================================
+
+# My custom unit test runner
 
 from django.test.runner import DiscoverRunner
 import unittest
