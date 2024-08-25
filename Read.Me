@@ -1,0 +1,6 @@
+docker-compose exec django python manage.py inspectdb
+
+
+curl -X POST http://127.0.0.1:8000/signup \
+-H "Content-Type: application/json" \
+-d '{"username": "anna", "password": "Pass1234!", "email": "anna@mail.com"}'

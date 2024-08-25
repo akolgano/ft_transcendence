@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      #- ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+    ports:
+      - "5432:5432"
+    environment:
+           POSTGRES_HOST: ${POSTGRES_HOST}
+           POSTGRES_DB: ${POSTGRES_DB}
+           POSTGRES_USER: ${POSTGRES_USER}
+           POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  django:
+    container_name: django
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    #command: python manage.py runsslserver --certificate /app/ssl/cert.pem --key /app/ssl/key.pem
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    #  - "443:443"
+    depends_on:
+      - postgres
+    environment:
+           POSTGRES_HOST: ${POSTGRES_HOST}
+           POSTGRES_DB: ${POSTGRES_DB}
+           POSTGRES_USER: ${POSTGRES_USER}
+           POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+           PIPELINE: local
+
+volumes:
+  postgres_data:
+
+networks:
+  default:
+    driver: bridge
