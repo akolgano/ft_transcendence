@@ -2,34 +2,48 @@
 // create document click that watches the nav links only
 document.addEventListener("click", (e) => {
 	// const { target } = e;
-	// const target = e.target;
+	const target = e.target;
 	// if (!target.matches("nav a")) {
 	// 	return;
 	// }
+	if (!target.classList.contains("spa"))
+		return;
 	e.preventDefault();
 	urlRoute();
 });
+
+console.log("ROUTER");
 
 const urlRoutes = {
 	404: {
 		template: "../templates/404.html",
 		title: "404",
 		description: "Page not found",
+		scripts: [],
 	},
 	"/": {
 		template: "../templates/index.html",
 		title: "Home",
 		description: "Home page",
+		scripts: [],
 	},
 	"/friends": {
 		template: "../templates/friends.html",
 		title: "About Us",
-		description: "This is the about page",
+		description: "All your friends",
+		scripts: [],
 	},
 	"/history": {
 		template: "../templates/history.html",
-		title: "Contact Us",
-		description: "This is the contact page",
+		title: "History",
+		description: "Game history",
+		scripts: [],
+	},
+	"/signup": {
+		template: "../templates/signup.html",
+		title: "Sign up",
+		description: "Sign up to play pong",
+		scripts: ["../js/signup.js"]
 	},
 };
 
@@ -55,12 +69,30 @@ const urlLocationHandler = async () => {
 	const html = await fetch(route.template).then((response) => response.text());
 	// set the content of the content div to the html
 	document.getElementById("content").innerHTML = html;
-	// set the title of the document to the title of the route
+
+	// Load scripts
+	loadScripts(route.scripts || []);
+
+	// metadata
 	document.title = route.title;
-	// set the description of the document to the description of the route
 	document
 		.querySelector('meta[name="description"]')
 		.setAttribute("content", route.description);
+};
+
+// Function to load and execute scripts
+const loadScripts = (scripts) => {
+    // Remove old scripts
+    const existingScripts = document.querySelectorAll("script[data-page-script]");
+    existingScripts.forEach(script => script.remove());
+
+    // Add new scripts
+    scripts.forEach(scriptSrc => {
+        const script = document.createElement("script");
+        script.src = scriptSrc;
+        script.dataset.pageScript = ""; // Custom attribute to identify scripts
+        document.body.appendChild(script);
+    });
 };
 
 // add an event listener to the window that watches for url changes
