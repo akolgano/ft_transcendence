@@ -17,7 +17,13 @@ services:
   django:
     container_name: django
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: >
+      sh -c "
+        python manage.py migrate &&
+        python manage.py createsuperuser --noinput ||
+        echo 'Superuser already exists' &&
+        python manage.py runserver 0.0.0.0:8000"
+
     #command: python manage.py runsslserver --certificate /app/ssl/cert.pem --key /app/ssl/key.pem
     volumes:
       - .:/app
@@ -32,6 +38,9 @@ services:
            POSTGRES_USER: ${POSTGRES_USER}
            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
            PIPELINE: local
+           DJANGO_SUPERUSER_USERNAME: admin
+           DJANGO_SUPERUSER_PASSWORD: admin
+           DJANGO_SUPERUSER_EMAIL: barbayjuliette95@gmail.com
 
 volumes:
   postgres_data:
