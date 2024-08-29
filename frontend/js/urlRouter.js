@@ -1,11 +1,7 @@
 
 // create document click that watches the nav links only
 document.addEventListener("click", (e) => {
-	// const { target } = e;
 	const target = e.target;
-	// if (!target.matches("nav a")) {
-	// 	return;
-	// }
 	if (!target.classList.contains("spa"))
 		return;
 	e.preventDefault();
@@ -82,17 +78,17 @@ const urlLocationHandler = async () => {
 
 // Function to load and execute scripts
 const loadScripts = (scripts) => {
-    // Remove old scripts
-    const existingScripts = document.querySelectorAll("script[data-page-script]");
-    existingScripts.forEach(script => script.remove());
+	// Remove old scripts
+	const existingScripts = document.querySelectorAll("script[data-page-script]");
+	existingScripts.forEach(script => script.remove());
 
-    // Add new scripts
-    scripts.forEach(scriptSrc => {
-        const script = document.createElement("script");
-        script.src = scriptSrc;
-        script.dataset.pageScript = ""; // Custom attribute to identify scripts
-        document.body.appendChild(script);
-    });
+	// Add new scripts
+	scripts.forEach(scriptSrc => {
+		const script = document.createElement("script");
+		script.src = scriptSrc;
+		script.dataset.pageScript = ""; // Custom attribute to identify scripts
+		document.body.appendChild(script);
+	});
 };
 
 // add an event listener to the window that watches for url changes
