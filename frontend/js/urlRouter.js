@@ -1,5 +1,6 @@
+// To make it SPA
+// ADD your new page in the urlRoutes, and and the spa class to link.
 
-// create document click that watches the nav links only
 document.addEventListener("click", (e) => {
 	const target = e.target;
 	if (!target.classList.contains("spa"))
@@ -51,7 +52,7 @@ const urlRoutes = {
 
 // create a function that watches the url and calls the urlLocationHandler
 const urlRoute = (event) => {
-	event = event || window.event; // get window.event if event argument not provided
+	event = event || window.event;
 	event.preventDefault();
 	window.history.pushState({}, "", event.target.href);
 	urlLocationHandler();
