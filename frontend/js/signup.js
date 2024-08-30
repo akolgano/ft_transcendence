@@ -8,17 +8,26 @@ signupForm.addEventListener("submit", async (e) => {
 	const formData = new FormData(signupForm);
 
 	try {
+		console.log(formData);
+		let errorMessage = "";
 		const response = await fetch("http://127.0.0.1:8000/signup", {
 			method: 'POST',
 			body: formData,
 		})
-
 		const data = await response.json();
-		console.log("RESPONSE: " + response);
 		if (!response.ok) {
-			// console.log(`Error ${response.status}: ${response.statusText}`);
-			console.log("Error response body:", data);
-			throw new Error(data.error || 'An error occurred');
+			console.log("Error response body error:", data.error);
+
+			if (Array.isArray(data.error)) {
+				data.error.forEach((message, index) => {
+					errorMessage += "\n • ";
+					errorMessage += message;
+				});
+			}
+			else
+				errorMessage = data.error;
+
+			throw new Error(errorMessage || 'An error occurred');
 		}
 		console.log("Data: " + data);
 		if (data.token)
@@ -40,6 +49,6 @@ signupForm.addEventListener("submit", async (e) => {
 			alert("Sign up failed: " + data.message);
 		}
 	} catch (error) {
-		alert("Sign up failed: " + error);
+		alert("Sign up failed: " + error.message);
 	}
 })
