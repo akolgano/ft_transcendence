@@ -1,15 +1,20 @@
-<h1>Log in</h1>
-<form id="signupForm">
-
-	<div>
-		<label for="username">Username: </label>
-		<input type="text" id="username" name="username" autocomplete="on" required>
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-md-6 col-lg-4 border rounded bg-light">
+			<h1 class="text-center mt-3">Log in</h1>
+			<form id="signupForm" class="row g-3">
+				<div class="mb-3">
+					<label for="username" class="form-label">Username: </label>
+					<input type="text" id="username" name="username" class="form-control" autocomplete="on" required>
+				</div>
+				<div class="mb-3">
+					<label for="password" class="form-label">Password:</label>
+					<input type="password" id="password" name="password" class="form-control" autocomplete="on" required>
+				</div>
+				<div class="mb-3 text-center">
+					<button type="submit" class="btn btn-success">Log in</button>
+				</div>
+			</form>
+		</div>
 	</div>
-
-	<div>
-		<label for="password">Password:</label>
-		<input type="password" id="password" name="password" autocomplete="on" required>
-	</div>
-
-	<button type="submit">Log in</button>
-</form>
+</div>
