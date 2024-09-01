@@ -1,6 +1,26 @@
 // To make it SPA
 // ADD your new page in the urlRoutes, and and the spa class to link.
 
+const checkIfLoggedIn = async () => {
+	if (localStorage.getItem("token") == null)
+	{
+		console.log("NOT LOGGED IN");
+		console.log("Token: " + localStorage.token)
+		// Add login form
+		const response = await fetch("../templates/login.html")
+		let html = await response.text()
+		document.getElementById("content").innerHTML = html;
+		// loadScripts(["../js/login.js"])
+
+		// Change navbar
+		html = '<a class="btn btn-outline-secondary spa" type="button" href="/signup">Sign up</a><a class="btn btn-outline-secondary spa mx-2" type="button" href="/login">Log in</a>'
+		document.getElementById("nav-log").innerHTML = html;
+		console.log("in router");
+	}
+}
+
+checkIfLoggedIn()
+
 document.addEventListener("click", (e) => {
 	const target = e.target;
 	if (!target.classList.contains("spa"))
@@ -28,7 +48,7 @@ const urlRoutes = {
 		template: "../templates/friends.html",
 		title: "About Us",
 		description: "All your friends",
-		scripts: [],
+		scripts: ["../js/friends.js"],
 	},
 	"/history": {
 		template: "../templates/history.html",
