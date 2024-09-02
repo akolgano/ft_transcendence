@@ -20,6 +20,14 @@
 
 // bindSpaLinks();
 
+// function spaHandler(e) {
+// 	const target = e.target;
+// 	if (!target.classList.contains("spa"))
+// 		return;
+// 	e.preventDefault();
+// 	urlRoute(e);
+// }
+
 document.addEventListener("click", (e) => {
 	const target = e.target;
 	if (!target.classList.contains("spa"))
@@ -42,21 +50,21 @@ const urlRoutes = {
 		template: "../templates/index.html",
 		title: "Home",
 		description: "Home page",
-		scripts: ["../js/logout.js"],
+		scripts: [],
 		auth: true,
 	},
 	"/friends": {
 		template: "../templates/friends.html",
 		title: "About Us",
 		description: "All your friends",
-		scripts: ["../js/friends.js", "../js/logout.js"],
+		scripts: ["../js/friends.js"],
 		auth: true,
 	},
 	"/history": {
 		template: "../templates/history.html",
 		title: "History",
 		description: "Game history",
-		scripts: ["../js/logout.js"],
+		scripts: [],
 		auth: false,
 	},
 	"/signup": {
@@ -93,25 +101,14 @@ const urlLocationHandler = async () => {
 	if (location.length == 0)
 		location = "/";
 
-	const navbarElem = document.getElementById("nav-log")
-
 	// Not logged in and route needs authentication
 	if (localStorage.getItem("token") == null) // User is logged out
 	{
-		const nav = '<a class="btn btn-outline-secondary spa" type="button" href="/signup">Sign up</a><a class="btn btn-outline-secondary spa mx-2" type="button" href="/login">Log in</a>'
-		navbarElem.innerHTML = nav;
-
 		if (urlRoutes[location].auth == true)
 		{
 			console.log("Needs to be logged in")
 			location = "/login"
 		}
-	}
-	else // User is logged in
-	{
-		//  If nav-log has class logout, then replace the navbar
-		const nav = '<li class="nav-item"><p class="navbar-text m-0 px-4">Welcome, Juliette!</p></li><li class="nav-item dropdown"><a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="./images/profile_pic.jpeg" alt="avatar" class="rounded-circle border-1 avatar"></a><ul class="dropdown-menu dropdown-menu-end"><li><a class="dropdown-item" href="#">Profile</a></li><li><a class="dropdown-item" href="#">Another action</a></li><li><a class="dropdown-item" href="#" id="logout">Logout</a></li></ul>'
-		navbarElem.innerHTML = nav;
 	}
 
 	// Get the route, get the html, add it to the div

@@ -2,15 +2,17 @@
 	console.log("SCRIPT LOG OUT")
 	console.log("Token: " + localStorage.token)
 
-	if (localStorage.getItem("token"))
-	{
-		const logout = document.getElementById("logout");
+	const logout = document.getElementById("logout");
 
-		logout.addEventListener("click", (e) => {
-			e.preventDefault();
-			alert("Logout successful!");
-			localStorage.clear();
-			urlRoute({ target: { href: '/' }, preventDefault: () => {} });
-		})
-	}
+	logout.addEventListener("click", (e) => {
+		e.preventDefault();
+		alert("Logout successful!");
+		localStorage.clear();
+		const nav = '<a class="btn btn-outline-secondary spa" type="button" href="/signup">Sign up</a><a class="btn btn-outline-secondary spa mx-2" type="button" href="/login">Log in</a>'
+		document.getElementById("nav-log").innerHTML = nav;
+
+		document.querySelector(".logout-script").remove();
+
+		urlRoute({ target: { href: '/' }, preventDefault: () => {} });
+	})
 }
