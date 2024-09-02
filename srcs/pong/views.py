@@ -29,18 +29,18 @@ def signup(request):
 	if serializer.is_valid():
 		password = request.data.get('password')
 		if not password:
-			return Response({"detail": "Password is required."}, status=status.HTTP_400_BAD_REQUEST)
+			return Response({"error": "Password is required."}, status=status.HTTP_400_BAD_REQUEST)
 		try:
 			validate_password(request.data['password'])
 		except ValidationError as e:
-			return Response({"detail": e.messages}, status=status.HTTP_400_BAD_REQUEST)
+			return Response({"error": e.messages}, status=status.HTTP_400_BAD_REQUEST)
 		serializer.save()
 		user = User.objects.get(username=request.data['username'])
 		user.set_password(request.data['password']) #hash pass with this function
 		user.save()
 		token = Token.objects.create(user=user)
 		return Response({'token': token.key, 'user': serializer.data})
-	return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+	return Response({'error': 'Please enter a valid email address'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])

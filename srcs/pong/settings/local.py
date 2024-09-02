@@ -41,6 +41,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'sslserver',
+	'corsheaders',
+]
+CORS_ALLOWED_ORIGINS = [
+"http://localhost:3000"
 ]
 
 MIDDLEWARE = [
@@ -51,6 +55,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'corsheaders.middleware.CorsMiddleware',
+	'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'pong.urls'
@@ -80,11 +86,11 @@ WSGI_APPLICATION = 'pong.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME':     os.getenv("POSTGRES_DB", None),     
-        'USER':     os.getenv("POSTGRES_USER", None),  
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD", None),  
-        "HOST":     os.getenv("POSTGRES_HOST", None),    
-        "PORT":     5432,                           
+        'NAME':     os.getenv("POSTGRES_DB", None),
+        'USER':     os.getenv("POSTGRES_USER", None),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", None),
+        "HOST":     os.getenv("POSTGRES_HOST", None),
+        "PORT":     5432,
     }
 }
 
@@ -137,7 +143,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
         'OPTIONS': {
-            'min_length': 12,
+            'min_length': 5,
         },
     },
     {
