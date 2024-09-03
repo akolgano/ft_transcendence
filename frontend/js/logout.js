@@ -12,7 +12,6 @@
 		const nav = '<a class="btn btn-outline-secondary spa" type="button" href="/signup">Sign up</a><a class="btn btn-outline-secondary spa mx-2" type="button" href="/login">Log in</a>'
 		const navbar = document.getElementById("nav-log");
 		navbar.innerHTML = nav;
-		document.querySelector(".logout-script").remove();
 
 		//  Add eventListener on navbar
 		links = navbar.querySelectorAll(".spa");
