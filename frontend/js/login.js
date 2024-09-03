@@ -34,8 +34,7 @@
 
 				// Add logout script
 				const script = document.createElement("script");
-				script.classList.add("logout-script");
-				script.src = "../js/logout.js";
+				script.textContent = logoutScript;
 				document.body.appendChild(script);
 
 				//  Add eventListener on navbar
