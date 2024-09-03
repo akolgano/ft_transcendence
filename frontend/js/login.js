@@ -29,15 +29,20 @@
 
 				// Change navbar
 				const nav = '<li class="nav-item"><p class="navbar-text m-0 px-4">Welcome, Juliette!</p></li><li class="nav-item dropdown"><a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="./images/profile_pic.jpeg" alt="avatar" class="rounded-circle border-1 avatar"></a><ul class="dropdown-menu dropdown-menu-end"><li><a class="dropdown-item" href="#">Profile</a></li><li><a class="dropdown-item" href="#">Another action</a></li><li><a class="dropdown-item" href="#" id="logout">Logout</a></li></ul>'
-				document.getElementById("nav-log").innerHTML = nav;
-				// document.getElementById("logout").removeEventListener("click", spaHandler);
+				const navbar = document.getElementById("nav-log");
+				navbar.innerHTML = nav;
 
 				// Add logout script
 				const script = document.createElement("script");
 				script.classList.add("logout-script");
 				script.src = "../js/logout.js";
-
 				document.body.appendChild(script);
+
+				//  Add eventListener on navbar
+				links = navbar.querySelectorAll(".spa");
+				links.forEach( link => {
+					link.addEventListener("click", spaHandler)
+				})
 
 				urlRoute({ target: { href: '/' }, preventDefault: () => {} });
 			}
