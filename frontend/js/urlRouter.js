@@ -1,13 +1,53 @@
 // To make it SPA
 // ADD your new page in the urlRoutes, and and the spa class to link.
 
-document.addEventListener("click", (e) => {
+
+// Make it more efficient by NOT putting the event listener on every click of the document.
+// BUT make sure the content added to the DOM will be inside the class we used for capturing events.
+
+// --> When I add an element to the DOM, I add an eventListener to it
+
+// document.addEventListener("click", (e) => {
+// 	const target = e.target;
+// 	if (!target.classList.contains("spa"))
+// 		return;
+// 	e.preventDefault();
+// 	urlRoute(e);
+// })
+// document.addEventListener("click", spaHandler)
+
+if (localStorage.getItem("token"))
+{
+	const nav = '<li class="nav-item"><p class="navbar-text m-0 px-4">Welcome, Juliette!</p></li><li class="nav-item dropdown"><a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="./images/profile_pic.jpeg" alt="avatar" class="rounded-circle border-1 avatar"></a><ul class="dropdown-menu dropdown-menu-end"><li><a class="dropdown-item" href="#">Profile</a></li><li><a class="dropdown-item" href="#">Another action</a></li><li><a class="dropdown-item" href="#" id="logout">Logout</a></li></ul>'
+	document.getElementById("nav-log").innerHTML = nav;
+	const script = document.createElement("script");
+	script.classList.add("logout-script");
+	script.src = "../js/logout.js";
+
+	document.body.appendChild(script);
+}
+else
+{
+	const nav = '<a class="btn btn-outline-secondary spa" type="button" href="/signup">Sign up</a><a class="btn btn-outline-secondary spa mx-2" type="button" href="/login">Log in</a>'
+	document.getElementById("nav-log").innerHTML = nav;
+}
+
+function spaHandler(e) {
 	const target = e.target;
-	if (!target.classList.contains("spa"))
-		return;
 	e.preventDefault();
-	urlRoute();
-});
+	urlRoute(e);
+}
+
+function makeItSpa() {
+
+	let nav = document.querySelectorAll(".spa")
+
+	nav.forEach( link => {
+		link.addEventListener("click", spaHandler)
+	})
+}
+
+makeItSpa();
 
 console.log("ROUTER");
 
@@ -17,57 +57,85 @@ const urlRoutes = {
 		title: "404",
 		description: "Page not found",
 		scripts: [],
+		auth: false,
 	},
 	"/": {
 		template: "../templates/index.html",
 		title: "Home",
 		description: "Home page",
 		scripts: [],
+		auth: true,
 	},
 	"/friends": {
 		template: "../templates/friends.html",
 		title: "About Us",
 		description: "All your friends",
-		scripts: [],
+		scripts: ["../js/friends.js"],
+		auth: true,
 	},
 	"/history": {
 		template: "../templates/history.html",
 		title: "History",
 		description: "Game history",
 		scripts: [],
+		auth: false,
 	},
 	"/signup": {
 		template: "../templates/signup.html",
 		title: "Sign up",
 		description: "Sign up to play pong",
-		scripts: ["../js/signup.js"]
+		scripts: ["../js/signup.js"],
+		auth: false,
 	},
 	"/login": {
 		template: "../templates/login.html",
 		title: "Log in",
 		description: "Log in to play pong",
-		scripts: ["../js/login.js"]
+		scripts: ["../js/login.js"],
+		auth: false,
 	},
 };
 
 // create a function that watches the url and calls the urlLocationHandler
 const urlRoute = (event) => {
-	event = event || window.event;
-	event.preventDefault();
+	if (localStorage.getItem("token") == null && urlRoutes[window.location.pathname].auth == true)
+		href = "http://localhost:3000/login"
+
 	window.history.pushState({}, "", event.target.href);
 	urlLocationHandler();
 };
 
 // create a function that handles the url location
 const urlLocationHandler = async () => {
-	const location = window.location.pathname; // get the url path
-	if (location.length == 0) {
+
+	let location = window.location.pathname;
+
+	console.log("Location: " + location)
+	if (location.length == 0)
 		location = "/";
+
+	// Not logged in and route needs authentication
+	if (localStorage.getItem("token") == null) // User is logged out
+	{
+		if (urlRoutes[location].auth == true)
+		{
+			console.log("Needs to be logged in")
+			location = "/login"
+		}
 	}
+
 	// Get the route, get the html, add it to the div
 	const route = urlRoutes[location] || urlRoutes["404"];
-	const html = await fetch(route.template).then((response) => response.text());
-	document.getElementById("content").innerHTML = html;
+	const response = await fetch(route.template)
+	let html = await response.text()
+	const content = document.getElementById("content")
+	content.innerHTML = html;
+
+	//  Add eventListener on new content
+	links = content.querySelectorAll(".spa");
+	links.forEach( link => {
+		link.addEventListener("click", spaHandler)
+	})
 
 	// Load scripts
 	loadScripts(route.scripts || []);
@@ -89,13 +157,17 @@ const loadScripts = (scripts) => {
 	scripts.forEach(scriptSrc => {
 		const script = document.createElement("script");
 		script.src = scriptSrc;
-		script.dataset.pageScript = ""; // Custom attribute to identify scripts
+		// Custom attribute to identify scripts. So the urlRouter script won't be deleted
+		script.dataset.pageScript = "";
 		document.body.appendChild(script);
 	});
 };
 
-// add an event listener to the window that watches for url changes
+// Ensures correct routing when using back/forward buttons from history
 window.onpopstate = urlLocationHandler;
+
+// Make the urlRoute function globally accessible.
 window.route = urlRoute;
+
 // call the urlLocationHandler function to handle the initial url
 urlLocationHandler();
