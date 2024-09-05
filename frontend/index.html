@@ -14,20 +14,27 @@
 
 	<body>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
 		<!-- Navbar -->
 		<nav class="navbar bg-dark border-bottom border-body navbar-expand-lg fixed-top bg-body-tertiary" data-bs-theme="dark">
 			<div class="container-fluid">
 
 				<ul class="navbar-nav d-flex">
 					<li class="nav-item">
-						<a class="nav-link spa" aria-current="page" href="/">Play</a>
+						<a class="nav-link spa" aria-current="page" href="/" data-i18n="navbar.play"></a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link spa" aria-current="page" href="/friends">Friends</a>
+						<a class="nav-link spa" aria-current="page" href="/friends" data-i18n="navbar.friends"></a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link spa" aria-current="page" href="/history">History</a>
+						<a class="nav-link spa" aria-current="page" href="/history" data-i18n="navbar.history"></a>
+					</li>
+					<li class="nav-item dropdown">
+						<a href="#" role="button" class="nav-link" data-bs-toggle="dropdown" aria-expanded="false">Language</a>
+						<ul class="dropdown-menu dropdown-menu-end">
+							<li value="fr"><a class="dropdown-item spa change-language" href="#" data-language="fr">🇧🇪 Français</a></li>
+							<li value="es"><a class="dropdown-item spa change-language" href="#" data-language="es">🇲🇽 Español</a></li>
+							<li value="en"><a class="dropdown-item spa change-language" href="#" data-language="en">🇸🇬 English</a></li>
+						</ul>
 					</li>
 				</ul>
 
@@ -47,7 +54,7 @@
 						  </ul>
 					</li> -->
 
-					<!-- If not logged in -->
+					<!-- If NOT logged in -->
 					<!-- <a class="btn btn-outline-secondary spa" type="button" href="/signup">Sign up</a>
 					<a class="btn btn-outline-secondary spa mx-2" type="button" href="/login">Log in</a> -->
 				</ul>
@@ -58,6 +65,12 @@
 		<!-- Page content -->
 
 		<div id="content" class="mx-3 my-5 pt-5"></div>
+
+		<!-- Scripts -->
 		<script src="./js/urlRouter.js"></script>
+		<script
+		src="https://unpkg.com/@andreasremdt/simple-translator@latest/dist/umd/translator.min.js"
+		></script>
+		<script src="./js/translator.js"></script>
 	</body>
 </html>
