@@ -8,6 +8,9 @@ console.log("ROUTER");
 
 // ---------------------------------------- VARIABLES FOR SPA ----------------------------------------
 
+
+// The below provided options are default.
+
 const urlRoutes = {
 	404: {
 		template: "./404.html",
@@ -89,6 +92,7 @@ const urlRoute = (event) => {
 const urlLocationHandler = async () => {
 
 	let location = window.location.pathname;
+	console.log("Location: " + location)
 
 	if (location.length == 0)
 		location = "/";
@@ -103,6 +107,7 @@ const urlLocationHandler = async () => {
 	// Get the route, get the html, add it to the div
 	const route = urlRoutes[location] || urlRoutes["404"];
 	content.innerHTML = route.content;
+	translator.translatePageTo("en");
 
 	//  Add eventListener on new content
 	let links = content.querySelectorAll(".spa");

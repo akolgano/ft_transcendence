@@ -1,0 +1,18 @@
+{
+	"navbar" : {
+		"play": "Play",
+		"history": "History",
+		"language": "Language",
+		"friends": "Friends"
+	},
+	"auth" : {
+		"username": "Username: ",
+		"password": "Password: ",
+		"log-in": "Log in",
+		"log-out": "Log out",
+		"sign-up": "Sign up",
+		"no-account": "Don't have an account yet?",
+		"already-account": "Already have an account?"
+	},
+	"404": "Transcendent error: page not found"
+}
