@@ -28,9 +28,21 @@ python3 -m http.server 3000
 ```
 
 ### Go to http://localhost:3000/
-
+Currently, yoiu can only navigate using links, do not type the full url yourself.
+Example: http://localhost:3000/login will not work, but clicking on the login button will work.
 
 ## Check the database for tests
 
 You can go to localhost:8000/admin to manage the database.
 User and password: admin
+
+## Translations
+When adding some text to the html, add the attribute data-i18n with a key.
+Then add that key to the English dictionary (i18n folder), and I will add the translations later for other languages
+
+Example:
+- HTML: <h1 data-i18n="navbar.friends"></h1>
+- In en.json:
+"navbar" : {
+	"friends": "Friends"
+},
