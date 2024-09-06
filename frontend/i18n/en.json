@@ -1,0 +1,24 @@
+{
+	"navbar" : {
+		"play": "Play",
+		"history": "History",
+		"language": "Language",
+		"friends": "Friends"
+	},
+	"auth" : {
+		"username": "Username: ",
+		"password": "Password: ",
+		"log-in": "Log in",
+		"log-out": "Log out",
+		"sign-up": "Sign up",
+		"email": "Email address",
+		"no-account": "Don't have an account yet?",
+		"already-account": "Already have an account?",
+		"error": "Error: ",
+		"login-error": "Sorry, looks like that’s the username or password.",
+		"sign-up-success": "Sign up successful",
+		"login-success": "Login successful",
+		"logout-success": "Logout successful"
+	},
+	"404": "Transcendent error: page not found"
+}

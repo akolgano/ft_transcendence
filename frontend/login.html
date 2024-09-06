@@ -1,20 +1,23 @@
 <div class="container">
 	<div class="row justify-content-center">
 		<div class="col-md-6 col-lg-4 border rounded bg-light">
-			<h1 class="text-center mt-3">Log in</h1>
+			<h1 class="text-center mt-3" data-i18n="auth.log-in"></h1>
 			<form id="loginForm" class="row g-3">
 				<div class="mb-3">
-					<label for="username" class="form-label">Username: </label>
+					<label for="username" class="form-label" data-i18n="auth.username"></label>
 					<input type="text" id="username" name="username" class="form-control" autocomplete="on" required>
 				</div>
 				<div class="mb-3">
-					<label for="password" class="form-label">Password:</label>
+					<label for="password" class="form-label" data-i18n="auth.password"></label>
 					<input type="password" id="password" name="password" class="form-control" autocomplete="on" required>
 				</div>
 				<div class="mb-3 text-center">
-					<button type="submit" class="btn btn-success">Log in</button>
+					<button type="submit" class="btn btn-success" data-i18n="auth.log-in" ></button>
 				</div>
-				<p>Don't have an account yet? <a href="./signup" class="spa text-reset">Sign up</a></p>
+				<div>
+					<p data-i18n="auth.no-account" class="d-inline-block"></p>
+					<a href="./signup" class="spa text-reset d-inline-block" data-i18n="auth.sign-up"></a>
+				</div>
 			</form>
 		</div>
 	</div>

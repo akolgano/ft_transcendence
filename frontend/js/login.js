@@ -22,36 +22,24 @@
 			{
 				// console.log("Token: " + data.token);
 				// console.log("User: " + data.user);
-				alert("Login successful!");
+				alert(translator.translateForKey("auth.login-success", localStorage.getItem("preferred_language") || "en"))
 				localStorage.setItem("auth", 1);
 				localStorage.setItem("user", data.user.username);
 				localStorage.setItem("token", data.token);
 
 				// Change navbar
-
-				const nav = `<li class="nav-item"><p class="navbar-text m-0 px-4">Welcome, ${data.user.username}!</p></li><li class="nav-item dropdown"><a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="./images/profile_pic.jpeg" alt="avatar" class="rounded-circle border-1 avatar"></a><ul class="dropdown-menu dropdown-menu-end"><li><a class="dropdown-item" href="#">Profile</a></li><li><a class="dropdown-item" href="#">Another action</a></li><li><a class="dropdown-item" href="#" id="logout">Logout</a></li></ul>`
-				const navbar = document.getElementById("nav-log");
-				navbar.innerHTML = nav;
-
-				// Add logout script
-				const script = document.createElement("script");
-				script.textContent = logoutScript;
-				document.body.appendChild(script);
-
-				//  Add eventListener on navbar
-				links = navbar.querySelectorAll(".spa");
-				links.forEach( link => {
-					link.addEventListener("click", spaHandler)
-				})
+				updateNavbar(true);
 
 				urlRoute({ target: { href: '/' }, preventDefault: () => {} });
 			}
 			else
 			{
-				alert("Login failed: " + data.message);
+				alert(translator.translateForKey("auth.login-error", localStorage.getItem("preferred_language") || "en"))
+				console.log(data.message);
 			}
 		} catch (error) {
-			alert("Login failed: " + error.message);
+			alert(translator.translateForKey("auth.login-error", localStorage.getItem("preferred_language") || "en"))
+			console.log(error.message)
 		}
 	})
 }

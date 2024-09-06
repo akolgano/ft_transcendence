@@ -6,22 +6,14 @@
 
 	function handleLogout(e) {
 		e.preventDefault();
-		alert("Logout successful!");
-		localStorage.clear();
+		alert(translator.translateForKey("auth.logout-success", localStorage.getItem("preferred_language") || "en"))
+		localStorage.removeItem("auth")
+		localStorage.removeItem("user")
+		localStorage.removeItem("token")
 
-		const nav = '<a class="btn btn-outline-secondary spa" type="button" href="/signup">Sign up</a><a class="btn btn-outline-secondary spa mx-2" type="button" href="/login">Log in</a>'
-		const navbar = document.getElementById("nav-log");
-		navbar.innerHTML = nav;
-
-		//  Add eventListener on navbar
-		links = navbar.querySelectorAll(".spa");
-		links.forEach( link => {
-			link.addEventListener("click", spaHandler)
-		})
+		updateNavbar(false)
 
 		urlRoute({ target: { href: '/' }, preventDefault: () => {} });
 	}
-
-	// logout.removeEventListener("click", spaHandler)
 	logout.addEventListener("click", handleLogout);
 }
