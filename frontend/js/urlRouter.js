@@ -4,12 +4,42 @@
 // Make it more efficient by NOT putting the event listener on every click of the document.
 // BUT make sure the content added to the DOM will be inside the class we used for capturing events.
 // --> When I add an element to the DOM, I add an eventListener to it
-console.log("ROUTER");
+// console.log("ROUTER");
+
+// ---------------------------------------- TRANSLATOR ----------------------------------------
+
+var translator = new Translator({
+	defaultLanguage: "fr",
+	detectLanguage: false,
+	selector: "[data-i18n]",
+	debug: true,
+	registerGlobally: "__",
+	persist: true,
+	persistKey: "preferred_language",
+	filesLocation: "/i18n"
+});
+
+translator.fetch(["en", "fr", "es"]).then(() => {
+	// Calling `translatePageTo()` without any parameters
+	// will translate to the default language.
+	translator.translatePageTo();
+	console.log("Translating page start");
+	registerLanguageToggle();
+});
+
+function registerLanguageToggle() {
+	let select = document.querySelectorAll(".change-language");
+
+	select.forEach(link => {
+		link.addEventListener("click", event => {
+		var language = event.target.getAttribute('data-language');
+		console.log("Translating page to: " + language);
+		translator.translatePageTo(language);
+		});
+	})
+}
 
 // ---------------------------------------- VARIABLES FOR SPA ----------------------------------------
-
-
-// The below provided options are default.
 
 const urlRoutes = {
 	404: {
@@ -92,7 +122,7 @@ const urlRoute = (event) => {
 const urlLocationHandler = async () => {
 
 	let location = window.location.pathname;
-	console.log("Location: " + location)
+	// console.log("Location: " + location)
 
 	if (location.length == 0)
 		location = "/";
@@ -100,14 +130,23 @@ const urlLocationHandler = async () => {
 	// Not logged in and route needs authentication
 	if (localStorage.getItem("token") == null && urlRoutes[location].auth == true) // User is logged out
 	{
-		console.log("Needs to be logged in")
+		// console.log("Needs to be logged in")
 		location = "/login"
 	}
 
 	// Get the route, get the html, add it to the div
 	const route = urlRoutes[location] || urlRoutes["404"];
+	content = document.getElementById("content")
 	content.innerHTML = route.content;
-	translator.translatePageTo("en");
+
+	// Translate only new content.
+	content.querySelectorAll("[data-i18n]").forEach(element => {
+		let data = element.getAttribute('data-i18n')
+		let translation = translator.translateForKey(data, localStorage.getItem("preferred_language"))
+		element.innerHTML = translation
+	});
+
+	// translator.translatePageTo(localStorage.getItem("preferred_language"));
 
 	//  Add eventListener on new content
 	let links = content.querySelectorAll(".spa");

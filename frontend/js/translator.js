@@ -1,37 +1,39 @@
-console.log("TRANSLATOR");
+// console.log("TRANSLATOR");
 
-var translator = new Translator({
-	defaultLanguage: "fr",
-	detectLanguage: false,
-	selector: "[data-i18n]",
-	debug: true,
-	registerGlobally: "__",
-	persist: false,
-	persistKey: "preferred_language",
-	filesLocation: "/i18n"
-});
+let language = "fr"
+
+// var translator = new Translator({
+// 	defaultLanguage: "fr",
+// 	detectLanguage: false,
+// 	selector: "[data-i18n]",
+// 	debug: true,
+// 	registerGlobally: "__",
+// 	persist: true,
+// 	persistKey: "preferred_language",
+// 	filesLocation: "/i18n"
+// });
 
 
-translator.fetch(["en", "fr", "es"]).then(() => {
-	// Calling `translatePageTo()` without any parameters
-	// will translate to the default language.
-	translator.translatePageTo();
-	console.log("Translating page start");
-	registerLanguageToggle();
-});
+// translator.fetch(["en", "fr", "es"]).then(() => {
+// 	// Calling `translatePageTo()` without any parameters
+// 	// will translate to the default language.
+// 	translator.translatePageTo();
+// 	console.log("Translating page start");
+// 	registerLanguageToggle();
+// });
 
-function registerLanguageToggle() {
-	let select = document.querySelectorAll(".change-language");
+// function registerLanguageToggle() {
+// 	let select = document.querySelectorAll(".change-language");
 
-	select.forEach(link => {
-		link.addEventListener("click", event => {
-		var language = event.target.getAttribute('data-language');
-		console.log("Event: " + event)
-		console.log("Translating page to " + language);
-		translator.translatePageTo(language);
-		});
-	})
-}
+// 	select.forEach(link => {
+// 		link.addEventListener("click", event => {
+// 		var language = event.target.getAttribute('data-language');
+// 		// console.log("Event: " + event)
+// 		console.log("Translating page to: " + language);
+// 		translator.translatePageTo(language);
+// 		});
+// 	})
+// }
 
 //   document.querySelector("button").addEventListener("click", () => {
 // 	// Using `translateForKey()` without a target language,
