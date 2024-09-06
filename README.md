@@ -41,8 +41,13 @@ When adding some text to the html, add the attribute data-i18n with a key.
 Then add that key to the English dictionary (i18n folder), and I will add the translations later for other languages
 
 Example:
-- HTML: <h1 data-i18n="navbar.friends"></h1>
+- HTML:
+```
+<h1 data-i18n="navbar.friends"></h1>
+```
 - In en.json:
+```
 "navbar" : {
 	"friends": "Friends"
 },
+```
