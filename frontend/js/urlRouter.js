@@ -96,14 +96,14 @@ function spaHandler(e) {
 	urlRoute(e);
 }
 
-function makeItSpa() {
+// function makeItSpa() {
 
-	let nav = document.querySelectorAll(".spa")
+// 	let nav = document.querySelectorAll(".spa")
 
-	nav.forEach( link => {
-		link.addEventListener("click", spaHandler)
-	})
-}
+// 	nav.forEach( link => {
+// 		link.addEventListener("click", spaHandler)
+// 	})
+// }
 
 // Function that watches the url and calls the urlLocationHandler
 const urlRoute = (event) => {
@@ -127,9 +127,12 @@ const translateNewContent = (node) => {
 	});
 }
 
-// const addEventNewContent = (node) => {
-
-// }
+const addEventSpaLinks = (node) => {
+	let links = node.querySelectorAll(".spa");
+	links.forEach( link => {
+		link.addEventListener("click", spaHandler)
+	})
+}
 
 // Function that handles the url location
 const urlLocationHandler = async () => {
@@ -141,11 +144,8 @@ const urlLocationHandler = async () => {
 		location = "/";
 
 	// Not logged in and route needs authentication
-	if (localStorage.getItem("token") == null && urlRoutes[location].auth == true) // User is logged out
-	{
-		// console.log("Needs to be logged in")
+	if (localStorage.getItem("token") == null && urlRoutes[location].auth == true)
 		location = "/login"
-	}
 
 	// Get the route, get the html, add it to the div
 	const route = urlRoutes[location] || urlRoutes["404"];
@@ -154,14 +154,9 @@ const urlLocationHandler = async () => {
 
 	// Translate only new content.
 	translateNewContent(content)
+	addEventSpaLinks(content)
 
 	// translator.translatePageTo(localStorage.getItem("preferred_language"));
-
-	//  Add eventListener on new content
-	let links = content.querySelectorAll(".spa");
-	links.forEach( link => {
-		link.addEventListener("click", spaHandler)
-	})
 
 	loadScripts(route.scriptContent || []);
 
@@ -232,19 +227,14 @@ const updateNavbar = (loggedIn) => {
 	const navbar = document.getElementById("nav-log");
 	navbar.innerHTML = navContent;
 
-	// Add event
-	links = navbar.querySelectorAll(".spa");
-	links.forEach( link => {
-		link.addEventListener("click", spaHandler)
-	})
-
+	addEventSpaLinks(navbar)
 	translateNewContent(navbar)
 
 	if (loggedIn)
 	{
 		navbar.querySelector(".navbar-text").innerHTML = `Welcome, ${localStorage.getItem("user")}!`
 
-		//  Add scripts
+		// Add logout script
 		const script = document.createElement("script");
 		script.textContent = logoutScript;
 		document.body.appendChild(script);
@@ -258,23 +248,11 @@ const run = async () => {
 	await fetchPages();
 
 	if (localStorage.getItem("token"))
-	{
-			// const nav = `<li class="nav-item"><p class="navbar-text m-0 px-4">Welcome, ${localStorage.getItem("user")}</p></li><li class="nav-item dropdown"><a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="./images/profile_pic.jpeg" alt="avatar" class="rounded-circle border-1 avatar"></a><ul class="dropdown-menu dropdown-menu-end"><li><a class="dropdown-item" href="#">Profile</a></li><li><a class="dropdown-item" href="#">Another action</a></li><li><a class="dropdown-item" href="#" id="logout">Logout</a></li></ul>`
-			// document.getElementById("nav-log").innerHTML = nav;
 			updateNavbar(true)
-
-			// const script = document.createElement("script");
-			// script.src = "../js/logout.js";
-			// document.body.appendChild(script);
-	}
 	else
-	{
-		// const nav = '<a class="btn btn-outline-secondary spa" type="button" href="/signup">Sign up</a><a class="btn btn-outline-secondary spa mx-2" type="button" href="/login">Log in</a>'
-		// document.getElementById("nav-log").innerHTML = nav;
 		updateNavbar(false)
-	}
 
-	makeItSpa();
+	addEventSpaLinks(document)
 	window.onpopstate = urlLocationHandler; // Ensures correct routing when using back/forward buttons from history
 	window.route = urlRoute; // Make the urlRoute function globally accessible.
 }
