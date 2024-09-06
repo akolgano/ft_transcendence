@@ -11,6 +11,7 @@
 		"log-in": "Log in",
 		"log-out": "Log out",
 		"sign-up": "Sign up",
+		"email": "Correo electronico: ",
 		"no-account": "Don't have an account yet?",
 		"already-account": "Already have an account?"
 	},

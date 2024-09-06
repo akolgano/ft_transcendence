@@ -11,8 +11,9 @@
 		"log-in": "Se connecter",
 		"log-out": "Se déconnecter",
 		"sign-up": "S'enregistrer",
+		"email": "Adresse email: ",
 		"no-account": "Vous n'avez pas encore de compte?",
-		"already-account": "AVous avez déjà un compte?"
+		"already-account": "Vous avez déjà un compte?"
 	},
 	"404": "Transcendent error: page non trouvée"
 }
