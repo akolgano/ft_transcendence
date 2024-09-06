@@ -121,7 +121,7 @@ const urlRoute = (event) => {
 const translateNewContent = (node) => {
 	node.querySelectorAll("[data-i18n]").forEach(element => {
 		let data = element.getAttribute('data-i18n')
-		console.log("Preferred language: " + localStorage.getItem("preferred_language"))
+		// console.log("Preferred language: " + localStorage.getItem("preferred_language"))
 		let translation = translator.translateForKey(data, localStorage.getItem("preferred_language") || "en")
 		element.innerHTML = translation
 	});
@@ -138,7 +138,6 @@ const addEventSpaLinks = (node) => {
 const urlLocationHandler = async () => {
 
 	let location = window.location.pathname;
-	// console.log("Location: " + location)
 
 	if (location.length == 0)
 		location = "/";

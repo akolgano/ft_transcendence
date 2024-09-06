@@ -6,7 +6,7 @@
 
 	function handleLogout(e) {
 		e.preventDefault();
-		alert("Logout successful!");
+		alert(translator.translateForKey("auth.logout-success", localStorage.getItem("preferred_language") || "en"))
 		localStorage.removeItem("auth")
 		localStorage.removeItem("user")
 		localStorage.removeItem("token")

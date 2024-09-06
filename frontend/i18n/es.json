@@ -6,14 +6,19 @@
 		"friends": "Amigos"
 	},
 	"auth" : {
-		"username": "Username: ",
-		"password": "Password: ",
-		"log-in": "Log in",
-		"log-out": "Log out",
-		"sign-up": "Sign up",
-		"email": "Correo electronico: ",
-		"no-account": "Don't have an account yet?",
-		"already-account": "Already have an account?"
+		"username": "Nombre de usuario: ",
+		"password": "Contraseña: ",
+		"log-in": "Iniciar Sesión",
+		"log-out": "Cerrar sesión",
+		"sign-up": "Crear una cuenta",
+		"email": "Correo: ",
+		"no-account": "¿No tienes cuenta?",
+		"already-account": "¿Ya tienes cuenta?",
+		"error": "Error: ",
+		"login-error": "Lo sentimos, su contraseña o nombre de usuario es incorrecto",
+		"sign-up-success": "Cuenta creada",
+		"login-success": "Inicio de sesión exitosa",
+		"logout-success": "Session cerrada"
 	},
-	"404": "Transcendent error: page not found"
+	"404": "Error transcendente: Parece que esta página no existe"
 }

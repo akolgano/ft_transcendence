@@ -22,7 +22,7 @@
 			{
 				// console.log("Token: " + data.token);
 				// console.log("User: " + data.user);
-				alert("Login successful!");
+				alert(translator.translateForKey("auth.login-success", localStorage.getItem("preferred_language") || "en"))
 				localStorage.setItem("auth", 1);
 				localStorage.setItem("user", data.user.username);
 				localStorage.setItem("token", data.token);
@@ -34,10 +34,12 @@
 			}
 			else
 			{
-				alert("Login failed: " + data.message);
+				alert(translator.translateForKey("auth.login-error", localStorage.getItem("preferred_language") || "en"))
+				console.log(data.message);
 			}
 		} catch (error) {
-			alert("Login failed: " + error.message);
+			alert(translator.translateForKey("auth.login-error", localStorage.getItem("preferred_language") || "en"))
+			console.log(error.message)
 		}
 	})
 }

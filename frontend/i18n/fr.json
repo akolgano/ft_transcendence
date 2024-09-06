@@ -8,12 +8,17 @@
 	"auth" : {
 		"username": "Nom d'utilisateur: ",
 		"password": "Mot de passe: ",
-		"log-in": "Se connecter",
+		"log-in": "Connexion",
 		"log-out": "Se déconnecter",
-		"sign-up": "S'enregistrer",
+		"sign-up": "Créer un compte",
 		"email": "Adresse email: ",
 		"no-account": "Vous n'avez pas encore de compte?",
-		"already-account": "Vous avez déjà un compte?"
+		"already-account": "Vous avez déjà un compte?",
+		"error": "Erreur: ",
+		"login-error": "Oups, le nom d'utilisateur ou le mot de passe est incorrect",
+		"login-success": "Connecté avec succès",
+		"sign-up-success": "Compte créé avec succès",
+		"logout-success": "Session fermée."
 	},
-	"404": "Transcendent error: page non trouvée"
+	"404": "Erreur Transcendente: page non trouvée"
 }

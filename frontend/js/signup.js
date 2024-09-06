@@ -28,15 +28,19 @@
 			}
 			if (data.token)
 			{
-				alert("Sign up successful!");
+				alert(translator.translateForKey("auth.sign-up-success", localStorage.getItem("preferred_language") || "en"))
 				urlRoute({ target: { href: '/' }, preventDefault: () => {} });
 			}
 			else
 			{
-				alert("Sign up failed: " + data.message);
+				// TO DO: Get the error message in english, then check what it is, depending on that, translate it.
+				// console.log("Language: " + localStorage.getItem("preferred_language"))
+				alert(translator.translateForKey("auth.error", localStorage.getItem("preferred_language") || "en") + data.message)
+				console.log(data.message);
 			}
 		} catch (error) {
-			alert("Sign up failed: " + error.message);
+			alert(translator.translateForKey("auth.error", localStorage.getItem("preferred_language") || "en") + error.message)
+			console.log(error.message)
 		}
 	})
 }
