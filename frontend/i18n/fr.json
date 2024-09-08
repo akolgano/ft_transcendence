@@ -16,9 +16,11 @@
 		"already-account": "Vous avez déjà un compte?",
 		"error": "Erreur: ",
 		"login-error": "Oups, le nom d'utilisateur ou le mot de passe est incorrect",
+		"login-ko": "Error logging in, please try again",
 		"login-success": "Connecté avec succès",
 		"sign-up-success": "Compte créé avec succès",
 		"logout-success": "Session fermée."
 	},
-	"404": "Erreur Transcendente: page non trouvée"
+	"404": "Erreur Transcendente: page non trouvée",
+	"profile": "Profile"
 }

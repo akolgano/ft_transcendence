@@ -15,10 +15,12 @@
 		"no-account": "Don't have an account yet?",
 		"already-account": "Already have an account?",
 		"error": "Error: ",
-		"login-error": "Sorry, looks like that’s the username or password.",
+		"login-error": "Sorry, looks like that’s the wrong username or password.",
+		"login-ko": "Error logging in, please try again",
 		"sign-up-success": "Sign up successful",
 		"login-success": "Login successful",
 		"logout-success": "Logout successful"
 	},
-	"404": "Transcendent error: page not found"
+	"404": "Transcendent error: page not found",
+	"profile": "Profile"
 }
