@@ -16,9 +16,11 @@
 		"already-account": "¿Ya tienes cuenta?",
 		"error": "Error: ",
 		"login-error": "Lo sentimos, su contraseña o nombre de usuario es incorrecto",
+		"login-ko": "Error logging in, please try again",
 		"sign-up-success": "Cuenta creada",
 		"login-success": "Inicio de sesión exitosa",
 		"logout-success": "Session cerrada"
 	},
-	"404": "Error transcendente: Parece que esta página no existe"
+	"404": "Error transcendente: Parece que esta página no existe",
+	"profile": "Mon profil"
 }

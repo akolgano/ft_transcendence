@@ -84,6 +84,13 @@ const urlRoutes = {
 		scripts: ["../js/login.js"],
 		auth: false,
 	},
+	"/profile": {
+		template: "./profile.html",
+		title: "Profile",
+		description: "Your profile",
+		scripts: ["../js/profile.js"],
+		auth: true,
+	},
 };
 
 let logoutScript;
@@ -219,7 +226,7 @@ const updateNavbar = (loggedIn) => {
 	// HTML
 	let navContent;
 	if (loggedIn)
-		navContent = `<li class="nav-item"><p class="navbar-text m-0 px-4"></p></li><li class="nav-item dropdown"><a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="./images/profile_pic.jpeg" alt="avatar" class="rounded-circle border-1 avatar"></a><ul class="dropdown-menu dropdown-menu-end"><li><a class="dropdown-item" href="#">Profile</a></li><li><a class="dropdown-item" href="#">Another action</a></li><li><a class="dropdown-item" href="#" id="logout" data-i18n="auth.log-out"></a></li></ul>`
+		navContent = `<li class="nav-item"><p class="navbar-text m-0 px-4"></p></li><li class="nav-item dropdown"><a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="./images/profile_pic.jpeg" alt="avatar" class="rounded-circle border-1 avatar"></a><ul class="dropdown-menu dropdown-menu-end"><li><a class="dropdown-item spa" href="/profile" data-i18n="profile">Profile</a></li><li><a class="dropdown-item" href="#">Another action</a></li><li><a class="dropdown-item" href="#" id="logout" data-i18n="auth.log-out"></a></li></ul>`
 	else
 		navContent = '<a class="btn btn-outline-secondary spa" type="button" href="/signup" data-i18n="auth.sign-up"></a><a class="btn btn-outline-secondary spa mx-2" type="button" href="/login" data-i18n="auth.log-in"></a>'
 
@@ -231,18 +238,17 @@ const updateNavbar = (loggedIn) => {
 
 	if (loggedIn)
 	{
-		navbar.querySelector(".navbar-text").innerHTML = `Welcome, ${localStorage.getItem("user")}!`
+		navbar.querySelector(".navbar-text").innerHTML = `Welcome, ${JSON.parse(localStorage.getItem("user")).username}!`
 
 		// Add logout script
 		const script = document.createElement("script");
 		script.textContent = logoutScript;
 		document.body.appendChild(script);
 	}
-
-	console.log("Updated navbar")
 }
 
 // ---------------------------------------- EXECUTION ----------------------------------------
+
 const run = async () => {
 	await fetchPages();
 
