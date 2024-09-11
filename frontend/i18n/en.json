@@ -3,7 +3,8 @@
 		"play": "Play",
 		"history": "History",
 		"language": "Language",
-		"friends": "Friends"
+		"friends": "Friends",
+		"welcome": "Welcome, "
 	},
 	"auth" : {
 		"username": "Username: ",
