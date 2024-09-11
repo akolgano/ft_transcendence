@@ -6,7 +6,6 @@
 	signupForm.addEventListener("submit", async (e) => {
 		e.preventDefault();
 		const formData = new FormData(signupForm);
-
 		try {
 			let errorMessage = "";
 			const response = await fetch("http://127.0.0.1:8000/signup", {
@@ -15,15 +14,12 @@
 			})
 			const data = await response.json();
 			if (!response.ok) {
-				// console.log("Error response body error:", data.error);
-				if (Array.isArray(data.error)) {
-					data.error.forEach((message, index) => {
-						errorMessage += "\n • ";
-						errorMessage += message;
-					});
-				}
-				else
-					errorMessage = data.error;
+				// console.log("Data from back: " + Object.values(data));
+				let errors_array = Object.values(data);
+				errors_array.forEach((message, index) => {
+					errorMessage += "\n • ";
+					errorMessage += message;
+				});
 				throw new Error(errorMessage || 'An error occurred');
 			}
 			if (data.token)
