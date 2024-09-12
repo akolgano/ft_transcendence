@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'sslserver',
 	'corsheaders',
+    'pong.users',
 ]
 CORS_ALLOWED_ORIGINS = [
 "http://localhost:3000"
@@ -50,7 +51,6 @@ CORS_ALLOWED_ORIGINS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -161,3 +161,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 #SECURE_SSL_REDIRECT = True
+AUTH_USER_MODEL = 'users.CustomUser'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
