@@ -3,7 +3,8 @@
 		"play": "Jugar",
 		"history": "Historia",
 		"language": "Idioma",
-		"friends": "Amigos"
+		"friends": "Amigos",
+		"welcome": "Hola, "
 	},
 	"auth" : {
 		"username": "Nombre de usuario: ",
