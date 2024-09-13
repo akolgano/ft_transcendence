@@ -11,6 +11,7 @@
 		"password": "Contraseña",
 		"new-password": "Nueva contraseña",
 		"repeat-password": "Confirmar contraseña",
+		"old-password": "Current password",
 		"log-in": "Iniciar Sesión",
 		"log-out": "Cerrar sesión",
 		"sign-up": "Crear una cuenta",

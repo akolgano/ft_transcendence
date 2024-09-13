@@ -71,3 +71,6 @@ test_get_user_info_user_not_found (pong.tests.tests.UserInfoTests.test_get_user_
 Ran 23 tests in 35.731s
 
 OK
+
+
+curl -X PATCH http://127.0.0.1:8000/change_password/ Content-Type: application/json {'old_password': 'wrongpassword', 'new_password': 'newpassword456'}

@@ -9,43 +9,66 @@
 	document.querySelector(".profile-pic").src = "http://localhost:8000" + user.profile_picture
 
 
+	const changePassword = document.getElementById("changePassword");
 
-	// const changeUsername = document.getElementById("changeUsername");
+	changePassword.addEventListener("submit", async (e) => {
+		e.preventDefault();
 
-	// changeUsername.addEventListener("submit", async (e) => {
-	// 	e.preventDefault();
-	// 	const formData = new FormData(changeUsername);
-	// 	try {
-	// 		let errorMessage = "";
-	// 		const response = await fetch("http://127.0.0.1:8000/signup", {
-	// 			method: 'PATCH',
-	// 			body: formData,
-	// 		})
-	// 		const data = await response.json();
-	// 		if (!response.ok) {
-	// 			// console.log("Data from back: " + Object.values(data));
-	// 			let errors_array = Object.values(data);
-	// 			errors_array.forEach((message, index) => {
-	// 				errorMessage += "\n • ";
-	// 				errorMessage += message;
-	// 			});
-	// 			throw new Error(errorMessage || 'An error occurred');
-	// 		}
-	// 		if (data.token)
-	// 		{
-	// 			alert(translator.translateForKey("auth.sign-up-success", localStorage.getItem("preferred_language") || "en"))
-	// 			urlRoute({ target: { href: '/' }, preventDefault: () => {} });
-	// 		}
-	// 		else
-	// 		{
-	// 			// TO DO: Get the error message in english, then check what it is, depending on that, translate it.
-	// 			// console.log("Language: " + localStorage.getItem("preferred_language"))
-	// 			alert(translator.translateForKey("auth.error", localStorage.getItem("preferred_language") || "en") + data.message)
-	// 			console.log(data.message);
-	// 		}
-	// 	} catch (error) {
-	// 		alert(translator.translateForKey("auth.error", localStorage.getItem("preferred_language") || "en") + error.message)
-	// 		console.log(error.message)
-	// 	}
-	// })
+		let oldPassword = document.getElementById("old-password").value;
+		let newPassword = document.getElementById("new-password").value;
+		let repeatPassword = document.getElementById("repeat-password").value;
+
+		if (newPassword !== repeatPassword)
+		{
+			alert("Passwords do not match");
+			return ;
+		}
+
+		const formData = new FormData();
+		formData.append("old_password", oldPassword);
+		formData.append("new_password", newPassword);
+
+		try {
+			const response = await fetch("http://127.0.0.1:8000/change_password/", {
+				headers: {
+					'Authorization': `Token ${localStorage.getItem("token")}`,
+				},
+				method: 'PATCH',
+				body: formData,
+			})
+			const data = await response.json();
+			if (!response.ok) {
+				console.log("Data json: " + JSON.stringify(data))
+				let errorMessage = "";
+
+				for (let [key, value] of Object.entries(data)) {
+					errorMessage += key;
+					value.forEach(message => {
+						errorMessage += "\n    • ";
+						errorMessage += message;
+					});
+				}
+
+				throw new Error(errorMessage || 'An error occurred');
+			}
+			if (data.detail)
+			{
+				alert("Password changed successfully")
+				urlRoute({ target: { href: '/account' }, preventDefault: () => {} });
+			}
+			else
+			{
+				// TO DO: Get the error message in english, then check what it is, depending on that, translate it.
+				// console.log("Language: " + localStorage.getItem("preferred_language"))
+				alert("Unexpected error. Unable to change password.")
+				console.log(data.message);
+			}
+		} catch (error) {
+			alert("Error changing password.\n" + error.message)
+			console.log(error.message)
+		}
+	})
 }
+
+
+// Error message: {"new_password":["This password is too short. It must contain at least 5 characters.","This password is too common."]}

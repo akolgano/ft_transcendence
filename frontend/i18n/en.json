@@ -11,6 +11,7 @@
 		"password": "Password",
 		"new-password": "New password",
 		"repeat-password": "Confirm password",
+		"old-password": "Current password",
 		"log-in": "Log in",
 		"log-out": "Log out",
 		"sign-up": "Sign up",
