@@ -6,13 +6,13 @@ from django.utils.html import format_html
 class UserAdmin(BaseUserAdmin):
 
     # Display profile picture in list view
-    list_display = ('username', 'email', 'profile_picture_display')
+    list_display = ('username', 'email', 'profile_picture_display', 'online', 'language')
 
     def profile_picture_display(self, obj):
         if obj.profile_picture:
             return format_html('<img src="{}" style="width: 60px; height: 50px;"/>', obj.profile_picture.url)
         #return format_html('<img src="{}" style="width: 50px; height: 50px;"/>', '/media/profile_pictures/default.jpg')
-    
+
     profile_picture_display.short_description = 'Profile Picture'
     model = CustomUser
     fieldsets = BaseUserAdmin.fieldsets + (

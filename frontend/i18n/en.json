@@ -7,8 +7,10 @@
 		"welcome": "Welcome, "
 	},
 	"auth" : {
-		"username": "Username: ",
-		"password": "Password: ",
+		"username": "Username",
+		"password": "Password",
+		"new-password": "New password",
+		"repeat-password": "Confirm password",
 		"log-in": "Log in",
 		"log-out": "Log out",
 		"sign-up": "Sign up",
@@ -22,6 +24,9 @@
 		"login-success": "Login successful",
 		"logout-success": "Logout successful"
 	},
-	"404": "Transcendent error: page not found",
-	"profile": "Profile"
+	"account" : {
+		"update": "Update",
+		"title": "My account"
+	},
+	"404": "Transcendent error: page not found"
 }

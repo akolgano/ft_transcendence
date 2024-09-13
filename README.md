@@ -12,6 +12,10 @@ docker-compose up
 
 The Makefile is currently not working
 
+## Migrations
+
+docker exec -it django python3 manage.py makemigrations
+docker exec -it django python3 manage.py migrate
 
 ## Frontend
 
@@ -28,7 +32,7 @@ python3 -m http.server 3000
 ```
 
 ### Go to http://localhost:3000/
-Currently, yoiu can only navigate using links, do not type the full url yourself.
+Currently, you can only navigate using links, do not type the full url yourself.
 Example: http://localhost:3000/login will not work, but clicking on the login button will work.
 
 ## Check the database for tests

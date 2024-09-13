@@ -7,12 +7,14 @@
 		"welcome": "Hola, "
 	},
 	"auth" : {
-		"username": "Nombre de usuario: ",
-		"password": "Contraseña: ",
+		"username": "Nombre de usuario",
+		"password": "Contraseña",
+		"new-password": "Nueva contraseña",
+		"repeat-password": "Confirmar contraseña",
 		"log-in": "Iniciar Sesión",
 		"log-out": "Cerrar sesión",
 		"sign-up": "Crear una cuenta",
-		"email": "Correo: ",
+		"email": "Correo",
 		"no-account": "¿No tienes cuenta?",
 		"already-account": "¿Ya tienes cuenta?",
 		"error": "Error: ",
@@ -22,6 +24,9 @@
 		"login-success": "Inicio de sesión exitosa",
 		"logout-success": "Session cerrada"
 	},
-	"404": "Error transcendente: Parece que esta página no existe",
-	"profile": "Mon profil"
+	"account" : {
+		"update": "Update username",
+		"title": "Mi cuenta"
+	},
+	"404": "Error transcendente: Parece que esta página no existe"
 }

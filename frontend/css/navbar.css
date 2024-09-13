@@ -1,5 +1,18 @@
-.avatar 
+.avatar
 {
-	height:40px; 
+	height:40px;
 	width:40px;
+}
+
+.avatar-lg
+{
+	max-height:300px;
+	max-width:300px;
+	width: auto;
+	height: auto;
+}
+
+#changeUsername > input
+{
+	vertical-align: middle
 }

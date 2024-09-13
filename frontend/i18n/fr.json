@@ -7,12 +7,14 @@
 		"welcome": "Bonjour, "
 	},
 	"auth" : {
-		"username": "Nom d'utilisateur: ",
-		"password": "Mot de passe: ",
+		"username": "Nom d'utilisateur",
+		"password": "Mot de passe",
+		"new-password": "Nouveau mot de passe",
+		"repeat-password": "Confirmer mot de passe",
 		"log-in": "Connexion",
 		"log-out": "Se déconnecter",
 		"sign-up": "Créer un compte",
-		"email": "Adresse email: ",
+		"email": "Adresse email",
 		"no-account": "Vous n'avez pas encore de compte?",
 		"already-account": "Vous avez déjà un compte?",
 		"error": "Erreur: ",
@@ -22,6 +24,9 @@
 		"sign-up-success": "Compte créé avec succès",
 		"logout-success": "Session fermée."
 	},
-	"404": "Erreur Transcendente: page non trouvée",
-	"profile": "Profile"
+	"account" : {
+		"update": "Mettre à jour",
+		"title": "Mon compte"
+	},
+	"404": "Erreur Transcendente: page non trouvée"
 }
