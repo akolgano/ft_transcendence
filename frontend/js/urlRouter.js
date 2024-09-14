@@ -53,7 +53,14 @@ const urlRoutes = {
 		template: "./play.html",
 		title: "Home",
 		description: "Home page",
-		scripts: [],
+		scripts: ["../js/game.js"],
+		auth: true,
+	},
+	"/play": {
+		template: "./play.html",
+		title: "Home",
+		description: "Home page",
+		scripts: ["../js/game.js"],
 		auth: true,
 	},
 	"/friends": {

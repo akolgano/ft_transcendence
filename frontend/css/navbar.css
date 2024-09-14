@@ -3,16 +3,3 @@
 	height:40px;
 	width:40px;
 }
-
-.avatar-lg
-{
-	max-height:300px;
-	max-width:300px;
-	width: auto;
-	height: auto;
-}
-
-.v-align
-{
-	vertical-align: middle
-}

@@ -1,0 +1,12 @@
+.v-align
+{
+	vertical-align: middle
+}
+
+.avatar-lg
+{
+	max-height:300px;
+	max-width:300px;
+	width: auto;
+	height: auto;
+}
