@@ -27,7 +27,8 @@
 	},
 	"account" : {
 		"update": "Update",
-		"title": "My account"
+		"title": "My account",
+		"picture": "Profile picture"
 	},
 	"404": "Transcendent error: page not found"
 }

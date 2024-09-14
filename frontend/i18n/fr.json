@@ -27,7 +27,8 @@
 	},
 	"account" : {
 		"update": "Mettre à jour",
-		"title": "Mon compte"
+		"title": "Mon compte",
+		"picture": "Photo de profil"
 	},
 	"404": "Erreur Transcendente: page non trouvée"
 }

@@ -27,7 +27,8 @@
 	},
 	"account" : {
 		"update": "Update username",
-		"title": "Mi cuenta"
+		"title": "Mi cuenta",
+		"picture": "Profile picture"
 	},
 	"404": "Error transcendente: Parece que esta página no existe"
 }
