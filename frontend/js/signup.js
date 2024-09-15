@@ -5,6 +5,16 @@
 
 	signupForm.addEventListener("submit", async (e) => {
 		e.preventDefault();
+
+		let newPassword = document.getElementById("password").value;
+		let repeatPassword = document.getElementById("confirm-password").value;
+
+		if (newPassword !== repeatPassword)
+		{
+			alert("Passwords do not match");
+			return ;
+		}
+
 		const formData = new FormData(signupForm);
 		try {
 			let errorMessage = "";

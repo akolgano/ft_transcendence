@@ -29,17 +29,14 @@
 				alert(translator.translateForKey("auth.login-success", localStorage.getItem("preferred_language") || "en"))
 				// Change navbar
 				updateNavbar(true);
-				console.log("SIX")
 				urlRoute({ target: { href: '/' }, preventDefault: () => {} });
 			}
 			else
 			{
-				console.log("Elsing")
 				alert(translator.translateForKey("auth.login-error", localStorage.getItem("preferred_language") || "en"))
 				console.log(data.message);
 			}
 		} catch (error) {
-			console.log("Catching")
 			alert(translator.translateForKey("auth.login-ko", localStorage.getItem("preferred_language") || "en"))
 			console.log(error.message)
 		}
