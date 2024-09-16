@@ -78,8 +78,8 @@ def change_profile_picture(request):
 @permission_classes([IsAuthenticated])
 def add_friend(request):
     user = request.user
-    friend_id = request.data.get('friend_id')
-    friend = get_object_or_404(CustomUser, id=friend_id)
+    friend_username = request.data.get('friend_username')
+    friend = get_object_or_404(CustomUser, username=friend_username)
     user.add_friend(friend)
     return Response({'detail': 'Friend added successfully'}, status=status.HTTP_200_OK)
 
@@ -88,8 +88,8 @@ def add_friend(request):
 @permission_classes([IsAuthenticated])
 def remove_friend(request):
     user = request.user
-    friend_id = request.data.get('friend_id')
-    friend = get_object_or_404(CustomUser, id=friend_id)
+    friend_username = request.data.get('friend_username')
+    friend = get_object_or_404(CustomUser, username=friend_username)
     user.remove_friend(friend)
     return Response({'detail': 'Friend removed successfully'}, status=status.HTTP_200_OK)
 
@@ -132,6 +132,8 @@ def change_password(request):
         serializer.save()
         return Response({"detail": "Password changed successfully."}, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 
