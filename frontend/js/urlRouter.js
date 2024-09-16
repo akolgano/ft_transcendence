@@ -160,8 +160,6 @@ const urlLocationHandler = async () => {
 	translateNewContent(content)
 	addEventSpaLinks(content)
 
-	// translator.translatePageTo(localStorage.getItem("preferred_language"));
-
 	loadScripts(route.scriptContent || []);
 
 	document.title = route.title;

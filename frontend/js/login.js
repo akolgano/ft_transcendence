@@ -1,6 +1,10 @@
 {
 	console.log("SCRIPT LOG IN")
 
+	document.querySelectorAll(".toggle-password").forEach(node => {
+		node.addEventListener("click", togglePassword)
+	});
+
 	const loginForm = document.getElementById("loginForm");
 
 	loginForm.addEventListener("submit", async (e) => {

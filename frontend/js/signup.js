@@ -3,6 +3,10 @@
 
 	const signupForm = document.getElementById("signupForm");
 
+	document.querySelectorAll(".toggle-password").forEach(node => {
+		node.addEventListener("click", togglePassword)
+	});
+
 	signupForm.addEventListener("submit", async (e) => {
 		e.preventDefault();
 

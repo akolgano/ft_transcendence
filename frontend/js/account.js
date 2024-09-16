@@ -1,6 +1,10 @@
 {
 	console.log("Account script")
 
+	document.querySelectorAll(".toggle-password").forEach(node => {
+		node.addEventListener("click", togglePassword)
+	});
+
 	let user = JSON.parse(localStorage.getItem("user"));
 	console.log(user);
 
