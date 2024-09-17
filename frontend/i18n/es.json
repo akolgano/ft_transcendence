@@ -20,7 +20,7 @@
 		"already-account": "¿Ya tienes cuenta?",
 		"error": "Error: ",
 		"login-error": "Lo sentimos, su contraseña o nombre de usuario es incorrecto",
-		"login-ko": "Error logging in, please try again",
+		"login-ko": "Error logging in, please try again ES",
 		"sign-up-success": "Cuenta creada",
 		"login-success": "Inicio de sesión exitosa",
 		"logout-success": "Session cerrada",

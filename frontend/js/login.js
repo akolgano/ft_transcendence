@@ -30,7 +30,11 @@
 				localStorage.setItem("user", JSON.stringify(data.user));
 				localStorage.setItem("token", data.token);
 
-				alert(translator.translateForKey("auth.login-success", localStorage.getItem("preferred_language") || "en"))
+				localStorage.setItem("preferred_language", (data.user.language))
+				console.log("Preferred language: " + localStorage.getItem("preferred_language"))
+
+				translator.translatePageTo(localStorage.getItem("preferred_language"));
+				alert(translator.translateForKey("auth.login-success", localStorage.getItem("preferred_language")))
 				// Change navbar
 				updateNavbar(true);
 				urlRoute({ target: { href: '/' }, preventDefault: () => {} });

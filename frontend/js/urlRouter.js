@@ -95,7 +95,7 @@ const urlRoutes = {
 		template: "./account.html",
 		title: "account",
 		description: "Your account",
-		scripts: ["../js/account.js", "../js/changePassword.js", "../js/changePicture.js"],
+		scripts: ["../js/account.js", "../js/changePassword.js", "../js/changePicture.js", "../js/defaultLanguage.js"],
 		auth: true,
 	},
 };
@@ -126,8 +126,8 @@ const urlRoute = (event) => {
 const translateNewContent = (node) => {
 	node.querySelectorAll("[data-i18n]").forEach(element => {
 		let data = element.getAttribute('data-i18n')
-		// console.log("Preferred language: " + localStorage.getItem("preferred_language"))
-		let translation = translator.translateForKey(data, localStorage.getItem("preferred_language") || "en")
+		console.log("Preferred language: " + localStorage.getItem("preferred_language"))
+		let translation = translator.translateForKey(data, localStorage.getItem("preferred_language"))
 		element.innerHTML = translation
 	});
 }
