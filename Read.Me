@@ -72,6 +72,7 @@ Ran 23 tests in 35.731s
 
 OK
 
+curl -X PATCH http://127.0.0.1:8000/change_password/ Content-Type: application/json {'old_password': 'wrongpassword', 'new_password': 'newpassword456'}
 
 curl -X GET http://localhost:8000/get_friends/ -H "Content-Type: application/json" -H "Authorization: Token 7fd95b26d7f0c116e424b12ebd2ccf2554b2692f"
 
