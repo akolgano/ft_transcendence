@@ -30,5 +30,10 @@
 		"title": "Mon compte",
 		"picture": "Photo de profil"
 	},
+	"friends": {
+		"add-title": "Add a new friend",
+		"add": "Ajouter",
+		"remove": "Unfriend"
+	},
 	"404": "Erreur Transcendente: page non trouvée"
 }
