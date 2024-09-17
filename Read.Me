@@ -74,3 +74,7 @@ OK
 
 
 curl -X PATCH http://127.0.0.1:8000/change_password/ Content-Type: application/json {'old_password': 'wrongpassword', 'new_password': 'newpassword456'}
+curl -X POST http://localhost:8000/your-endpoint-url/ \
+     -H "Authorization: Token YOUR_ACCESS_TOKEN" \
+     -H "Content-Type: application/json" \
+     -d '{"friend_username": "friend_username_here"}

@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.response import Response
 from rest_framework import status
 #from django.contrib.auth.models import User
-from .models import CustomUser
+from .models import CustomUser, Friendship
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, FriendSerializer, ChangePasswordSerializer
 from django.contrib.auth import get_user_model
@@ -16,6 +16,7 @@ from django.core.exceptions import ValidationError
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound
+from django.shortcuts import render
 
 User = get_user_model()
 
@@ -73,26 +74,6 @@ def change_profile_picture(request):
     serializer = UserSerializer(user)
     return Response({'user': serializer.data}, status=status.HTTP_200_OK)
 
-@api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def add_friend(request):
-    user = request.user
-    friend_username = request.data.get('friend_username')
-    friend = get_object_or_404(CustomUser, username=friend_username)
-    user.add_friend(friend)
-    return Response({'detail': 'Friend added successfully'}, status=status.HTTP_200_OK)
-
-@api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def remove_friend(request):
-    user = request.user
-    friend_username = request.data.get('friend_username')
-    friend = get_object_or_404(CustomUser, username=friend_username)
-    user.remove_friend(friend)
-    return Response({'detail': 'Friend removed successfully'}, status=status.HTTP_200_OK)
-
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -133,7 +114,58 @@ def change_password(request):
         return Response({"detail": "Password changed successfully."}, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def add_friend(request):
+    user = request.user
+    username_to_add = request.data.get('username_to_add')
 
+    if not username_to_add:
+        return Response({'detail': 'Username to add is required.'}, status=status.HTTP_400_BAD_REQUEST)
 
+    user_to_add = get_object_or_404(CustomUser, username=username_to_add)
 
+    if user == user_to_add:
+        return Response({'detail': 'You cannot add yourself as a friend.'}, status=status.HTTP_400_BAD_REQUEST)
 
+    if Friendship.objects.filter(from_user=user, to_user=user_to_add).exists():
+        return Response({'detail': 'You are already friends with this user.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    Friendship.objects.create(from_user=user, to_user=user_to_add)
+    return Response({'detail': 'Friend added successfully.'}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def remove_friend(request):
+    user = request.user
+    username_to_remove = request.data.get('username_to_remove')
+
+    if not username_to_remove:
+        return Response({'detail': 'Username to remove is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    user_to_remove = get_object_or_404(CustomUser, username=username_to_remove)
+
+    friendship = Friendship.objects.filter(from_user=user, to_user=user_to_remove).first()
+    if not friendship:
+        return Response({'detail': 'You are not friends with this user.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    friendship.delete()
+    return Response({'detail': 'Friend removed successfully.'}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def user_friends_view(request):
+    user = request.user
+    try:
+        friends = user.get_friends()
+        #friends_list = [friend.to_user.username for friend in friends] 
+        friends_list = [{
+            'username': friend.to_user.username,
+            'profile_picture': friend.to_user.profile_picture.url if friend.to_user.profile_picture else None
+        } for friend in friends] 
+        return Response({'user': user.username, 'friends': friends_list})
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
