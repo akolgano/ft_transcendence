@@ -196,18 +196,24 @@ class FriendTests(TestCase):
     
     def test_add_friend(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token1.key)
-        response = self.client.post('/add-friend/', {'friend_id': self.user2.id})
+        response = self.client.post('/add_friend/', {'username_to_add': self.user2.username})
         self.assertEqual(response.status_code, 200)
-        self.assertIn(self.user2, self.user1.friends.all())
-        self.assertIn(self.user1, self.user2.friends.all())
-    
+        self.assertEqual(response.data['detail'], 'Friend added successfully.')
+        response = self.client.post('/add_friend/', {'username_to_add': self.user2.username})
+        self.assertEqual(response.data['detail'], 'You are already friends with this user.')
+
     def test_remove_friend(self):
-        self.user1.add_friend(self.user2)  # Add friend first
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token1.key)
-        response = self.client.post('/remove-friend/', {'friend_id': self.user2.id})
+
+        response = self.client.post('/add_friend/', {'username_to_add': self.user2.username})
         self.assertEqual(response.status_code, 200)
-        self.assertNotIn(self.user2, self.user1.friends.all())
-        self.assertNotIn(self.user1, self.user2.friends.all())
+        response = self.client.post('/remove_friend/', {'username_to_remove': self.user2.username})
+        self.assertEqual(response.data['detail'], 'Friend removed successfully.')
+        self.assertEqual(response.status_code, 200)     
+        response = self.client.post('/remove_friend/', {'username_to_remove': self.user2.username})
+        self.assertEqual(response.data['detail'], 'You are not friends with this user.')
+        self.assertEqual(response.status_code, 400)
+
 
 class FriendListTests(TestCase):
 
@@ -217,13 +223,16 @@ class FriendListTests(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='password123', email='user2@example.com')
         self.user3 = User.objects.create_user(username='user3', password='password123', email='user3@example.com')
 
-        self.user1.add_friend(self.user2)
-        self.user1.add_friend(self.user3)
-
         self.client.force_authenticate(user=self.user1)
 
     def test_get_friends(self):
+        response = self.client.post('/add_friend/', {'username_to_add': self.user2.username})
+        self.assertEqual(response.status_code, 200) 
+
+        response = self.client.post('/add_friend/', {'username_to_add': self.user3.username})
+        self.assertEqual(response.status_code, 200)
         response = self.client.get('/get_friends/')
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         friends = response.data['friends']
         self.assertEqual(len(friends), 2)
