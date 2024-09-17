@@ -16,7 +16,6 @@ from django.core.exceptions import ValidationError
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound
-from django.shortcuts import render
 
 User = get_user_model()
 
