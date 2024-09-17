@@ -2,12 +2,9 @@ from django.contrib import admin
 from .models import CustomUser, Friendship
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.html import format_html
-from .forms import CustomUserChangeForm, CustomUserCreationForm
+
 
 class UserAdmin(BaseUserAdmin):
-    form = CustomUserChangeForm
-    add_form = CustomUserCreationForm
-
     list_display = ('username', 'email', 'profile_picture_display', 'online', 'language', 'get_friends_count', 'get_friends_list')
 
     def profile_picture_display(self, obj):
