@@ -14,8 +14,12 @@ The Makefile is currently not working
 
 ## Migrations
 
+```
 docker exec -it django python3 manage.py makemigrations
 docker exec -it django python3 manage.py migrate
+```
+
+If there were any migrations, you have to stop the container (CONTROL-C) and start it again (docker-compose up).
 
 ## Frontend
 
