@@ -65,17 +65,17 @@ const urlRoutes = {
 	},
 	"/friends": {
 		template: "./friends.html",
-		title: "About Us",
+		title: "Friends",
 		description: "All your friends",
-		scripts: ["../js/friends.js"],
+		scripts: ["../js/removeFriend.js", "../js/friends.js", "../js/addFriend.js"],
 		auth: true,
 	},
 	"/history": {
 		template: "./history.html",
 		title: "History",
 		description: "Game history",
-		scripts: [],
-		auth: false,
+		scripts: ["../js/history.js"],
+		auth: true,
 	},
 	"/signup": {
 		template: "./signup.html",
