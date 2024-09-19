@@ -4,7 +4,7 @@ console.log("ADD FRIEND SCRIPT")
 
 // }
 
-{
+function addFriendEvent() {
 	const addFriend = document.getElementById("addFriend");
 
 	addFriend.addEventListener("submit", async (e) => {
@@ -44,9 +44,6 @@ console.log("ADD FRIEND SCRIPT")
 			console.log(error.message)
 		}
 	})
-
 }
 
-// function addFriend() {
-
-// }
+addFriendEvent();
