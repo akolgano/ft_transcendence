@@ -10,3 +10,51 @@
 	width: auto;
 	height: auto;
 }
+
+body
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #000;
+}
+
+.game-container
+{
+    display: flex;
+    flex-direction: column; /* Stacks the player labels on top of the canvas */
+    align-items: center;
+}
+
+canvas
+
+{
+    border: 2px solid #fff;
+}
+
+.game-over-modal
+{
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.player-labels
+{
+    display: flex;
+    justify-content: space-between;
+    width: 800px;
+    margin-bottom: 10px;
+    color: white;
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+ }
