@@ -1,4 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong Game</title>
+
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+
 <div class="mx-3 mb-5 d-flex flex-column align-items-center">
-	<h2 class="mb-2">Welcome to Pong</h2>
-    	<a href="{% url 'game_page' %}" class="btn btn-success text-center">Play 🏓</a>
+    <div id="gameOptions" class="game-options">
+        <h1>WELCOME!<br><br> Please select a Game ...</h1>
+        <button onclick="startPlayerVsPlayer()">Player vs Player</button>
+        <button onclick="startPlayerVsAI()">Player vs AI</button>
+        <button onclick="startTournament()">Tournament (4 Players)</button>
+    </div>
+
+    <!-- Game Container AI to hold both player labels and canvas -->
+    <div id="gameContainerAI" class="game-containerAI">
+        <div class="player-tags">
+            <div>Player AI</div>
+            <div>Player 1</div>
+        </div>
+        <canvas id="pongGameCanvasAI"></canvas>
+        <div id="gameOverModalAI" class="game-over-modalAI">
+            <h1>Game Over!</h1>
+            <p>Winner: <span id="winner-name-ai"></span></p>
+            <button onclick="startPvAI()">Restart</button>
+            <button onclick="showGameOptions()">Back to Main Menu</button>        
+        </div>
+    </div>
+
+    <!-- Game Container PP to hold both player labels and canvas -->
+    <div id="gameContainerPP" class="game-containerPP">
+        <div class="player-tags">
+            <div>Player 2</div>
+            <div>Player 1</div>
+        </div>
+        <canvas id="pongGameCanvasPP"></canvas>
+        <div id="gameOverModalPP" class="game-over-modalPP">
+            <h1>Game Over!</h1>
+            <p>Winner: <span id="winner-name-pp"></span></p>
+            <button onclick="startPvP()">Restart</button>
+            <button onclick="showGameOptions()">Back to Main Menu</button>        
+        </div>
+    </div>
 </div>
+    <!-- Link to external JavaScript file -->
+    <script src="{% static 'js/game.js' %}"></script>
+</body>
+</html>    
