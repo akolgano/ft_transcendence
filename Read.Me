@@ -79,4 +79,16 @@ curl -X GET http://localhost:8000/get_friends/ -H "Content-Type: application/jso
 
 curl -X POST http://localhost:8000/add_friend/ -H "Content-Type: application/json" -H "Authorization: Token 7fd95b26d7f0c116e424b12ebd2ccf2554b2692f" -d '{"username_to_add": "elina"}'
 
+curl -X POST http://localhost:8000/remove_friend/ -H "Content-Type: application/json" -H "Authorization: Token 7fd95b26d7f0c116e424b12ebd2ccf2554b2692f" -d '{"username_to_remove": "elina"}'
+
+curl -X GET http://localhost:8000/player/stats/ \
+-H "Authorization: Token 1f7755b7392c8f70a50a0a99be363edff8b416e4"
+
+curl -X GET http://localhost:8000/player/stats/all/ -H "Authorization: Token 1f7755b7392c8f70a50a0a99be363edff8b416e4"
+
+
+curl -X POST http://localhost:8000/game/result/ -H "Authorization: Token 1f7755b7392c8f70a50a0a99be363edff8b416e4" -H "Content-Type: application/json" -d '{"opponent_username": "elina", "is_ai": false, "score": [5, 2] }'
+
+
+curl -X POST http://localhost:8000/game/result/ -H "Authorization: Token 1f7755b7392c8f70a50a0a99be363edff8b416e4" -H "Content-Type: application/json" -d '{"opponent_username": "computer", "is_ai": true, "score": [5, 2] }'
 
