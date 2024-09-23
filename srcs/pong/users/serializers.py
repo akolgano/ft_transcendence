@@ -7,6 +7,8 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from rest_framework import serializers
+from .models import GameResult, PlayerStats
 User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
@@ -43,3 +45,17 @@ class ChangePasswordSerializer(serializers.Serializer):
         new_password = self.validated_data['new_password']
         user.set_password(new_password)
         user.save()
+
+
+
+class GameResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GameResult
+        fields = ['user', 'opponent_username', 'is_ai', 'score', 'date_time']
+
+class PlayerStatsSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    profile_picture = serializers.ImageField(source='user.profile_picture', read_only=True)
+    class Meta:
+        model = PlayerStats
+        fields = ['username', 'profile_picture', 'victories', 'losses']

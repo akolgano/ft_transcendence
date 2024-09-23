@@ -6,6 +6,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
+
 class CustomUser(AbstractUser):
     profile_picture = models.ImageField(
         upload_to='profile_pictures/',
@@ -54,3 +55,23 @@ class Friendship(models.Model):
 
     def __str__(self):
         return f"{self.from_user} -> {self.to_user}"
+
+
+class GameResult(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user', on_delete=models.CASCADE)
+    opponent_username = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='opponent', on_delete=models.CASCADE)
+    is_ai = models.BooleanField(default=False)
+    score = models.JSONField()
+    date_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date_time']  # Latest games first
+        verbose_name_plural = 'Game Results'
+
+class PlayerStats(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    victories = models.IntegerField(default=0)
+    losses = models.IntegerField(default=0)
+
+    class Meta:
+        verbose_name_plural = 'Stats'

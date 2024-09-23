@@ -19,5 +19,10 @@ urlpatterns = [
     path('get_user_info/', views.get_user_info, name='get_user_info'),
     path('change_password/', views.change_password, name='change_password'),
     path('get_user_info/<int:user_id>/', views.get_user_by_id, name='get_user_by_id'),
+    path('game/result/', views.save_game_result, name='game_result'),
+    path('player/stats/', views.get_game_result, name='player_stats'),
+	path('player/stats/all/', views.all_player_stats, name='all_player_stats'),
     re_path('change-profile-picture', views.change_profile_picture, name='change_profile_picture'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+

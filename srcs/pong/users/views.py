@@ -16,7 +16,9 @@ from django.core.exceptions import ValidationError
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound
-
+from .models import GameResult, PlayerStats
+from .serializers import GameResultSerializer, PlayerStatsSerializer
+from rest_framework.views import APIView
 User = get_user_model()
 
 @api_view(['POST'])
@@ -160,7 +162,6 @@ def user_friends_view(request):
     user = request.user
     try:
         friends = user.get_friends()
-        #friends_list = [friend.to_user.username for friend in friends] 
         friends_list = [{
             'username': friend.to_user.username,
             'profile_picture': friend.to_user.profile_picture.url if friend.to_user.profile_picture else None
@@ -168,3 +169,65 @@ def user_friends_view(request):
         return Response({'user': user.username, 'friends': friends_list})
     except Exception as e:
         return Response({'error': str(e)}, status=400)
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def save_game_result(request):
+    user = request.user
+    opponent_username = request.data.get('opponent_username')
+    is_ai = request.data.get('is_ai')
+    score = request.data.get('score')
+    if score is None:
+        return Response({'error': 'Score is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if isinstance(score, list):
+        if len(score) != 2 or not all(isinstance(s, int) for s in score):
+            return Response({'error': 'Invalid score format.'}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({'error': 'Invalid score format.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    opponent_user = get_object_or_404(CustomUser, username=opponent_username)
+    game_result = GameResult.objects.create(
+        user=user,
+        opponent_username=opponent_user,
+        is_ai=is_ai,
+        score=score
+    )
+    player_stats, created = PlayerStats.objects.get_or_create(user=user)
+    if score[0] > score[1]: 
+        player_stats.victories += 1
+    else: 
+        player_stats.losses += 1
+        
+    player_stats.save()
+
+    player_stats, created = PlayerStats.objects.get_or_create(user=opponent_user)
+    if score[1] > score[0]: 
+        player_stats.victories += 1
+    else: 
+        player_stats.losses += 1
+        
+    player_stats.save()
+
+    return Response({'detail': 'Score saved successfully.'}, status=status.HTTP_201_CREATED)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_game_result(request):
+    user = request.user
+    try:
+        stats = PlayerStats.objects.get(user=user)
+        return Response(PlayerStatsSerializer(stats).data)
+    except PlayerStats.DoesNotExist:
+        return Response({"error": "No results"}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def all_player_stats(request):
+    stats = PlayerStats.objects.all()
+    serializer = PlayerStatsSerializer(stats, many=True)
+    return Response(serializer.data)

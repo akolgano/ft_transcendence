@@ -20,7 +20,7 @@ POST http://127.0.0.1:8000/signup Content-Type: application/json
 
 ###
 
-curl -X POST http://127.0.0.1:8000/login Content-Type: application/json { "username": "anna", "password": "Pass1234!" }
+curl POST http://127.0.0.1:8000/login Content-Type: application/json { "username": "anna", "password": "Pass1234!" }
 
 ###
 
@@ -71,9 +71,23 @@ test_get_user_info_user_not_found (pong.tests.tests.UserInfoTests.test_get_user_
 Ran 23 tests in 35.731s
 
 OK
+curl -X POST http://127.0.0.1:8000/signup -H "Content-Type: application/json" -d '{"username": "alex", "password": "Pass1234!9999", "email": "testalex@mail.com"}'
 
 curl -X PATCH http://127.0.0.1:8000/change_password/ Content-Type: application/json {'old_password': 'wrongpassword', 'new_password': 'newpassword456'}
 
 curl -X GET http://localhost:8000/get_friends/ -H "Content-Type: application/json" -H "Authorization: Token 7fd95b26d7f0c116e424b12ebd2ccf2554b2692f"
 
 curl -X POST http://localhost:8000/add_friend/ -H "Content-Type: application/json" -H "Authorization: Token 7fd95b26d7f0c116e424b12ebd2ccf2554b2692f" -d '{"username_to_add": "elina"}'
+
+
+
+curl -X GET http://localhost:8000/player/stats/ \
+-H "Authorization: Token 1f7755b7392c8f70a50a0a99be363edff8b416e4"
+
+curl -X GET http://localhost:8000/player/stats/all/ -H "Authorization: Token 1f7755b7392c8f70a50a0a99be363edff8b416e4"
+
+
+curl -X POST http://localhost:8000/game/result/ -H "Authorization: Token 1f7755b7392c8f70a50a0a99be363edff8b416e4" -H "Content-Type: application/json" -d '{"opponent_username": "elina", "is_ai": false, "score": [5, 2] }'
+
+
+curl -X POST http://localhost:8000/game/result/ -H "Authorization: Token 1f7755b7392c8f70a50a0a99be363edff8b416e4" -H "Content-Type: application/json" -d '{"opponent_username": "computer", "is_ai": true, "score": [5, 2] }'
