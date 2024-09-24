@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, Friendship
+from .models import CustomUser, Friendship, GameResult, PlayerStats
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.html import format_html
 
@@ -30,3 +30,19 @@ class FriendshipAdmin(admin.ModelAdmin):
     search_fields = ('from_user__username', 'to_user__username')
 
 admin.site.register(Friendship, FriendshipAdmin)
+admin.site.register(GameResult)
+
+class PlayerStatsAdmin(admin.ModelAdmin):
+    list_display = ['user', 'victories', 'losses']  
+    search_fields = ['user__username'] 
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset
+
+    def serialize_stats(self, obj):
+        serializer = PlayerStatsSerializer(obj)
+        return serializer.data
+
+
+admin.site.register(PlayerStats, PlayerStatsAdmin)

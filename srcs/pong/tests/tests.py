@@ -7,15 +7,13 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
-#from django.contrib.auth.models import User
-from pong.users.models import CustomUser
+from pong.users.models import CustomUser, GameResult, PlayerStats
 from rest_framework.authtoken.models import Token
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.conf import settings
 from django.contrib.auth import get_user_model
 import time, os
-
 
 class LoginApiTests(APITestCase):
 
@@ -353,3 +351,115 @@ class LanguageTestCases(APITestCase):
         })
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['user']['language'], 'es')
+
+
+
+class SaveGameResultTests(APITestCase):
+
+    def setUp(self):
+        self.client = APIClient()
+        self.user = CustomUser.objects.create_user(username='user1', password='testpass')
+        self.opponent = CustomUser.objects.create_user(username='opponent1', password='testpass')
+        self.token = Token.objects.create(user=self.user)
+
+    def test_valid_game_result_submission(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/game/result/', {
+            'opponent_username': 'opponent1',
+            'is_ai': False,
+            'score': [3, 1]
+        }, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(GameResult.objects.count(), 1)
+        self.assertEqual(PlayerStats.objects.get(user=self.user).victories, 1)
+        self.assertEqual(PlayerStats.objects.get(user=self.opponent).losses, 1)
+
+    def test_opponent_not_found(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/game/result/', {
+            'opponent_username': 'unknown_user',
+            'is_ai': False,
+            'score': [2, 2]
+        }, format='json')
+        self.assertEqual(response.status_code, 404)
+
+    def test_invalid_score_format(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/game/result/', {
+            'opponent_username': 'opponent1',
+            'is_ai': False,
+            'score': 'invalid_score'
+        }, format='json')
+        self.assertEqual(response.status_code, 400)
+
+    def test_missing_required_fields(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/game/result/', {
+            'opponent_username': 'opponent1',
+            'is_ai': False
+        }, format='json')
+        self.assertEqual(response.status_code, 400)
+
+    def test_score_tie_scenario(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/game/result/', {
+            'opponent_username': 'opponent1',
+            'is_ai': False,
+            'score': [2, 2]
+        }, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(PlayerStats.objects.get(user=self.user).victories, 0)
+        self.assertEqual(PlayerStats.objects.get(user=self.opponent).victories, 0)
+
+class GetGameResultTests(APITestCase):
+
+    def setUp(self):
+        self.user = CustomUser.objects.create_user(username='user1', password='testpass')
+        self.opponent = CustomUser.objects.create_user(username='opponent1', password='testpass')
+        self.token = Token.objects.create(user=self.user)
+
+    def test_valid_user_stats_retrieval(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/game/result/', {
+            'opponent_username': 'opponent1',
+            'is_ai': False,
+            'score': [3, 1]
+        }, format='json')
+        self.assertEqual(response.status_code, 201)
+        response = self.client.get('/player/stats/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('username' in response.data)
+        self.assertTrue('victories' in response.data)
+        self.assertTrue('losses' in response.data)
+
+    def test_user_stats_not_found(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.get('/player/stats/')
+        self.assertEqual(response.status_code, 404)
+
+
+class AllPlayerStatsTests(APITestCase):
+
+    def setUp(self):
+        self.user = CustomUser.objects.create_user(username='user1', password='testpass')
+        self.opponent = CustomUser.objects.create_user(username='opponent1', password='testpass')
+        self.token = Token.objects.create(user=self.user)
+        self.url = '/player/stats/all/'
+
+    def test_get_all_player_stats(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/game/result/', {
+            'opponent_username': 'opponent1',
+            'is_ai': False,
+            'score': [3, 1]
+        }, format='json')
+        self.assertEqual(response.status_code, 201)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.data, list)
+
+    def test_no_player_stats_available(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, [])
