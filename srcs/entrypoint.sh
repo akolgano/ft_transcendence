@@ -8,6 +8,7 @@ done
 
 # Apply migrations
 echo "Applying migrations..."
+python manage.py makemigrations
 python manage.py migrate
 
 # Start the Gunicorn server
