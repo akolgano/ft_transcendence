@@ -77,7 +77,12 @@ curl -X PATCH http://127.0.0.1:8000/change_password/ Content-Type: application/j
 
 curl -X GET http://localhost:8000/get_friends/ -H "Content-Type: application/json" -H "Authorization: Token 7fd95b26d7f0c116e424b12ebd2ccf2554b2692f"
 
+----Add friend---------
 curl -X POST http://localhost:8000/add_friend/ -H "Content-Type: application/json" -H "Authorization: Token 7fd95b26d7f0c116e424b12ebd2ccf2554b2692f" -d '{"username_to_add": "elina"}'
+
+{"detail":"Friend added successfully.","friend":{"id":3,"username":"elina","email":"elina@example.com","online":false,"language":"fr","profile_picture":"/media/profile_pictures/default.jpg"}} / {"detail":"You are already friends with this user."} / {"detail":"You cannot add yourself as a friend."} / {"detail":"No CustomUser matches the given query."}
+
+------------------------
 
 curl -X POST http://localhost:8000/remove_friend/ -H "Content-Type: application/json" -H "Authorization: Token 7fd95b26d7f0c116e424b12ebd2ccf2554b2692f" -d '{"username_to_remove": "elina"}'
 

@@ -134,7 +134,11 @@ def add_friend(request):
         return Response({'detail': 'You are already friends with this user.'}, status=status.HTTP_400_BAD_REQUEST)
 
     Friendship.objects.create(from_user=user, to_user=user_to_add)
-    return Response({'detail': 'Friend added successfully.'}, status=status.HTTP_200_OK)
+    serializer = UserSerializer(user_to_add)
+    return Response({
+        'detail': 'Friend added successfully.',
+        'friend': serializer.data
+    }, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
