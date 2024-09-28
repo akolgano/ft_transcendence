@@ -92,3 +92,10 @@ curl -X POST http://localhost:8000/game/result/ -H "Authorization: Token 1f7755b
 
 curl -X POST http://localhost:8000/game/result/ -H "Authorization: Token 1f7755b7392c8f70a50a0a99be363edff8b416e4" -H "Content-Type: application/json" -d '{"opponent_username": "computer", "is_ai": true, "score": [5, 2] }'
 
+----Change language---------
+
+curl -X PATCH http://localhost:8000/change_language/ -H "Authorization: Token cc237650a8591835493dce0984299fec780eeda4" -H "Content-Type: application/json" -d '{"language": "fr"}' 
+
+{"detail":"Language changed successfully."} / {"error":"Language is required."} / {"error":"Unsupported language."}
+----------------------------
+

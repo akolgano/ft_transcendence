@@ -22,6 +22,7 @@ urlpatterns = [
     path('game/result/', views.save_game_result, name='game_result'),
     path('player/stats/', views.get_game_result, name='player_stats'),
 	path('player/stats/all/', views.all_player_stats, name='all_player_stats'),
+    path('change_language/', views.change_language, name='change_language'),
     re_path('change-profile-picture', views.change_profile_picture, name='change_profile_picture'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
