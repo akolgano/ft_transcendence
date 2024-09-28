@@ -3,19 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pong Game</title>
-
+    <title>Pong Game PvAI</title>
     <!-- Link to external CSS file -->
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-
-<div class="mx-3 mb-5 d-flex flex-column align-items-center">
+    <!-- Game options to select 3 game options via buttons -->
     <div id="gameOptions" class="game-options">
         <h1>WELCOME!<br><br> Please select a Game ...</h1>
         <button onclick="startPlayerVsPlayer()">Player vs Player</button>
         <button onclick="startPlayerVsAI()">Player vs AI</button>
-        <button onclick="startTournament()">Tournament (4 Players)</button>
+        <button onclick="startTournament()">Tournament Play</button>
     </div>
 
     <!-- Game Container AI to hold both player labels and canvas -->
@@ -47,8 +45,37 @@
             <button onclick="showGameOptions()">Back to Main Menu</button>        
         </div>
     </div>
-</div>
+
+    <!-- Tournament options to select 2 options via buttons -->    
+    <div id="tourOptions" class ="tour-options">
+        <h1>WELCOME TO<br>42 PONG TOURNAMENT!<br><br> Please select a Tournament ...</h1>
+        <button onclick="getPlayerName(4)">Tournament - 4 Players</button>
+        <button onclick="getPlayerName(8)">Tournament - 8 Players</button><br>
+        <div class="center-button">
+            <button onclick="showGameOptions()">Back to Main Menu</button>
+        </div>
+    </div>
+
+    <!-- Player Name Form -->
+    <div id="playerNameForm" class="player-name-form" style="display:none;">
+        <h1>Enter Player Names</h1>
+        <form id="playerForm">
+        <!-- Dynamic Player Name Inputs will go here -->
+        </form>
+        <button onclick="finalisePlayer()">Start Tournament</button>
+        <button onclick="startTournament()">Back to Tournament Selection</button>
+    </div>
+
+    <!-- Tournament Match Diagram and Buttons -->
+    <div id="tournamentContainer" class="tournament-container" style="display: none;">
+        <h2>Tournament Bracket</h2>
+        <div id="tournamentBracket" class="tournament-bracket">
+            <!-- Matches will be populated here dynamically -->
+        </div>
+        <button id="nextMatchButton" onclick="startNextMatch()" style="display: none;">Start Next Match</button>
+    </div>
+    
     <!-- Link to external JavaScript file -->
-    <script src="{% static 'js/game.js' %}"></script>
+    <script src="js/game.js"></script>
 </body>
-</html>    
+</html>

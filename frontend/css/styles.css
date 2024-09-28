@@ -12,60 +12,147 @@
 }
 
 body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #000;
-            color: #fff;
-            font-family: Arial, sans-serif;
-        }
-        .game-options {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-	.game-options h1 {
-	    text-align: center;
-	    margin-bottom: 20px; /* Add some spacing after the heading */
-	}
-        .game-containerAI, .game-containerPP {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            color: white;
-        }
-        canvas {
-            border: 2px solid #fff;
-        }
-        .game-over-modalAI, .game-over-modalPP {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-       .menu {
-            text-align: center;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 20px;
-            margin: 10px;
-            cursor: pointer;
-        }
-        .player-tags {
-            display: flex;
-            justify-content: space-between;
-            width: 800px;
-            margin-bottom: 10px;
-            color: white;
-            font-size: 20px;
-            font-family: Arial, sans-serif;
-         }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #000;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+.game-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.game-options h1 {
+    text-align: center;
+    margin-bottom: 20px; /* Add some spacing after the heading */
+}
+.game-containerAI, .game-containerPP {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+canvas {
+    border: 2px solid #fff;
+}
+.game-over-modalAI, .game-over-modalPP {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+.menu {
+    text-align: center;
+}
+button {
+    padding: 10px 20px;
+    font-size: 20px;
+    margin: 10px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #45a049;
+}
+.center-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.player-tags {
+    display: flex;
+    justify-content: space-between;
+    width: 800px;
+    margin-bottom: 10px;
+    color: white;
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.tour-options {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}        
+.tour-options h1 {
+    text-align: center;
+    margin-bottom: 20px; /* Add some spacing after the heading */
+}
+.tour-container {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+#playerFormContainer {
+    text-align: center;
+}
+#playerForm {
+    max-width: 600px;
+    margin: 0 auto; /* Center the form container */
+}
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.form-row label {
+    flex-basis: 30%; /* Label takes 30% width */
+    text-align: left;
+    font-size: 20px;
+    font-family: Arial, sans-serif; /* Use a clean, readable font */
+    line-height: 1; /* Adds some spacing for better readability */
+    height: 100%; /* Ensure the label occupies the full height */
+    display: flex;
+    align-items: center; /* Text inside the label is vertically centered */
+}
+.form-row input {
+    flex-basis: 65%; /* Input takes 65% width */
+    padding: 12px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    width: 100%; /* Ensure full width for input */
+    border: 1px solid #ccc;
+    border-radius: 4px; /* Adds slight rounding to input field borders */
+}
+.player-name-form {
+    text-align: center;
+}
+.player-name-form label {
+    display: block;
+    margin: 10px 0;
+}
+.player-name-form input {
+    padding: 10px;
+    width: 200px;
+    margin-bottom: 20px;
+}
+
+.tournament-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.tournament-bracket {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.match-box {
+    padding: 10px;
+    border: 1px solid #ccc;
+    width: 150px;
+    text-align: center;
+}
