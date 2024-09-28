@@ -43,7 +43,6 @@ class UserAdmin(BaseUserAdmin):
         'fields': ('username', 'email', 'password1', 'password2'),
     }),
     )
-    #fieldsets = {'fields': ('username', 'email', 'password1', 'password2')}
     list_display = ('username', 'email', 'profile_picture_display', 'online', 'language', 'get_friends_count', 'get_friends_list')
     def profile_picture_display(self, obj):
         if obj.profile_picture:
