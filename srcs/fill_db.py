@@ -8,7 +8,7 @@ django.setup()
 from pong.users.models import CustomUser
 
 sample_data = [
-    ('computer', 'alice@example.com', False, 'en', 'profile_pictures/default.jpg'),
+    ('computer', 'computer@example.com', False, 'en', 'profile_pictures/default.jpg'),
     ('elina', 'elina@example.com', False, 'fr', '/profile_pictures/default.jpg'),
     ('emily', 'emily@example.com', False, 'es', 'profile_pictures/default.jpg'),
     ('alice', 'alice@example.com', False, 'es', '/profile_pictures/default.jpg'),

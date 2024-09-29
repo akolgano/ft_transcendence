@@ -134,7 +134,11 @@ def add_friend(request):
         return Response({'detail': 'You are already friends with this user.'}, status=status.HTTP_400_BAD_REQUEST)
 
     Friendship.objects.create(from_user=user, to_user=user_to_add)
-    return Response({'detail': 'Friend added successfully.'}, status=status.HTTP_200_OK)
+    serializer = UserSerializer(user_to_add)
+    return Response({
+        'detail': 'Friend added successfully.',
+        'friend': serializer.data
+    }, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
@@ -231,3 +235,18 @@ def all_player_stats(request):
     stats = PlayerStats.objects.all()
     serializer = PlayerStatsSerializer(stats, many=True)
     return Response(serializer.data)
+
+@api_view(['PATCH'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def change_language(request):
+    user = request.user
+    new_language = request.data.get('language')
+    if not new_language:
+        return Response({"error": "Language is required."}, status=status.HTTP_400_BAD_REQUEST)
+    supported_languages = ['en', 'es', 'fr']
+    if new_language not in supported_languages:
+        return Response({"error": "Unsupported language."}, status=status.HTTP_400_BAD_REQUEST)
+    user.language = new_language
+    user.save()
+    return Response({"detail": "Language changed successfully."}, status=status.HTTP_200_OK)

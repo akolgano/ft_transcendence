@@ -21,7 +21,7 @@ class LoginApiTests(APITestCase):
     #    self.user = User.objects.create_user(username='testuser', password='testpassword')
 
     def setUp(self):
-        self.user = CustomUser.objects.create_user(username='testuser', password='testpassword')
+        self.user = CustomUser.objects.create_user(username='testuser', password='testpassword', email = 'dummy')
         self.token, created = Token.objects.get_or_create(user=self.user)
 
     def test_login_success(self):
@@ -63,17 +63,16 @@ class LoginApiTests(APITestCase):
 class SignupApiTests(APITestCase):
     
     def setUp(self):
-        # Create a user for testing duplicate username scenario
-        self.existing_user = CustomUser.objects.create_user(username='existinguser', password='testpassword')
+        self.existing_user = CustomUser.objects.create_user(username='existinguser', password='testpassword', email = 'dummy')
 
     def test_signup_success(self):
         url = reverse('signup')
         data = {
             'username': 'newuser',
-            'password': 'newpassword%'
+            'password': 'newpassword%',
+            'email': 'dummy1@email.com'
         }
         response = self.client.post(url, data, format='json')
-
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         self.assertIn('token', response.data)
@@ -91,7 +90,8 @@ class SignupApiTests(APITestCase):
     def test_signup_missing_username(self):
         url = reverse('signup')
         data = {
-            'password': 'newpassword'
+            'password': 'newpassword',
+            'email': 'dummy2'
         }
         response = self.client.post(url, data, format='json')
 
@@ -101,7 +101,8 @@ class SignupApiTests(APITestCase):
     def test_signup_missing_password(self):
         url = reverse('signup')
         data = {
-            'username': 'newuser'
+            'username': 'newuser',
+            'email': 'dummy3'
         }
         response = self.client.post(url, data, format='json')
 
@@ -111,10 +112,10 @@ class SignupApiTests(APITestCase):
         url = reverse('signup')
         data = {
             'username': 'validuser',
-            'password': '1'
+            'password': '1',
+            'email': 'dummy4@email.com'
         }
         response = self.client.post(url, data, format='json')
-
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('This password is too short', response.data['error'][0])
 
@@ -122,7 +123,8 @@ class SignupApiTests(APITestCase):
         url = reverse('signup')
         data = {
             'username': 'existinguser',
-            'password': 'newpassword'
+            'password': 'newpassword',
+            'email': 'email'
         }
         response = self.client.post(url, data, format='json')
 
@@ -141,7 +143,8 @@ class SignupApiTests(APITestCase):
         url = reverse('signup')
         data = {
             'username': 'validuser',
-            'password': 'space_in_password '
+            'password': 'space_in_password ',
+            'email': 'dummy4@email.com'
         }
         response = self.client.post(url, data, format='json')
 
@@ -187,8 +190,8 @@ class FriendTests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user1 = User.objects.create_user(username='user1', password='password1')
-        self.user2 = User.objects.create_user(username='user2', password='password2')
+        self.user1 = User.objects.create_user(username='user1', password='password1', email = 'dummy1')
+        self.user2 = User.objects.create_user(username='user2', password='password2', email = 'dummy2')
         self.token1, _ = Token.objects.get_or_create(user=self.user1)
         self.token2, _ = Token.objects.get_or_create(user=self.user2)
     
@@ -341,13 +344,14 @@ class ChangePasswordTestCase(APITestCase):
 class LanguageTestCases(APITestCase):
     def setUp(self):
         self.client = APIClient()
-        self.user = CustomUser.objects.create_user(username='testuser', password='testpassword')
+        self.user = CustomUser.objects.create_user(username='testuser', password='testpassword', email = 'dummy')
 
     def test_create_user_with_language(self):
         response = self.client.post('/signup/', {
             'username': 'newuser',
             'password': 'newpassword%',
-            'language': 'es'
+            'language': 'es',
+            'email': 'email@test.com'
         })
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['user']['language'], 'es')
@@ -358,8 +362,8 @@ class SaveGameResultTests(APITestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user = CustomUser.objects.create_user(username='user1', password='testpass')
-        self.opponent = CustomUser.objects.create_user(username='opponent1', password='testpass')
+        self.user = CustomUser.objects.create_user(username='user1', password='testpass', email = 'dummy1')
+        self.opponent = CustomUser.objects.create_user(username='opponent1', password='testpass', email = 'dummy2')
         self.token = Token.objects.create(user=self.user)
 
     def test_valid_game_result_submission(self):
@@ -414,8 +418,8 @@ class SaveGameResultTests(APITestCase):
 class GetGameResultTests(APITestCase):
 
     def setUp(self):
-        self.user = CustomUser.objects.create_user(username='user1', password='testpass')
-        self.opponent = CustomUser.objects.create_user(username='opponent1', password='testpass')
+        self.user = CustomUser.objects.create_user(username='user1', password='testpass', email = 'dummy1')
+        self.opponent = CustomUser.objects.create_user(username='opponent1', password='testpass', email = 'dummy2')
         self.token = Token.objects.create(user=self.user)
 
     def test_valid_user_stats_retrieval(self):
@@ -441,8 +445,8 @@ class GetGameResultTests(APITestCase):
 class AllPlayerStatsTests(APITestCase):
 
     def setUp(self):
-        self.user = CustomUser.objects.create_user(username='user1', password='testpass')
-        self.opponent = CustomUser.objects.create_user(username='opponent1', password='testpass')
+        self.user = CustomUser.objects.create_user(username='user1', password='testpass', email = 'dummy1')
+        self.opponent = CustomUser.objects.create_user(username='opponent1', email = 'dummy2', password='testpass')
         self.token = Token.objects.create(user=self.user)
         self.url = '/player/stats/all/'
 
@@ -463,3 +467,34 @@ class AllPlayerStatsTests(APITestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, [])
+
+
+class ChangeLanguageTests(APITestCase):
+
+    def setUp(self):
+        self.user = CustomUser.objects.create_user(username='user1', email = 'dummy', password='testpass', language ='en')
+        self.token = Token.objects.create(user=self.user)
+
+    def test_change_language_success(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.patch('/change_language/', {
+            'language': 'es',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {"detail": "Language changed successfully."})
+
+
+    def test_change_language_missing_field(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.patch('/change_language/', {
+        })
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, {"error": "Language is required."})
+
+    def test_change_language_unsupported(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.patch('/change_language/', {
+            'language': 'it',
+        })
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, {"error": "Unsupported language."})
