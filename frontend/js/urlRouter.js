@@ -139,6 +139,10 @@ const addEventSpaLinks = (node) => {
 	})
 }
 
+const addEventNavigate = () => {
+	window.addEventListener('popstate', spaHandler);
+}
+
 // Function that handles the url location
 const urlLocationHandler = async () => {
 
@@ -256,7 +260,8 @@ const run = async () => {
 	else
 		updateNavbar(false)
 
-	addEventSpaLinks(document)
+	addEventSpaLinks(document);
+	addEventNavigate();
 	window.onpopstate = urlLocationHandler; // Ensures correct routing when using back/forward buttons from history
 	window.route = urlRoute; // Make the urlRoute function globally accessible.
 }
