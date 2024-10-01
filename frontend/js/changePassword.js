@@ -58,6 +58,4 @@
 			console.log(error.message)
 		}
 	})
-
-
 }

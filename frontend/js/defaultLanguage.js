@@ -8,13 +8,12 @@ console.log("DefaultLanguage")
 
 		let selectElement = document.getElementById("selectLanguage")
 		let selectedLanguage = selectElement.options[selectElement.selectedIndex].value;
-		// console.log("selected value: " + selectedLanguage)
 
 		const formData = new FormData();
 		formData.append("language", selectedLanguage);
 		if (selectedLanguage == JSON.parse(localStorage.getItem("user")).language)
 		{
-			// defaultLanguage.querySelector(".language-error").value = "This is already the current language"
+			defaultLanguage.querySelector(".language-error").value = "This is already the current language"
 			alert("this is already the default language")
 			return ;
 		}
@@ -35,16 +34,16 @@ console.log("DefaultLanguage")
 			{
 				alert("Language changed succesfully")
 				translator.translatePageTo(selectedLanguage);
+				// localStorage.setItem("user",)
+				// Update language user;
 				urlRoute({ target: { href: '/account' }, preventDefault: () => {} });
 			}
 			else
 			{
 				// TO DO: Get the error message in english, then check what it is, depending on that, translate it.
 				// console.log("Language: " + localStorage.getItem("preferred_language"))
-				console.log("check 7")
 				alert("Unexpected error. Unable to change language.")
 				console.log(data.message);
-				console.log("check 8")
 			}
 		} catch (error) {
 			alert("Error changing language.\n" + error.message)
