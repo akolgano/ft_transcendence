@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-b=ox%e9=fw%*==0odz7dfakr4_u!^gb5(8b&nd@%i0hc6r#e@b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -44,19 +45,16 @@ INSTALLED_APPS = [
 	'corsheaders',
     'pong.users',
 ]
-CORS_ALLOWED_ORIGINS = [
-"http://localhost:3000"
-]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-	'corsheaders.middleware.CorsMiddleware',
-	'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'pong.urls'
@@ -128,7 +126,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+
+#STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -165,3 +164,42 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# CORS_ALLOWED_ORIGINS = [
+#     "https://localhost:3000",
+#     "http://localhost:3000",
+#     "https://localhost:443",
+# ]
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+#For nginx
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+USE_X_FORWARDED_HOST = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
+SESSION_COOKIE_SECURE = False  # Ensure cookies are only sent over HTTPS
+CSRF_COOKIE_SECURE = False  # CSRF cookies should be sent over HTTPS
+
+APPEND_SLASH = True  # This is the default setting
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_HEADERS = [
+    "content-type",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS',
+]
+STATIC_URL = '/static/'
+STATICFILES_DIRS = ['/app/frontend',]

@@ -22,7 +22,7 @@
 		const formData = new FormData(signupForm);
 		try {
 			let errorMessage = "";
-			const response = await fetch("http://127.0.0.1:8000/signup", {
+			const response = await fetch("https://localhost/api/signup", {
 				method: 'POST',
 				body: formData,
 			})

@@ -47,7 +47,19 @@ services:
            DJANGO_SUPERUSER_USERNAME: admin
            DJANGO_SUPERUSER_PASSWORD: admin
            DJANGO_SUPERUSER_EMAIL: barbayjuliette95@gmail.com
-
+  nginx:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    volumes:
+      - ./frontend:/usr/share/nginx/html 
+      - ./logs:/var/log/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - django
 volumes:
   postgres_data:
 
