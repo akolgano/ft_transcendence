@@ -24,7 +24,7 @@
 			if (data.user)
 			{
 				localStorage.setItem("user", JSON.stringify(data.user));
-				document.querySelector('.avatar-nav').src = "http://localhost:8000" + JSON.parse(localStorage.getItem("user")).profile_picture;
+				document.querySelector('.avatar-sm').src = "http://localhost:8000" + JSON.parse(localStorage.getItem("user")).profile_picture;
 				alert("Picture changed successfully")
 				urlRoute({ target: { href: '/account' }, preventDefault: () => {} });
 			}

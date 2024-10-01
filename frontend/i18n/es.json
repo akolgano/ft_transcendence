@@ -32,5 +32,10 @@
 		"title": "Mi cuenta",
 		"picture": "Profile picture"
 	},
+	"friends": {
+		"add-title": "Add a new friend",
+		"add": "Ajouter",
+		"remove": "Remove"
+	},
 	"404": "Error transcendente: Parece que esta página no existe"
 }

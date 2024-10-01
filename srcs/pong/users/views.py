@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.response import Response
 from rest_framework import status
 #from django.contrib.auth.models import User
-from .models import CustomUser
+from .models import CustomUser, Friendship
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, FriendSerializer, ChangePasswordSerializer
 from django.contrib.auth import get_user_model
@@ -16,7 +16,9 @@ from django.core.exceptions import ValidationError
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound
-
+from .models import GameResult, PlayerStats
+from .serializers import GameResultSerializer, PlayerStatsSerializer
+from rest_framework.views import APIView
 User = get_user_model()
 
 @api_view(['POST'])
@@ -73,26 +75,6 @@ def change_profile_picture(request):
     serializer = UserSerializer(user)
     return Response({'user': serializer.data}, status=status.HTTP_200_OK)
 
-@api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def add_friend(request):
-    user = request.user
-    friend_id = request.data.get('friend_id')
-    friend = get_object_or_404(CustomUser, id=friend_id)
-    user.add_friend(friend)
-    return Response({'detail': 'Friend added successfully'}, status=status.HTTP_200_OK)
-
-@api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def remove_friend(request):
-    user = request.user
-    friend_id = request.data.get('friend_id')
-    friend = get_object_or_404(CustomUser, id=friend_id)
-    user.remove_friend(friend)
-    return Response({'detail': 'Friend removed successfully'}, status=status.HTTP_200_OK)
-
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -133,5 +115,138 @@ def change_password(request):
         return Response({"detail": "Password changed successfully."}, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def add_friend(request):
+    user = request.user
+    username_to_add = request.data.get('username_to_add')
+
+    if not username_to_add:
+        return Response({'detail': 'Username to add is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    user_to_add = get_object_or_404(CustomUser, username=username_to_add)
+
+    if user == user_to_add:
+        return Response({'detail': 'You cannot add yourself as a friend.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if Friendship.objects.filter(from_user=user, to_user=user_to_add).exists():
+        return Response({'detail': 'You are already friends with this user.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    Friendship.objects.create(from_user=user, to_user=user_to_add)
+    serializer = UserSerializer(user_to_add)
+    return Response({
+        'detail': 'Friend added successfully.',
+        'friend': serializer.data
+    }, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def remove_friend(request):
+    user = request.user
+    username_to_remove = request.data.get('username_to_remove')
+
+    if not username_to_remove:
+        return Response({'detail': 'Username to remove is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    user_to_remove = get_object_or_404(CustomUser, username=username_to_remove)
+
+    friendship = Friendship.objects.filter(from_user=user, to_user=user_to_remove).first()
+    if not friendship:
+        return Response({'detail': 'You are not friends with this user.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    friendship.delete()
+    return Response({'detail': 'Friend removed successfully.'}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def user_friends_view(request):
+    user = request.user
+    try:
+        friends = user.get_friends()
+        friends_list = [{
+            'username': friend.to_user.username,
+            'profile_picture': friend.to_user.profile_picture.url if friend.to_user.profile_picture else None
+        } for friend in friends] 
+        return Response({'user': user.username, 'friends': friends_list})
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def save_game_result(request):
+    user = request.user
+    opponent_username = request.data.get('opponent_username')
+    is_ai = request.data.get('is_ai')
+    score = request.data.get('score')
+    if score is None:
+        return Response({'error': 'Score is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if isinstance(score, list):
+        if len(score) != 2 or not all(isinstance(s, int) for s in score):
+            return Response({'error': 'Invalid score format.'}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({'error': 'Invalid score format.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    opponent_user = get_object_or_404(CustomUser, username=opponent_username)
+    game_result = GameResult.objects.create(
+        user=user,
+        opponent_username=opponent_user,
+        is_ai=is_ai,
+        score=score
+    )
+    player_stats, created = PlayerStats.objects.get_or_create(user=user)
+    if score[0] > score[1]: 
+        player_stats.victories += 1
+    else: 
+        player_stats.losses += 1
+        
+    player_stats.save()
+
+    player_stats, created = PlayerStats.objects.get_or_create(user=opponent_user)
+    if score[1] > score[0]: 
+        player_stats.victories += 1
+    else: 
+        player_stats.losses += 1
+        
+    player_stats.save()
+
+    return Response({'detail': 'Score saved successfully.'}, status=status.HTTP_201_CREATED)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_game_result(request):
+    user = request.user
+    try:
+        stats = PlayerStats.objects.get(user=user)
+        return Response(PlayerStatsSerializer(stats).data)
+    except PlayerStats.DoesNotExist:
+        return Response({"error": "No results"}, status=status.HTTP_404_NOT_FOUND)
 
 
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def all_player_stats(request):
+    stats = PlayerStats.objects.all()
+    serializer = PlayerStatsSerializer(stats, many=True)
+    return Response(serializer.data)
+
+@api_view(['PATCH'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def change_language(request):
+    user = request.user
+    new_language = request.data.get('language')
+    if not new_language:
+        return Response({"error": "Language is required."}, status=status.HTTP_400_BAD_REQUEST)
+    supported_languages = ['en', 'es', 'fr']
+    if new_language not in supported_languages:
+        return Response({"error": "Unsupported language."}, status=status.HTTP_400_BAD_REQUEST)
+    user.language = new_language
+    user.save()
+    return Response({"detail": "Language changed successfully."}, status=status.HTTP_200_OK)

@@ -19,9 +19,15 @@ services:
     build: .
     command: >
       sh -c "
+        while ! nc -z $POSTGRES_HOST 5432; do
+        echo 'Waiting for PostgreSQL...';
+        sleep 1;
+        done &&
+        python manage.py makemigrations &&
         python manage.py migrate &&
         python manage.py createsuperuser --noinput ||
         echo 'Superuser already exists' &&
+        python fill_db.py &&
         python manage.py runserver 0.0.0.0:8000"
 
     #command: python manage.py runsslserver --certificate /app/ssl/cert.pem --key /app/ssl/key.pem

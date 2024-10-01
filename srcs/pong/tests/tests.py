@@ -7,8 +7,7 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
-#from django.contrib.auth.models import User
-from pong.users.models import CustomUser
+from pong.users.models import CustomUser, GameResult, PlayerStats
 from rest_framework.authtoken.models import Token
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
@@ -16,14 +15,13 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 import time, os
 
-
 class LoginApiTests(APITestCase):
 
     #def setUp(self):
     #    self.user = User.objects.create_user(username='testuser', password='testpassword')
 
     def setUp(self):
-        self.user = CustomUser.objects.create_user(username='testuser', password='testpassword')
+        self.user = CustomUser.objects.create_user(username='testuser', password='testpassword', email = 'dummy')
         self.token, created = Token.objects.get_or_create(user=self.user)
 
     def test_login_success(self):
@@ -65,17 +63,16 @@ class LoginApiTests(APITestCase):
 class SignupApiTests(APITestCase):
     
     def setUp(self):
-        # Create a user for testing duplicate username scenario
-        self.existing_user = CustomUser.objects.create_user(username='existinguser', password='testpassword')
+        self.existing_user = CustomUser.objects.create_user(username='existinguser', password='testpassword', email = 'dummy')
 
     def test_signup_success(self):
         url = reverse('signup')
         data = {
             'username': 'newuser',
-            'password': 'newpassword%'
+            'password': 'newpassword%',
+            'email': 'dummy1@email.com'
         }
         response = self.client.post(url, data, format='json')
-
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         self.assertIn('token', response.data)
@@ -93,7 +90,8 @@ class SignupApiTests(APITestCase):
     def test_signup_missing_username(self):
         url = reverse('signup')
         data = {
-            'password': 'newpassword'
+            'password': 'newpassword',
+            'email': 'dummy2'
         }
         response = self.client.post(url, data, format='json')
 
@@ -103,7 +101,8 @@ class SignupApiTests(APITestCase):
     def test_signup_missing_password(self):
         url = reverse('signup')
         data = {
-            'username': 'newuser'
+            'username': 'newuser',
+            'email': 'dummy3'
         }
         response = self.client.post(url, data, format='json')
 
@@ -113,10 +112,10 @@ class SignupApiTests(APITestCase):
         url = reverse('signup')
         data = {
             'username': 'validuser',
-            'password': '1'
+            'password': '1',
+            'email': 'dummy4@email.com'
         }
         response = self.client.post(url, data, format='json')
-
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('This password is too short', response.data['error'][0])
 
@@ -124,7 +123,8 @@ class SignupApiTests(APITestCase):
         url = reverse('signup')
         data = {
             'username': 'existinguser',
-            'password': 'newpassword'
+            'password': 'newpassword',
+            'email': 'email'
         }
         response = self.client.post(url, data, format='json')
 
@@ -143,7 +143,8 @@ class SignupApiTests(APITestCase):
         url = reverse('signup')
         data = {
             'username': 'validuser',
-            'password': 'space_in_password '
+            'password': 'space_in_password ',
+            'email': 'dummy4@email.com'
         }
         response = self.client.post(url, data, format='json')
 
@@ -189,25 +190,31 @@ class FriendTests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user1 = User.objects.create_user(username='user1', password='password1')
-        self.user2 = User.objects.create_user(username='user2', password='password2')
+        self.user1 = User.objects.create_user(username='user1', password='password1', email = 'dummy1')
+        self.user2 = User.objects.create_user(username='user2', password='password2', email = 'dummy2')
         self.token1, _ = Token.objects.get_or_create(user=self.user1)
         self.token2, _ = Token.objects.get_or_create(user=self.user2)
     
     def test_add_friend(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token1.key)
-        response = self.client.post('/add-friend/', {'friend_id': self.user2.id})
+        response = self.client.post('/add_friend/', {'username_to_add': self.user2.username})
         self.assertEqual(response.status_code, 200)
-        self.assertIn(self.user2, self.user1.friends.all())
-        self.assertIn(self.user1, self.user2.friends.all())
-    
+        self.assertEqual(response.data['detail'], 'Friend added successfully.')
+        response = self.client.post('/add_friend/', {'username_to_add': self.user2.username})
+        self.assertEqual(response.data['detail'], 'You are already friends with this user.')
+
     def test_remove_friend(self):
-        self.user1.add_friend(self.user2)  # Add friend first
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token1.key)
-        response = self.client.post('/remove-friend/', {'friend_id': self.user2.id})
+
+        response = self.client.post('/add_friend/', {'username_to_add': self.user2.username})
         self.assertEqual(response.status_code, 200)
-        self.assertNotIn(self.user2, self.user1.friends.all())
-        self.assertNotIn(self.user1, self.user2.friends.all())
+        response = self.client.post('/remove_friend/', {'username_to_remove': self.user2.username})
+        self.assertEqual(response.data['detail'], 'Friend removed successfully.')
+        self.assertEqual(response.status_code, 200)     
+        response = self.client.post('/remove_friend/', {'username_to_remove': self.user2.username})
+        self.assertEqual(response.data['detail'], 'You are not friends with this user.')
+        self.assertEqual(response.status_code, 400)
+
 
 class FriendListTests(TestCase):
 
@@ -217,13 +224,16 @@ class FriendListTests(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='password123', email='user2@example.com')
         self.user3 = User.objects.create_user(username='user3', password='password123', email='user3@example.com')
 
-        self.user1.add_friend(self.user2)
-        self.user1.add_friend(self.user3)
-
         self.client.force_authenticate(user=self.user1)
 
     def test_get_friends(self):
+        response = self.client.post('/add_friend/', {'username_to_add': self.user2.username})
+        self.assertEqual(response.status_code, 200) 
+
+        response = self.client.post('/add_friend/', {'username_to_add': self.user3.username})
+        self.assertEqual(response.status_code, 200)
         response = self.client.get('/get_friends/')
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         friends = response.data['friends']
         self.assertEqual(len(friends), 2)
@@ -334,13 +344,157 @@ class ChangePasswordTestCase(APITestCase):
 class LanguageTestCases(APITestCase):
     def setUp(self):
         self.client = APIClient()
-        self.user = CustomUser.objects.create_user(username='testuser', password='testpassword')
+        self.user = CustomUser.objects.create_user(username='testuser', password='testpassword', email = 'dummy')
 
     def test_create_user_with_language(self):
         response = self.client.post('/signup/', {
             'username': 'newuser',
             'password': 'newpassword%',
-            'language': 'es'
+            'language': 'es',
+            'email': 'email@test.com'
         })
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['user']['language'], 'es')
+
+
+
+class SaveGameResultTests(APITestCase):
+
+    def setUp(self):
+        self.client = APIClient()
+        self.user = CustomUser.objects.create_user(username='user1', password='testpass', email = 'dummy1')
+        self.opponent = CustomUser.objects.create_user(username='opponent1', password='testpass', email = 'dummy2')
+        self.token = Token.objects.create(user=self.user)
+
+    def test_valid_game_result_submission(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/game/result/', {
+            'opponent_username': 'opponent1',
+            'is_ai': False,
+            'score': [3, 1]
+        }, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(GameResult.objects.count(), 1)
+        self.assertEqual(PlayerStats.objects.get(user=self.user).victories, 1)
+        self.assertEqual(PlayerStats.objects.get(user=self.opponent).losses, 1)
+
+    def test_opponent_not_found(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/game/result/', {
+            'opponent_username': 'unknown_user',
+            'is_ai': False,
+            'score': [2, 2]
+        }, format='json')
+        self.assertEqual(response.status_code, 404)
+
+    def test_invalid_score_format(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/game/result/', {
+            'opponent_username': 'opponent1',
+            'is_ai': False,
+            'score': 'invalid_score'
+        }, format='json')
+        self.assertEqual(response.status_code, 400)
+
+    def test_missing_required_fields(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/game/result/', {
+            'opponent_username': 'opponent1',
+            'is_ai': False
+        }, format='json')
+        self.assertEqual(response.status_code, 400)
+
+    def test_score_tie_scenario(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/game/result/', {
+            'opponent_username': 'opponent1',
+            'is_ai': False,
+            'score': [2, 2]
+        }, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(PlayerStats.objects.get(user=self.user).victories, 0)
+        self.assertEqual(PlayerStats.objects.get(user=self.opponent).victories, 0)
+
+class GetGameResultTests(APITestCase):
+
+    def setUp(self):
+        self.user = CustomUser.objects.create_user(username='user1', password='testpass', email = 'dummy1')
+        self.opponent = CustomUser.objects.create_user(username='opponent1', password='testpass', email = 'dummy2')
+        self.token = Token.objects.create(user=self.user)
+
+    def test_valid_user_stats_retrieval(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/game/result/', {
+            'opponent_username': 'opponent1',
+            'is_ai': False,
+            'score': [3, 1]
+        }, format='json')
+        self.assertEqual(response.status_code, 201)
+        response = self.client.get('/player/stats/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('username' in response.data)
+        self.assertTrue('victories' in response.data)
+        self.assertTrue('losses' in response.data)
+
+    def test_user_stats_not_found(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.get('/player/stats/')
+        self.assertEqual(response.status_code, 404)
+
+
+class AllPlayerStatsTests(APITestCase):
+
+    def setUp(self):
+        self.user = CustomUser.objects.create_user(username='user1', password='testpass', email = 'dummy1')
+        self.opponent = CustomUser.objects.create_user(username='opponent1', email = 'dummy2', password='testpass')
+        self.token = Token.objects.create(user=self.user)
+        self.url = '/player/stats/all/'
+
+    def test_get_all_player_stats(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/game/result/', {
+            'opponent_username': 'opponent1',
+            'is_ai': False,
+            'score': [3, 1]
+        }, format='json')
+        self.assertEqual(response.status_code, 201)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.data, list)
+
+    def test_no_player_stats_available(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, [])
+
+
+class ChangeLanguageTests(APITestCase):
+
+    def setUp(self):
+        self.user = CustomUser.objects.create_user(username='user1', email = 'dummy', password='testpass', language ='en')
+        self.token = Token.objects.create(user=self.user)
+
+    def test_change_language_success(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.patch('/change_language/', {
+            'language': 'es',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {"detail": "Language changed successfully."})
+
+
+    def test_change_language_missing_field(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.patch('/change_language/', {
+        })
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, {"error": "Language is required."})
+
+    def test_change_language_unsupported(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.patch('/change_language/', {
+            'language': 'it',
+        })
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, {"error": "Unsupported language."})
