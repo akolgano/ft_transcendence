@@ -28,24 +28,24 @@
 				console.log("User: " + JSON.stringify(data.user));
 				localStorage.setItem("auth", 1);
 				localStorage.setItem("user", JSON.stringify(data.user));
+
+				siteLanguage = data.user.language;
 				localStorage.setItem("token", data.token);
 
-				localStorage.setItem("preferred_language", (data.user.language))
-				console.log("Preferred language: " + localStorage.getItem("preferred_language"))
+				translator.translatePageTo(siteLanguage);
+				alert(translator.translateForKey("auth.login-success", siteLanguage))
 
-				translator.translatePageTo(localStorage.getItem("preferred_language"));
-				alert(translator.translateForKey("auth.login-success", localStorage.getItem("preferred_language")))
 				// Change navbar
 				updateNavbar(true);
 				urlRoute({ target: { href: '/' }, preventDefault: () => {} });
 			}
 			else
 			{
-				alert(translator.translateForKey("auth.login-error", localStorage.getItem("preferred_language") || "en"))
+				alert(translator.translateForKey("auth.login-error", siteLanguage))
 				console.log(data.message);
 			}
 		} catch (error) {
-			alert(translator.translateForKey("auth.login-ko", localStorage.getItem("preferred_language") || "en"))
+			alert(translator.translateForKey("auth.login-ko", siteLanguage))
 			console.log(error.message)
 		}
 	})

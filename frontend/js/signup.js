@@ -38,18 +38,18 @@
 			}
 			if (data.token)
 			{
-				alert(translator.translateForKey("auth.sign-up-success", localStorage.getItem("preferred_language") || "en"))
+				alert(translator.translateForKey("auth.sign-up-success", siteLanguage))
 				urlRoute({ target: { href: '/' }, preventDefault: () => {} });
 			}
 			else
 			{
 				// TO DO: Get the error message in english, then check what it is, depending on that, translate it.
-				// console.log("Language: " + localStorage.getItem("preferred_language"))
-				alert(translator.translateForKey("auth.error", localStorage.getItem("preferred_language") || "en") + data.message)
+				// console.log("Language: " + siteLanguage)
+				alert(translator.translateForKey("auth.error", siteLanguage) + data.message)
 				console.log(data.message);
 			}
 		} catch (error) {
-			alert(translator.translateForKey("auth.error", localStorage.getItem("preferred_language") || "en") + error.message)
+			alert(translator.translateForKey("auth.error", siteLanguage) + error.message)
 			console.log(error.message)
 		}
 	})

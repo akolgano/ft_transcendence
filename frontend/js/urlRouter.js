@@ -8,6 +8,8 @@
 
 // ---------------------------------------- TRANSLATOR ----------------------------------------
 
+siteLanguage = "fr"
+
 var translator = new Translator({
 	defaultLanguage: "fr",
 	detectLanguage: false,
@@ -20,9 +22,7 @@ var translator = new Translator({
 });
 
 translator.fetch(["en", "fr", "es"]).then(() => {
-	// Calling `translatePageTo()` without any parameters
-	// will translate to the default language.
-	translator.translatePageTo();
+	translator.translatePageTo(siteLanguage);
 	console.log("Translating page start");
 	registerLanguageToggle();
 });
@@ -32,9 +32,9 @@ function registerLanguageToggle() {
 
 	select.forEach(link => {
 		link.addEventListener("click", event => {
-		var language = event.target.getAttribute('data-language');
-		console.log("Translating page to: " + language);
-		translator.translatePageTo(language);
+		siteLanguage = event.target.getAttribute('data-language');
+		console.log("Translating page to: " + siteLanguage);
+		translator.translatePageTo(siteLanguage);
 		});
 	})
 }
@@ -126,8 +126,8 @@ const urlRoute = (event) => {
 const translateNewContent = (node) => {
 	node.querySelectorAll("[data-i18n]").forEach(element => {
 		let data = element.getAttribute('data-i18n')
-		console.log("Preferred language: " + localStorage.getItem("preferred_language"))
-		let translation = translator.translateForKey(data, localStorage.getItem("preferred_language"))
+		// console.log("Preferred language: " + siteLanguage)
+		let translation = translator.translateForKey(data, siteLanguage)
 		element.innerHTML = translation
 	});
 }
@@ -234,7 +234,7 @@ const updateNavbar = (loggedIn) => {
 
 	if (loggedIn)
 	{
-		let welcome = translator.translateForKey("navbar.welcome", localStorage.getItem("preferred_language") || translator.defaultLanguage)
+		let welcome = translator.translateForKey("navbar.welcome", siteLanguage)
 		navbar.querySelector(".navbar-text").innerHTML = welcome;
 		navbar.querySelector(".navbar-username").innerHTML = `${JSON.parse(localStorage.getItem("user")).username}!`;
 		navbar.querySelector('.avatar-sm').src = "http://localhost:8000" + JSON.parse(localStorage.getItem("user")).profile_picture;

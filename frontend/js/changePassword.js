@@ -49,7 +49,7 @@
 			else
 			{
 				// TO DO: Get the error message in english, then check what it is, depending on that, translate it.
-				// console.log("Language: " + localStorage.getItem("preferred_language"))
+				// console.log("Language: " + siteLanguage)
 				alert("Unexpected error. Unable to change password.")
 				console.log(data.message);
 			}

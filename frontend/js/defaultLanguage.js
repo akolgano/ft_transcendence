@@ -11,12 +11,14 @@ console.log("DefaultLanguage")
 
 		const formData = new FormData();
 		formData.append("language", selectedLanguage);
+
 		if (selectedLanguage == JSON.parse(localStorage.getItem("user")).language)
 		{
-			defaultLanguage.querySelector(".language-error").value = "This is already the current language"
+			// defaultLanguage.querySelector(".language-error").value = "This is already the current language"
 			alert("this is already the default language")
 			return ;
 		}
+
 		try {
 			const response = await fetch("http://127.0.0.1:8000/change_language/", {
 				headers: {
@@ -34,14 +36,18 @@ console.log("DefaultLanguage")
 			{
 				alert("Language changed succesfully")
 				translator.translatePageTo(selectedLanguage);
-				// localStorage.setItem("user",)
-				// Update language user;
-				urlRoute({ target: { href: '/account' }, preventDefault: () => {} });
+
+				// Update current site language
+				siteLanguage = selectedLanguage;
+
+				// Update user instance of preferred language
+				let user = JSON.parse(localStorage.getItem('user'));
+				user.language = selectedLanguage;
+				localStorage.setItem("user", JSON.stringify(user));
+				console.log("USER: " + user);
 			}
 			else
 			{
-				// TO DO: Get the error message in english, then check what it is, depending on that, translate it.
-				// console.log("Language: " + localStorage.getItem("preferred_language"))
 				alert("Unexpected error. Unable to change language.")
 				console.log(data.message);
 			}
