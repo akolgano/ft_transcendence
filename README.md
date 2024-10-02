@@ -4,7 +4,6 @@
 
 
 ```
-cd srcs
 docker-compose down
 docker-compose build --no-cache
 docker-compose up
@@ -23,25 +22,15 @@ If there were any migrations, you have to stop the container (CONTROL-C) and sta
 
 ## Frontend
 
-### Go to frontend folder
-
 ```
-cd frontend
+Just go to https://localhost (no need to run server anymore)
 ```
 
-### Run server on port 3000
-
-```
-python3 -m http.server 3000
-```
-
-### Go to http://localhost:3000/
-Currently, you can only navigate using links, do not type the full url yourself.
-Example: http://localhost:3000/login will not work, but clicking on the login button will work.
+Example: http://localhost:3000/login will work now
 
 ## Check the database for tests
 
-You can go to localhost:8000/admin to manage the database.
+You can go to localhost:8000/api/admin to manage the database.
 User and password: admin
 
 ## Translations
