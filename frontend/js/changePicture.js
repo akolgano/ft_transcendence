@@ -24,12 +24,8 @@
 			if (data.user)
 			{
 				localStorage.setItem("user", JSON.stringify(data.user));
-<<<<<<< HEAD
 				document.querySelector('.avatar-sm').src = "http://localhost:8000" + JSON.parse(localStorage.getItem("user")).profile_picture;
 				document.querySelector(".profile-pic").src = "http://localhost:8000" + JSON.parse(localStorage.getItem("user")).profile_picture;
-=======
-				document.querySelector('.avatar-sm').src = "https://localhost" + JSON.parse(localStorage.getItem("user")).profile_picture;
->>>>>>> f188055 (nginx #1)
 				alert("Picture changed successfully")
 			}
 			else

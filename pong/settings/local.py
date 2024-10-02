@@ -176,10 +176,10 @@ AUTHENTICATION_BACKENDS = [
 #For nginx
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-USE_X_FORWARDED_HOST = True
+#USE_X_FORWARDED_HOST = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
+#SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
 SESSION_COOKIE_SECURE = False  # Ensure cookies are only sent over HTTPS
 CSRF_COOKIE_SECURE = False  # CSRF cookies should be sent over HTTPS
 
@@ -201,5 +201,5 @@ CORS_ALLOW_METHODS = [
     'DELETE',
     'OPTIONS',
 ]
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATICFILES_DIRS = ['/app/frontend',]

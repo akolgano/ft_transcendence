@@ -9,8 +9,8 @@ from django.conf.urls.static import static
 from pong.users import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls), 
-    path('api/login', views.login, name='login'),
+    path('api/admin/', admin.site.urls), 
+    re_path('api/login', views.login, name='login'),
     re_path('api/signup', views.signup, name='signup'),
     re_path('api/test_token', views.test_token, name='test_token'),
     path('api/add_friend/', views.add_friend, name='add_friend'),
