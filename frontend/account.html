@@ -26,13 +26,16 @@
 			<div class="account-password mb-3">
 				<form id="changePassword">
 					<p data-i18n="auth.password"></p>
-					<p data-i18n="auth.old-password" class="mb-0"></p>
+					<p data-i18n="auth.old-password" class="mb-0 mt-3"></p>
 					<input type="password" id="old-password" name="old-password" class="form-control w-50" autocomplete="on" required>
-					<p data-i18n="auth.new-password" class="mb-0"></p>
+					<a href="/account" class="toggle-password text-reset" data-password-field="old-password">Show password</a>
+					<p data-i18n="auth.new-password" class="mb-0 mt-3"></p>
 					<input type="password" id="new-password" name="new-password" class="form-control w-50" autocomplete="on" required>
-					<p data-i18n="auth.repeat-password" class="mb-0"></p>
-					<input type="password" id="repeat-password" name="repeat-password" class="form-control w-50 d-inline-block align-middle" autocomplete="on" required>
-					<button type="submit" class="btn btn-success" data-i18n="account.update"></button>
+					<a href="/account" class="toggle-password text-reset" data-password-field="new-password">Show password</a>
+					<p data-i18n="auth.repeat-password" class="mb-0 mt-3"></p>
+					<input type="password" id="repeat-password" name="repeat-password" class="form-control w-50 d-inline-block v-align" autocomplete="on" required>
+					<button type="submit" class="btn btn-success" data-i18n="account.update"></button><br>
+					<a href="/account" class="toggle-password text-reset" data-password-field="repeat-password">Show password</a>
 				</form>
 			</div>
 
@@ -42,6 +45,18 @@
 					<input type="file" id="profile_picture" name="profile_picture" class="form-control input-email d-inline-block w-50 align-middle" accept="image/*" required>
 					<button type="submit" class="btn btn-success" data-i18n="account.update">
 				</form>
+			</div>
+
+			<div class="defaultLangue">
+				<form id="defaultLanguage">
+					<select class="form-select v-align d-inline-block w-50" aria-label="Default select example" id="selectLanguage">
+						<option value="fr" class="select-lang">🇧🇪 Français</option>
+						<option value="es" class="select-lang">🇲🇽 Español</option>
+						<option value="en" class="select-lang">🇸🇬 English</option>
+					</select>
+					<button type="submit" class="btn btn-success" data-i18n="account.update">
+				</form>
+				<span class="language-error"></span>
 			</div>
 		</div>
 

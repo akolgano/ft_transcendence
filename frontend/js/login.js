@@ -1,6 +1,10 @@
 {
 	console.log("SCRIPT LOG IN")
 
+	document.querySelectorAll(".toggle-password").forEach(node => {
+		node.addEventListener("click", togglePassword)
+	});
+
 	const loginForm = document.getElementById("loginForm");
 
 	loginForm.addEventListener("submit", async (e) => {
@@ -24,20 +28,24 @@
 				console.log("User: " + JSON.stringify(data.user));
 				localStorage.setItem("auth", 1);
 				localStorage.setItem("user", JSON.stringify(data.user));
+
+				siteLanguage = data.user.language;
 				localStorage.setItem("token", data.token);
 
-				alert(translator.translateForKey("auth.login-success", localStorage.getItem("preferred_language") || "en"))
+				translator.translatePageTo(siteLanguage);
+				alert(translator.translateForKey("auth.login-success", siteLanguage))
+
 				// Change navbar
 				updateNavbar(true);
 				urlRoute({ target: { href: '/' }, preventDefault: () => {} });
 			}
 			else
 			{
-				alert(translator.translateForKey("auth.login-error", localStorage.getItem("preferred_language") || "en"))
+				alert(translator.translateForKey("auth.login-error", siteLanguage))
 				console.log(data.message);
 			}
 		} catch (error) {
-			alert(translator.translateForKey("auth.login-ko", localStorage.getItem("preferred_language") || "en"))
+			alert(translator.translateForKey("auth.login-ko", siteLanguage))
 			console.log(error.message)
 		}
 	})
