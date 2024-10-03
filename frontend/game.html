@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong Game PvP</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- Link to styles.css -->
+</head>
+
+<body>
+    <!-- Game Container to hold both player labels and canvas -->
+    <div class="game-container">
+    <!-- Player Labels -->
+	    <div class="player-labels">
+		<div>Player 1</div>
+		<div>Player 2</div>
+	    </div>
+
+	    <canvas id="pongGameCanvas"></canvas>
+
+	    <!-- Game Over Modal -->
+	    <div class="game-over-modal">
+		<h1>Game Over!</h1>
+		<p>Winner: <span id="winner-name"></span></p>
+		<button onclick="restartGame()">Restart</button>
+	    </div>
+    </div>
+
+    <script src="{% static 'js/game.js' %}"></script> <!-- Link to game.js script -->
+</body>
+</html>
