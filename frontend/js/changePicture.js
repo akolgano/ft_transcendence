@@ -15,28 +15,28 @@
 				body: formData,
 			})
 			const data = await response.json();
+			removeAlert();
 			if (!response.ok) {
 				console.log("Data json: " + JSON.stringify(data))
-				let errorMessage = Object.entries(data);
-
-				throw new Error(errorMessage || 'An error occurred');
+				throw new Error(data.error || 'An error occurred');
 			}
 			if (data.user)
 			{
 				localStorage.setItem("user", JSON.stringify(data.user));
 				document.querySelector('.avatar-sm').src = "http://localhost:8000" + JSON.parse(localStorage.getItem("user")).profile_picture;
 				document.querySelector(".profile-pic").src = "http://localhost:8000" + JSON.parse(localStorage.getItem("user")).profile_picture;
-				alert("Picture changed successfully")
+				displayAlert("account.change-pic-success", "success");
 			}
 			else
 			{
-				// TO DO: Get the error message in english, then check what it is, depending on that, translate it.
-				// console.log("Language: " + siteLanguage)
-				alert("Unexpected error. Unable to change profile picture.")
+				displayAlert("account.change-pic-error", "danger");
 				console.log(data.message);
 			}
 		} catch (error) {
-			alert("Error changing profile picture.\n" + error.message)
+			if (error.message == "No profile picture uploaded.")
+				displayAlert("account.change-pic-empty", "danger");
+			else
+				displayAlert("account.change-pic-error", "danger");
 			console.log(error.message)
 		}
 	})

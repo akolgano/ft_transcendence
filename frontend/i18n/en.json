@@ -30,7 +30,17 @@
 	"account" : {
 		"update": "Update",
 		"title": "My account",
-		"picture": "Profile picture"
+		"picture": "Profile picture",
+		"change-pic-success": "Profile picture changed successfully",
+		"change-pic-error": "Error changing profile picture",
+		"change-pic-empty": "Error: No profile picture uploaded.",
+		"already-language": "This is already the default language",
+		"change-language-success": "Language changed successfully",
+		"change-language-error": "Error changing language",
+		"change-language-empty": "Error: Language is required.",
+		"change-language-unsupported": "Error: Unsupported language.",
+		"change-password-success": "Password changed successfully",
+		"change-password-error": "Error changing password"
 	},
 	"friends": {
 		"add-title": "Add a new friend",

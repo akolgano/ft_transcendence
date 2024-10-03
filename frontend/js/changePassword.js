@@ -5,14 +5,11 @@
 		e.preventDefault();
 
 		let oldPassword = document.getElementById("old-password").value;
-		let newPassword = document.getElementById("new-password").value;
-		let repeatPassword = document.getElementById("repeat-password").value;
+		let newPassword = document.getElementById("password").value;
 
-		if (newPassword !== repeatPassword)
-		{
-			alert("Passwords do not match");
+		resetErrorField();
+		if (!checkPasswordMatch())
 			return ;
-		}
 
 		const formData = new FormData();
 		formData.append("old_password", oldPassword);
@@ -27,34 +24,22 @@
 				body: formData,
 			})
 			const data = await response.json();
+			removeAlert()
 			if (!response.ok) {
-				console.log("Data json: " + JSON.stringify(data))
-				let errorMessage = "";
-
-				for (let [key, value] of Object.entries(data)) {
-					errorMessage += key;
-					value.forEach(message => {
-						errorMessage += "\n    • ";
-						errorMessage += message;
-					});
-				}
-
-				throw new Error(errorMessage || 'An error occurred');
+				// console.log("Data json: " + JSON.stringify(data))
+				addErrorToHTML(data);
+				throw new Error(JSON.stringify(data) || 'An error occurred');
 			}
 			if (data.detail)
 			{
-				alert("Password changed successfully")
-				urlRoute({ target: { href: '/account' }, preventDefault: () => {} });
+				displayAlert("account.change-password-success", "success");
 			}
 			else
 			{
-				// TO DO: Get the error message in english, then check what it is, depending on that, translate it.
-				// console.log("Language: " + siteLanguage)
-				alert("Unexpected error. Unable to change password.")
+				displayAlert("account.change-password-error", "danger");
 				console.log(data.message);
 			}
 		} catch (error) {
-			alert("Error changing password.\n" + error.message)
 			console.log(error.message)
 		}
 	})

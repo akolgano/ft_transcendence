@@ -11,7 +11,6 @@
 				body: formData,
 			})
 			const data = await response.json();
-
 			removeAlert();
 
 			if (!response.ok) {

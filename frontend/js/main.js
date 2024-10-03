@@ -29,3 +29,47 @@ const removeAlert = () => {
 	if (alert)
 		alert.remove();
 }
+
+function checkPasswordMatch() {
+	let newPassword = document.getElementById("password").value;
+	let repeatPassword = document.getElementById("confirm-password").value;
+
+	if (newPassword !== repeatPassword)
+	{
+		const errorPassword = document.querySelector(".repeat-password-error");
+		let errorTag = document.createElement("p");
+		errorTag.innerHTML = "Passwords do not match";
+		errorPassword.appendChild(errorTag);
+		return (false);
+	}
+	return (true);
+}
+
+function addErrorToHTML(data) {
+	for (const key in data)
+	{
+		let errorClass;
+		if (key == "error" || key == "new_password")
+			errorClass = ".password-error";
+		else if (key == "old_password")
+			errorClass = ".old-password-error"
+		else
+			errorClass = `.${key}-error`;
+
+		const errorDiv = document.querySelector(errorClass);
+
+		data[key].forEach(message => {
+			let errorTag = document.createElement("p");
+			errorTag.innerHTML = message;
+			errorDiv.appendChild(errorTag);
+		});
+	}
+}
+
+function resetErrorField() {
+	const errorDivs = document.querySelectorAll(".form-error");
+
+	errorDivs.forEach(div => {
+		div.innerHTML = ""
+	});
+}
