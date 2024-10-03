@@ -29,7 +29,10 @@
 				translator.translatePageTo(siteLanguage);
 
 				updateNavbar(true);
-				urlRoute({ target: { href: document.referrer }, preventDefault: () => {} });
+
+				if (last_page == "/login")
+					last_page = "/"
+				urlRoute({ target: { href: last_page }, preventDefault: () => {} });
 				displayAlert("auth.login-success", "success");
 			}
 			else

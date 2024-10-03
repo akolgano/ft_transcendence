@@ -1,5 +1,20 @@
 console.log("REMOVE FRIEND SCRIPT")
 
+function getErrorKeyRemoveFriend(error)
+{
+	let errorKey;
+
+	if (error == "Username to remove is required.")
+		errorKey = "friends.error-empty";
+	else if (error == "No CustomUser matches the given query.")
+		errorKey = "friends.error-no-user"
+	else if (error == "You are not friends with this user.")
+		errorKey = "friends.error-not-friend"
+	else
+		errorKey = "friends.remove-error"
+	return (errorKey);
+}
+
 function removeFriendFromHTML(username) {
 	const userDiv = document.querySelector(`.friend-card[data-username="${username}"]`);
 	if (userDiv)
@@ -27,7 +42,7 @@ async function addEventRemoveButton(e) {
 		const data = await response.json();
 		if (!response.ok) {
 			console.log("Error: " + JSON.stringify(data))
-			throw new Error(JSON.stringify(data.detail) || 'An error occurred');
+			throw new Error(data.detail || 'An error occurred');
 		}
 		if (data.detail)
 		{
@@ -40,7 +55,7 @@ async function addEventRemoveButton(e) {
 			console.log(data.message);
 		}
 	} catch (error) {
-		displayAlert("friends.remove-error", "danger");
+		displayAlert(getErrorKeyRemoveFriend(error.message), "danger");
 		console.log(error.message)
 	}
 

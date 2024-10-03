@@ -53,7 +53,8 @@
 		"add-error": "Error adding friend",
 		"error-already-friend": "You are already friends with this user.",
 		"error-no-user": "No user found with this username",
-		"error-yourself": "You cannot add yourself as a friend"
+		"error-yourself": "You cannot add yourself as a friend",
+		"error-empty": "Username to add is required."
 	},
 	"404": "Erreur Transcendente: page non trouvée"
 }

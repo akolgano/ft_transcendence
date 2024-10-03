@@ -10,6 +10,8 @@ function getErrorKeyAddFriend(error)
 		errorKey = "friends.error-yourself";
 	else if (error == '"No CustomUser matches the given query."')
 		errorKey = "friends.error-no-user"
+	else if (error == "Username to add is required.")
+		errorKey = "friends.error-empty"
 	else
 		errorKey = "friends.add-error"
 	return (errorKey);
