@@ -14,3 +14,12 @@ const togglePassword = (event) => {
 		button.innerHTML = translator.translateForKey("auth.password-show", siteLanguage)
 	}
 }
+
+const displayAlert = (key, type) => {
+	const content = document.querySelector("#content");
+	const alert = `<div class="alert alert-${type} alert-dismissible fade show" role="alert">
+	${translator.translateForKey(key, siteLanguage)}
+	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>`
+	content.insertAdjacentHTML("beforebegin", alert);
+}

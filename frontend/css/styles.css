@@ -18,3 +18,9 @@
 	width:20px;
 	object-fit: cover;
 }
+
+.alert {
+	position: absolute;
+	top: 60px;
+	right: 5px;
+}
