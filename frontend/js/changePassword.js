@@ -33,6 +33,9 @@
 			if (data.detail)
 			{
 				displayAlert("account.change-password-success", "success");
+				document.getElementById("old-password").value = "";
+				document.getElementById("password").value = "";
+				document.getElementById("confirm-password").value = "";
 			}
 			else
 			{
