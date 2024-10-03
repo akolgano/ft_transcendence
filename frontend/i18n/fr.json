@@ -18,7 +18,7 @@
 		"email": "Adresse email",
 		"no-account": "Vous n'avez pas encore de compte?",
 		"already-account": "Vous avez déjà un compte?",
-		"error": "Erreur: ",
+		"error": "Erreur",
 		"login-error": "Oups, le nom d'utilisateur ou le mot de passe est incorrect",
 		"login-ko": "Error logging in, please try again",
 		"login-success": "Connecté avec succès",

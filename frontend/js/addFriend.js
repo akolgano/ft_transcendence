@@ -1,6 +1,6 @@
 console.log("ADD FRIEND SCRIPT")
 
-const getErrorKeyAddFriend = (error) =>
+function getErrorKeyAddFriend(error)
 {
 	let errorKey;
 	console.log("Error: " + error);

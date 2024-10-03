@@ -18,7 +18,7 @@
 		"email": "Email address",
 		"no-account": "Don't have an account yet?",
 		"already-account": "Already have an account?",
-		"error": "Error: ",
+		"error": "Authentication error",
 		"login-error": "Sorry, looks like that’s the wrong username or password.",
 		"login-ko": "Error logging in, please try again",
 		"sign-up-success": "Sign up successful",
