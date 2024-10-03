@@ -45,11 +45,13 @@ async function fetchFriends() {
 		}
 		else
 		{
-			alert("Unexpected error. Unable to fetch friends.")
+			removeAlert();
+			displayAlert("friends.error-load", "danger");
 			console.log(data.message);
 		}
 	} catch (error) {
-		alert("Error fetching friends.\n" + error.message)
+		removeAlert();
+		displayAlert("friends.error-load", "danger");
 		console.log(error.message)
 	}
 }

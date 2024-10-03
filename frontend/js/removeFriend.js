@@ -3,12 +3,14 @@ console.log("REMOVE FRIEND SCRIPT")
 function removeFriendFromHTML(username) {
 	const userDiv = document.querySelector(`.friend-card[data-username="${username}"]`);
 	if (userDiv)
-		userDiv.remove()
+		userDiv.remove();
+	displayAlert("friends.remove-success", "success");
 }
 
 async function addEventRemoveButton(e) {
 
 	e.preventDefault();
+	removeAlert();
 	const button = e.target;
 	const username = button.getAttribute("data-username");
 	const formData = new FormData();
@@ -29,19 +31,16 @@ async function addEventRemoveButton(e) {
 		}
 		if (data.detail)
 		{
-			alert("Friend removed")
-			// TO DO: add the new friend to the list instead of doing a full page refresh
 			removeFriendFromHTML(username);
 			console.log("Data: " + JSON.stringify(data));
-			// urlRoute({ target: { href: '/friends' }, preventDefault: () => {} });
 		}
 		else
 		{
-			alert("Unexpected error. Unable to remove friend.")
+			displayAlert("friends.remove-error", "danger");
 			console.log(data.message);
 		}
 	} catch (error) {
-		alert("Error adding friend.\n" + error.message)
+		displayAlert("friends.remove-error", "danger");
 		console.log(error.message)
 	}
 

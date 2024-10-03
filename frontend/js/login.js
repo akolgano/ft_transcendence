@@ -12,9 +12,7 @@
 			})
 			const data = await response.json();
 
-			const alert = document.querySelector(".alert");
-			if (alert)
-				alert.remove();
+			removeAlert();
 
 			if (!response.ok) {
 				throw new Error("auth.login-error");

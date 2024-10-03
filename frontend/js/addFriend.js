@@ -1,5 +1,20 @@
 console.log("ADD FRIEND SCRIPT")
 
+const getErrorKeyAddFriend = (error) =>
+{
+	let errorKey;
+	console.log("Error: " + error);
+	if (error == '"You are already friends with this user."')
+		errorKey = "friends.error-already-friend";
+	else if (error == '"You cannot add yourself as a friend."')
+		errorKey = "friends.error-yourself";
+	else if (error == '"No CustomUser matches the given query."')
+		errorKey = "friends.error-no-user"
+	else
+		errorKey = "friends.add-error"
+	return (errorKey);
+}
+
 function addFriendToHTML(user) {
 	const friendsList = document.querySelector(".friends-list");
 
@@ -27,6 +42,7 @@ function addFriendToHTML(user) {
 
 	const newFriendCard = document.querySelector(`.friend-card[data-username="${user.username}"]`);
 	translateNewContent(newFriendCard);
+	document.getElementById("add-friend").value = "";
 }
 
 function addFriendEvent() {
@@ -35,7 +51,7 @@ function addFriendEvent() {
 	addFriend.addEventListener("submit", async (e) => {
 		e.preventDefault();
 		const formData = new FormData(addFriend);
-
+		removeAlert();
 		try {
 			const response = await fetch("http://localhost:8000/add_friend/", {
 				headers: {
@@ -51,19 +67,17 @@ function addFriendEvent() {
 			}
 			if (data.detail)
 			{
-				alert("Friend added")
 				addFriendToHTML(data.friend);
+				displayAlert("friends.add-success", "success");
 				console.log("Data: " + JSON.stringify(data));
 			}
 			else
 			{
-				// TO DO: Get the error message in english, then check what it is, depending on that, translate it.
-				// console.log("Language: " + siteLanguage)
-				alert("Unexpected error. Unable to add friend.")
+				displayAlert("friends.add-error", "danger");
 				console.log(data.message);
 			}
 		} catch (error) {
-			alert("Error adding friend.\n" + error.message)
+			displayAlert(getErrorKeyAddFriend(error.message), "danger");
 			console.log(error.message)
 		}
 	})

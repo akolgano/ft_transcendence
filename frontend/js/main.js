@@ -23,3 +23,9 @@ const displayAlert = (key, type) => {
 </div>`
 	content.insertAdjacentHTML("beforebegin", alert);
 }
+
+const removeAlert = () => {
+	const alert = document.querySelector(".alert");
+	if (alert)
+		alert.remove();
+}
