@@ -8,8 +8,6 @@
 
 // ---------------------------------------- TRANSLATOR ----------------------------------------
 
-siteLanguage = "fr"
-
 var translator = new Translator({
 	defaultLanguage: "fr",
 	detectLanguage: false,
@@ -22,7 +20,9 @@ var translator = new Translator({
 });
 
 translator.fetch(["en", "fr", "es"]).then(() => {
-	translator.translatePageTo(siteLanguage);
+	// Calling `translatePageTo()` without any parameters
+	// will translate to the default language.
+	translator.translatePageTo();
 	console.log("Translating page start");
 	registerLanguageToggle();
 });
@@ -32,9 +32,9 @@ function registerLanguageToggle() {
 
 	select.forEach(link => {
 		link.addEventListener("click", event => {
-		siteLanguage = event.target.getAttribute('data-language');
-		console.log("Translating page to: " + siteLanguage);
-		translator.translatePageTo(siteLanguage);
+		var language = event.target.getAttribute('data-language');
+		console.log("Translating page to: " + language);
+		translator.translatePageTo(language);
 		});
 	})
 }
@@ -43,59 +43,59 @@ function registerLanguageToggle() {
 
 const urlRoutes = {
 	404: {
-		template: "./404.html",
+		template: "static/404.html",
 		title: "404",
 		description: "Page not found",
 		scripts: [],
 		auth: false,
 	},
 	"/": {
-		template: "./play.html",
+		template: "static/play.html",
 		title: "Home",
 		description: "Home page",
 		scripts: ["../js/game.js"],
 		auth: true,
 	},
 	"/play": {
-		template: "./play.html",
+		template: "static/play.html",
 		title: "Home",
 		description: "Home page",
 		scripts: ["../js/game.js"],
 		auth: true,
 	},
 	"/friends": {
-		template: "./friends.html",
+		template: "static/friends.html",
 		title: "Friends",
 		description: "All your friends",
 		scripts: ["../js/removeFriend.js", "../js/friends.js", "../js/addFriend.js"],
 		auth: true,
 	},
 	"/history": {
-		template: "./history.html",
+		template: "static/history.html",
 		title: "History",
 		description: "Game history",
 		scripts: ["../js/history.js"],
 		auth: true,
 	},
 	"/signup": {
-		template: "./signup.html",
+		template: "static/signup.html",
 		title: "Sign up",
 		description: "Sign up to play pong",
 		scripts: ["../js/signup.js"],
 		auth: false,
 	},
 	"/login": {
-		template: "./login.html",
+		template: "static/login.html",
 		title: "Log in",
 		description: "Log in to play pong",
 		scripts: ["../js/login.js"],
 		auth: false,
 	},
 	"/account": {
-		template: "./account.html",
+		template: "static/account.html",
 		title: "account",
 		description: "Your account",
-		scripts: ["../js/account.js", "../js/changePassword.js", "../js/changePicture.js", "../js/defaultLanguage.js"],
+		scripts: ["../js/account.js", "../js/changePassword.js", "../js/changePicture.js"],
 		auth: true,
 	},
 };
@@ -126,8 +126,8 @@ const urlRoute = (event) => {
 const translateNewContent = (node) => {
 	node.querySelectorAll("[data-i18n]").forEach(element => {
 		let data = element.getAttribute('data-i18n')
-		// console.log("Preferred language: " + siteLanguage)
-		let translation = translator.translateForKey(data, siteLanguage)
+		// console.log("Preferred language: " + localStorage.getItem("preferred_language"))
+		let translation = translator.translateForKey(data, localStorage.getItem("preferred_language") || "en")
 		element.innerHTML = translation
 	});
 }
@@ -137,6 +137,10 @@ const addEventSpaLinks = (node) => {
 	links.forEach( link => {
 		link.addEventListener("click", spaHandler)
 	})
+}
+
+const addEventNavigate = () => {
+	window.addEventListener('popstate', spaHandler);
 }
 
 // Function that handles the url location
@@ -159,6 +163,8 @@ const urlLocationHandler = async () => {
 	// Translate only new content.
 	translateNewContent(content)
 	addEventSpaLinks(content)
+
+	// translator.translatePageTo(localStorage.getItem("preferred_language"));
 
 	loadScripts(route.scriptContent || []);
 
@@ -234,7 +240,7 @@ const updateNavbar = (loggedIn) => {
 
 	if (loggedIn)
 	{
-		let welcome = translator.translateForKey("navbar.welcome", siteLanguage)
+		let welcome = translator.translateForKey("navbar.welcome", localStorage.getItem("preferred_language") || translator.defaultLanguage)
 		navbar.querySelector(".navbar-text").innerHTML = welcome;
 		navbar.querySelector(".navbar-username").innerHTML = `${JSON.parse(localStorage.getItem("user")).username}!`;
 		navbar.querySelector('.avatar-sm').src = "http://localhost:8000" + JSON.parse(localStorage.getItem("user")).profile_picture;
@@ -256,7 +262,8 @@ const run = async () => {
 	else
 		updateNavbar(false)
 
-	addEventSpaLinks(document)
+	addEventSpaLinks(document);
+	addEventNavigate();
 	window.onpopstate = urlLocationHandler; // Ensures correct routing when using back/forward buttons from history
 	window.route = urlRoute; // Make the urlRoute function globally accessible.
 }

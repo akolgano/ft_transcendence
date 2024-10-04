@@ -23,9 +23,7 @@
 		"login-ko": "Error logging in, please try again",
 		"login-success": "Connecté avec succès",
 		"sign-up-success": "Compte créé avec succès",
-		"logout-success": "Session fermée.",
-		"password-show": "Show password",
-		"password-hide": "Hide password"
+		"logout-success": "Session fermée."
 	},
 	"account" : {
 		"update": "Mettre à jour",

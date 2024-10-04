@@ -20,15 +20,13 @@
 		"already-account": "¿Ya tienes cuenta?",
 		"error": "Error: ",
 		"login-error": "Lo sentimos, su contraseña o nombre de usuario es incorrecto",
-		"login-ko": "Error logging in, please try again ES",
+		"login-ko": "Error logging in, please try again",
 		"sign-up-success": "Cuenta creada",
 		"login-success": "Inicio de sesión exitosa",
-		"logout-success": "Session cerrada",
-		"password-show": "Show password",
-		"password-hide": "Hide password"
+		"logout-success": "Session cerrada"
 	},
 	"account" : {
-		"update": "Actualizar",
+		"update": "Update username",
 		"title": "Mi cuenta",
 		"picture": "Profile picture"
 	},

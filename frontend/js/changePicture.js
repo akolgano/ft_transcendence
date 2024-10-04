@@ -7,7 +7,7 @@
 		const formData = new FormData(changeProfilePic);
 
 		try {
-			const response = await fetch("http://127.0.0.1:8000/change-profile-picture/", {
+			const response = await fetch("https://localhost/api/change-profile-picture/", {
 				headers: {
 					'Authorization': `Token ${localStorage.getItem("token")}`,
 				},
@@ -25,13 +25,13 @@
 			{
 				localStorage.setItem("user", JSON.stringify(data.user));
 				document.querySelector('.avatar-sm').src = "http://localhost:8000" + JSON.parse(localStorage.getItem("user")).profile_picture;
-				document.querySelector(".profile-pic").src = "http://localhost:8000" + JSON.parse(localStorage.getItem("user")).profile_picture;
 				alert("Picture changed successfully")
+				urlRoute({ target: { href: '/account' }, preventDefault: () => {} });
 			}
 			else
 			{
 				// TO DO: Get the error message in english, then check what it is, depending on that, translate it.
-				// console.log("Language: " + siteLanguage)
+				// console.log("Language: " + localStorage.getItem("preferred_language"))
 				alert("Unexpected error. Unable to change profile picture.")
 				console.log(data.message);
 			}

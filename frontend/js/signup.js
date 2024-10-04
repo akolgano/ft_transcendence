@@ -3,10 +3,6 @@
 
 	const signupForm = document.getElementById("signupForm");
 
-	document.querySelectorAll(".toggle-password").forEach(node => {
-		node.addEventListener("click", togglePassword)
-	});
-
 	signupForm.addEventListener("submit", async (e) => {
 		e.preventDefault();
 
@@ -22,7 +18,7 @@
 		const formData = new FormData(signupForm);
 		try {
 			let errorMessage = "";
-			const response = await fetch("http://127.0.0.1:8000/signup", {
+			const response = await fetch("https://localhost/api/signup", {
 				method: 'POST',
 				body: formData,
 			})
@@ -38,18 +34,18 @@
 			}
 			if (data.token)
 			{
-				alert(translator.translateForKey("auth.sign-up-success", siteLanguage))
+				alert(translator.translateForKey("auth.sign-up-success", localStorage.getItem("preferred_language") || "en"))
 				urlRoute({ target: { href: '/' }, preventDefault: () => {} });
 			}
 			else
 			{
 				// TO DO: Get the error message in english, then check what it is, depending on that, translate it.
-				// console.log("Language: " + siteLanguage)
-				alert(translator.translateForKey("auth.error", siteLanguage) + data.message)
+				// console.log("Language: " + localStorage.getItem("preferred_language"))
+				alert(translator.translateForKey("auth.error", localStorage.getItem("preferred_language") || "en") + data.message)
 				console.log(data.message);
 			}
 		} catch (error) {
-			alert(translator.translateForKey("auth.error", siteLanguage) + error.message)
+			alert(translator.translateForKey("auth.error", localStorage.getItem("preferred_language") || "en") + error.message)
 			console.log(error.message)
 		}
 	})

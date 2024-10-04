@@ -23,9 +23,7 @@
 		"login-ko": "Error logging in, please try again",
 		"sign-up-success": "Sign up successful",
 		"login-success": "Login successful",
-		"logout-success": "Logout successful",
-		"password-show": "Show password",
-		"password-hide": "Hide password"
+		"logout-success": "Logout successful"
 	},
 	"account" : {
 		"update": "Update",

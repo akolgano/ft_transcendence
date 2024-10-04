@@ -12,7 +12,7 @@ function addFriendEvent() {
 		const formData = new FormData(addFriend);
 
 		try {
-			const response = await fetch("http://localhost:8000/add_friend/", {
+			const response = await fetch("https://localhost/api/add_friend/", {
 				headers: {
 					'Authorization': `Token ${localStorage.getItem("token")}`,
 				},
@@ -35,7 +35,7 @@ function addFriendEvent() {
 			else
 			{
 				// TO DO: Get the error message in english, then check what it is, depending on that, translate it.
-				// console.log("Language: " + siteLanguage)
+				// console.log("Language: " + localStorage.getItem("preferred_language"))
 				alert("Unexpected error. Unable to add friend.")
 				console.log(data.message);
 			}

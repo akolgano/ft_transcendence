@@ -19,7 +19,7 @@
 		formData.append("new_password", newPassword);
 
 		try {
-			const response = await fetch("http://127.0.0.1:8000/change_password/", {
+			const response = await fetch("https://localhost/api/change_password/", {
 				headers: {
 					'Authorization': `Token ${localStorage.getItem("token")}`,
 				},
@@ -49,7 +49,7 @@
 			else
 			{
 				// TO DO: Get the error message in english, then check what it is, depending on that, translate it.
-				// console.log("Language: " + siteLanguage)
+				// console.log("Language: " + localStorage.getItem("preferred_language"))
 				alert("Unexpected error. Unable to change password.")
 				console.log(data.message);
 			}
@@ -58,4 +58,6 @@
 			console.log(error.message)
 		}
 	})
+
+
 }
