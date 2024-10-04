@@ -19,7 +19,7 @@
 		formData.append("new_password", newPassword);
 
 		try {
-			const response = await fetch("https://localhost/api/change_password/", {
+			const response = await fetch("http://127.0.0.1:8000/change_password/", {
 				headers: {
 					'Authorization': `Token ${localStorage.getItem("token")}`,
 				},

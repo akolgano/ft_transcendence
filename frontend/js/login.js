@@ -13,7 +13,7 @@
 
 		console.log("TRYING TO LOG IN")
 		try {
-			const response = await fetch("https://localhost/api/login", {
+			const response = await fetch("http://127.0.0.1:8000/login", {
 				method: 'POST',
 				body: formData,
 			})

@@ -4,6 +4,7 @@
 
 
 ```
+cd srcs
 docker-compose down
 docker-compose build --no-cache
 docker-compose up
@@ -13,7 +14,6 @@ The Makefile is currently not working
 
 ## Migrations
 
-You dont need to run migrations after docker-compose anymore. Django will pick it up during docker-compose up.
 ```
 docker exec -it django python3 manage.py makemigrations
 docker exec -it django python3 manage.py migrate
@@ -23,15 +23,25 @@ If there were any migrations, you have to stop the container (CONTROL-C) and sta
 
 ## Frontend
 
+### Go to frontend folder
+
 ```
-Just go to https://localhost (you dont need to run server anymore)
+cd frontend
 ```
 
-Example: https://localhost/login will work now
+### Run server on port 3000
+
+```
+python3 -m http.server 3000
+```
+
+### Go to http://localhost:3000/
+Currently, you can only navigate using links, do not type the full url yourself.
+Example: http://localhost:3000/login will not work, but clicking on the login button will work.
 
 ## Check the database for tests
 
-You can go to localhost:8000/api/admin to manage the database.
+You can go to localhost:8000/admin to manage the database.
 User and password: admin
 
 ## Translations

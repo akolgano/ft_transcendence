@@ -31,7 +31,7 @@ function displayFriends(data) {
 async function fetchFriends() {
 	console.log("start async")
 	try {
-		const response = await fetch("https://localhost/api/get_friends/", {
+		const response = await fetch("http://127.0.0.1:8000/get_friends/", {
 			headers: {
 				'Authorization': `Token ${localStorage.getItem("token")}`,
 			},

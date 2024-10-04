@@ -15,7 +15,7 @@ async function addEventRemoveButton(e) {
 	formData.append("username_to_remove", username)
 
 	try {
-		const response = await fetch("https://localhost/api/remove_friend/", {
+		const response = await fetch("http://localhost:8000/remove_friend/", {
 			headers: {
 				'Authorization': `Token ${localStorage.getItem("token")}`,
 			},
