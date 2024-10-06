@@ -44,56 +44,56 @@ function registerLanguageToggle() {
 
 const urlRoutes = {
 	404: {
-		template: "./404.html",
+		template: "static/404.html",
 		title: "404",
 		description: "Page not found",
 		scripts: [],
 		auth: false,
 	},
 	"/": {
-		template: "./play.html",
+		template: "static/play.html",
 		title: "Home",
 		description: "Home page",
 		scripts: ["../js/game.js"],
 		auth: true,
 	},
 	"/play": {
-		template: "./play.html",
+		template: "static/play.html",
 		title: "Home",
 		description: "Home page",
 		scripts: ["../js/game.js"],
 		auth: true,
 	},
 	"/friends": {
-		template: "./friends.html",
+		template: "static/friends.html",
 		title: "Friends",
 		description: "All your friends",
 		scripts: ["../js/removeFriend.js", "../js/friends.js", "../js/addFriend.js"],
 		auth: true,
 	},
 	"/history": {
-		template: "./history.html",
+		template: "static/history.html",
 		title: "History",
 		description: "Game history",
 		scripts: ["../js/history.js"],
 		auth: true,
 	},
 	"/signup": {
-		template: "./signup.html",
+		template: "static/signup.html",
 		title: "Sign up",
 		description: "Sign up to play pong",
 		scripts: ["../js/signup.js"],
 		auth: false,
 	},
 	"/login": {
-		template: "./login.html",
+		template: "static/login.html",
 		title: "Log in",
 		description: "Log in to play pong",
 		scripts: ["../js/login.js"],
 		auth: false,
 	},
 	"/account": {
-		template: "./account.html",
+		template: "static/account.html",
 		title: "account",
 		description: "Your account",
 		scripts: ["../js/account.js", "../js/changePassword.js", "../js/changePicture.js", "../js/defaultLanguage.js"],
@@ -131,6 +131,10 @@ const addEventSpaLinks = (node) => {
 	links.forEach( link => {
 		link.addEventListener("click", spaHandler)
 	})
+}
+
+const addEventNavigate = () => {
+	window.addEventListener('popstate', spaHandler);
 }
 
 // Function that handles the url location
@@ -257,7 +261,8 @@ const run = async () => {
 	else
 		updateNavbar(false)
 
-	addEventSpaLinks(document)
+	addEventSpaLinks(document);
+	addEventNavigate();
 	window.onpopstate = urlLocationHandler; // Ensures correct routing when using back/forward buttons from history
 	window.route = urlRoute; // Make the urlRoute function globally accessible.
 }

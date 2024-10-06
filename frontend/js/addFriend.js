@@ -55,7 +55,7 @@ function addFriendEvent() {
 		const formData = new FormData(addFriend);
 		removeAlert();
 		try {
-			const response = await fetch("http://localhost:8000/add_friend/", {
+			const response = await fetch("https://localhost/api/add_friend/", {
 				headers: {
 					'Authorization': `Token ${localStorage.getItem("token")}`,
 				},

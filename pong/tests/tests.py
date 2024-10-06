@@ -12,9 +12,11 @@ from rest_framework.authtoken.models import Token
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.conf import settings
+from django.test import override_settings
 from django.contrib.auth import get_user_model
 import time, os
 
+@override_settings(SECURE_SSL_REDIRECT=False)
 class LoginApiTests(APITestCase):
 
     #def setUp(self):
@@ -59,7 +61,7 @@ class LoginApiTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-
+@override_settings(SECURE_SSL_REDIRECT=False)
 class SignupApiTests(APITestCase):
     
     def setUp(self):
@@ -151,11 +153,12 @@ class SignupApiTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['error'][0], 'The password must not contain spaces.')
 
+@override_settings(SECURE_SSL_REDIRECT=False)
 class ChangeProfilePictureTestCase(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.change_profile_picture_url = '/change-profile-picture/'
+        self.change_profile_picture_url = '/api/change-profile-picture/'
         
         self.user = CustomUser.objects.create_user(
             username='testuser',
@@ -186,6 +189,7 @@ class ChangeProfilePictureTestCase(TestCase):
 
 User = get_user_model()
 
+@override_settings(SECURE_SSL_REDIRECT=False)
 class FriendTests(TestCase):
 
     def setUp(self):
@@ -197,25 +201,25 @@ class FriendTests(TestCase):
     
     def test_add_friend(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token1.key)
-        response = self.client.post('/add_friend/', {'username_to_add': self.user2.username})
+        response = self.client.post('/api/add_friend/', {'username_to_add': self.user2.username})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['detail'], 'Friend added successfully.')
-        response = self.client.post('/add_friend/', {'username_to_add': self.user2.username})
+        response = self.client.post('/api/add_friend/', {'username_to_add': self.user2.username})
         self.assertEqual(response.data['detail'], 'You are already friends with this user.')
 
     def test_remove_friend(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token1.key)
 
-        response = self.client.post('/add_friend/', {'username_to_add': self.user2.username})
+        response = self.client.post('/api/add_friend/', {'username_to_add': self.user2.username})
         self.assertEqual(response.status_code, 200)
-        response = self.client.post('/remove_friend/', {'username_to_remove': self.user2.username})
+        response = self.client.post('/api/remove_friend/', {'username_to_remove': self.user2.username})
         self.assertEqual(response.data['detail'], 'Friend removed successfully.')
         self.assertEqual(response.status_code, 200)     
-        response = self.client.post('/remove_friend/', {'username_to_remove': self.user2.username})
+        response = self.client.post('/api/remove_friend/', {'username_to_remove': self.user2.username})
         self.assertEqual(response.data['detail'], 'You are not friends with this user.')
         self.assertEqual(response.status_code, 400)
 
-
+@override_settings(SECURE_SSL_REDIRECT=False)
 class FriendListTests(TestCase):
 
     def setUp(self):
@@ -227,12 +231,12 @@ class FriendListTests(TestCase):
         self.client.force_authenticate(user=self.user1)
 
     def test_get_friends(self):
-        response = self.client.post('/add_friend/', {'username_to_add': self.user2.username})
+        response = self.client.post('/api/add_friend/', {'username_to_add': self.user2.username})
         self.assertEqual(response.status_code, 200) 
 
-        response = self.client.post('/add_friend/', {'username_to_add': self.user3.username})
+        response = self.client.post('/api/add_friend/', {'username_to_add': self.user3.username})
         self.assertEqual(response.status_code, 200)
-        response = self.client.get('/get_friends/')
+        response = self.client.get('/api/get_friends/')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         friends = response.data['friends']
@@ -242,10 +246,10 @@ class FriendListTests(TestCase):
 
     def test_get_friends_no_auth(self):
         self.client.force_authenticate(user=None)
-        response = self.client.get('/get_friends/')
+        response = self.client.get('/api/get_friends/')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-
+@override_settings(SECURE_SSL_REDIRECT=False)
 class UserInfoTests(APITestCase):
 
     def setUp(self):
@@ -259,7 +263,7 @@ class UserInfoTests(APITestCase):
 
     def test_get_user_info_success(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token1.key)
-        url = f'/get_user_info/{self.user1.id}/'
+        url = f'/api/get_user_info/{self.user1.id}/'
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['username'], self.user1.username)
@@ -267,18 +271,18 @@ class UserInfoTests(APITestCase):
 
     def test_get_user_info_user_not_found(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token1.key)
-        url = '/get_user_info/999/'  # An ID that does not exist
+        url = '/api/get_user_info/999/'  # An ID that does not exist
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'], 'User not found.')
 
     def test_get_user_info_unauthenticated(self):
         # Test unauthenticated access
-        url = f'/get_user_info/{self.user1.id}/'
+        url = f'/api/get_user_info/{self.user1.id}/'
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-
+@override_settings(SECURE_SSL_REDIRECT=False)
 class ChangePasswordTestCase(APITestCase):
     
     def setUp(self):
@@ -289,7 +293,7 @@ class ChangePasswordTestCase(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token)
     
     def test_change_password_success(self):
-        url = '/change_password/'
+        url = '/api/change_password/'
         data = {
             'old_password': 'oldpassword123',
             'new_password': 'newpassword456'
@@ -302,7 +306,7 @@ class ChangePasswordTestCase(APITestCase):
         self.client.credentials()  
 
         #log in with the new password
-        login_url = '/login/'
+        login_url = '/api/login/'
         login_data = {
             'username': 'testuser',
             'password': 'newpassword456'
@@ -320,34 +324,34 @@ class ChangePasswordTestCase(APITestCase):
         self.assertEqual(old_password_login_response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_change_password_invalid_old_password(self):
-        url = '/change_password/'  
+        url = '/api/change_password/'  
         response = self.client.patch(url, {'old_password': 'wrongpassword', 'new_password': 'newpassword456'})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('old_password', response.data)
         self.assertEqual(response.data['old_password'][0], 'Old password is incorrect.')
 
     def test_change_password_missing_fields(self):
-        url = '/change_password/'
+        url = '/api/change_password/'
         response = self.client.patch(url, {'old_password': 'oldpassword123'})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('new_password', response.data)
 
     def test_change_password_weak_new_password(self):
-        url = '/change_password/'
+        url = '/api/change_password/'
         response = self.client.patch(url, {'old_password': 'oldpassword123', 'new_password': '1'})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('new_password', response.data)
         self.assertTrue(any("This password is too short" in msg for msg in response.data['new_password']))
 
 
-
+@override_settings(SECURE_SSL_REDIRECT=False)
 class LanguageTestCases(APITestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = CustomUser.objects.create_user(username='testuser', password='testpassword', email = 'dummy')
 
     def test_create_user_with_language(self):
-        response = self.client.post('/signup/', {
+        response = self.client.post('/api/signup/', {
             'username': 'newuser',
             'password': 'newpassword%',
             'language': 'es',
@@ -357,7 +361,7 @@ class LanguageTestCases(APITestCase):
         self.assertEqual(response.data['user']['language'], 'es')
 
 
-
+@override_settings(SECURE_SSL_REDIRECT=False)
 class SaveGameResultTests(APITestCase):
 
     def setUp(self):
@@ -368,7 +372,7 @@ class SaveGameResultTests(APITestCase):
 
     def test_valid_game_result_submission(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.post('/game/result/', {
+        response = self.client.post('/api/game/result/', {
             'opponent_username': 'opponent1',
             'is_ai': False,
             'score': [3, 1]
@@ -380,7 +384,7 @@ class SaveGameResultTests(APITestCase):
 
     def test_opponent_not_found(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.post('/game/result/', {
+        response = self.client.post('/api/game/result/', {
             'opponent_username': 'unknown_user',
             'is_ai': False,
             'score': [2, 2]
@@ -389,7 +393,7 @@ class SaveGameResultTests(APITestCase):
 
     def test_invalid_score_format(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.post('/game/result/', {
+        response = self.client.post('/api/game/result/', {
             'opponent_username': 'opponent1',
             'is_ai': False,
             'score': 'invalid_score'
@@ -398,7 +402,7 @@ class SaveGameResultTests(APITestCase):
 
     def test_missing_required_fields(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.post('/game/result/', {
+        response = self.client.post('/api/game/result/', {
             'opponent_username': 'opponent1',
             'is_ai': False
         }, format='json')
@@ -406,7 +410,7 @@ class SaveGameResultTests(APITestCase):
 
     def test_score_tie_scenario(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.post('/game/result/', {
+        response = self.client.post('/api/game/result/', {
             'opponent_username': 'opponent1',
             'is_ai': False,
             'score': [2, 2]
@@ -415,6 +419,7 @@ class SaveGameResultTests(APITestCase):
         self.assertEqual(PlayerStats.objects.get(user=self.user).victories, 0)
         self.assertEqual(PlayerStats.objects.get(user=self.opponent).victories, 0)
 
+@override_settings(SECURE_SSL_REDIRECT=False)
 class GetGameResultTests(APITestCase):
 
     def setUp(self):
@@ -424,13 +429,13 @@ class GetGameResultTests(APITestCase):
 
     def test_valid_user_stats_retrieval(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.post('/game/result/', {
+        response = self.client.post('/api/game/result/', {
             'opponent_username': 'opponent1',
             'is_ai': False,
             'score': [3, 1]
         }, format='json')
         self.assertEqual(response.status_code, 201)
-        response = self.client.get('/player/stats/')
+        response = self.client.get('/api/player/stats/')
         self.assertEqual(response.status_code, 200)
         self.assertTrue('username' in response.data)
         self.assertTrue('victories' in response.data)
@@ -438,21 +443,21 @@ class GetGameResultTests(APITestCase):
 
     def test_user_stats_not_found(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.get('/player/stats/')
+        response = self.client.get('/api/player/stats/')
         self.assertEqual(response.status_code, 404)
 
-
+@override_settings(SECURE_SSL_REDIRECT=False)
 class AllPlayerStatsTests(APITestCase):
 
     def setUp(self):
         self.user = CustomUser.objects.create_user(username='user1', password='testpass', email = 'dummy1')
         self.opponent = CustomUser.objects.create_user(username='opponent1', email = 'dummy2', password='testpass')
         self.token = Token.objects.create(user=self.user)
-        self.url = '/player/stats/all/'
+        self.url = '/api/player/stats/all/'
 
     def test_get_all_player_stats(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.post('/game/result/', {
+        response = self.client.post('/api/game/result/', {
             'opponent_username': 'opponent1',
             'is_ai': False,
             'score': [3, 1]
@@ -468,7 +473,7 @@ class AllPlayerStatsTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, [])
 
-
+@override_settings(SECURE_SSL_REDIRECT=False)
 class ChangeLanguageTests(APITestCase):
 
     def setUp(self):
@@ -477,7 +482,7 @@ class ChangeLanguageTests(APITestCase):
 
     def test_change_language_success(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.patch('/change_language/', {
+        response = self.client.patch('/api/change_language/', {
             'language': 'es',
         })
         self.assertEqual(response.status_code, 200)
@@ -486,14 +491,14 @@ class ChangeLanguageTests(APITestCase):
 
     def test_change_language_missing_field(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.patch('/change_language/', {
+        response = self.client.patch('/api/change_language/', {
         })
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data, {"error": "Language is required."})
 
     def test_change_language_unsupported(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.patch('/change_language/', {
+        response = self.client.patch('/api/change_language/', {
             'language': 'it',
         })
         self.assertEqual(response.status_code, 400)
