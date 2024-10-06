@@ -30,12 +30,31 @@
 	"account" : {
 		"update": "Actualizar",
 		"title": "Mi cuenta",
-		"picture": "Profile picture"
+		"picture": "Profile picture",
+		"change-pic-success": "Profile picture changed successfully",
+		"change-pic-error": "Error changing profile picture",
+		"change-pic-empty": "Error: No profile picture uploaded.",
+		"already-language": "This is already the default language",
+		"change-language-success": "Language changed successfully",
+		"change-language-error": "Error changing language",
+		"change-language-empty": "Error: Language is required.",
+		"change-language-unsupported": "Error: Unsupported language.",
+		"change-password-success": "Password changed successfully",
+		"change-password-error": "Error changing password"
 	},
 	"friends": {
 		"add-title": "Add a new friend",
+		"error-load": "Error loading friends",
 		"add": "Ajouter",
-		"remove": "Remove"
+		"remove": "Remove",
+		"remove-success": "Friend removed successfully",
+		"remove-error": "Error removing friend",
+		"add-success": "Friend added successfully",
+		"add-error": "Error adding friend",
+		"error-already-friend": "You are already friends with this user.",
+		"error-no-user": "No user found with this username",
+		"error-yourself": "You cannot add yourself as a friend",
+		"error-empty": "Username to add is required."
 	},
 	"404": "Error transcendente: Parece que esta página no existe"
 }

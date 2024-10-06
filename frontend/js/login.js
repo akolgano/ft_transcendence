@@ -1,31 +1,25 @@
 {
 	console.log("SCRIPT LOG IN")
+	async function login(e) {
 
-	document.querySelectorAll(".toggle-password").forEach(node => {
-		node.addEventListener("click", togglePassword)
-	});
-
-	const loginForm = document.getElementById("loginForm");
-
-	loginForm.addEventListener("submit", async (e) => {
 		e.preventDefault();
 		const formData = new FormData(loginForm);
 
-		console.log("TRYING TO LOG IN")
 		try {
 			const response = await fetch("http://127.0.0.1:8000/login", {
 				method: 'POST',
 				body: formData,
 			})
 			const data = await response.json();
+			removeAlert();
+
 			if (!response.ok) {
-				let errorMessage = data.error;
-				throw new Error(errorMessage || 'An error occurred');
+				throw new Error("auth.login-error");
 			}
 			if (data.token)
 			{
-				console.log("Token: " + data.token);
 				console.log("User: " + JSON.stringify(data.user));
+
 				localStorage.setItem("auth", 1);
 				localStorage.setItem("user", JSON.stringify(data.user));
 
@@ -33,20 +27,33 @@
 				localStorage.setItem("token", data.token);
 
 				translator.translatePageTo(siteLanguage);
-				alert(translator.translateForKey("auth.login-success", siteLanguage))
 
-				// Change navbar
 				updateNavbar(true);
-				urlRoute({ target: { href: '/' }, preventDefault: () => {} });
+
+				if (last_page == "/login")
+					last_page = "/"
+				urlRoute({ target: { href: last_page }, preventDefault: () => {} });
+				displayAlert("auth.login-success", "success");
 			}
 			else
 			{
-				alert(translator.translateForKey("auth.login-error", siteLanguage))
-				console.log(data.message);
+				displayAlert("auth.login-error", "danger");
 			}
 		} catch (error) {
-			alert(translator.translateForKey("auth.login-ko", siteLanguage))
-			console.log(error.message)
+			displayAlert(error.message, "danger");
 		}
-	})
+	}
+
+	const loginScript = () => {
+		document.querySelectorAll(".toggle-password").forEach(node => {
+			node.addEventListener("click", togglePassword)
+		});
+
+		const loginForm = document.getElementById("loginForm");
+		loginForm.addEventListener("submit", login);
+	}
+
+	loginScript();
 }
+
+// Data from back: {"detail":"No CustomUser matches the given query."}

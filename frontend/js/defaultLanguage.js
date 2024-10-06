@@ -14,8 +14,8 @@ console.log("DefaultLanguage")
 
 		if (selectedLanguage == JSON.parse(localStorage.getItem("user")).language)
 		{
-			// defaultLanguage.querySelector(".language-error").value = "This is already the current language"
-			alert("this is already the default language")
+			removeAlert();
+			displayAlert("account.already-language", "warning");
 			return ;
 		}
 
@@ -28,13 +28,14 @@ console.log("DefaultLanguage")
 				body: formData,
 			})
 			const data = await response.json();
+			removeAlert();
 			if (!response.ok) {
 				// console.log("Data json: " + JSON.stringify(data))
-				throw new Error('An error occurred');
+				throw new Error(data.error || 'An error occurred');
 			}
 			if (data.detail)
 			{
-				alert("Language changed succesfully")
+				displayAlert("account.change-language-success", "success");
 				translator.translatePageTo(selectedLanguage);
 
 				// Update current site language
@@ -48,11 +49,16 @@ console.log("DefaultLanguage")
 			}
 			else
 			{
-				alert("Unexpected error. Unable to change language.")
+				displayAlert("account.change-language-error", "danger");
 				console.log(data.message);
 			}
 		} catch (error) {
-			alert("Error changing language.\n" + error.message)
+			if (error.message == "Language is required.")
+				displayAlert("account.change-language-empty", "danger");
+			else if (error.message == "Unsupported language.")
+				displayAlert("account.change-language-unsupported", "danger");
+			else
+				displayAlert("account.change-language-error", "danger");
 			console.log(error.message)
 		}
 	})

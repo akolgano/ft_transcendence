@@ -5,7 +5,6 @@ function displayFriends(data) {
 	const friendsList = document.querySelector(".friends-list");
 
 	data.forEach(user => {
-
 		const userHTML = `
 	<div class="friend-card" data-username=${user.username}>
 		<div class="border rounded bg-light w-50 mb-2 d-inline-block align-middle">
@@ -22,14 +21,12 @@ function displayFriends(data) {
 			<button type="submit" class="btn btn-danger mb-2 removeFriend" data-username=${user.username} data-i18n="friends.remove"></button>
 		</div>
 	</div>`
-		console.log("Username: " + user.username);
 		friendsList.insertAdjacentHTML("beforeend", userHTML);
 	});
 	translateNewContent(friendsList);
 }
 
 async function fetchFriends() {
-	console.log("start async")
 	try {
 		const response = await fetch("http://127.0.0.1:8000/get_friends/", {
 			headers: {
@@ -44,19 +41,19 @@ async function fetchFriends() {
 		}
 		if (data)
 		{
-			console.log("Here are the friends: ", data);
 			displayFriends(data.friends);
 		}
 		else
 		{
-			alert("Unexpected error. Unable to fetch friends.")
+			removeAlert();
+			displayAlert("friends.error-load", "danger");
 			console.log(data.message);
 		}
 	} catch (error) {
-		alert("Error fetching friends.\n" + error.message)
+		removeAlert();
+		displayAlert("friends.error-load", "danger");
 		console.log(error.message)
 	}
-	console.log("done async")
 }
 
 fetchFriends().then(removeFriendScript);

@@ -18,7 +18,7 @@
 		"email": "Email address",
 		"no-account": "Don't have an account yet?",
 		"already-account": "Already have an account?",
-		"error": "Error: ",
+		"error": "Authentication error",
 		"login-error": "Sorry, looks like that’s the wrong username or password.",
 		"login-ko": "Error logging in, please try again",
 		"sign-up-success": "Sign up successful",
@@ -30,12 +30,32 @@
 	"account" : {
 		"update": "Update",
 		"title": "My account",
-		"picture": "Profile picture"
+		"picture": "Profile picture",
+		"change-pic-success": "Profile picture changed successfully",
+		"change-pic-error": "Error changing profile picture",
+		"change-pic-empty": "Error: No profile picture uploaded.",
+		"already-language": "This is already the default language",
+		"change-language-success": "Language changed successfully",
+		"change-language-error": "Error changing language",
+		"change-language-empty": "Error: Language is required.",
+		"change-language-unsupported": "Error: Unsupported language.",
+		"change-password-success": "Password changed successfully",
+		"change-password-error": "Error changing password"
 	},
 	"friends": {
 		"add-title": "Add a new friend",
+		"error-load": "Error loading friends",
 		"add": "Ajouter",
-		"remove": "Unfriend"
+		"remove": "Unfriend",
+		"remove-success": "Friend removed successfully",
+		"add-success": "Friend added successfully",
+		"remove-error": "Error removing friend",
+		"add-error": "Error adding friend",
+		"error-already-friend": "You are already friends with this user.",
+		"error-no-user": "No user found with this username",
+		"error-yourself": "You cannot add yourself as a friend",
+		"error-empty": "Username is required.",
+		"error-not-friend": "You are not friend with this user"
 	},
 	"404": "Transcendent error: page not found"
 }

@@ -6,20 +6,24 @@
 				<div class="mb-3">
 					<label for="username" class="form-label" data-i18n="auth.username"></label>
 					<input type="text" id="username" name="username" class="form-control" autocomplete="on" required>
+					<div class="username-error form-error"></div>
 				</div>
 				<div class="mb-3">
 					<label for="email" class="form-label" data-i18n="auth.email"></label>
 					<input type="text" id="email" name="email" class="form-control" autocomplete="on" required>
+					<div class="email-error form-error"></div>
 				</div>
 				<div class="mb-3">
 					<label for="password" class="form-label" data-i18n="auth.password"></label>
 					<input type="password" id="password" name="password" class="form-control" autocomplete="on" required>
 					<a href="/signup" class="toggle-password text-reset" data-password-field="password">Show password</a>
+					<div class="password-error form-error"></div>
 				</div>
 				<div class="mb-3">
 					<label for="confirm-password" class="form-label" data-i18n="auth.repeat-password"></label>
 					<input type="password" id="confirm-password" name="confirm-password" class="form-control" autocomplete="on" required>
 					<a href="/signup" class="toggle-password text-reset" data-password-field="confirm-password">Show password</a>
+					<div class="repeat-password-error form-error"></div>
 				</div>
 				<div class="mb-3 text-center">
 					<button type="submit" class="btn btn-success" data-i18n="auth.sign-up"></button>

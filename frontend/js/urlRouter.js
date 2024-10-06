@@ -8,7 +8,8 @@
 
 // ---------------------------------------- TRANSLATOR ----------------------------------------
 
-siteLanguage = "fr"
+let siteLanguage = "fr"
+let last_page = "/"
 
 var translator = new Translator({
 	defaultLanguage: "fr",
@@ -112,13 +113,6 @@ function spaHandler(e) {
 
 // Function that watches the url and calls the urlLocationHandler
 const urlRoute = (event) => {
-	// let href = event.target.href
-	// if (localStorage.getItem("token") == null && urlRoutes[window.location.pathname].auth == true)
-	// {
-	// 	href = "http://localhost:3000/login"
-	// 	console.log("here")
-	// }
-
 	window.history.pushState({}, "", event.target.href);
 	urlLocationHandler();
 };
@@ -143,6 +137,12 @@ const addEventSpaLinks = (node) => {
 const urlLocationHandler = async () => {
 
 	let location = window.location.pathname;
+	last_page = window.location.pathname;
+
+	// Logged in but user tries to go to login or sign up
+	// TO TEST with nginx
+	if (localStorage.getItem("token") && (location == "/login" || location == "/signup"))
+		return ;
 
 	if (location.length == 0)
 		location = "/";
@@ -150,6 +150,7 @@ const urlLocationHandler = async () => {
 	// Not logged in and route needs authentication
 	if (localStorage.getItem("token") == null && urlRoutes[location].auth == true)
 		location = "/login"
+
 
 	// Get the route, get the html, add it to the div
 	const route = urlRoutes[location] || urlRoutes["404"];
