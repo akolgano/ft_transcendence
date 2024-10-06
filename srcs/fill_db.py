@@ -8,15 +8,15 @@ django.setup()
 from pong.users.models import CustomUser
 
 sample_data = [
-    ('computer', 'computer@example.com', False, 'en', 'profile_pictures/default.jpg'),
-    ('elina', 'elina@example.com', False, 'fr', '/profile_pictures/default.jpg'),
-    ('emily', 'emily@example.com', False, 'es', 'profile_pictures/default.jpg'),
-    ('alice', 'alice@example.com', False, 'es', '/profile_pictures/default.jpg'),
-    ('alex', 'alex@example.com', False, 'es', '/profile_pictures/default.jpg'),
+    ('computer', 'computer@example.com', 'password', False, 'en', 'profile_pictures/default.jpg'),
+    ('elina', 'elina@example.com', 'password', False, 'fr', '/profile_pictures/default.jpg'),
+    ('emily', 'emily@example.com', 'password', False, 'es', 'profile_pictures/default.jpg'),
+    ('alice', 'alice@example.com', 'password', False, 'es', '/profile_pictures/default.jpg'),
+    ('alex', 'alex@example.com', 'password', False, 'es', '/profile_pictures/default.jpg'),
 ]
 
 def insert_sample_data():
-    for username, email, online, language, profile_picture in sample_data:
+    for username, email, password, online, language, profile_picture in sample_data:
         try:
             user, created = CustomUser.objects.get_or_create(
                 username=username,
@@ -28,6 +28,8 @@ def insert_sample_data():
                 }
             )
             if created:
+                user.set_password("password") # hash it
+                user.save()
                 print(f"Inserted: {username}")
             else:
                 print(f"User already exists: {username}")
