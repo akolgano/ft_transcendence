@@ -18,6 +18,7 @@ function addResultsToHTML(data) {
 
 
 async function fetchHistory() {
+	removeAlert();
 	try {
 		const response = await fetch("https://localhost/api/player/stats/", {
 			headers: {
