@@ -146,7 +146,7 @@ const urlLocationHandler = async () => {
 	// Logged in but user tries to go to login or sign up
 	// TO TEST with nginx
 	if (localStorage.getItem("token") && (location == "/login" || location == "/signup"))
-		return ;
+		location = "/";
 
 	if (location.length == 0)
 		location = "/";
@@ -154,7 +154,6 @@ const urlLocationHandler = async () => {
 	// Not logged in and route needs authentication
 	if (localStorage.getItem("token") == null && urlRoutes[location].auth == true)
 		location = "/login"
-
 
 	// Get the route, get the html, add it to the div
 	const route = urlRoutes[location] || urlRoutes["404"];
