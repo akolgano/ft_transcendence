@@ -7,7 +7,7 @@
 		const formData = new FormData(changeProfilePic);
 
 		try {
-			const response = await fetch("http://127.0.0.1:8000/change-profile-picture/", {
+			const response = await fetch("https://localhost/api/change-profile-picture/", {
 				headers: {
 					'Authorization': `Token ${localStorage.getItem("token")}`,
 				},

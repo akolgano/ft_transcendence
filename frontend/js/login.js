@@ -6,7 +6,7 @@
 		const formData = new FormData(loginForm);
 
 		try {
-			const response = await fetch("http://127.0.0.1:8000/login", {
+			const response = await fetch("https://localhost/api/login", {
 				method: 'POST',
 				body: formData,
 			})
