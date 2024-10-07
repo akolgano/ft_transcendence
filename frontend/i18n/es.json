@@ -4,6 +4,7 @@
 		"history": "Historia",
 		"language": "Idioma",
 		"friends": "Amigos",
+		"dashboard": "Tablero",
 		"welcome": "Hola, "
 	},
 	"auth" : {
@@ -41,6 +42,16 @@
 		"change-language-unsupported": "Error: Unsupported language.",
 		"change-password-success": "Password changed successfully",
 		"change-password-error": "Error changing password"
+	},
+	"dash" : {
+		"player-stats": "Estadísticas del Jugador",
+		"victories": "Victorias : ",
+		"losses": "Losses S : ",
+		"player-distri": "Player Victory and Loss Distribution S",
+		"game-duration": "Game Durations S",
+		"game-intensity": "Game Intensity S",
+		"game-margin": "Game Margin Distribution S",
+		"player-results": "Resultados del Jugador"
 	},
 	"friends": {
 		"add-title": "Add a new friend",

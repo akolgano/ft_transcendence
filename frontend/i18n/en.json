@@ -4,6 +4,7 @@
 		"history": "History",
 		"language": "Language",
 		"friends": "Friends",
+		"dashboard": "Dashboard",
 		"welcome": "Welcome, "
 	},
 	"auth" : {
@@ -41,6 +42,16 @@
 		"change-language-unsupported": "Error: Unsupported language.",
 		"change-password-success": "Password changed successfully",
 		"change-password-error": "Error changing password"
+	},
+	"dash" : {
+		"player-stats": "Player Statistics",
+		"victories": "Victories : ",
+		"losses": "Losses : ",
+		"player-distri": "Player Victory and Loss Distribution",
+		"game-duration": "Game Durations",
+		"game-intensity": "Game Intensity",
+		"game-margin": "Game Margin Distribution",
+		"player-results": "Player Results : "
 	},
 	"friends": {
 		"add-title": "Add a new friend",
