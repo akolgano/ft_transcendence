@@ -8,10 +8,20 @@
 		removeAlert();
 		try {
 			const response = await fetch("https://localhost/api/login", {
+				headers: {
+					'Accept': 'application/json',
+				},
 				method: 'POST',
 				body: formData,
 			})
-			const data = await response.json();
+
+			let data;
+			const contentType = response.headers.get('Content-Type');
+			if (contentType && contentType.includes('application/json')) {
+				data = await response.json();
+			} else {
+				data = await response.text();
+			}
 
 			if (!response.ok) {
 				throw new Error("auth.login-error");

@@ -33,6 +33,7 @@ function registerLanguageToggle() {
 
 	select.forEach(link => {
 		link.addEventListener("click", event => {
+		event.preventDefault();
 		siteLanguage = event.target.getAttribute('data-language');
 		console.log("Translating page to: " + siteLanguage);
 		translator.translatePageTo(siteLanguage);

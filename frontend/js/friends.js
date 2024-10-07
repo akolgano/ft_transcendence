@@ -31,10 +31,19 @@ async function fetchFriends() {
 		const response = await fetch("https://localhost/api/get_friends/", {
 			headers: {
 				'Authorization': `Token ${localStorage.getItem("token")}`,
+				'Accept': 'application/json',
 			},
 			method: 'GET',
 		})
-		const data = await response.json();
+
+		let data;
+		const contentType = response.headers.get('Content-Type');
+		if (contentType && contentType.includes('application/json')) {
+			data = await response.json();
+		} else {
+			data = await response.text();
+		}
+
 		if (!response.ok) {
 			console.log("Error: " + JSON.stringify(data))
 			throw new Error(JSON.stringify(data.detail) || 'An error occurred');

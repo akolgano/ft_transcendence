@@ -35,11 +35,20 @@ async function addEventRemoveButton(e) {
 		const response = await fetch("https://localhost/api/remove_friend/", {
 			headers: {
 				'Authorization': `Token ${localStorage.getItem("token")}`,
+				'Accept': 'application/json',
 			},
 			method: 'POST',
 			body: formData,
 		})
-		const data = await response.json();
+
+		let data;
+		const contentType = response.headers.get('Content-Type');
+		if (contentType && contentType.includes('application/json')) {
+			data = await response.json();
+		} else {
+			data = await response.text();
+		}
+
 		if (!response.ok) {
 			console.log("Error: " + JSON.stringify(data))
 			throw new Error(data.detail || 'An error occurred');

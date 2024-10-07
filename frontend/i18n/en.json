@@ -40,7 +40,8 @@
 		"change-language-empty": "Error: Language is required.",
 		"change-language-unsupported": "Error: Unsupported language.",
 		"change-password-success": "Password changed successfully",
-		"change-password-error": "Error changing password. Try again later."
+		"change-password-error": "Error changing password. Try again later.",
+		"change-pic-too-large": "Error changing picture: file too large"
 	},
 	"friends": {
 		"add-title": "Add a new friend",
@@ -56,6 +57,12 @@
 		"error-yourself": "You cannot add yourself as a friend",
 		"error-empty": "Username is required.",
 		"error-not-friend": "You are not friend with this user"
+	},
+	"history": {
+		"error-load": "Error loading history.",
+		"victories": "Victories: ",
+		"losses": "Losses: ",
+		"points": "points"
 	},
 	"404": "Transcendent error: page not found",
 	"error-fetch": "Unexpected error, please try again later."

@@ -11,10 +11,21 @@ async function addEventSignUpForm(e) {
 	removeAlert();
 	try {
 		const response = await fetch("https://localhost/api/signup", {
+			headers: {
+				'Accept': 'application/json',
+			},
 			method: 'POST',
 			body: formData,
 		})
-		const data = await response.json();
+
+		let data;
+		const contentType = response.headers.get('Content-Type');
+		if (contentType && contentType.includes('application/json')) {
+			data = await response.json();
+		} else {
+			data = await response.text();
+		}
+
 		if (!response.ok) {
 			// console.log("Data from back: " + JSON.stringify(data));
 			addErrorToHTML(data);
