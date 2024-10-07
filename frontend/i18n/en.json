@@ -32,20 +32,20 @@
 		"title": "My account",
 		"picture": "Profile picture",
 		"change-pic-success": "Profile picture changed successfully",
-		"change-pic-error": "Error changing profile picture",
+		"change-pic-error": "Error changing profile picture. Try again later.",
 		"change-pic-empty": "Error: No profile picture uploaded.",
 		"already-language": "This is already the default language",
 		"change-language-success": "Language changed successfully",
-		"change-language-error": "Error changing language",
+		"change-language-error": "Error changing language. Try again later.",
 		"change-language-empty": "Error: Language is required.",
 		"change-language-unsupported": "Error: Unsupported language.",
 		"change-password-success": "Password changed successfully",
-		"change-password-error": "Error changing password"
+		"change-password-error": "Error changing password. Try again later."
 	},
 	"friends": {
 		"add-title": "Add a new friend",
 		"error-load": "Error loading friends",
-		"add": "Ajouter",
+		"add": "Add",
 		"remove": "Unfriend",
 		"remove-success": "Friend removed successfully",
 		"add-success": "Friend added successfully",
@@ -57,5 +57,6 @@
 		"error-empty": "Username is required.",
 		"error-not-friend": "You are not friend with this user"
 	},
-	"404": "Transcendent error: page not found"
+	"404": "Transcendent error: page not found",
+	"error-fetch": "Unexpected error, please try again later."
 }

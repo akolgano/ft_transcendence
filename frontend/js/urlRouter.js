@@ -144,7 +144,6 @@ const urlLocationHandler = async () => {
 	last_page = window.location.pathname;
 
 	// Logged in but user tries to go to login or sign up
-	// TO TEST with nginx
 	if (localStorage.getItem("token") && (location == "/login" || location == "/signup"))
 		location = "/";
 
@@ -261,7 +260,7 @@ const run = async () => {
 		updateNavbar(false)
 
 	addEventSpaLinks(document);
-	addEventNavigate();
+	// addEventNavigate();
 	window.onpopstate = urlLocationHandler; // Ensures correct routing when using back/forward buttons from history
 	window.route = urlRoute; // Make the urlRoute function globally accessible.
 }

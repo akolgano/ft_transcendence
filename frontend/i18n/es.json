@@ -56,5 +56,6 @@
 		"error-yourself": "You cannot add yourself as a friend",
 		"error-empty": "Username to add is required."
 	},
-	"404": "Error transcendente: Parece que esta página no existe"
+	"404": "Error transcendente: Parece que esta página no existe",
+	"error-fetch": "Unexpected error, please try again later."
 }

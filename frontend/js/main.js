@@ -16,6 +16,10 @@ const togglePassword = (event) => {
 }
 
 const displayAlert = (key, type) => {
+	// Previous alert should be already deleted before, but just to make sure
+	removeAlert()
+	if (key === null)
+		key = "error-fetch";
 	const content = document.querySelector("#content");
 	const alert = `<div class="alert alert-${type} alert-dismissible fade show position-absolute" role="alert">
 	${translator.translateForKey(key, siteLanguage)}
@@ -53,10 +57,19 @@ function addErrorToHTML(data) {
 			errorClass = ".password-error";
 		else if (key == "old_password")
 			errorClass = ".old-password-error"
+		else if (key == "detail")
+		{
+			removeAlert();
+			displayAlert("error-fetch", "danger");
+			console.log(data)
+			return ;
+		}
 		else
 			errorClass = `.${key}-error`;
 
 		const errorDiv = document.querySelector(errorClass);
+		if (errorDiv == null)
+			return ;
 
 		data[key].forEach(message => {
 			let errorTag = document.createElement("p");

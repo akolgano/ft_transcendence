@@ -54,7 +54,9 @@
 		"error-already-friend": "You are already friends with this user.",
 		"error-no-user": "No user found with this username",
 		"error-yourself": "You cannot add yourself as a friend",
-		"error-empty": "Username to add is required."
+		"error-empty": "Username to add is required.",
+		"error-fetch": "Unexpecting error while fetching"
 	},
-	"404": "Erreur Transcendente: page non trouvée"
+	"404": "Erreur Transcendente: page non trouvée",
+	"error-fetch": "Unexpected error, please try again later."
 }

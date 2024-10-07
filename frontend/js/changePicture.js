@@ -5,6 +5,7 @@
 		e.preventDefault();
 
 		const formData = new FormData(changeProfilePic);
+		removeAlert();
 
 		try {
 			const response = await fetch("https://localhost/api/change-profile-picture/", {
@@ -15,7 +16,6 @@
 				body: formData,
 			})
 			const data = await response.json();
-			removeAlert();
 			if (!response.ok) {
 				console.log("Data json: " + JSON.stringify(data))
 				throw new Error(data.error || 'An error occurred');
