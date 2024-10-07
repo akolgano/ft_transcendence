@@ -21,13 +21,17 @@
 //    .then(response => response.json())
 //    .then(data => {        
         // Update player stats 
-        document.getElementById('victories').innerText = data.stats.victories;
-        document.getElementById('losses').innerText = data.stats.losses;
+        let victoriesElement = document.getElementById('victories');
+        let lossesElement = document.getElementById('losses');
 
-        // Increase the font size for both the words and numbers
-        document.querySelectorAll('li').forEach(item => {
-            item.style.fontSize = '18px';  // Apply to all list items containing the stats
-        });
+        if (victoriesElement) {
+            victoriesElement.innerText = data.stats.victories;
+        }
+
+        if (lossesElement) {
+            lossesElement.innerText = data.stats.losses;
+        }
+
 
         // Prepare game result data for the chart
         const gameResults = data.recent_games;

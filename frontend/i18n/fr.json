@@ -45,8 +45,8 @@
 	},
 	"dash" : {
 		"player-stats": "Statistiques du Joueur",
-		"victories": "Victoires : ",
-		"losses": "Losses F : ",
+		"vict": "Victoires : ",
+		"loss": "Losses F : ",
 		"player-distri": "Player Victory and Loss Distribution F",
 		"game-duration": "Game Durations F",
 		"game-intensity": "Game Intensity F",

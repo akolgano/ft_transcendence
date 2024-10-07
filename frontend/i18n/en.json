@@ -45,8 +45,8 @@
 	},
 	"dash" : {
 		"player-stats": "Player Statistics",
-		"victories": "Victories : ",
-		"losses": "Losses : ",
+		"vict": "Victories : ",
+		"loss": "Losses : ",
 		"player-distri": "Player Victory and Loss Distribution",
 		"game-duration": "Game Durations",
 		"game-intensity": "Game Intensity",
