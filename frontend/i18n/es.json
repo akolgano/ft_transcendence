@@ -45,6 +45,7 @@
 		"change-pic-too-large": "Error changing picture: file too large"
 	},
 	"dash" : {
+		"error-load": "Error loading dashboard.",
 		"player-stats": "Estadísticas del Jugador",
 		"vict": "Victorias : ",
 		"loss": "Losses S : ",
