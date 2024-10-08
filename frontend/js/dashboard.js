@@ -189,7 +189,223 @@ function renderCharts(labels, playerScores, opponentScores, victories, losses, g
         }
     });
 
-    // Additional chart logic for game durations, intensity, etc., remains the same
+    // Prepare game result data for the game duration bar chart
+    const gameDurations = gameResults.map((result) => {
+        const startTime = new Date(result.date_time);
+        const endTime = new Date(result.end_time);
+        return (endTime - startTime) / 60000;  // Duration in minutes
+    });
+
+    // Render the bar chart for game durations
+    const ctxBar = document.getElementById('gameDurationChart').getContext('2d');
+    new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: labels,  // Use all labels as we now have a duration for each game
+            datasets: [{
+                label: 'Game Duration (minutes)',
+                data: gameDurations,  // Duration for each game
+                backgroundColor: 'rgba(153, 102, 255, 0.6)',  // Color for the bars
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    ticks: {
+                        font: {
+                            size: 16  // Increase font size of the x-axis labels
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,  // Ensure the scale increments by whole numbers
+                        callback: function(value) {
+                            return Number.isInteger(value) ? value : '';  // Display only whole numbers
+                        },
+                        font: {
+                            size: 16  // Increase font size of the y-axis labels
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 18  // Increase font size of the legend (Game Duration)
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const game = data.recent_games[context.dataIndex];
+                            const startTime = new Date(game.date_time).toLocaleTimeString('en-GB', { timeZone: 'UTC' });
+                            const endTime = new Date(game.end_time).toLocaleTimeString('en-GB', { timeZone: 'UTC' });
+                            return `Duration: ${context.raw} mins (Start: ${startTime}, End: ${endTime})`;
+                        }
+                    },
+                    titleFont: {
+                        size: 16  // Increase font size of tooltip titles
+                    },
+                    bodyFont: {
+                        size: 16  // Increase font size of tooltip text
+                    }
+                }
+            }
+        }
+    });
+
+
+    // Prepare game intensity data (scores per minute)
+    const gameIntensity = gameResults.map((result) => {
+        const startTime = new Date(result.date_time);
+        const endTime = new Date(result.end_time);
+        const duration = (endTime - startTime) / 60000;  // Duration in minutes
+        const totalScore = result.score[0] + result.score[1];  // Total score for both player and opponent
+        return totalScore / duration;  // Scores per minute (intensity)
+    });
+
+    // Render the heatmap-style bar chart for game intensity
+    const ctxIntensity = document.getElementById('gameIntensityChart').getContext('2d');
+    new Chart(ctxIntensity, {
+        type: 'bar',
+        data: {
+            labels: labels,  // Use the same labels for game dates
+            datasets: [{
+                label: 'Game Intensity (Scores per Minute)',
+                data: gameIntensity,  // Scores per minute for each game
+                backgroundColor: gameIntensity.map(value => {
+                    // Generate color based on intensity: more intense games are darker
+                    const intensity = Math.min(value / Math.max(...gameIntensity), 1);  // Normalize intensity between 0 and 1
+                    return `rgba(255, 99, 132, ${intensity})`;  // Red gradient (change color if needed)
+                }),
+                borderColor: 'rgba(255, 99, 132, 1)',  // Border color for each bar
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    ticks: {
+                        font: {
+                            size: 16  // Increase font size of the x-axis labels
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,  // Ensure the scale increments by whole numbers
+                        callback: function(value) {
+                            return Number.isInteger(value) ? value : '';  // Display only whole numbers
+                        },
+                        font: {
+                            size: 16  // Increase font size of the y-axis labels
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 18  // Increase font size of the legend (Game Intensity)
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const game = data.recent_games[context.dataIndex];
+                            const startTime = new Date(game.date_time).toLocaleTimeString('en-GB', { timeZone: 'UTC' });
+                            const endTime = new Date(game.end_time).toLocaleTimeString('en-GB', { timeZone: 'UTC' });
+                            return `Intensity: ${context.raw.toFixed(2)} scores/min (Start: ${startTime}, End: ${endTime})`;
+                        }
+                    },
+                    titleFont: {
+                        size: 16  // Increase font size of tooltip titles
+                    },
+                    bodyFont: {
+                        size: 16  // Increase font size of tooltip text
+                    }
+                }
+            }
+        }
+    });
+
+    // Prepare data for game margins
+    const gameMargins = gameResults.map(result => Math.abs(result.score[0] - result.score[1]));
+
+    // Group margins into categories
+    const marginCategories = {
+        "Close Games (1)": 0,
+        "Moderate Games (2-3)": 0,
+        "Large Margins (4+)": 0
+    };
+
+    // Classify each game based on its margin
+    gameMargins.forEach(margin => {
+        if (margin <= 1) {
+            marginCategories["Close Games (1)"]++;
+        } else if (margin <= 3) {
+            marginCategories["Moderate Games (2-3)"]++;
+        } else {
+            marginCategories["Large Margins (4+)"]++;
+        }
+    });
+
+    // Data for pie chart
+    const marginLabels = Object.keys(marginCategories);
+    const marginData = Object.values(marginCategories);
+
+    // Render the pie chart for game margins
+    const ctxMargin = document.getElementById('gameMarginChart').getContext('2d');
+    new Chart(ctxMargin, {
+        type: 'pie',
+        data: {
+            labels: marginLabels,  // Label categories
+            datasets: [{
+                data: marginData,  // Data values for each category
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.6)', // Blue for close games
+                    'rgba(255, 205, 86, 0.6)', // Yellow for moderate games
+                    'rgba(255, 99, 132, 0.6)'  // Red for large margins
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 205, 86, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: {
+                            size: 18  // Increase font size of the legend (Game Margins)
+                        }
+                    }
+                },
+                tooltip: {
+                    titleFont: {
+                        size: 16  // Increase font size of tooltip titles
+                    },
+                    bodyFont: {
+                        size: 16  // Increase font size of tooltip text
+                    }
+                }
+            }
+        }
+    });
 }
 
 // Call the fetchDashboardData function to get the data and render the charts
