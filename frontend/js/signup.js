@@ -7,16 +7,29 @@ async function addEventSignUpForm(e) {
 		return ;
 
 	const formData = new FormData(signupForm);
+	let formErrors = 0;
+	removeAlert();
 	try {
 		const response = await fetch("https://localhost/api/signup", {
+			headers: {
+				'Accept': 'application/json',
+			},
 			method: 'POST',
 			body: formData,
 		})
-		const data = await response.json();
-		removeAlert();
+
+		let data;
+		const contentType = response.headers.get('Content-Type');
+		if (contentType && contentType.includes('application/json')) {
+			data = await response.json();
+		} else {
+			data = await response.text();
+		}
+
 		if (!response.ok) {
 			// console.log("Data from back: " + JSON.stringify(data));
 			addErrorToHTML(data);
+			formErrors = 1;
 			throw new Error(JSON.stringify(data) || 'An error occurred');
 		}
 		if (data.token)
@@ -27,10 +40,11 @@ async function addEventSignUpForm(e) {
 		else
 		{
 			displayAlert("auth.error", "danger");
-			console.log(data.message);
 		}
 	} catch (error) {
 		console.log(error.message)
+		if (!formErrors)
+			displayAlert("error-fetch", "danger");
 	}
 }
 
