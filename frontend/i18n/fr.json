@@ -1,7 +1,7 @@
 {
 	"navbar" : {
 		"play": "Jouer",
-		"history": "Historique",
+		"profile": "Profil",
 		"language": "Langue",
 		"friends": "Amis",
 		"welcome": "Bonjour, "
@@ -58,8 +58,8 @@
 		"error-empty": "Username to add is required.",
 		"error-fetch": "Unexpecting error while fetching"
 	},
-	"history": {
-		"error-load": "Error loading history.",
+	"profile": {
+		"error-load": "Error loading profile.",
 		"victories": "Victories: ",
 		"losses": "Losses: ",
 		"points": "points"

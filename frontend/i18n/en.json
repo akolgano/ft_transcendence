@@ -1,7 +1,7 @@
 {
 	"navbar" : {
 		"play": "Play",
-		"history": "History",
+		"profile": "Profile",
 		"language": "Language",
 		"friends": "Friends",
 		"welcome": "Welcome, "
@@ -58,8 +58,8 @@
 		"error-empty": "Username is required.",
 		"error-not-friend": "You are not friend with this user"
 	},
-	"history": {
-		"error-load": "Error loading history.",
+	"profile": {
+		"error-load": "Error loading profile.",
 		"victories": "Victories: ",
 		"losses": "Losses: ",
 		"points": "points"

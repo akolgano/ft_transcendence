@@ -1,7 +1,7 @@
 {
 	"navbar" : {
 		"play": "Jugar",
-		"history": "Historia",
+		"profile": "Profile",
 		"language": "Idioma",
 		"friends": "Amigos",
 		"welcome": "Hola, "
@@ -57,8 +57,8 @@
 		"error-yourself": "You cannot add yourself as a friend",
 		"error-empty": "Username to add is required."
 	},
-	"history": {
-		"error-load": "Error loading history.",
+	"profile": {
+		"error-load": "Error loading profile.",
 		"victories": "Victories: ",
 		"losses": "Losses: ",
 		"points": "points"
