@@ -1,30 +1,23 @@
 
-<div class="dashboard-container">
-    <h2 data-i18n="navbar.dashboard"></h2>
-    <div>
-        <h3 data-i18n="dash.player-stats"></h3>
-        <ul>
-            <li data-i18n="dash.vict"><span id="victories"></span></li>
-            <li data-i18n="dash.loss"><span id="losses"></span></li>
-        </ul>
-    </div>
-
+<div class="dashboard-container" style="width: 800px;"> <!-- Fixed width of 800px for the dashboard container -->
+    <h2 data-i18n="navbar.dashboard" style="margin-bottom: 40px;"></h2>
+    
     <h3 data-i18n="dash.player-results"></h3>
-    <canvas id="gameResultsChart"></canvas>
+    <canvas id="gameResultsChart" style="width: 800px; margin-bottom: 40px;"></canvas> <!-- Add margin-bottom -->
 
     <!-- New section for victory/loss pie chart -->
     <h3 data-i18n="dash.player-distri"></h3>
-    <canvas id="victoryLossChart"></canvas> <!-- Pie chart for victories and losses -->
+    <canvas id="victoryLossChart" style="width: 800px; margin-bottom: 40px;"></canvas> <!-- Add margin-bottom -->
 
     <h3 data-i18n="dash.game-duration"></h3>
-    <canvas id="gameDurationChart"></canvas> <!-- Bar chart for game durations -->
+    <canvas id="gameDurationChart" style="width: 800px; margin-bottom: 40px;"></canvas> <!-- Add margin-bottom -->
 
     <h3 data-i18n="dash.game-intensity"></h3>
-    <canvas id="gameIntensityChart"></canvas> <!-- Heatmap-style bar chart for game intensity -->
+    <canvas id="gameIntensityChart" style="width: 800px; margin-bottom: 40px;"></canvas> <!-- Add margin-bottom -->
 
     <h3 data-i18n="dash.game-margin"></h3>
-    <canvas id="gameMarginChart"></canvas> <!-- Pie chart for game margins -->
-
+    <canvas id="gameMarginChart" style="width: 800px; margin-bottom: 40px;"></canvas> <!-- Add margin-bottom -->
 </div>
+
 
 <script src="../js/dashboard.js"></script>
