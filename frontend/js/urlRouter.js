@@ -169,7 +169,7 @@ const urlLocationHandler = async () => {
 		location = "/";
 
 	// Not logged in and route needs authentication
-	if (localStorage.getItem("token") == null && urlRoutes[location].auth == true)
+	if (localStorage.getItem("token") == null && urlRoutes[location] && urlRoutes[location].auth == true)
 		location = "/login"
 
 	// Get the route, get the html, add it to the div
