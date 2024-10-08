@@ -1,23 +1,19 @@
+<div class="container dashboard-container"> <!-- Use Bootstrap container and your custom class for width -->
+    <h2 data-i18n="navbar.dashboard" class="mb-4"></h2> <!-- Bootstrap margin-bottom -->
 
-<div class="dashboard-container" style="width: 800px;"> <!-- Fixed width of 800px for the dashboard container -->
-    <h2 data-i18n="navbar.dashboard" style="margin-bottom: 40px;"></h2>
-    
     <h3 data-i18n="dash.player-results"></h3>
-    <canvas id="gameResultsChart" style="width: 800px; margin-bottom: 40px;"></canvas> <!-- Add margin-bottom -->
+    <canvas id="gameResultsChart" class="w-100 mb-4"></canvas> <!-- Bootstrap width and margin-bottom -->
 
     <!-- New section for victory/loss pie chart -->
     <h3 data-i18n="dash.player-distri"></h3>
-    <canvas id="victoryLossChart" style="width: 800px; margin-bottom: 40px;"></canvas> <!-- Add margin-bottom -->
+    <canvas id="victoryLossChart" class="w-100 mb-4"></canvas> <!-- Equal width and height -->
 
     <h3 data-i18n="dash.game-duration"></h3>
-    <canvas id="gameDurationChart" style="width: 800px; margin-bottom: 40px;"></canvas> <!-- Add margin-bottom -->
+    <canvas id="gameDurationChart" class="w-100 mb-4"></canvas> <!-- Bootstrap width and margin-bottom -->
 
     <h3 data-i18n="dash.game-intensity"></h3>
-    <canvas id="gameIntensityChart" style="width: 800px; margin-bottom: 40px;"></canvas> <!-- Add margin-bottom -->
+    <canvas id="gameIntensityChart" class="w-100 mb-4"></canvas> <!-- Bootstrap width and margin-bottom -->
 
     <h3 data-i18n="dash.game-margin"></h3>
-    <canvas id="gameMarginChart" style="width: 800px; margin-bottom: 40px;"></canvas> <!-- Add margin-bottom -->
+    <canvas id="gameMarginChart" class="w-100 mb-4"></canvas> <!-- Bootstrap width and margin-bottom -->
 </div>
-
-
-<script src="../js/dashboard.js"></script>
