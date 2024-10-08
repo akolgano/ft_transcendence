@@ -4,6 +4,7 @@
 		"history": "History",
 		"language": "Language",
 		"friends": "Friends",
+		"dashboard": "Dashboard",
 		"welcome": "Welcome, "
 	},
 	"auth" : {
@@ -42,6 +43,17 @@
 		"change-password-success": "Password changed successfully",
 		"change-password-error": "Error changing password. Try again later.",
 		"change-pic-too-large": "Error changing picture: file too large"
+	},
+	"dash" : {
+		"error-load": "Error loading dashboard.",
+		"player-stats": "Player Statistics",
+		"vict": "Victories : ",
+		"loss": "Losses : ",
+		"player-distri": "Player Victory and Loss Distribution",
+		"game-duration": "Game Durations",
+		"game-intensity": "Game Intensity",
+		"game-margin": "Game Margin Distribution",
+		"player-results": "Player Results : "
 	},
 	"friends": {
 		"add-title": "Add a new friend",
