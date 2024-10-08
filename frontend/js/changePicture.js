@@ -5,17 +5,30 @@
 		e.preventDefault();
 
 		const formData = new FormData(changeProfilePic);
+		removeAlert();
 
 		try {
-			const response = await fetch("https://localhost/api/change-profile-picture/", {
+			const response = await fetch("https://localhost/api/change-prfile-picture/", {
 				headers: {
 					'Authorization': `Token ${localStorage.getItem("token")}`,
+					'Accept': 'application/json',
 				},
 				method: 'POST',
 				body: formData,
 			})
-			const data = await response.json();
-			removeAlert();
+
+			let data;
+			const contentType = response.headers.get('Content-Type');
+			if (contentType && contentType.includes('application/json')) {
+				data = await response.json();
+			} else {
+				data = await response.text();
+			}
+
+			if (response.status === 413)
+			{
+				throw new Error("File too large");
+			}
 			if (!response.ok) {
 				console.log("Data json: " + JSON.stringify(data))
 				throw new Error(data.error || 'An error occurred');
@@ -36,6 +49,8 @@
 		} catch (error) {
 			if (error.message == "No profile picture uploaded.")
 				displayAlert("account.change-pic-empty", "danger");
+			else if (error.message == "File too large")
+				displayAlert("account.change-pic-too-large", "danger");
 			else
 				displayAlert("account.change-pic-error", "danger");
 			console.log(error.message)

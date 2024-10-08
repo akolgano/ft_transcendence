@@ -25,7 +25,7 @@ function addFriendToHTML(user) {
 		<div class="border rounded bg-light w-50 mb-2 d-inline-block align-middle">
 			<div class="d-flex justify-content-between p-2">
 				<div class="d-flex">
-					<img src="http://localhost:8000${user.profile_picture}" alt="avatar" class="rounded-circle border-1 avatar-mini">
+					<img src="http://localhost:8000${user.profile_picture}" alt="avatar" class="rounded-circle border-1 avatar-mini object-fit-cover">
 					<a class="mb-0 px-2" href="/" id ="friend-username">${user.username}</a>
 				</div>
 				<p class="mb-0">Level 3</p>
@@ -58,11 +58,20 @@ function addFriendEvent() {
 			const response = await fetch("https://localhost/api/add_friend/", {
 				headers: {
 					'Authorization': `Token ${localStorage.getItem("token")}`,
+					'Accept': 'application/json',
 				},
 				method: 'POST',
 				body: formData,
 			})
-			const data = await response.json();
+
+			let data;
+			const contentType = response.headers.get('Content-Type');
+			if (contentType && contentType.includes('application/json')) {
+				data = await response.json();
+			} else {
+				data = await response.text();
+			}
+
 			if (!response.ok) {
 				console.log("Error: " + JSON.stringify(data))
 				throw new Error(JSON.stringify(data.detail) || 'An error occurred');

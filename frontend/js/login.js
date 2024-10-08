@@ -5,13 +5,23 @@
 		e.preventDefault();
 		const formData = new FormData(loginForm);
 
+		removeAlert();
 		try {
 			const response = await fetch("https://localhost/api/login", {
+				headers: {
+					'Accept': 'application/json',
+				},
 				method: 'POST',
 				body: formData,
 			})
-			const data = await response.json();
-			removeAlert();
+
+			let data;
+			const contentType = response.headers.get('Content-Type');
+			if (contentType && contentType.includes('application/json')) {
+				data = await response.json();
+			} else {
+				data = await response.text();
+			}
 
 			if (!response.ok) {
 				throw new Error("auth.login-error");
@@ -40,7 +50,11 @@
 				displayAlert("auth.login-error", "danger");
 			}
 		} catch (error) {
-			displayAlert(error.message, "danger");
+			console.log("error message: " + error.message)
+			if (error.message === "auth.login-error")
+				displayAlert(error.message, "danger");
+			else
+				displayAlert("error-fetch", "danger");
 		}
 	}
 

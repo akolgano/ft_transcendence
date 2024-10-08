@@ -1,4 +1,4 @@
-console.log("DefaultLanguage")
+console.log("DEFAULT LANG SCRIPT")
 
 {
 	const defaultLanguage = document.getElementById("defaultLanguage");
@@ -12,9 +12,9 @@ console.log("DefaultLanguage")
 		const formData = new FormData();
 		formData.append("language", selectedLanguage);
 
+		removeAlert();
 		if (selectedLanguage == JSON.parse(localStorage.getItem("user")).language)
 		{
-			removeAlert();
 			displayAlert("account.already-language", "warning");
 			return ;
 		}
@@ -23,12 +23,20 @@ console.log("DefaultLanguage")
 			const response = await fetch("https://localhost/api/change_language/", {
 				headers: {
 					'Authorization': `Token ${localStorage.getItem("token")}`,
+					'Accept': 'application/json',
 				},
 				method: 'PATCH',
 				body: formData,
 			})
-			const data = await response.json();
-			removeAlert();
+
+			let data;
+			const contentType = response.headers.get('Content-Type');
+			if (contentType && contentType.includes('application/json')) {
+				data = await response.json();
+			} else {
+				data = await response.text();
+			}
+
 			if (!response.ok) {
 				// console.log("Data json: " + JSON.stringify(data))
 				throw new Error(data.error || 'An error occurred');

@@ -14,20 +14,31 @@
 		const formData = new FormData();
 		formData.append("old_password", oldPassword);
 		formData.append("new_password", newPassword);
+		removeAlert()
+		let formErrors = 0;
 
 		try {
 			const response = await fetch("https://localhost/api/change_password/", {
 				headers: {
 					'Authorization': `Token ${localStorage.getItem("token")}`,
+					'Accept': 'application/json',
 				},
 				method: 'PATCH',
 				body: formData,
 			})
-			const data = await response.json();
-			removeAlert()
+
+			let data;
+			const contentType = response.headers.get('Content-Type');
+			if (contentType && contentType.includes('application/json')) {
+				data = await response.json();
+			} else {
+				data = await response.text();
+			}
+
 			if (!response.ok) {
 				// console.log("Data json: " + JSON.stringify(data))
 				addErrorToHTML(data);
+				formErrors = 1;
 				throw new Error(JSON.stringify(data) || 'An error occurred');
 			}
 			if (data.detail)
@@ -43,6 +54,8 @@
 				console.log(data.message);
 			}
 		} catch (error) {
+			if (!formErrors)
+				displayAlert("account.change-password-error", "danger");
 			console.log(error.message)
 		}
 	})

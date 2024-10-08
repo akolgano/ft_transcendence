@@ -41,7 +41,8 @@
 		"change-language-empty": "Error: Language is required.",
 		"change-language-unsupported": "Error: Unsupported language.",
 		"change-password-success": "Password changed successfully",
-		"change-password-error": "Error changing password"
+		"change-password-error": "Error changing password",
+		"change-pic-too-large": "Error changing picture: file too large"
 	},
 	"dash" : {
 		"player-stats": "Statistiques du Joueur",
@@ -65,7 +66,15 @@
 		"error-already-friend": "You are already friends with this user.",
 		"error-no-user": "No user found with this username",
 		"error-yourself": "You cannot add yourself as a friend",
-		"error-empty": "Username to add is required."
+		"error-empty": "Username to add is required.",
+		"error-fetch": "Unexpecting error while fetching"
 	},
-	"404": "Erreur Transcendente: page non trouvée"
+	"history": {
+		"error-load": "Error loading history.",
+		"victories": "Victories: ",
+		"losses": "Losses: ",
+		"points": "points"
+	},
+	"404": "Erreur Transcendente: page non trouvée",
+	"error-fetch": "Unexpected error, please try again later."
 }
