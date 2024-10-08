@@ -31,3 +31,11 @@
 	color: red;
 	margin-bottom: 0 !important;
 }
+
+.w-20 {
+	width: 20%;
+}
+
+.w-70 {
+	width: 70%;
+}
