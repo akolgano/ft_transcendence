@@ -107,6 +107,13 @@ const urlRoutes = {
 		scripts: ["../js/account.js", "../js/changePassword.js", "../js/changePicture.js", "../js/defaultLanguage.js"],
 		auth: true,
 	},
+	"/dashboard": {
+		template: "static/dashboard.html",
+		title: "dashboard",
+		description: "Your dashboard",
+		scripts: ["../js/dashboard.js"],
+		auth: true,
+	},
 };
 
 let logoutScript;

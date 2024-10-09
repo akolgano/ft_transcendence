@@ -39,3 +39,9 @@
 .w-70 {
 	width: 70%;
 }
+
+/* Container width */
+.dashboard-container {
+	max-width: 800px;
+	margin-left: 0; /* Align the container to the left */
+}

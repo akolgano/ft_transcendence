@@ -4,6 +4,7 @@
 		"profile": "Profil",
 		"language": "Langue",
 		"friends": "Amis",
+		"dashboard": "Tableau",
 		"welcome": "Bonjour, "
 	},
 	"auth" : {
@@ -42,6 +43,17 @@
 		"change-password-success": "Password changed successfully",
 		"change-password-error": "Error changing password",
 		"change-pic-too-large": "Error changing picture: file too large"
+	},
+	"dash" : {
+		"error-load": "Error loading dashboard.",
+		"player-stats": "Statistiques du Joueur",
+		"vict": "Victoires : ",
+		"loss": "Losses F : ",
+		"player-distri": "Player Victory and Loss Distribution F",
+		"game-duration": "Game Durations F",
+		"game-intensity": "Game Intensity F",
+		"game-margin": "Game Margin Distribution F",
+		"player-results": "Résultats du Joueur"
 	},
 	"friends": {
 		"add-title": "Add a new friend",
