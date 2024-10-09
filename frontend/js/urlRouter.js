@@ -52,17 +52,17 @@ const urlRoutes = {
 		auth: false,
 	},
 	"/": {
-		template: "static/play.html",
+		template: "static/gameRegistration.html",
 		title: "Home",
 		description: "Home page",
-		scripts: ["../js/game.js"],
+		scripts: ["../js/gameRegistration.js"],
 		auth: true,
 	},
-	"/play": {
-		template: "static/play.html",
+	"/gameRegistration": {
+		template: "static/gameRegistration.html",
 		title: "Home",
 		description: "Home page",
-		scripts: ["../js/game.js"],
+		scripts: ["../js/gameRegistration.js"],
 		auth: true,
 	},
 	"/friends": {

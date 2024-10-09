@@ -75,6 +75,12 @@
 		"losses": "Losses: ",
 		"points": "points"
 	},
+	"game": {
+		"play": "Play 🏓",
+		"opponent-name": "Opponent's name",
+		"opponent": "opponent",
+		"opponent-name-error": "Opponent's name cannot be the same as the user"
+	},
 	"404": "Error transcendente: Parece que esta página no existe",
 	"error-fetch": "Unexpected error, please try again later."
 }

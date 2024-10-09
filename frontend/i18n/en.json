@@ -76,6 +76,12 @@
 		"losses": "Losses: ",
 		"points": "points"
 	},
+	"game": {
+		"play": "Play 🏓",
+		"opponent-name": "Opponent's name",
+		"opponent": "opponent",
+		"opponent-name-error": "Opponent's name cannot be the same as the user"
+	},
 	"404": "Transcendent error: page not found",
 	"error-fetch": "Unexpected error, please try again later."
 }
