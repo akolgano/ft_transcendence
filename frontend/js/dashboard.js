@@ -5,9 +5,9 @@
 
     const recent_games = [
     { date_time: '2024-10-02T17:00:00Z', end_time: '2024-10-02T17:04:30Z', score: [5, 1], progression: [[1, 0], [2, 1], [3, 1], [4, 1], [5, 1]] },
-    { date_time: '2024-10-02T17:05:00Z', end_time: '2024-10-02T17:08:10Z', score: [4, 5], progression: [[1, 0], [1, 1], [2, 2], [3, 2], [3, 3], [4, 3], [4, 4], [4, 5]] },
+    { date_time: '2024-10-02T17:05:00Z', end_time: '2024-10-02T17:08:10Z', score: [4, 5], progression: [[1, 0], [2, 0], [3, 0], [4, 0], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5]] },
     { date_time: '2024-10-02T17:09:00Z', end_time: '2024-10-02T17:14:50Z', score: [3, 5], progression: [[0, 1], [1, 1], [1, 2], [2, 2], [2, 3], [3, 3], [3, 4], [3, 5]] },
-    { date_time: '2024-10-02T17:15:10Z', end_time: '2024-10-02T17:18:00Z', score: [5, 4], progression: [[1, 0], [1, 1], [2, 1], [2, 2], [3, 2], [3, 3], [4, 3], [4, 4], [5, 4]] }
+    { date_time: '2024-10-02T17:15:10Z', end_time: '2024-10-02T17:18:00Z', score: [5, 4], progression: [[1, 0], [1, 1], [2, 1], [3, 1], [3, 2], [3, 3], [4, 3], [4, 4], [5, 4]] }
     ]
 
 
@@ -91,7 +91,22 @@ function renderCharts(labels, playerScores, opponentScores, victories, losses, g
     renderBarChart(labels, gameResults);
     renderIntensityChart(labels, gameResults);
     renderMarginPieChart(gameResults);
-    renderScoreProgressionChart(gameResults[gameResults.length - 1].progression);  // Use the last game's progression
+    
+    // Remove any previous score progression charts
+    const progressionsContainer = document.getElementById('progressionsContainer');
+    progressionsContainer.innerHTML = '';
+
+    // Render score progression for each game
+    gameResults.forEach((gameResult, index) => {
+        // Dynamically create a canvas for each game's progression chart
+        const canvas = document.createElement('canvas');
+        canvas.id = `scoreProgressionChart-${index}`;
+        canvas.classList.add('w-100', 'mb-4');
+        progressionsContainer.appendChild(canvas);
+
+        // Render the progression chart for this game
+        renderScoreProgressionChart(gameResult.progression, `scoreProgressionChart-${index}`, index + 1);
+    });
 }
 
 // Function to render the line chart (Player vs. Opponent scores)
@@ -285,9 +300,9 @@ function renderMarginPieChart(gameResults) {
     ]);
 }
 
-// Function to render the score progression of the last game
-function renderScoreProgressionChart(scoreProgression) {
-    const ctxProgression = document.getElementById('scoreProgressionChart').getContext('2d');
+// Function to render the score progression of each game
+function renderScoreProgressionChart(scoreProgression, canvasId, gameNumber) {
+    const ctxProgression = document.getElementById(canvasId).getContext('2d');
     const playerProgression = scoreProgression.map(score => score[0]);
     const opponentProgression = scoreProgression.map(score => score[1]);
 
@@ -297,14 +312,14 @@ function renderScoreProgressionChart(scoreProgression) {
             labels: playerProgression.map((_, index) => `Point ${index + 1}`),  // Labels: Point 1, Point 2, etc.
             datasets: [
                 {
-                    label: 'Player Score',
+                    label: `Player Score - Game ${gameNumber}`,
                     data: playerProgression,
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 4,
                     fill: false
                 },
                 {
-                    label: 'Opponent Score',
+                    label: `Opponent Score - Game ${gameNumber}`,
                     data: opponentProgression,
                     borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 4,
