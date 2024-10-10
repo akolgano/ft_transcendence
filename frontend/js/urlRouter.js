@@ -37,6 +37,9 @@ function registerLanguageToggle() {
 		siteLanguage = event.target.getAttribute('data-language');
 		console.log("Translating page to: " + siteLanguage);
 		translator.translatePageTo(siteLanguage);
+		const placeholderUsername = document.getElementById("add-friend-input")
+		if (placeholderUsername)
+			placeholderUsername.placeholder = translator.translateForKey("auth.username", siteLanguage);
 		});
 	})
 }

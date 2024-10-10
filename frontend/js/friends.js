@@ -13,7 +13,7 @@ function displayFriends(data) {
 					<img src="http://localhost:8000${user.profile_picture}" alt="avatar" class="rounded-circle border-1 avatar-mini object-fit-cover">
 					<a class="mb-0 px-2 spa" href="/profile/${user.username}" id ="friend-username">${user.username}</a>
 				</div>
-				<p class="mb-0">Level 3</p>
+				<div><span class="mb-0" data-i18n="friends.level"></span><span class="mb-0">3</span></div>
 			</div>
 		</div>
 
@@ -66,4 +66,5 @@ async function fetchFriends() {
 	}
 }
 
+document.getElementById("add-friend-input").placeholder = translator.translateForKey("auth.username", siteLanguage);
 fetchFriends().then(removeFriendScript);
