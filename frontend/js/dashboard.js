@@ -138,13 +138,27 @@ function renderLineChart(labels, playerScores, opponentScores) {
         },
         options: {
             scales: {
-                x: { ticks: { font: { size: 16 } } },
+                x: {
+                    ticks: {
+                        font: { size: 16 }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Date / Time',
+                        font: { size: 18 }
+                    }
+                },
                 y: {
                     beginAtZero: true,
                     ticks: {
                         stepSize: 1,
                         callback: (value) => Number.isInteger(value) ? value : '',
                         font: { size: 16 }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Points',
+                        font: { size: 18 }
                     }
                 }
             },
@@ -221,13 +235,25 @@ function renderBarChart(labels, gameResults) {
         },
         options: {
             scales: {
-                x: { ticks: { font: { size: 16 } } },
+                x: {
+                    ticks: { font: { size: 16 } },
+                    title: {
+                        display: true,
+                        text: 'Date / Time',
+                        font: { size: 18 }
+                    }
+                },
                 y: {
                     beginAtZero: true,
                     ticks: {
                         stepSize: 1,
                         callback: (value) => Number.isInteger(value) ? value : '',
                         font: { size: 16 }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Minutes',
+                        font: { size: 18 }
                     }
                 }
             },
@@ -258,7 +284,7 @@ function renderIntensityChart(labels, gameResults) {
         data: {
             labels: labels,
             datasets: [{
-                label: 'Game Intensity (Scores per Minute)',
+                label: 'Game Intensity (Points per Minute)',
                 data: gameIntensity,
                 backgroundColor: gameIntensity.map(value => {
                     const intensity = Math.min(value / Math.max(...gameIntensity), 1);
@@ -270,13 +296,25 @@ function renderIntensityChart(labels, gameResults) {
         },
         options: {
             scales: {
-                x: { ticks: { font: { size: 16 } } },
+                x: {
+                    ticks: { font: { size: 16 } },
+                    title: {
+                        display: true,
+                        text: 'Date / Time',
+                        font: { size: 18 }
+                    }
+                },
                 y: {
                     beginAtZero: true,
                     ticks: {
                         stepSize: 1,
                         callback: (value) => Number.isInteger(value) ? value : '',
                         font: { size: 16 }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Points per minute',
+                        font: { size: 18 }
                     }
                 }
             },
