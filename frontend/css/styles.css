@@ -37,3 +37,15 @@
 	max-width: 800px;
 	margin-left: 0; /* Align the container to the left */
 }
+
+/* Game Margin Chart custom size */
+#gameMarginChart {
+    width: 600px !important;
+    height: 600px !important;
+}
+
+/* Game Margin Chart custom size */
+#victoryLossChart {
+    width: 600px !important;
+    height: 600px !important;
+}
