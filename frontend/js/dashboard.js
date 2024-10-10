@@ -119,16 +119,20 @@ function renderLineChart(labels, playerScores, opponentScores) {
             labels: labels,
             datasets: [
                 {
-                    label: 'Player',
+                    label: 'You',
                     data: playerScores,
                     borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 4
+                    borderWidth: 4,
+                    fill: false,
+                    pointStyle: 'line'
                 },
                 {
                     label: 'Opponent',
                     data: opponentScores,
                     borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 4
+                    borderWidth: 4,
+                    fill: false,
+                    pointStyle: 'line'
                 }
             ]
         },
@@ -145,15 +149,27 @@ function renderLineChart(labels, playerScores, opponentScores) {
                 }
             },
             plugins: {
-                legend: { labels: { font: { size: 18 } } },
+                legend: {
+                    labels: {
+                        font: { size: 18 },
+                        usePointStyle: true // Use line style for legend
+                    }
+                },
                 tooltip: {
                     titleFont: { size: 16 },
                     bodyFont: { size: 16 }
+                }
+            },
+            elements: {
+                point: {
+                    radius: 0 // Remove the default point circles from the chart lines
                 }
             }
         }
     });
 }
+
+
 
 // Function to render a pie chart (Victories and Losses or Margins)
 function renderPieChart(chartId, labels, data, backgroundColors) {
@@ -332,18 +348,20 @@ function renderScoreProgressionChart(scoreProgression, canvasId, gameNumber) {
             labels: playerProgression.map((_, index) => `Point ${index + 1}`),  // Labels: Point 1, Point 2, etc.
             datasets: [
                 {
-                    label: `Player Score - Game ${gameNumber}`,
+                    label: `You - Game ${gameNumber}`,
                     data: playerProgression,
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 4,
-                    fill: false
+                    fill: false,
+                    pointStyle: 'line' // Use line style for legend
                 },
                 {
-                    label: `Opponent Score - Game ${gameNumber}`,
+                    label: `Opponent - Game ${gameNumber}`,
                     data: opponentProgression,
                     borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 4,
-                    fill: false
+                    fill: false,
+                    pointStyle: 'line' // Use line style for legend
                 }
             ]
         },
@@ -359,15 +377,26 @@ function renderScoreProgressionChart(scoreProgression, canvasId, gameNumber) {
                 }
             },
             plugins: {
-                legend: { labels: { font: { size: 18 } } },
+                legend: {
+                    labels: {
+                        font: { size: 18 },
+                        usePointStyle: true // Display lines in the legend
+                    }
+                },
                 tooltip: {
                     titleFont: { size: 16 },
                     bodyFont: { size: 16 }
+                }
+            },
+            elements: {
+                point: {
+                    radius: 0 // Keep circular points visible on the chart
                 }
             }
         }
     });
 }
+
 
 // Call the fetchDashboardData function to get the data and render the charts
 fetchDashboardData();
