@@ -96,16 +96,17 @@ function renderCharts(labels, playerScores, opponentScores, victories, losses, g
     const progressionsContainer = document.getElementById('progressionsContainer');
     progressionsContainer.innerHTML = '';
 
-    // Render score progression for each game
     gameResults.forEach((gameResult, index) => {
-        // Dynamically create a canvas for each game's progression chart
-        const canvas = document.createElement('canvas');
-        canvas.id = `scoreProgressionChart-${index}`;
-        canvas.classList.add('w-100', 'mb-4');
-        progressionsContainer.appendChild(canvas);
-
-        // Render the progression chart for this game
-        renderScoreProgressionChart(gameResult.progression, `scoreProgressionChart-${index}`, index + 1);
+        const listItem = document.createElement('div');
+        listItem.classList.add('game-list-item', 'mb-2');
+        listItem.textContent = `Game ${index + 1}`;
+        
+        // Add hover event listener to open modal and render chart
+        listItem.addEventListener('mouseenter', () => {
+            openGameProgressionModal(gameResult.progression, index + 1);
+        });
+        
+        progressionsContainer.appendChild(listItem);
     });
 }
 
@@ -300,7 +301,26 @@ function renderMarginPieChart(gameResults) {
     ]);
 }
 
-// Function to render the score progression of each game
+// Function to open the modal and render the progression chart
+function openGameProgressionModal(scoreProgression, gameNumber) {
+    const modal = new bootstrap.Modal(document.getElementById('gameProgressionModal'));
+    const canvasId = 'scoreProgressionChartModal';
+    
+    // Clear the existing chart (if any)
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    if (Chart.getChart(canvasId)) {
+        Chart.getChart(canvasId).destroy();
+    }
+
+    // Render the progression chart inside the modal
+    renderScoreProgressionChart(scoreProgression, canvasId, gameNumber);
+
+    // Open the modal
+    modal.show();
+}
+
+// Function to render the score progression chart in the modal
 function renderScoreProgressionChart(scoreProgression, canvasId, gameNumber) {
     const ctxProgression = document.getElementById(canvasId).getContext('2d');
     const playerProgression = scoreProgression.map(score => score[0]);
