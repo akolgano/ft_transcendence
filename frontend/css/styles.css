@@ -37,3 +37,7 @@
 	max-width: 800px;
 	margin-left: 0; /* Align the container to the left */
 }
+
+#pongContent {
+	width: 800px;
+}

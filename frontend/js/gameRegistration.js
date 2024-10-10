@@ -20,8 +20,10 @@ function registerOpponent(event) {
 	if (!checkGuestName())
 		return ;
 
-	opponentsNameForm = document.getElementById("opponentsNameForm")
-	const formData = new FormData(opponentsNameForm);
+	urlRoute({ target: { href: "/pong" }, preventDefault: () => {} });
+
+	// opponentsNameForm = document.getElementById("opponentsNameForm")
+	// const formData = new FormData(opponentsNameForm);
 
 }
 

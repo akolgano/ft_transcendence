@@ -107,6 +107,13 @@ const urlRoutes = {
 		scripts: ["../js/dashboard.js"],
 		auth: true,
 	},
+	"/pong": {
+		template: "static/pong.html",
+		title: "Pong game",
+		description: "Your pong",
+		scripts: ["../js/pong.js"],
+		auth: false,
+	}
 };
 
 let logoutScript;
