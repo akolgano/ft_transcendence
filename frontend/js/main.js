@@ -42,7 +42,7 @@ function checkPasswordMatch() {
 	{
 		const errorPassword = document.querySelector(".repeat-password-error");
 		let errorTag = document.createElement("p");
-		errorTag.innerHTML = "Passwords do not match";
+		errorTag.innerHTML = translator.translateForKey("auth.password-no-match", siteLanguage);
 		errorPassword.appendChild(errorTag);
 		return (false);
 	}

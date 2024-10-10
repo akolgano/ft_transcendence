@@ -48,12 +48,12 @@ async function fetchHistory() {
 		else
 		{
 			removeAlert();
-			displayAlert("history.error-load", "danger");
+			displayAlert("profile.error-load", "danger");
 			console.log(data.message);
 		}
 	} catch (error) {
 		removeAlert();
-		displayAlert("history.error-load", "danger");
+		displayAlert("profile.error-load", "danger");
 		console.log(error.message)
 	}
 }
