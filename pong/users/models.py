@@ -61,10 +61,11 @@ class Friendship(models.Model):
 
 class GameResult(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user', on_delete=models.CASCADE)
-    opponent_username = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='opponent', on_delete=models.CASCADE)
+    opponent_username = models.CharField(max_length = 20)
     is_ai = models.BooleanField(default=False)
     score = models.JSONField()
     date_time = models.DateTimeField(auto_now_add=True)
+    game_duration = models.DurationField()
 
     class Meta:
         ordering = ['-date_time']  # Latest games first

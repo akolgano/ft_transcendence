@@ -62,24 +62,43 @@ class UserAdmin(BaseUserAdmin):
 admin.site.register(CustomUser, UserAdmin)
 
 class FriendshipAdmin(admin.ModelAdmin):
+    """
+    Admin interface for managing Friendship instances.
+    """
     list_display = ('from_user', 'to_user')
-    #list_filter = ('created_at',)
     search_fields = ('from_user__username', 'to_user__username')
 
 admin.site.register(Friendship, FriendshipAdmin)
-admin.site.register(GameResult)
+
+class GameResultAdmin(admin.ModelAdmin):
+    """
+    Admin interface for managing GameResult instances.
+    """
+    list_display = ('user', 'opponent_username', 'is_ai', 'score', 'game_duration', 'date_time')
+    list_filter = ('user', 'opponent_username', 'is_ai', 'date_time')
+    search_fields = ('user__username', 'opponent_username')
+    ordering = ('-date_time',)
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+
+        player_stats, created = PlayerStats.objects.get_or_create(user=obj.user)
+
+        user_score, opponent_score = obj.score
+
+        if user_score > opponent_score:
+            player_stats.victories += 1
+        elif user_score < opponent_score:
+            player_stats.losses += 1
+        player_stats.save()
 
 class PlayerStatsAdmin(admin.ModelAdmin):
-    list_display = ['user', 'victories', 'losses']  
-    search_fields = ['user__username'] 
+    """
+    Admin interface for managing PlayerStats instances.
+    """
 
-    def get_queryset(self, request):
-        queryset = super().get_queryset(request)
-        return queryset
+    list_display = ('user', 'victories', 'losses')
+    search_fields = ('user__username',)
 
-    def serialize_stats(self, obj):
-        serializer = PlayerStatsSerializer(obj)
-        return serializer.data
-
-
+admin.site.register(GameResult, GameResultAdmin)
 admin.site.register(PlayerStats, PlayerStatsAdmin)
