@@ -5,7 +5,7 @@ import sys
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pong.settings")
 django.setup()
 
-from pong.users.models import CustomUser
+from pong.users.models import CustomUser, PlayerStats
 
 sample_data = [
     ('computer', 'computer@example.com', 'password', False, 'en', 'profile_pictures/default.jpg'),
@@ -33,6 +33,19 @@ def insert_sample_data():
                 print(f"Inserted: {username}")
             else:
                 print(f"User already exists: {username}")
+
+            # Create or update PlayerStats for the user
+            player_stats, created_stats = PlayerStats.objects.get_or_create(
+                user=user,
+                defaults={
+                    'victories': 0,
+                    'losses': 0,
+                }
+            )
+            if created_stats:
+                print(f"Inserted PlayerStats for: {username}")
+            else:
+                print(f"PlayerStats already exists for: {username}")
         except Exception as e:
             print(f"Error inserting {username}: {e}")
 
