@@ -1,11 +1,27 @@
 <div class="container dashboard-container"> <!-- Use Bootstrap container and your custom class for width -->
     <h2 data-i18n="navbar.dashboard" class="mb-4"></h2> <!-- Bootstrap margin-bottom -->
 
-    <h3 data-i18n="dash.player-results"></h3>
+    <h4 data-i18n="dash.player-results"></h4>
+    <div style="display: flex; align-items: center; margin: 10px 0;">
+    <hr style="border: 2px solid rgba(75, 192, 192, 1); width: 5%; margin: 0; opacity: 1;">
+    <h6 style="margin-left: 10px;" data-i18n="dash.you"></h6>
+    </div>
+    <div style="display: flex; align-items: center; margin: 10px 0;">
+    <hr style="border: 2px solid rgba(255, 99, 132, 1); width: 5%; margin: 0; opacity: 1;">
+    <h6 style="margin-left: 10px;" data-i18n="dash.opponent"></h6>
+    </div>
     <canvas id="gameResultsChart" class="w-100 mb-4"></canvas> <!-- Bootstrap width and margin-bottom -->
 
     <!-- New section for victory/loss pie chart -->
-    <h3 data-i18n="dash.player-distri"></h3>
+    <h4 data-i18n="dash.player-distri"></h4>
+    <div style="display: flex; align-items: center; margin: 10px 0;">
+    <hr style="border: 2px solid rgba(75, 192, 192, 1); width: 5%; margin: 0; opacity: 1;">
+    <h6 style="margin-left: 10px;" data-i18n="dash.you"></h6>
+    </div>
+    <div style="display: flex; align-items: center; margin: 10px 0;">
+    <hr style="border: 2px solid rgba(255, 99, 132, 1); width: 5%; margin: 0; opacity: 1;">
+    <h6 style="margin-left: 10px;" data-i18n="dash.opponent"></h6>
+    </div>
     <canvas id="victoryLossChart" class="w-100 mb-4"></canvas> <!-- Equal width and height -->
 
     <h3 data-i18n="dash.game-duration"></h3>

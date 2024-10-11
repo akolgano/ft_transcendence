@@ -119,7 +119,6 @@ function renderLineChart(labels, playerScores, opponentScores) {
             labels: labels,
             datasets: [
                 {
-                    label: 'You',
                     data: playerScores,
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 4,
@@ -127,7 +126,6 @@ function renderLineChart(labels, playerScores, opponentScores) {
                     pointStyle: 'line'
                 },
                 {
-                    label: 'Opponent',
                     data: opponentScores,
                     borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 4,
@@ -143,9 +141,7 @@ function renderLineChart(labels, playerScores, opponentScores) {
                         font: { size: 16 }
                     },
                     title: {
-                        display: true,
-                        text: 'Date / Time',
-                        font: { size: 18 }
+                        display: false, // Hide 'Date / Time'
                     }
                 },
                 y: {
@@ -156,18 +152,13 @@ function renderLineChart(labels, playerScores, opponentScores) {
                         font: { size: 16 }
                     },
                     title: {
-                        display: true,
-                        text: 'Points',
-                        font: { size: 18 }
+                        display: false, // Hide 'Points'
                     }
                 }
             },
             plugins: {
                 legend: {
-                    labels: {
-                        font: { size: 18 },
-                        usePointStyle: true // Use line style for legend
-                    }
+                    display: false, // Hide legend
                 },
                 tooltip: {
                     titleFont: { size: 16 },
@@ -182,6 +173,7 @@ function renderLineChart(labels, playerScores, opponentScores) {
         }
     });
 }
+
 
 
 

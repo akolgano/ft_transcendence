@@ -54,7 +54,9 @@
 		"game-intensity": "Game Intensity",
 		"game-margin": "Game Margin Distribution",
 		"game-progression": "Game Score Progression",
-		"player-results": "Player Results : "
+		"you": "You",
+		"opponent": "Opponent",
+		"player-results": "Player Results :"
 	},
 	"friends": {
 		"add-title": "Add a new friend",
