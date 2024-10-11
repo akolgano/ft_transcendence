@@ -194,7 +194,9 @@ function renderPieChart(chartId, labels, data, backgroundColors) {
         options: {
             responsive: true,
             plugins: {
-                legend: { position: 'top', labels: { font: { size: 18 } } },
+                legend: {
+                    display: false // This will remove the legend
+                },
                 tooltip: {
                     titleFont: { size: 16 },
                     bodyFont: { size: 16 }
@@ -203,6 +205,7 @@ function renderPieChart(chartId, labels, data, backgroundColors) {
         }
     });
 }
+
 
 // Function to render the bar chart for game durations
 function renderBarChart(labels, gameResults) {
@@ -230,9 +233,7 @@ function renderBarChart(labels, gameResults) {
                 x: {
                     ticks: { font: { size: 16 } },
                     title: {
-                        display: true,
-                        text: 'Date / Time',
-                        font: { size: 18 }
+                        display: false,
                     }
                 },
                 y: {
@@ -243,14 +244,14 @@ function renderBarChart(labels, gameResults) {
                         font: { size: 16 }
                     },
                     title: {
-                        display: true,
-                        text: 'Minutes',
-                        font: { size: 18 }
+                        display: false,
                     }
                 }
             },
             plugins: {
-                legend: { labels: { font: { size: 18 } } },
+                legend: {
+                    display: false
+                },
                 tooltip: {
                     titleFont: { size: 16 },
                     bodyFont: { size: 16 }
@@ -291,9 +292,7 @@ function renderIntensityChart(labels, gameResults) {
                 x: {
                     ticks: { font: { size: 16 } },
                     title: {
-                        display: true,
-                        text: 'Date / Time',
-                        font: { size: 18 }
+                        display: false,
                     }
                 },
                 y: {
@@ -304,14 +303,12 @@ function renderIntensityChart(labels, gameResults) {
                         font: { size: 16 }
                     },
                     title: {
-                        display: true,
-                        text: 'Points per minute',
-                        font: { size: 18 }
+                        display: false,
                     }
                 }
             },
             plugins: {
-                legend: { labels: { font: { size: 18 } } },
+                legend: { display: false },
                 tooltip: {
                     titleFont: { size: 16 },
                     bodyFont: { size: 16 },
