@@ -41,3 +41,8 @@
 #pongContent {
 	width: 800px;
 }
+
+.modalEndOfGame {
+	display: none;
+	margin-top: 200px;
+}

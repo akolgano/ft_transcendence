@@ -1,5 +1,4 @@
 {
-
 	// initial variables
 	let board;
 	let boardWidth = 800;
@@ -28,7 +27,8 @@
 		width: playerWidth,
 		height: playerHeight,
 		velocityY: playerVelocityY,
-		score: 0
+		score: 0,
+		name: JSON.parse(localStorage.getItem("user")).username
 	}
 
 	let playerGuest = {
@@ -37,13 +37,19 @@
 		width: playerWidth,
 		height: playerHeight,
 		velocityY: playerVelocityY,
-		score: 0
+		score: 0,
+		name : localStorage.getItem("guestName")
 	}
 
-
 	function startGame() {
+		if (playerGuest.name == null) {
+			document.getElementById("content").innerHTML = "<p>You need to register first</p>"
+			return ;
+		}
 		document.getElementById("playerUser").innerHTML = 0
 		document.getElementById("playerGuest").innerHTML = 0
+		document.querySelector(".name-opponent").innerHTML = playerGuest.name;
+		document.querySelector(".name-user").innerHTML = playerUser.name;
 		board = document.getElementById("pongCanvas");
 		board.height = boardHeight;
 		board.width = boardWidth;
@@ -55,7 +61,8 @@
 		context.fillRect(playerGuest.x, playerGuest.y, playerGuest.width, playerGuest.height)
 
 		requestAnimationFrame(update)
-		document.addEventListener("keyup", movePlayer)
+		document.addEventListener("keyup", movePlayerOnce)
+		document.addEventListener("keydown", movePlayerContinuous)
 	}
 
 	startGame()
@@ -74,27 +81,42 @@
 		ball.y = boardHeight / 2;
 	}
 
+	function calculateNewPosition(player) {
+		let nextPlayerPositionA = player.y + player.velocityY
+		if (!outOfBounds(nextPlayerPositionA))
+			player.y += player.velocityY
+		context.fillRect(player.x, player.y, player.width, player.height)
+	}
+
+	function endOfGame() {
+		document.querySelector(".modalEndOfGame").style.display = "block";
+		const winner = playerGuest.score > playerUser.score ? playerGuest.name : playerUser.name
+		const looser = (winner == playerGuest.name ? playerUser.name : playerGuest.name)
+		document.querySelector(".modal-title-winner").innerHTML = winner
+		document.querySelector(".modal-score").innerHTML = `${playerUser.score} - ${playerGuest.score}`
+		document.querySelector(".modal-looser").innerHTML = looser
+
+		localStorage.removeItem("guestName");
+		document.querySelector(".play-again").addEventListener("click", event => {
+			urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
+		})
+	}
+
 	function update() {
-		if (playerGuest.score == 5 || playerUser.score == 5)
+		if (playerGuest.score == 1 || playerUser.score == 1)
+		{
+			endOfGame();
 			return ;
+		}
 		requestAnimationFrame(update);
 
 		context.clearRect(0, 0, boardWidth, boardHeight)
-		context.fillStyle = "white";
 
-		//  Calculate new position player user
-		let nextPlayerPositionA = playerUser.y + playerUser.velocityY
-		if (!outOfBounds(nextPlayerPositionA))
-			playerUser.y += playerUser.velocityY
-		context.fillRect(playerUser.x, playerUser.y, playerUser.width, playerUser.height)
+		// Calculate new position players
+		calculateNewPosition(playerUser);
+		calculateNewPosition(playerGuest)
 
-		//  Calculate new position player guest
-		let nextPlayerPositionB = playerGuest.y + playerGuest.velocityY
-		if (!outOfBounds(nextPlayerPositionB))
-			playerGuest.y += playerGuest.velocityY
-		context.fillRect(playerGuest.x, playerGuest.y, playerGuest.width, playerGuest.height)
-
-		// Ball touches top or bottom
+		// Move ball and check if touch wall
 		ball.x += ball.velocityX;
 		ball.y += ball.velocityY;
 		if (ball.y <= 0 || ball.y + ball.height >= boardHeight)
@@ -132,7 +154,7 @@
 		)
 	}
 
-	function movePlayer(event) {
+	function movePlayerContinuous(event) {
 		// Player 1 - USER
 		console.log("code: " +  event.code)
 		if (event.code == "KeyW")
@@ -148,4 +170,35 @@
 		if (event.code == "ArrowDown")
 			playerGuest.velocityY = 3;
 	}
+
+	function movePlayerOnce(event) {
+	if (event.code == "KeyW") {
+		if (!outOfBounds(playerUser.y - 10)) {
+			playerUser.y -= 10;
+			playerUser.velocityY = 0
+		}
+	}
+
+	if (event.code == "KeyS") {
+		if (!outOfBounds(playerUser.y + 10)) {
+			playerUser.y += 10;
+			playerUser.velocityY = 0
+		}
+	}
+
+	if (event.code == "ArrowUp") {
+		if (!outOfBounds(playerGuest.y - 10)) {
+			playerGuest.y -= 10;
+			playerGuest.velocityY = 0;
+		}
+	}
+
+	if (event.code == "ArrowDown") {
+		if (!outOfBounds(playerGuest.y + 10)) {
+			playerGuest.y += 10;
+			playerGuest.velocityY = 0;
+		}
+	}
+	}
+
 }

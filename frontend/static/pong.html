@@ -3,16 +3,36 @@
 	<h1>PONG GAME</h1>
 		<div class="d-flex justify-content-between mx-5">
 			<div>
-				<span class="text-uppercase fs-5"><b>USER </b></span>
+				<span class="text-uppercase fs-5 name-user"><b>USER</b></span>
 				<span id="playerUser" class="fs-5"></span>
 			</div>
 			<div>
-				<span class="text-uppercase fs-5"><b>OPPONENT </b></span>
+				<span class="text-uppercase fs-5 name-opponent"><b>OPPONENT </b></span>
 				<span id="playerGuest" class="fs-5"></span>
 			</div>
 		</div>
 		<canvas id="pongCanvas" class="bg-black border border-3 border-white">
-
 		</canvas>
-
 </div>
+
+<div class="modal modalEndOfGame" tabindex="-1">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header d-flex justify-content-start">
+			<h5 class="modal-title">Congratulations&nbsp;</h5>
+			<h5 class="modal-title modal-title-winner"></h5>
+			<h5 class="modal-title">&nbsp;🎉</h5>
+		</div>
+		<div class="modal-body d-flex justify-content-start">
+		  <p>You won&nbsp;</p>
+		  <p class="modal-score"></p>
+		  <p>&nbsp;against&nbsp;</p>
+		  <p class="modal-looser"></p>
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-success play-again">Start another game</button>
+		</div>
+	  </div>
+	</div>
+
+  </div>

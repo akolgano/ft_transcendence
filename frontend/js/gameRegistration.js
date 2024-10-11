@@ -8,18 +8,20 @@ function checkGuestName(params) {
 		let errorTag = document.createElement("p");
 		errorTag.innerHTML = translator.translateForKey("game.opponent-name-error", siteLanguage);
 		errorGuestName.appendChild(errorTag);
-		return (false);
+		return (NULL);
 	}
-	return true;
+	return guestName;
 }
 
 function registerOpponent(event) {
 	event.preventDefault();
 
 	resetErrorField();
-	if (!checkGuestName())
+	const guest = checkGuestName()
+	if (!guest)
 		return ;
 
+	localStorage.setItem("guestName", guest);
 	urlRoute({ target: { href: "/pong" }, preventDefault: () => {} });
 
 	// opponentsNameForm = document.getElementById("opponentsNameForm")
