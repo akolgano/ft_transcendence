@@ -181,6 +181,7 @@ def user_friends_view(request):
 def save_game_result(request):
     user = request.user
     is_ai = request.data.get('is_ai')
+    game_duration = request.data.get('game_duration')
     if not is_ai:
         opponent_username = request.data.get('opponent_username')
     else:
@@ -201,7 +202,8 @@ def save_game_result(request):
         user=user,
         opponent_username=opponent_username,
         is_ai=is_ai,
-        score=score
+        score=score,
+        game_duration = game_duration
     )
     player_stats, created = PlayerStats.objects.get_or_create(user=user)
     if score[0] > score[1]: 
