@@ -1,0 +1,91 @@
+.tournament-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+.tournament-container h1 {
+    text-align: center;
+    margin-bottom: 20px; /* Add some spacing after the heading */
+}
+
+h2 { /* Tournament container header */
+    text-align: center;
+    font-family: 'Arial', sans-serif; /* Use a clear font */
+    color: #333; /* Dark color for contrast */
+}
+
+#tournamentBracket {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.quarter-finals,
+.semi-finals,
+.final {
+    flex: 1;
+    margin: 0 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.quarter-finals h3,
+.semi-finals h3,
+.final h3 { /* Centralize headers within each bracket section */
+    text-align: center;
+    font-family: 'Arial', sans-serif; /* Consistent font for headers */
+    color: #2c3e50; /* Darker color for header contrast */
+}
+
+.match-box {
+    font-size: 18px; /* Increase font size of match boxes */
+    margin: 15px; /* Add spacing between matches */
+    border: 1px solid #000; /* Example border */
+    padding: 10px; /* Add padding */
+    width: 300px; /* Set width */
+    text-align: center; /* Center text inside match boxes */
+    font-family: 'Arial', sans-serif; /* Consistent font for match titles */
+}
+
+.match-title {
+    font-weight: bold;
+    color: #2c3e50; /* Ensure match titles have good contrast */
+}
+
+.winner-placeholder {
+    font-style: italic;
+    color: #777;
+}
+
+#nextMatchButton {
+    display: block; /* Ensure the button is block-level */
+    margin: 20px auto; /* Automatically center horizontally */
+    padding: 10px 20px; /* Add padding for a better appearance */
+    font-size: 18px; /* Increase font size for readability */
+    cursor: pointer; /* Change the cursor to pointer */
+    background-color: #007bff; /* Set the button background color */
+    color: white; /* Set text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Add rounded corners */
+}
+
+#nextMatchButton:hover {
+    background-color: #0056b3; /* Darker background color on hover */
+}
+
+.tournament-over-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}

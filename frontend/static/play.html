@@ -1,4 +1,84 @@
-<div class="mx-3 mb-5 d-flex flex-column align-items-center">
-	<h2 class="mb-2">Welcome to Pong</h2>
-	<button class="btn btn-success text-center">Play 🏓</button>
-</div>
+    <!-- Game options to select 3 game options via buttons -->
+    <div id="gameOptions" class="game-options">
+        <h1>WELCOME!<br><br> Please select a Game ...</h1>
+        <button onclick="startPlayerVsPlayer()">Player vs Player</button>
+        <button onclick="startPlayerVsAI()">Player vs AI</button>
+        <button onclick="startTournament()">Tournament Play</button>
+    </div>
+
+    <!-- Game Container AI to hold both player labels and canvas -->
+    <div id="gameContainerAI" class="game-containerAI">
+        <div id="matchLabelAI" class="match-label">
+            Practice Match with AI <span id="current-match"></span>
+        </div>
+        <div class="player-tags">
+            <div>Player AI</div>
+            <div>Player 1</div>
+        </div>
+        <canvas id="pongGameCanvasAI"></canvas>
+        <div id="gameOverModalAI" class="game-over-modalAI">
+            <h1>Game Over!</h1>
+            <p>Winner: <span id="winner-name-ai"></span></p>
+            <button onclick="startPlayerVsAI()">Restart</button>
+            <button onclick="showGameOptions()">Back to Main Menu</button>        
+        </div>
+    </div>
+
+    <!-- Game Container PP to hold both player labels and canvas -->
+    <div id="gameContainerPP" class="game-containerPP">
+        <!-- Match Label Display -->
+        <div id="matchLabel" class="match-label">
+            Practice Match <span id="current-match"></span>
+        </div>
+        <div class="player-tags">
+            <div id="player2Name">Player 2</div>
+            <div id="player1Name">Player 1</div>
+        </div>
+        <canvas id="pongGameCanvasPP"></canvas>
+        <div id="gameOverModalPP" class="game-over-modalPP">
+            <h1>Game Over!</h1>
+            <p>Winner: <span id="winner-name-pp"></span></p>
+            <button onclick="startPlayerVsPlayer('Player1', 'Player2')">Restart</button>
+            <button onclick="showGameOptions()">Back to Main Menu</button>        
+        </div>
+        <div id="gameOverModalTournament" class="game-over-modalPP">
+            <h1>Game Over!</h1>
+            <p>Winner: <span id="winner-name-ppt"></span></p>
+            <button onclick="updateTournamentBracket()">Back to Tournament Dashboard</button>        
+        </div>
+    </div>
+
+    <!-- Tournament options to select 2 options via buttons -->    
+    <div id="tourOptions" class ="tour-options">
+		<h1>WELCOME TO<br>42 PONG TOURNAMENT!<br><br> Please select a Tournament ...</h1>
+		<button onclick="getPlayerName(4)">Tournament - 4 Players</button>
+		<button onclick="getPlayerName(8)">Tournament - 8 Players</button><br>
+		<div class="center-button">
+            <button onclick="showGameOptions()">Back to Main Menu</button>
+        </div>
+    </div>
+
+	<!-- Player Name Form -->
+	<div id="playerNameForm" class="player-name-form" style="display:none;">
+	    <h1>Enter Player Names</h1>
+	    <form id="playerForm">
+		<!-- Dynamic Player Name Inputs will go here -->
+	    </form>
+	    <button onclick="finalisePlayer()">Start Tournament</button>
+	    <button onclick="startTournament()">Back to Tournament Selection</button>
+	</div>
+
+	<!-- Tournament Match Diagram and Buttons -->
+	<div id="tournamentContainer" class="tournament-container" style="display: none;">
+    	<h1>WELCOME TO<br>42 PONG TOURNAMENT<br><br> The matches today are ...</h1>
+    	<div id="tournamentBracket" class="tournament-bracket">
+        	<!-- Matches will be populated here dynamically -->
+    	</div>
+    	<button id="nextMatchButton" onclick="startNextMatch()" style="display: none;">Start Match 1</button>
+        <div id="tournamentOverModal" class="tournament-over-modal">
+            <h1>Tournament Over!</h1>
+            <p>Tournament Champion: <span id="winner-name-tour"></span></p>
+            <button onclick="showGameOptions()">Back to Main Menu</button>        
+        </div>  
+	</div>
+	
