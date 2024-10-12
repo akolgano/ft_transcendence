@@ -187,6 +187,7 @@ def save_game_result(request):
     else:
         opponent_username = ''
     score = request.data.get('score')
+    progression = request.data.get('progression')
     if User.objects.filter(username=opponent_username).exists():
         return Response({'error': 'Opponent username is already registered.'}, status=status.HTTP_400_BAD_REQUEST)
     if score is None:
@@ -198,12 +199,19 @@ def save_game_result(request):
     else:
         return Response({'error': 'Invalid score format.'}, status=status.HTTP_400_BAD_REQUEST)
 
+    if isinstance(progression, list):
+        if len(progression) > 9 or not all(isinstance(s, int) and 0 <= s <= 1 for s in progression):
+            return Response({'error': 'Invalid progression format.'}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({'error': 'Invalid progression format.'}, status=status.HTTP_400_BAD_REQUEST)
+
     game_result = GameResult.objects.create(
         user=user,
         opponent_username=opponent_username,
         is_ai=is_ai,
         score=score,
-        game_duration = game_duration
+        game_duration = game_duration,
+        progression = progression
     )
     player_stats, created = PlayerStats.objects.get_or_create(user=user)
     if score[0] > score[1]: 

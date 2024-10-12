@@ -1,4 +1,4 @@
-curl -k -X POST https://localhost/api/game/result/ -H "Authorization: Token aae1e7a8e278a85d245e20a87e466529af6d2643" -H "Content-Type: application/json" -d '{"opponent_username": "melina", "is_ai": false, "score": [5, 2], "game_duration": "00:00:01"}'
+curl -k -X POST https://localhost/api/game/result/ -H "Authorization: Token aae1e7a8e278a85d245e20a87e466529af6d2643" -H "Content-Type: application/json" -d '{"opponent_username": "melina", "is_ai": false, "score": [5, 2], "game_duration": "00:00:01", "progression": [0,0,0,0,0,1,1]}'
 
 
 curl -k -X GET https://localhost/api/player/stats/anna/ -H "Authorization: Token aae1e7a8e278a85d245e20a87e466529af6d2643"

@@ -97,7 +97,7 @@ class GameResultForm(forms.ModelForm):
 
 class GameResultAdmin(admin.ModelAdmin):
     form = GameResultForm
-    list_display = ('user', 'opponent_username', 'is_ai', 'score', 'game_duration', 'date_time')
+    list_display = ('user', 'opponent_username', 'is_ai', 'score', 'progression', 'game_duration', 'date_time')
     list_filter = ('user', 'opponent_username', 'is_ai', 'date_time')
     search_fields = ('user__username', 'opponent_username')
     ordering = ('-date_time',)
