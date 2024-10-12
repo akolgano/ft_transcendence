@@ -8,6 +8,9 @@ function addBaseDataHistory(params) {
 }
 
 function formatDate(date) {
+
+	const utcDate = new Date(date)
+
 	const options = {
 		timeZone: 'Asia/Singapore',
 		day: '2-digit',
@@ -15,12 +18,11 @@ function formatDate(date) {
 		year: 'numeric',
 		hour: '2-digit',
 		minute: '2-digit',
-		second: '2-digit',
 		hour12: false
 	};
 
 	// Get the formatted date and time string
-	const formattedDate = date.toLocaleString('en-GB', options);
+	const formattedDate = utcDate.toLocaleString('en-GB', options);
 	return (formattedDate);
 }
 
