@@ -70,6 +70,8 @@ class GameResult(models.Model):
     class Meta:
         ordering = ['-date_time']  # Latest games first
         verbose_name_plural = 'Game Results'
+    def __str__(self):
+        return f"{self.user.username} vs {self.opponent_username} - Score: {self.score} - Duration: {self.game_duration}"
 
 class PlayerStats(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

@@ -34,7 +34,6 @@ def insert_sample_data():
             else:
                 print(f"User already exists: {username}")
 
-            # Create or update PlayerStats for the user
             player_stats, created_stats = PlayerStats.objects.get_or_create(
                 user=user,
                 defaults={
