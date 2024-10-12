@@ -69,6 +69,17 @@ console.log("GAME SCRIPT")
 		document.getElementById('player1Name').textContent = p1;
 	}
 
+	async function startPvPpractice() {
+	    // This function should start a PvP match between the two players
+	    console.log(`Starting practice match between Player1 and Player2`);
+	    document.getElementById("tournamentContainer").style.display = "none";
+	    document.getElementById('gameOverModalTournament').style.display = 'none';
+	    tournamentMode = false;
+	    gameOver = true;
+		cancelAnimationFrame(gameLoopId); // Stop the existing game loop	        
+	    startPlayerVsPlayer();
+	}
+
     // Function to start Player vs Player game
 	function startPlayerVsPlayer(p1, p2) {
 		document.getElementById('gameOptions').style.display = 'none';
@@ -142,6 +153,7 @@ console.log("GAME SCRIPT")
 
     // Function to start Player vs AI game
     function startPlayerVsAI() {
+		cancelAnimationFrame(gameLoopId); // Stop the existing game loop    	
 		document.getElementById('gameOptions').style.display = 'none';
 		document.getElementById('gameContainerAI').style.display = 'flex';
 		setActiveCanvas('pongGameCanvasAI');  // Use the Player vs AI canvas
@@ -213,10 +225,10 @@ console.log("GAME SCRIPT")
         case 's':
             sPressed = true;
             break;
-		case 'ArrowUp':
+		case 'i':
 			ArrowUpPressed = true;
 			break;
-		case 'ArrowDown': 
+		case 'k': 
 			ArrowDownPressed = true;
 			break;
      }
@@ -230,10 +242,10 @@ console.log("GAME SCRIPT")
         case 's':
             sPressed = false;
             break;
-		case 'ArrowUp':
+		case 'i':
 			ArrowUpPressed = false;
 			break;
-		case 'ArrowDown': 
+		case 'k': 
 			ArrowDownPressed = false;	
 	    	break;
       }
@@ -404,14 +416,14 @@ function isContact(ball, paddle) {
 		}
 		
 		if (isPlayerAI) {
-		if(playerAI.score === 5 || player1.score === 5) {
+		if(playerAI.score === 1 || player1.score === 1) {
 		    gameOver = true;
-		    winner = playerAI.score === 5 ? 'Player AI' : 'Player 1';
+		    winner = playerAI.score === 1 ? 'Player AI' : 'Player 1';
 		    console.log("WinnerAI:", winner);  // Debugging to see what the winner is
 		}} else {
-		if(player2.score === 5 || player1.score === 5) {
+		if(player2.score === 1 || player1.score === 1) {
 		    gameOver = true;
-		    winner = player2.score === 5 ? player2.name : player1.name;
+		    winner = player2.score === 1 ? player2.name : player1.name;
 		    console.log("WinnerPP:", winner);  // Debugging to see what the winner is
 		}}
 	}

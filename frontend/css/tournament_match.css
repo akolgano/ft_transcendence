@@ -31,6 +31,9 @@ h2 { /* Tournament container header */
     border-radius: 8px;
     padding: 10px;
     background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center match-boxes horizontally */
 }
 
 .quarter-finals h3,
@@ -46,9 +49,13 @@ h2 { /* Tournament container header */
     margin: 15px; /* Add spacing between matches */
     border: 1px solid #000; /* Example border */
     padding: 10px; /* Add padding */
-    width: 300px; /* Set width */
+    width: 80%; /* Set width */
     text-align: center; /* Center text inside match boxes */
     font-family: 'Arial', sans-serif; /* Consistent font for match titles */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically within match-box */
+    align-items: center; /* Center content horizontally */    
 }
 
 .match-title {

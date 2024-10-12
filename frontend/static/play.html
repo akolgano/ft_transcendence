@@ -1,7 +1,8 @@
+<div id="game-container">
     <!-- Game options to select 3 game options via buttons -->
     <div id="gameOptions" class="game-options">
         <h1>WELCOME!<br><br> Please select a Game ...</h1>
-        <button onclick="startPlayerVsPlayer()">Player vs Player</button>
+        <button onclick="startPvPpractice()">Player vs Player</button>
         <button onclick="startPlayerVsAI()">Player vs AI</button>
         <button onclick="startTournament()">Tournament Play</button>
     </div>
@@ -70,7 +71,7 @@
 
 	<!-- Tournament Match Diagram and Buttons -->
 	<div id="tournamentContainer" class="tournament-container" style="display: none;">
-    	<h1>WELCOME TO<br>42 PONG TOURNAMENT<br><br> The matches today are ...</h1>
+    	<h1>THE 42 PONG TOURNAMENT<br> The matches today are ...</h1>
     	<div id="tournamentBracket" class="tournament-bracket">
         	<!-- Matches will be populated here dynamically -->
     	</div>
@@ -81,4 +82,4 @@
             <button onclick="showGameOptions()">Back to Main Menu</button>        
         </div>  
 	</div>
-	
+</div>	

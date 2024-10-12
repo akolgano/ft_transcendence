@@ -1,4 +1,4 @@
-body {
+#game-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -28,8 +28,8 @@ canvas {
 }
 .game-over-modalAI, .game-over-modalPP {
     display: none;
-    position: fixed;
-    top: 50%;
+    position: absolute;
+    top: 60%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: rgba(0, 0, 0, 0.8);
@@ -66,7 +66,7 @@ button:hover {
 }
 .match-label {
     position: absolute;
-    top: 250px; /* Adjust this value as needed */
+    top: 300px; /* Adjust this value as needed */
     left: 50%;
     transform: translateX(-50%);
     font-size: 24px;
