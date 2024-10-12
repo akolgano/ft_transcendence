@@ -8,7 +8,7 @@
 
 // ---------------------------------------- TRANSLATOR ----------------------------------------
 
-let siteLanguage = "fr"
+let siteLanguage = "en"
 let last_page = "/"
 
 var translator = new Translator({

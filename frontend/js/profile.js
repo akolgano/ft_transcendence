@@ -39,7 +39,6 @@ function addResultsToHTML(data) {
 	data.game_results.forEach(game => {
 		const result = (game.score[0] > game.score[1] ? "🏆" : "🥀")
 		const date = formatDate(game.date_time)
-		console.log("Date: " + date)
 
 		const gameHTML = `
 		<div class="game-card border rounded bg-light w-100 d-inline-block p-1 mb-2 bg-success-subtle">
