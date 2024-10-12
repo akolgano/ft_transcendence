@@ -8,7 +8,7 @@
 
 // ---------------------------------------- TRANSLATOR ----------------------------------------
 
-let siteLanguage = "fr"
+let siteLanguage = "en"
 let last_page = "/"
 
 var translator = new Translator({
@@ -193,7 +193,6 @@ const urlLocationHandler = async () => {
 
 	if (dynamic)
 	{
-		console.log("In second dynamic")
 		let profileDiv = document.querySelector(".profile-page");
 		if (profileDiv)
 			profileDiv.setAttribute("data-username", dynamic.param);
