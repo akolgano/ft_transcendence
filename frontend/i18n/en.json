@@ -1,7 +1,7 @@
 {
 	"navbar" : {
 		"play": "Play",
-		"history": "History",
+		"profile": "Profile",
 		"language": "Language",
 		"friends": "Friends",
 		"dashboard": "Dashboard",
@@ -26,7 +26,8 @@
 		"login-success": "Login successful",
 		"logout-success": "Logout successful",
 		"password-show": "Show password",
-		"password-hide": "Hide password"
+		"password-hide": "Hide password",
+		"password-no-match": "Passwords do not match"
 	},
 	"account" : {
 		"update": "Update",
@@ -68,13 +69,20 @@
 		"error-no-user": "No user found with this username",
 		"error-yourself": "You cannot add yourself as a friend",
 		"error-empty": "Username is required.",
-		"error-not-friend": "You are not friend with this user"
+		"error-not-friend": "You are not friend with this user",
+		"level": "Level "
 	},
-	"history": {
-		"error-load": "Error loading history.",
+	"profile": {
+		"error-load": "Error loading profile.",
 		"victories": "Victories: ",
 		"losses": "Losses: ",
-		"points": "points"
+		"points": "points",
+		"game-history": "Game history",
+		"tournament-history": "Tournament history",
+		"first": "First: ",
+		"second": "Second: ",
+		"third": "Third: ",
+		"fourth": "Fourth: "
 	},
 	"404": "Transcendent error: page not found",
 	"error-fetch": "Unexpected error, please try again later."
