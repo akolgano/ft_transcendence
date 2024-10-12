@@ -61,14 +61,18 @@ class Friendship(models.Model):
 
 class GameResult(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user', on_delete=models.CASCADE)
-    opponent_username = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='opponent', on_delete=models.CASCADE)
+    #opponent_username = models.CharField(max_length = 20)
+    opponent_username = models.CharField(max_length=20, blank=True)
     is_ai = models.BooleanField(default=False)
     score = models.JSONField()
     date_time = models.DateTimeField(auto_now_add=True)
+    game_duration = models.DurationField()
 
     class Meta:
         ordering = ['-date_time']  # Latest games first
         verbose_name_plural = 'Game Results'
+    def __str__(self):
+        return f"{self.user.username} vs {self.opponent_username} - Score: {self.score} - Duration: {self.game_duration}"
 
 class PlayerStats(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

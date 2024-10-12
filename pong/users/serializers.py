@@ -49,9 +49,10 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 
 class GameResultSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
     class Meta:
         model = GameResult
-        fields = ['user', 'opponent_username', 'is_ai', 'score', 'date_time']
+        fields = ['user', 'username', 'opponent_username', 'is_ai', 'score', 'date_time', "game_duration"]
 
 class PlayerStatsSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
