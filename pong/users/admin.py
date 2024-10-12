@@ -78,6 +78,16 @@ class GameResultForm(forms.ModelForm):
         model = GameResult
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['opponent_username'].required = True
+        if self.instance and self.instance.pk: #already existed
+            if self.instance.is_ai:
+                self.fields['opponent_username'].required = False
+        elif kwargs.get('initial', {}).get('is_ai'):
+            self.fields['opponent_username'].required = False
+
+
     def clean_score(self):
         score = self.cleaned_data.get('score')
         if isinstance(score, list):
