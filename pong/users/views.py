@@ -276,3 +276,19 @@ def change_language(request):
     user.language = new_language
     user.save()
     return Response({"detail": "Language changed successfully."}, status=status.HTTP_200_OK)
+
+
+@api_view(['PATCH'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def change_username(request):
+    user = request.user
+    new_username = request.data.get('new_username')
+    if not new_username:
+        return Response({"error": "New username is required."}, status=status.HTTP_400_BAD_REQUEST)
+    if User.objects.filter(username=new_username).exists():
+        return Response({"error": "Username already taken."}, status=status.HTTP_400_BAD_REQUEST)
+
+    user.username = new_username
+    user.save()
+    return Response({"detail": "Username changed successfully."}, status=status.HTTP_200_OK)
