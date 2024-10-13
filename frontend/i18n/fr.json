@@ -89,8 +89,8 @@
 		"second": "Deuxième: ",
 		"third": "Troisième: ",
 		"fourth": "Quatrième: ",
-		"online": "en ligne",
-		"offline": "hors ligne"
+		"online": "🟢 en ligne",
+		"offline": "🔴 hors ligne"
 	},
 	"404": "Erreur transcendente : page non trouvée",
 	"error-fetch": "Erreur inattendue, veuillez réessayer plus tard."

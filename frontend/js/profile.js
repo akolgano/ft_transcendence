@@ -66,10 +66,12 @@ function updateProfileCard(data)
 		data.online_status = false;
 
 		if (data.online_status === true)
-			online_text.innerText = `🟢 ${translator.translateForKey("profile.online", siteLanguage)}`
+			online_text.setAttribute("data-i18n", "profile.online")
 		else
-			online_text.innerText = `🔴 ${translator.translateForKey("profile.offline", siteLanguage)}`
+			online_text.setAttribute("data-i18n", "profile.offline")
+		translateNewContent(document.getElementById("profile-user-online"))
 	}
+
 }
 
 function addResultsToHTML(data) {
