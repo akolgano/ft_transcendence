@@ -6,3 +6,4 @@ __pycache__/
 /lib/
 /logs/
 django.log
+.vscode/

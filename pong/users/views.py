@@ -28,14 +28,25 @@ def login(request):
         return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
     token, created = Token.objects.get_or_create(user=user)
     serializer = UserSerializer(user)
+    user.online = True
+    user.save()
     return Response({'token': token.key, 'user': serializer.data})
+
+@api_view(['POST'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def logout(request):
+    user = get_object_or_404(User, username=request.data['username'])
+    user.online = False
+    request.user.auth_token.delete()
+    user.save()
+    return Response("logout successfully")
 
 @api_view(['POST'])
 def signup(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         email = request.data.get('email')
-        # Check if email already exists
         if User.objects.filter(email=email).exists():
             return Response({"error": "Email already taken."}, status=status.HTTP_400_BAD_REQUEST)
         password = request.data.get('password')
@@ -52,7 +63,6 @@ def signup(request):
         PlayerStats.objects.create(user=user)
         token = Token.objects.create(user=user)
         return Response({'token': token.key, 'user': serializer.data}, status=status.HTTP_201_CREATED)
-    #return Response({'error': 'Please enter a valid email address'}, status=status.HTTP_400_BAD_REQUEST)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
@@ -204,7 +214,6 @@ def save_game_result(request):
             return Response({'error': 'Invalid progression format.'}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({'error': 'Invalid progression format.'}, status=status.HTTP_400_BAD_REQUEST)
-
     game_result = GameResult.objects.create(
         user=user,
         opponent_username=opponent_username,
@@ -221,20 +230,6 @@ def save_game_result(request):
     player_stats.save()
 
     return Response({'detail': 'Score saved successfully.'}, status=status.HTTP_201_CREATED)
-
-@api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def get_game_result(request):
-    """
-    Retrieves player statistics for the current user.
-    """
-    user = request.user
-    try:
-        stats = PlayerStats.objects.get(user=user)
-        return Response(PlayerStatsSerializer(stats).data)
-    except PlayerStats.DoesNotExist:
-        return Response({"error": "No results"}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
