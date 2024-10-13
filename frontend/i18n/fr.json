@@ -77,13 +77,15 @@
 		"error-load": "Erreur lors du chargement du profil.",
 		"victories": "Victoires : ",
 		"losses": "Défaites : ",
-		"points": "points",
+		"points": "Points: ",
 		"game-history": "Historique des matchs",
 		"tournament-history": "Historique des tournois",
 		"first": "Premier: ",
 		"second": "Deuxième: ",
 		"third": "Troisième: ",
-		"fourth": "Quatrième: "
+		"fourth": "Quatrième: ",
+		"online": "online",
+		"offline": "offline"
 	},
 	"404": "Erreur transcendente : page non trouvée",
 	"error-fetch": "Erreur inattendue, veuillez réessayer plus tard."

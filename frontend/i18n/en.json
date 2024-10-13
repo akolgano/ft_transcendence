@@ -77,13 +77,15 @@
 		"error-load": "Error loading profile.",
 		"victories": "Victories: ",
 		"losses": "Losses: ",
-		"points": "points",
+		"points": "Points: ",
 		"game-history": "Game history",
 		"tournament-history": "Tournament history",
 		"first": "First: ",
 		"second": "Second: ",
 		"third": "Third: ",
-		"fourth": "Fourth: "
+		"fourth": "Fourth: ",
+		"online": "online",
+		"offline": "offline"
 	},
 	"404": "Transcendent error: page not found",
 	"error-fetch": "Unexpected error, please try again later."
