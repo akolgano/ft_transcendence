@@ -80,7 +80,7 @@
 
 	<!-- Tournament Match Diagram and Buttons -->
 	<div id="tournamentContainer" class="tournament-container mt-5" style="display: none;">
-    	<h1 class="text-center" data-i18n="tour.header"></h1>
+    	<h1 class="text-center" data-i18n="tour.tour-header"></h1>
     	<div id="tournamentBracket" class="tournament-bracket text-center">
         	<!-- Matches will be populated here dynamically -->
     	</div>
@@ -88,7 +88,7 @@
     	   <button id="nextMatchButton" onclick="startNextMatch()" style="display: none;">Start Match 1</button>
         </div>   
         <div id="tournamentOverModal" class="tournament-over-modal">
-            <h1>Tournament Over!</h1>
+            <h1 data-i18n="tour.tour-over"></h1>
             <p>Tournament Champion: <span id="winner-name-tour"></span></p>
             <button class="btn btn-warning btn-lg mb-2" onclick="showGameOptions()" data-i18n="play.back-menu"></button>
         </div>  
