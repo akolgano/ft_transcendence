@@ -16,7 +16,7 @@
 		"log-in": "Iniciar sesión",
 		"log-out": "Cerrar sesión",
 		"sign-up": "Crear una cuenta",
-		"email": "Dirección de correo electrónico",
+		"email": "Correo electrónico",
 		"no-account": "¿Aún no tienes una cuenta?",
 		"already-account": "¿Ya tienes una cuenta?",
 		"error": "Error",
@@ -44,7 +44,12 @@
 		"change-language-unsupported": "Error: Idioma no compatible.",
 		"change-password-success": "Contraseña cambiada con éxito",
 		"change-password-error": "Error al cambiar la contraseña",
-		"change-pic-too-large": "Error al cambiar la foto: archivo demasiado grande"
+		"change-pic-too-large": "Error al cambiar la foto: archivo demasiado grande",
+		"change-username-success": "Username changed successfully",
+		"change-username-error": "Error changing username",
+		"change-username-taken": "Username already taken",
+		"change-username-empty": "New username cannot be empty",
+		"change-username-same": "This is already your username"
 	},
 	"dash" : {
 		"error-load": "Error al cargar el panel de control.",
@@ -84,8 +89,8 @@
 		"second": "Segundo: ",
 		"third": "Tercero: ",
 		"fourth": "Cuarto: ",
-		"online": "online",
-		"offline": "offline"
+		"online": "en línea",
+		"offline": "offline S"
 	},
 	"404": "Error trascendental: página no encontrada",
 	"error-fetch": "Error inesperado, por favor inténtalo de nuevo más tarde."

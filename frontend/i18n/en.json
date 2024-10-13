@@ -44,7 +44,12 @@
 		"change-language-unsupported": "Error: Unsupported language.",
 		"change-password-success": "Password changed successfully",
 		"change-password-error": "Error changing password. Try again later.",
-		"change-pic-too-large": "Error changing picture: file too large"
+		"change-pic-too-large": "Error changing picture: file too large",
+		"change-username-success": "Username changed successfully",
+		"change-username-error": "Error changing username",
+		"change-username-taken": "Username already taken",
+		"change-username-empty": "New username cannot be empty",
+		"change-username-same": "This is already your username"
 	},
 	"dash" : {
 		"error-load": "Error loading dashboard.",

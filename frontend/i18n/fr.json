@@ -44,7 +44,12 @@
 		"change-language-unsupported": "Erreur : Langue non prise en charge.",
 		"change-password-success": "Mot de passe changé avec succès",
 		"change-password-error": "Erreur lors du changement de mot de passe",
-		"change-pic-too-large": "Erreur lors du changement de photo : fichier trop volumineux"
+		"change-pic-too-large": "Erreur lors du changement de photo : fichier trop volumineux",
+		"change-username-success": "Username changed successfully",
+		"change-username-error": "Error changing username",
+		"change-username-taken": "Username already taken",
+		"change-username-empty": "New username cannot be empty",
+		"change-username-same": "This is already your username"
 	},
 	"dash" : {
 		"error-load": "Erreur lors du chargement du tableau de bord.",
@@ -84,8 +89,8 @@
 		"second": "Deuxième: ",
 		"third": "Troisième: ",
 		"fourth": "Quatrième: ",
-		"online": "online",
-		"offline": "offline"
+		"online": "en ligne",
+		"offline": "hors ligne"
 	},
 	"404": "Erreur transcendente : page non trouvée",
 	"error-fetch": "Erreur inattendue, veuillez réessayer plus tard."
