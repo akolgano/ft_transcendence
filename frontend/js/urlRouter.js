@@ -58,14 +58,14 @@ const urlRoutes = {
 		template: "static/play.html",
 		title: "Home",
 		description: "Home page",
-		scripts: ["../js/game.js"],
+		scripts: ["../js/pong_game.js", "../js/tournament_signup.js", "../js/tournament_match.js"],
 		auth: true,
 	},
 	"/play": {
 		template: "static/play.html",
-		title: "Home",
-		description: "Home page",
-		scripts: ["../js/game.js"],
+		title: "Game",
+		description: "Game page",
+		scripts: ["../js/pong_game.js", "../js/tournament_signup.js", "../js/tournament_match.js"],
 		auth: true,
 	},
 	"/friends": {

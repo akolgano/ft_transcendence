@@ -58,7 +58,7 @@ function updateTournamentBracket() {
                 <div class='match-title'>Semi-Final 1: <br>Winner Match 1 <br>vs<br> Winner Match 2</div>
                 <div class='winner-placeholder'>Winner: <span id='winnerSemi1'></span></div>
             </div>
-            <br><br><br>            
+            <br>           
             <div class='match-box'>
                 <div class='match-title'>Semi-Final 2: <br>Winner Match 3 <br>vs<br> Winner Match 4</div>
                 <div class='winner-placeholder'>Winner: <span id='winnerSemi2'></span></div>
