@@ -23,6 +23,7 @@ urlpatterns = [
     path('api/game/result/', views.save_game_result, name='game_result'),
     path('api/player/stats/<str:username>/', views.get_player, name='player'),
     path('api/change_language/', views.change_language, name='change_language'),
+    path('api/change_username/', views.change_username, name='change_username'),
     re_path('api/change-profile-picture', views.change_profile_picture, name='change_profile_picture'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

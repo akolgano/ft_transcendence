@@ -33,9 +33,7 @@ django    | Run 'python manage.py migrate' to apply them.
 
 
 anna@anna-VirtualBox:~/ft_transcendence$ docker-compose exec django python manage.py test pong.tests.tests
-
-
-Found 32 test(s).
+Found 34 test(s).
 Creating test database for alias 'default'...
 System check identified no issues (0 silenced).
 test_change_language_missing_field (pong.tests.tests.ChangeLanguageTests.test_change_language_missing_field) ... ok
@@ -46,6 +44,8 @@ test_change_password_missing_fields (pong.tests.tests.ChangePasswordTestCase.tes
 test_change_password_success (pong.tests.tests.ChangePasswordTestCase.test_change_password_success) ... ok
 test_change_password_weak_new_password (pong.tests.tests.ChangePasswordTestCase.test_change_password_weak_new_password) ... ok
 test_change_profile_picture (pong.tests.tests.ChangeProfilePictureTestCase.test_change_profile_picture) ... ok
+test_change_username_success (pong.tests.tests.ChangeUsernameTests.test_change_username_success) ... ok
+test_change_username_username_taken (pong.tests.tests.ChangeUsernameTests.test_change_username_username_taken) ... ok
 test_get_friends (pong.tests.tests.FriendListTests.test_get_friends) ... ok
 test_get_friends_no_auth (pong.tests.tests.FriendListTests.test_get_friends_no_auth) ... ok
 test_add_friend (pong.tests.tests.FriendTests.test_add_friend) ... ok
@@ -72,9 +72,10 @@ test_get_user_info_unauthenticated (pong.tests.tests.UserInfoTests.test_get_user
 test_get_user_info_user_not_found (pong.tests.tests.UserInfoTests.test_get_user_info_user_not_found) ... ok
 
 ----------------------------------------------------------------------
-Ran 32 tests in 39.370s
+Ran 34 tests in 37.402s
 
 OK
+
 
 
 curl -k -X PATCH https://localhost/api/change_password/ Content-Type: application/json {'old_password': 'wrongpassword', 'new_password': 'newpassword456'}
@@ -92,7 +93,7 @@ curl -k -X POST https://localhost/api/remove_friend/ -H "Content-Type: applicati
 
 -----------------Change language------------------
 
-curl -k -X PATCH http://localhost/api/change_language/ -H "Authorization: Token cc237650a8591835493dce0984299fec780eeda4" -H "Content-Type: application/json" -d '{"language": "fr"}' 
+curl -k -X PATCH https://localhost/api/change_language/ -H "Authorization: Token cc237650a8591835493dce0984299fec780eeda4" -H "Content-Type: application/json" -d '{"language": "fr"}' 
 
 {"detail":"Language changed successfully."} / {"error":"Language is required."} / {"error":"Unsupported language."}
 
@@ -105,3 +106,9 @@ curl -k -X GET https://localhost/api/player/stats/anna/ -H "Authorization: Token
 
 ---------------------logout------------------------------
 curl -k -X POST https://localhost/api/logout/ -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b" -H "Content-Type: application/json" -d '{"username": "anna"}' 
+
+-----------------Change username-------------------------
+
+curl -k -X PATCH https://localhost/api/change_username/ -H "Authorization: Token 541a7cf4d6c9ca416702629292f6d336a448ce6e" -H "Content-Type: application/json" -d '{"new_username": "ana"}' 
+
+{"detail":"Username changed successfully."}/{"error":"Username already taken."}/{"error":"New username is required."}

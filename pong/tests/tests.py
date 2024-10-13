@@ -480,3 +480,31 @@ class ChangeLanguageTests(APITestCase):
         })
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data, {"error": "Unsupported language."})
+
+
+@override_settings(SECURE_SSL_REDIRECT=False)
+class ChangeUsernameTests(APITestCase):
+
+    def setUp(self):
+        self.user = CustomUser.objects.create_user(username='user1', email = 'dummy', password='testpass', language ='en')
+        self.user1 = CustomUser.objects.create_user(username='user2', email = 'dummy1', password='testpass', language ='en')
+        self.token = Token.objects.create(user=self.user)
+
+    def test_change_username_success(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.patch('/api/change_username/', {
+            'new_username': 'new_username',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {"detail": "Username changed successfully."})
+        response = self.client.get('/api/get_user_info/')
+        self.assertEqual(response.data['username'], 'new_username')
+
+
+    def test_change_username_username_taken(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.patch('/api/change_username/', {
+            'new_username': 'user2',
+        })
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, {"error": "Username already taken."})
