@@ -153,6 +153,8 @@ console.log("GAME SCRIPT")
 
     // Function to start Player vs AI game
     function startPlayerVsAI() {
+	    tournamentMode = false;
+	    gameOver = true;    	
 		cancelAnimationFrame(gameLoopId); // Stop the existing game loop    	
 		document.getElementById('gameOptions').style.display = 'none';
 		document.getElementById('gameContainerAI').style.display = 'flex';

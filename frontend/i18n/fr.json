@@ -1,4 +1,29 @@
 {
+	"play" : {
+		"welcome": "BONJOUR!<br><br> Enjoin select a Jouer ...",		
+		"pvp": "Jouer vs Jouer",
+		"pvai": "Jouers vs AI",
+		"tour": "Tornimen Jouer",
+		"match-title-AI": "Pra Match with AI",
+		"match-title-PP": "Pra Match",
+		"game-AI-PlayerAI": "Jouer AI",
+		"game-AI-Player1": "Jouer 1",
+		"game-over": "Gime Over!",
+		"restart": "Resturt",
+		"back-menu": "Balakan to Main Menu",
+		"back-tournament": "Back to Tornimen Dashboard",		
+		"winner": "Jualan: "
+	},
+	"tour" : {
+		"welcome": "BONJOUR TO<br>42 PONG TORNIMEN!<br><br> Please select a Tornimen ...",		
+		"tour-4P": "Tornimen 4 Jouers",
+		"tour-8P": "Tornimen 8 Jourers",		
+		"enter-names": "Enter Jouers Names",
+		"start-tour": "Start Tornimen",
+		"back-tour-select": "Back to Tornimen Selection",
+		"tour-header": "DE 42 PONG TORNIMEN<br> The matches today are ...",
+		"tour-over": "Tornimen Over!"
+	},		
 	"navbar" : {
 		"play": "Jouer",
 		"profile": "Profil",

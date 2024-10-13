@@ -1,4 +1,29 @@
 {
+	"play" : {
+		"welcome": "WELCOME!<br><br> Please select a Game ...",		
+		"pvp": "Player vs Player",
+		"pvai": "Player vs AI",
+		"tour": "Tournament Play",
+		"match-title-AI": "Practice Match with AI",
+		"match-title-PP": "Practice Match",
+		"game-AI-PlayerAI": "Player AI",
+		"game-AI-Player1": "Player 1",
+		"game-over": "Game Over!",
+		"restart": "Restart",
+		"back-menu": "Back to Main Menu",
+		"back-tournament": "Back to Tournament Dashboard",
+		"winner": "Winner: "
+	},
+	"tour" : {
+		"welcome": "WELCOME TO<br>42 PONG TOURNAMENT!<br><br> Please select a Tournament ...",		
+		"tour-4P": "Tournament 4 Players",
+		"tour-8P": "Tournament 8 Players",		
+		"enter-names": "Enter Player Names",
+		"start-tour": "Start Tournament",
+		"back-tour-select": "Back to Tournament Selection",
+		"tour-header": "THE 42 PONG TOURNAMENT<br> The matches today are ...",
+		"tour-over": "Tournament Over!"
+	},	
 	"navbar" : {
 		"play": "Play",
 		"profile": "Profile",
