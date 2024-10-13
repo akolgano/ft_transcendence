@@ -32,17 +32,21 @@ function addGameResults(game_results) {
 		game_results.forEach(game => {
 			const result = (game.score[0] > game.score[1] ? "🏆" : "🥀")
 			const date = formatDate(game.date_time)
+			let opponent;
+			if (game.is_ai === true)
+				opponent = "🤖 AI"
+			else
+				opponent = `⛹️‍♀️ ${game.opponent_username}`
 
 			const gameHTML = `
 			<div class="game-card border rounded bg-light w-100 d-inline-block p-1 mb-2 bg-success-subtle">
 				<div class="d-flex justify-content-between px-2">
 					<p class="my-1 me-5">${result}&nbsp;&nbsp;${game.score[0]} - ${game.score[1]}</p>
-					<p class="my-1 flex-grow-1">${game.opponent_username}</p>
+					<p class="my-1 flex-grow-1">${opponent}</p>
 					<p class="my-1">${date}</p>
 				</div>
 			</div>`
 			gameResultsDiv.insertAdjacentHTML("beforeend", gameHTML);
-
 		});
 	}
 }
