@@ -12,13 +12,15 @@
 	let ballWidth = 10;
 	let ballHeight = 10;
 
+	let gameLoopId;
+
 	let ball = {
 		x : boardWidth / 2,
 		y : boardHeight / 2,
 		width: ballWidth,
 		height: ballHeight,
-		velocityX: 1,
-		velocityY: 2,
+		velocityX: -3,
+		velocityY: 3,
 	}
 
 	let playerUser = {
@@ -41,6 +43,18 @@
 		name : localStorage.getItem("guestName")
 	}
 
+	function stopGame() {
+		console.log("Canceling Animation frame")
+		if (gameLoopId) {
+
+			cancelAnimationFrame(gameLoopId);
+			gameLoopId = null
+		}
+		document.removeEventListener("keyup", movePlayerOnce);
+		document.removeEventListener("keydown", movePlayerContinuous);
+		document.removeEventListener("click", stopGame)
+	}
+
 	function startGame() {
 		if (playerGuest.name == null) {
 			document.getElementById("content").innerHTML = "<p>You need to register first</p>"
@@ -60,9 +74,13 @@
 		context.fillRect(playerUser.x, playerUser.y, playerUser.width, playerUser.height)
 		context.fillRect(playerGuest.x, playerGuest.y, playerGuest.width, playerGuest.height)
 
-		requestAnimationFrame(update)
+		document.querySelectorAll("a").forEach(link => {
+			link.addEventListener("click", stopGame)
+		})
+		gameLoopId = requestAnimationFrame(update)
 		document.addEventListener("keyup", movePlayerOnce)
 		document.addEventListener("keydown", movePlayerContinuous)
+		// window.addEventListener("beforeunload", stopGame)
 	}
 
 	startGame()
@@ -100,19 +118,19 @@
 		document.querySelector(".play-again").addEventListener("click", event => {
 			urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
 		})
+		document.removeEventListener("click", stopGame)
 	}
 
 	function update() {
-		if (playerGuest.score == 1 || playerUser.score == 1)
+		if (playerGuest.score == 5 || playerUser.score == 5)
 		{
 			endOfGame();
 			return ;
 		}
-		requestAnimationFrame(update);
+		gameLoopId = requestAnimationFrame(update);
 
 		context.clearRect(0, 0, boardWidth, boardHeight)
 
-		// Calculate new position players
 		calculateNewPosition(playerUser);
 		calculateNewPosition(playerGuest)
 
@@ -124,12 +142,25 @@
 
 		context.fillRect(ball.x, ball.y, ball.width, ball.height)
 
-		if (detectCollision(ball, playerUser)) {
-			if (ball.x <= playerUser.x + playerUser.width)
+		// if (detectCollision(ball, playerUser)) {
+		// 	if (ball.x <= playerUser.x + playerUser.width)
+		// 		ball.velocityX *= -1
+		// }
+		// if (detectCollision(ball, playerGuest)) {
+		// 	if (ball.x + ball.width >= playerGuest.x)
+		// 		ball.velocityX *= -1
+		// }
+
+		if (ball.y >= playerUser.y && ball.y <= (playerUser.y + playerUser.height))
+		{
+			if (ball.x <= playerUser.x + playerUser.width && ball.x + ball.width >= playerUser.x)
 				ball.velocityX *= -1
 		}
-		else if (detectCollision(ball, playerGuest)) {
-			if (ball.x + ball.width >= playerGuest.x)
+
+		if (ball.y >= playerGuest.y && ball.y <= (playerGuest.y + playerGuest.height))
+		{
+			// console.log("COLLISION???")
+			if (ball.x + ball.width >= playerGuest.x && ball.x <= playerGuest.x + playerGuest.width )
 				ball.velocityX *= -1
 		}
 
