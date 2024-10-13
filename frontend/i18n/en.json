@@ -25,6 +25,7 @@
 		"sign-up-success": "Sign up successful",
 		"login-success": "Login successful",
 		"logout-success": "Logout successful",
+		"logout-error": "Error logging out",
 		"password-show": "Show password",
 		"password-hide": "Hide password",
 		"password-no-match": "Passwords do not match"
