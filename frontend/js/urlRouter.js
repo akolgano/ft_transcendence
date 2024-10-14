@@ -10,7 +10,34 @@
 
 let siteLanguage = "en"
 let last_page = "/"
+
+
+
+async function fetchCSRFToken() {
+	const response = await fetch('https://localhost/csrf-token/', {
+		credentials: 'include'  // include cookies in the request
+	});
+	console.log("Error status: " + response.status)
+	let data;
+
+	const contentType = response.headers.get('Content-Type');
+	if (contentType && contentType.includes('application/json')) {
+		data = await response.json();
+		// Set the CSRF token in the meta tag for future use
+		if (response.ok)
+			document.querySelector('meta[name="csrf-token"]').setAttribute('content', data.csrfToken);
+
+	} else {
+		data = await response.text();
+		console.log("error");
+		console.log(data);
+	}
+}
 const CSRFToken = document.querySelector('meta[name="csrf-token"]')['content']
+
+fetchCSRFToken();
+console.log("CSRFToken: " + CSRFToken)
+
 
 var translator = new Translator({
 	defaultLanguage: "fr",

@@ -7,9 +7,13 @@ from django.urls import path, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from pong.users import views
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.http import JsonResponse
+from .views import get_csrf_token
 
 urlpatterns = [
-    path('api/admin/', admin.site.urls), 
+	path('csrf-token/', get_csrf_token, name='csrf-token'),
+    path('api/admin/', admin.site.urls),
     re_path('api/login', views.login, name='login'),
     re_path('api/logout', views.logout, name='logout'),
     re_path('api/signup', views.signup, name='signup'),
@@ -26,5 +30,3 @@ urlpatterns = [
     path('api/change_username/', views.change_username, name='change_username'),
     re_path('api/change-profile-picture', views.change_profile_picture, name='change_profile_picture'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
