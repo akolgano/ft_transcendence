@@ -4,7 +4,7 @@ function addBaseDataHistory(params) {
 	console.log(user);
 
 	document.querySelector('.card-username').innerHTML = user.username
-	document.querySelector(".profile-pic").src = "http://localhost:8000" + user.profile_picture
+	document.querySelector(".profile-pic").src = "https://localhost" + user.profile_picture
 }
 
 function formatDate(date) {

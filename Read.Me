@@ -105,10 +105,10 @@ curl -k -X POST https://localhost/api/game/result/ -H "Authorization: Token 43c1
 curl -k -X GET https://localhost/api/player/stats/anna/ -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b"
 
 ---------------------logout------------------------------
-curl -k -X POST https://localhost/api/logout/ -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b" -H "Content-Type: application/json" -d '{"username": "anna"}' 
+curl -k -X POST https://localhost/api/logout/ -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b" -H "Content-Type: application/json" 
 
 -----------------Change username-------------------------
 
-curl -k -X PATCH https://localhost/api/change_username/ -H "Authorization: Token 541a7cf4d6c9ca416702629292f6d336a448ce6e" -H "Content-Type: application/json" -d '{"new_username": "ana"}' 
+curl -k -X PATCH https://localhost/api/change_username/ -H "Authorization: Token ee11fd15a138d25748559a38cafd4aee933884cb" -H "Content-Type: application/json" -d '{"new_username": "ana"}' 
 
 {"detail":"Username changed successfully."}/{"error":"Username already taken."}/{"error":"New username is required."}

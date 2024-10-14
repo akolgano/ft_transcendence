@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -91,28 +91,6 @@ DATABASES = {
         "PORT":     5432,
     }
 }
-
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
-# AUTH_PASSWORD_VALIDATORS = [
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-#     },
-# ]
-
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -181,7 +159,7 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 #SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
 SESSION_COOKIE_SECURE = False  # Ensure cookies are only sent over HTTPS
-CSRF_COOKIE_SECURE = False  # CSRF cookies should be sent over HTTPS
+#CSRF_COOKIE_SECURE = False  # CSRF cookies should be sent over HTTPS
 
 APPEND_SLASH = True  # This is the default setting
 
@@ -201,9 +179,9 @@ CORS_ALLOW_METHODS = [
     'DELETE',
     'OPTIONS',
 ]
-STATIC_URL = 'static/'
+STATIC_URL = '/backstatic/'
 STATICFILES_DIRS = ['/app/frontend',]
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 LOGGING = {
@@ -232,3 +210,7 @@ LOGGING = {
         },
     },
 }
+# STATICFILES_DIRS = [
+#     #os.path.join(BASE_DIR, 'frontend'),
+#     '/usr/local/lib/python3.12/site-packages/django/contrib/admin/static/admin/',
+# ]

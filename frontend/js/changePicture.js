@@ -8,7 +8,7 @@
 		removeAlert();
 
 		try {
-			const response = await fetch("https://localhost/api/change-prfile-picture/", {
+			const response = await fetch("https://localhost/api/change-profile-picture", {
 				headers: {
 					'Authorization': `Token ${localStorage.getItem("token")}`,
 					'Accept': 'application/json',
@@ -36,8 +36,8 @@
 			if (data.user)
 			{
 				localStorage.setItem("user", JSON.stringify(data.user));
-				document.querySelector('.avatar-sm').src = "http://localhost:8000" + JSON.parse(localStorage.getItem("user")).profile_picture;
-				document.querySelector(".profile-pic").src = "http://localhost:8000" + JSON.parse(localStorage.getItem("user")).profile_picture;
+				document.querySelector('.avatar-sm').src = "https://localhost" + JSON.parse(localStorage.getItem("user")).profile_picture;
+				document.querySelector(".profile-pic").src = "https://localhost" + JSON.parse(localStorage.getItem("user")).profile_picture;
 				displayAlert("account.change-pic-success", "success");
 				document.getElementById("profile_picture").value = "";
 			}

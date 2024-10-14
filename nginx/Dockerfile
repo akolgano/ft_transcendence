@@ -13,6 +13,7 @@ COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
 COPY frontend /usr/share/nginx/html/
 
+COPY pong .
 
 EXPOSE 80
 EXPOSE 443

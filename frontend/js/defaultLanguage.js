@@ -20,7 +20,7 @@ console.log("DEFAULT LANG SCRIPT")
 		}
 
 		try {
-			const response = await fetch("https://localhost/api/change_language/", {
+			const response = await fetch("https://localhost/api/change_language", {
 				headers: {
 					'Authorization': `Token ${localStorage.getItem("token")}`,
 					'Accept': 'application/json',

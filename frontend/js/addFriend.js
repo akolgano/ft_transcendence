@@ -25,7 +25,7 @@ function addFriendToHTML(user) {
 		<div class="border rounded bg-light w-50 mb-2 d-inline-block align-middle">
 			<div class="d-flex justify-content-between p-2">
 				<div class="d-flex">
-					<img src="http://localhost:8000${user.profile_picture}" alt="avatar" class="rounded-circle border-1 avatar-mini object-fit-cover">
+					<img src="https://localhost${user.profile_picture}" alt="avatar" class="rounded-circle border-1 avatar-mini object-fit-cover">
 					<a class="mb-0 px-2" href="/" id ="friend-username">${user.username}</a>
 				</div>
 				<div><span class="mb-0" data-i18n="friends.level"></span><span class="mb-0">3</span></div>
@@ -55,7 +55,7 @@ function addFriendEvent() {
 		const formData = new FormData(addFriend);
 		removeAlert();
 		try {
-			const response = await fetch("https://localhost/api/add_friend/", {
+			const response = await fetch("https://localhost/api/add_friend", {
 				headers: {
 					'Authorization': `Token ${localStorage.getItem("token")}`,
 					'Accept': 'application/json',

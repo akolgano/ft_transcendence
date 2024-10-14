@@ -19,6 +19,10 @@ from rest_framework.exceptions import NotFound
 from .models import GameResult, PlayerStats
 from .serializers import GameResultSerializer, PlayerStatsSerializer
 from rest_framework.views import APIView
+
+import logging
+
+logger = logging.getLogger(__name__)
 User = get_user_model()
 
 @api_view(['POST'])
@@ -30,17 +34,19 @@ def login(request):
     serializer = UserSerializer(user)
     user.online = True
     user.save()
+    logger.info(f"Logged in: {user.username}")
     return Response({'token': token.key, 'user': serializer.data})
 
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def logout(request):
-    user = get_object_or_404(User, username=request.data['username'])
+    user = request.user
     user.online = False
     request.user.auth_token.delete()
     user.save()
-    return Response("logout successfully")
+    logger.info(f"Logged out: {user.username}")
+    return Response({"detail": "Logged out successfully."}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def signup(request):
@@ -62,7 +68,9 @@ def signup(request):
         user.save()
         PlayerStats.objects.create(user=user)
         token = Token.objects.create(user=user)
+        logger.info(f"Signed up: {user.username}")
         return Response({'token': token.key, 'user': serializer.data}, status=status.HTTP_201_CREATED)
+    logger.error(f"Signup error for: {serializer.errors}")
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
@@ -72,10 +80,13 @@ def test_token(request):
     return Response("passed!")
 
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+#@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def change_profile_picture(request):
     user = request.user
+    old_image = user.profile_picture
+    logger.info(f"Old image path: {old_image.path}")
     if 'profile_picture' not in request.FILES:
         return Response({"error": "No profile picture uploaded."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -228,7 +239,7 @@ def save_game_result(request):
     else: 
         player_stats.losses += 1
     player_stats.save()
-
+    logger.info(f"Score saved: {game_result}")
     return Response({'detail': 'Score saved successfully.'}, status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
@@ -238,6 +249,7 @@ def get_player(request, username):
     """
     Retrieves player statistics for a specified user.
     """
+    logger.info(f"Getting player stats for: {username}")
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
@@ -248,9 +260,10 @@ def get_player(request, username):
         game_results = GameResult.objects.filter(user=user)
         stats_data = PlayerStatsSerializer(stats).data
         stats_data['game_results'] = GameResultSerializer(game_results, many=True).data
-
+        logger.info(f"Return player stats: {stats_data}")
         return Response(stats_data)
     except PlayerStats.DoesNotExist:
+        logger.error(f"No results for this user: {user.username}")
         return Response({"error": "No results for this user"}, status=status.HTTP_404_NOT_FOUND)
 
 
@@ -263,7 +276,8 @@ def all_player_stats(request):
     return Response(serializer.data)
 
 @api_view(['PATCH'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+#@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def change_language(request):
     user = request.user
@@ -273,8 +287,10 @@ def change_language(request):
     supported_languages = ['en', 'es', 'fr']
     if new_language not in supported_languages:
         return Response({"error": "Unsupported language."}, status=status.HTTP_400_BAD_REQUEST)
+    old_language =  user.language
     user.language = new_language
     user.save()
+    logger.info(f"User {user.username} changed language from {old_language} to {user.language}.")
     return Response({"detail": "Language changed successfully."}, status=status.HTTP_200_OK)
 
 
