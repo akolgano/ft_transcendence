@@ -19,7 +19,16 @@ from rest_framework.exceptions import NotFound
 from .models import GameResult, PlayerStats
 from .serializers import GameResultSerializer, PlayerStatsSerializer
 from rest_framework.views import APIView
+from django.views.decorators.csrf import ensure_csrf_cookie
 User = get_user_model()
+
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    csrf_token = request.META.get("CSRF_COOKIE")
+    if csrf_token:
+        return JsonResponse({"csrfToken": csrf_token})
+    else:
+        return JsonResponse({"error": "CSRF token not found"}, status=400)
 
 @api_view(['POST'])
 def login(request):
@@ -180,7 +189,7 @@ def user_friends_view(request):
         friends_list = [{
             'username': friend.to_user.username,
             'profile_picture': friend.to_user.profile_picture.url if friend.to_user.profile_picture else None
-        } for friend in friends] 
+        } for friend in friends]
         return Response({'user': user.username, 'friends': friends_list})
     except Exception as e:
         return Response({'error': str(e)}, status=400)
@@ -223,9 +232,9 @@ def save_game_result(request):
         progression = progression
     )
     player_stats, created = PlayerStats.objects.get_or_create(user=user)
-    if score[0] > score[1]: 
+    if score[0] > score[1]:
         player_stats.victories += 1
-    else: 
+    else:
         player_stats.losses += 1
     player_stats.save()
 
