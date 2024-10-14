@@ -146,6 +146,7 @@ async function fetchHistory(urlArgument) {
 
 function profileScript() {
 	const urlArgument = getArgument();
+	console.log("urlArgument: " +  urlArgument);
 	fetchHistory(urlArgument);
 }
 
