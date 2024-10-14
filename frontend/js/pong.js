@@ -13,7 +13,7 @@
 	let ballHeight = 10;
 
 	let gameLoopId;
-	let computerLevel = 0.1;
+	let computerLevel = 0.98;
 
 	let ball = {
 		x : boardWidth / 2,
@@ -141,21 +141,13 @@
 	function playerAI() {
 		if (ball.velocityX > 0)
 		{
-			if (playerGuest.y + playerGuest.height / 2 > ball.y)
-			{
-				// Go down
-				const newPosition = playerGuest.y -10;
-				if (!outOfBounds(newPosition))
-					playerGuest.y = newPosition;
-			}
-			else if (playerGuest.y + playerGuest.height / 2 < ball.y)
-			{
-				// Go up
-				const newPosition = playerGuest.y + 10;
-				if (!outOfBounds(newPosition))
-					playerGuest.y = newPosition;
-			}
+			if ((playerGuest.y + playerGuest.height / 2) * computerLevel  > ball.y)
+				playerGuest.velocityY = -3;
+			if ((playerGuest.y + playerGuest.height / 2) * computerLevel < ball.y)
+				playerGuest.velocityY = 3;
 		}
+		else
+			playerGuest.velocityY = 0;
 	}
 
 	function update() {
@@ -182,17 +174,24 @@
 		if (playerGuest.name === "AI")
 			playerAI()
 
+		// COLLISION WITH PADDLE
 		if (ball.y + ball.height >= playerUser.y && ball.y <= (playerUser.y + playerUser.height))
 		{
 			if (ball.x <= playerUser.x + playerUser.width && ball.x + ball.width >= playerUser.x)
-				ball.velocityX *= -1
+			{
+
+				ball.velocityX *= -1.05
+			}
 		}
 
 		if (ball.y + ball.height >= playerGuest.y && ball.y <= (playerGuest.y + playerGuest.height))
 		{
 			// console.log("COLLISION???")
 			if (ball.x + ball.width >= playerGuest.x && ball.x <= playerGuest.x + playerGuest.width )
-				ball.velocityX *= -1
+			{
+				ball.velocityX *= -1.05
+
+			}
 		}
 
 		if (ball.x < 0)

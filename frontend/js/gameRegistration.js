@@ -18,10 +18,10 @@ function registerOpponent(event) {
 
 	resetErrorField();
 	let guestName;
-	const checkbox = document.getElementById("AI-opponent").value;
+	const checkbox = document.getElementById("AI-opponent").checked;
 	console.log("Checkbox: " + checkbox)
 
-	if (checkbox === "on")
+	if (checkbox === true)
 		guestName = "AI"
 	else {
 		guestName = checkGuestName()
