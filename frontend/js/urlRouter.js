@@ -140,7 +140,7 @@ const translateNewContent = (node) => {
 		let data = element.getAttribute('data-i18n')
 		// console.log("Preferred language: " + siteLanguage)
 		let translation = translator.translateForKey(data, siteLanguage)
-		element.innerHTML = translation
+		element.innerText = translation
 	});
 }
 
@@ -277,8 +277,8 @@ const updateNavbar = (loggedIn) => {
 	if (loggedIn)
 	{
 		let welcome = translator.translateForKey("navbar.welcome", siteLanguage)
-		navbar.querySelector(".navbar-text").innerHTML = welcome;
-		navbar.querySelector(".navbar-username").innerHTML = `${JSON.parse(localStorage.getItem("user")).username}!`;
+		navbar.querySelector(".navbar-text").innerText = welcome;
+		navbar.querySelector(".navbar-username").innerText = `${JSON.parse(localStorage.getItem("user")).username}!`;
 		navbar.querySelector('.avatar-sm').src = "http://localhost:8000" + JSON.parse(localStorage.getItem("user")).profile_picture;
 
 		// Add logout script

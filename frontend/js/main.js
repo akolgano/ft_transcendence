@@ -7,11 +7,11 @@ const togglePassword = (event) => {
 
 	if (passwordField.type == "password") {
 		passwordField.type = "text"
-		button.innerHTML = translator.translateForKey("auth.password-hide", siteLanguage)
+		button.innerText = translator.translateForKey("auth.password-hide", siteLanguage)
 	}
 	else {
 		passwordField.type = "password"
-		button.innerHTML = translator.translateForKey("auth.password-show", siteLanguage)
+		button.innerText = translator.translateForKey("auth.password-show", siteLanguage)
 	}
 }
 
@@ -43,7 +43,7 @@ function checkPasswordMatch() {
 	{
 		const errorPassword = document.querySelector(".repeat-password-error");
 		let errorTag = document.createElement("p");
-		errorTag.innerHTML = translator.translateForKey("auth.password-no-match", siteLanguage);
+		errorTag.innerText = translator.translateForKey("auth.password-no-match", siteLanguage);
 		errorPassword.appendChild(errorTag);
 		return (false);
 	}
@@ -74,7 +74,7 @@ function addErrorToHTML(data) {
 
 		data[key].forEach(message => {
 			let errorTag = document.createElement("p");
-			errorTag.innerHTML = message;
+			errorTag.innerText = message;
 			errorDiv.appendChild(errorTag);
 		});
 	}
@@ -84,6 +84,17 @@ function resetErrorField() {
 	const errorDivs = document.querySelectorAll(".form-error");
 
 	errorDivs.forEach(div => {
-		div.innerHTML = ""
+		div.innerText = ""
 	});
 }
+
+function sanitize(param) {
+	let parser = new DOMParser();
+	let doc = parser.parseFromString(param, 'text/html');
+	let sanitized = doc.body.textContent || "";
+	return sanitized.trim();  // Return trimmed content
+}
+
+// console.log("sanitized 1: " + sanitize("<script>alert(1)<script>"))
+// console.log("sanitized 2: " + sanitize(`<img src="x" onerror="alert('XSS attacks!')">`))
+// console.log("sanitized 3: " + sanitize("hello juliette"))
