@@ -50,9 +50,9 @@
 		"vict": "Victories : ",
 		"loss": "Losses : ",
 		"player-distri": "Player Victory and Loss Distribution",
-		"game-duration": "Game Durations (In minutes)",
-		"game-intensity": "Game Intensity (Scores per minute)",
-		"game-margin": "Game Margin Distribution",
+		"game-duration": "Game Durations of each game (in minutes)",
+		"game-intensity": "Game Intensity of each game (Scores per minute)",
+		"game-margin": "Game Margin Distribution of all games",
 		"game-progression": "Game Score Progression",
 		"you": "You",
 		"opponent": "Opponent",
@@ -61,7 +61,7 @@
 		"close-games": "Close games (1)",
 		"moderate-games": "Moderate game (2-3)",
 		"large-margins": "Large magins (4)",
-		"player-results": "Player Results :"
+		"player-results": "Player Results (Scoreline of each game)"
 	},
 	"friends": {
 		"add-title": "Add a new friend",
