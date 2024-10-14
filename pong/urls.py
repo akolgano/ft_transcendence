@@ -8,7 +8,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 from pong.users import views
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.http import JsonResponse
 
 urlpatterns = [
 	path('csrf-token/', views.get_csrf_token, name='csrf-token'),
