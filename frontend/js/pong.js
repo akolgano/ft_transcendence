@@ -13,6 +13,7 @@
 	let ballHeight = 10;
 
 	let gameLoopId;
+	let computerLevel = 0.1;
 
 	let ball = {
 		x : boardWidth / 2,
@@ -137,6 +138,26 @@
 		})
 	}
 
+	function playerAI() {
+		if (ball.velocityX > 0)
+		{
+			if (playerGuest.y + playerGuest.height / 2 > ball.y)
+			{
+				// Go down
+				const newPosition = playerGuest.y -10;
+				if (!outOfBounds(newPosition))
+					playerGuest.y = newPosition;
+			}
+			else if (playerGuest.y + playerGuest.height / 2 < ball.y)
+			{
+				// Go up
+				const newPosition = playerGuest.y + 10;
+				if (!outOfBounds(newPosition))
+					playerGuest.y = newPosition;
+			}
+		}
+	}
+
 	function update() {
 		if (playerGuest.score == 5 || playerUser.score == 5)
 		{
@@ -158,22 +179,16 @@
 
 		context.fillRect(ball.x, ball.y, ball.width, ball.height)
 
-		// if (detectCollision(ball, playerUser)) {
-		// 	if (ball.x <= playerUser.x + playerUser.width)
-		// 		ball.velocityX *= -1
-		// }
-		// if (detectCollision(ball, playerGuest)) {
-		// 	if (ball.x + ball.width >= playerGuest.x)
-		// 		ball.velocityX *= -1
-		// }
+		if (playerGuest.name === "AI")
+			playerAI()
 
-		if (ball.y >= playerUser.y && ball.y <= (playerUser.y + playerUser.height))
+		if (ball.y + ball.height >= playerUser.y && ball.y <= (playerUser.y + playerUser.height))
 		{
 			if (ball.x <= playerUser.x + playerUser.width && ball.x + ball.width >= playerUser.x)
 				ball.velocityX *= -1
 		}
 
-		if (ball.y >= playerGuest.y && ball.y <= (playerGuest.y + playerGuest.height))
+		if (ball.y + ball.height >= playerGuest.y && ball.y <= (playerGuest.y + playerGuest.height))
 		{
 			// console.log("COLLISION???")
 			if (ball.x + ball.width >= playerGuest.x && ball.x <= playerGuest.x + playerGuest.width )
@@ -203,6 +218,7 @@
 
 	function movePlayerContinuous(event) {
 		// Player 1 - USER
+
 		if (event.code == "KeyW")
 			playerUser.velocityY = -3;
 
@@ -210,41 +226,48 @@
 			playerUser.velocityY = 3;
 
 		// Player 2 - GUEST
-		if (event.code == "ArrowUp")
-			playerGuest.velocityY = -3;
 
-		if (event.code == "ArrowDown")
-			playerGuest.velocityY = 3;
+		if (playerGuest.name !== "AI")
+		{
+			if (event.code == "ArrowUp")
+				playerGuest.velocityY = -3;
+
+			if (event.code == "ArrowDown")
+				playerGuest.velocityY = 3;
+		}
 	}
 
 	function movePlayerOnce(event) {
-	if (event.code == "KeyW") {
-		if (!outOfBounds(playerUser.y - 10)) {
-			playerUser.y -= 10;
-			playerUser.velocityY = 0
+		if (event.code == "KeyW") {
+			if (!outOfBounds(playerUser.y - 10)) {
+				playerUser.y -= 10;
+				playerUser.velocityY = 0
+			}
 		}
-	}
 
-	if (event.code == "KeyS") {
-		if (!outOfBounds(playerUser.y + 10)) {
-			playerUser.y += 10;
-			playerUser.velocityY = 0
+		if (event.code == "KeyS") {
+			if (!outOfBounds(playerUser.y + 10)) {
+				playerUser.y += 10;
+				playerUser.velocityY = 0
+			}
 		}
-	}
 
-	if (event.code == "ArrowUp") {
-		if (!outOfBounds(playerGuest.y - 10)) {
-			playerGuest.y -= 10;
-			playerGuest.velocityY = 0;
-		}
-	}
+		if (playerGuest.name !== "AI") {
 
-	if (event.code == "ArrowDown") {
-		if (!outOfBounds(playerGuest.y + 10)) {
-			playerGuest.y += 10;
-			playerGuest.velocityY = 0;
+			if (event.code == "ArrowUp") {
+				if (!outOfBounds(playerGuest.y - 10)) {
+					playerGuest.y -= 10;
+					playerGuest.velocityY = 0;
+				}
+			}
+
+			if (event.code == "ArrowDown") {
+				if (!outOfBounds(playerGuest.y + 10)) {
+					playerGuest.y += 10;
+					playerGuest.velocityY = 0;
+				}
+			}
 		}
-	}
 	}
 
 }
