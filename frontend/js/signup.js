@@ -13,6 +13,7 @@ async function addEventSignUpForm(e) {
 		const response = await fetch("https://localhost/api/signup", {
 			headers: {
 				'Accept': 'application/json',
+				'X-CSRFToken': CSRFToken,
 			},
 			method: 'POST',
 			body: formData,

@@ -19,6 +19,7 @@
 				headers: {
 					'Authorization': `Token ${localStorage.getItem("token")}`,
 					'Accept': 'application/json',
+					'X-CSRFToken': CSRFToken,
 				},
 				method: 'PATCH',
 				body: formData,

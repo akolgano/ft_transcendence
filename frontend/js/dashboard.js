@@ -20,6 +20,7 @@ async function fetchDashboardData() {
             headers: {
                 'Authorization': `Token ${localStorage.getItem("token")}`,
                 'Accept': 'application/json',
+				'X-CSRFToken': CSRFToken,
             },
             method: 'GET',
         });
@@ -56,7 +57,7 @@ async function fetchDashboardData() {
 
 // Update the dashboard with the actual data from the API
 function updateDashboard(data) {
-    // Update player stats 
+    // Update player stats
     let victoriesElement = document.getElementById('victories');
     let lossesElement = document.getElementById('losses');
 

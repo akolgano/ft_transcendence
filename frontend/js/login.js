@@ -10,6 +10,7 @@
 			const response = await fetch("https://localhost/api/login", {
 				headers: {
 					'Accept': 'application/json',
+					'X-CSRFToken': CSRFToken,
 				},
 				method: 'POST',
 				body: formData,

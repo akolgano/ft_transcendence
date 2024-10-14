@@ -10,6 +10,7 @@
 
 let siteLanguage = "en"
 let last_page = "/"
+const CSRFToken = document.querySelector('meta[name="csrf-token"]')['content']
 
 var translator = new Translator({
 	defaultLanguage: "fr",
