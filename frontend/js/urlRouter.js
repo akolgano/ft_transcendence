@@ -107,7 +107,7 @@ const urlRoutes = {
 		template: "static/account.html",
 		title: "account",
 		description: "Your account",
-		scripts: ["../js/account.js", "../js/changePassword.js", "../js/changePicture.js", "../js/defaultLanguage.js"],
+		scripts: ["../js/account.js", "../js/changePassword.js", "../js/changePicture.js", "../js/defaultLanguage.js", "../js/changeUsername.js"],
 		auth: true,
 	},
 	"/dashboard": {

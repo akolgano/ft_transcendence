@@ -44,7 +44,7 @@ function addFriendToHTML(user) {
 
 	const newFriendCard = document.querySelector(`.friend-card[data-username="${user.username}"]`);
 	translateNewContent(newFriendCard);
-	document.getElementById("add-friend").value = "";
+	document.getElementById("add-friend-input").value = "";
 }
 
 function addFriendEvent() {

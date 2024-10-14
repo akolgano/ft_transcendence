@@ -16,7 +16,7 @@
 		"log-in": "Iniciar sesión",
 		"log-out": "Cerrar sesión",
 		"sign-up": "Crear una cuenta",
-		"email": "Dirección de correo electrónico",
+		"email": "Correo electrónico",
 		"no-account": "¿Aún no tienes una cuenta?",
 		"already-account": "¿Ya tienes una cuenta?",
 		"error": "Error",
@@ -25,6 +25,7 @@
 		"login-success": "Sesión iniciada con éxito",
 		"sign-up-success": "Cuenta creada con éxito",
 		"logout-success": "Sesión cerrada.",
+		"logout-error": "Error logging out",
 		"password-show": "Mostrar contraseña",
 		"password-hide": "Ocultar contraseña",
 		"password-no-match": "Las contraseñas no coinciden"
@@ -43,7 +44,12 @@
 		"change-language-unsupported": "Error: Idioma no compatible.",
 		"change-password-success": "Contraseña cambiada con éxito",
 		"change-password-error": "Error al cambiar la contraseña",
-		"change-pic-too-large": "Error al cambiar la foto: archivo demasiado grande"
+		"change-pic-too-large": "Error al cambiar la foto: archivo demasiado grande",
+		"change-username-success": "Username changed successfully",
+		"change-username-error": "Error changing username",
+		"change-username-taken": "Username already taken",
+		"change-username-empty": "New username cannot be empty",
+		"change-username-same": "This is already your username"
 	},
 	"dash" : {
 		"error-load": "Error al cargar el panel de control.",
@@ -76,13 +82,15 @@
 		"error-load": "Error al cargar el perfil.",
 		"victories": "Victorias: ",
 		"losses": "Derrotas: ",
-		"points": "puntos",
+		"points": "Puntos: ",
 		"game-history": "Historial de juegos",
 		"tournament-history": "Historial de torneos",
 		"first": "Primero: ",
 		"second": "Segundo: ",
 		"third": "Tercero: ",
-		"fourth": "Cuarto: "
+		"fourth": "Cuarto: ",
+		"online": "🟢 en línea",
+		"offline": "🔴 offline S"
 	},
 	"404": "Error trascendental: página no encontrada",
 	"error-fetch": "Error inesperado, por favor inténtalo de nuevo más tarde."

@@ -40,6 +40,10 @@
 	width: 70%;
 }
 
+.text-sm {
+	font-size: 10px;
+}
+
 /* Container width */
 .dashboard-container {
 	max-width: 800px;
