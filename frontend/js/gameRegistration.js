@@ -17,20 +17,41 @@ function registerOpponent(event) {
 	event.preventDefault();
 
 	resetErrorField();
-	const guest = checkGuestName()
-	if (!guest)
-		return ;
+	let guestName;
+	const checkbox = document.getElementById("AI-opponent").value;
+	console.log("Checkbox: " + checkbox)
 
-	localStorage.setItem("guestName", guest);
+	if (checkbox === "on")
+		guestName = "AI"
+	else {
+		guestName = checkGuestName()
+		if (!guestName)
+			return ;
+	}
+
+	localStorage.setItem("guestName", guestName);
 	urlRoute({ target: { href: "/pong" }, preventDefault: () => {} });
 
 	// opponentsNameForm = document.getElementById("opponentsNameForm")
 	// const formData = new FormData(opponentsNameForm);
+}
+
+function toggleOpponentsField(event) {
+	const nameField = document.getElementById("opponent-name")
+	const checked = event.target.checked
+	if (checked)
+	{
+		nameField.value = ""
+		nameField.disabled = "disabled"
+	}
+	else
+		nameField.disabled = ""
 
 }
 
 function SignUpSimpleGame() {
 
+	document.getElementById("AI-opponent").addEventListener("click", toggleOpponentsField)
 	const registerGuestName = document.getElementById("opponentsNameForm");
 	registerGuestName.addEventListener("submit", registerOpponent);
 }

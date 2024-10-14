@@ -52,10 +52,27 @@
 		}
 		document.removeEventListener("keyup", movePlayerOnce);
 		document.removeEventListener("keydown", movePlayerContinuous);
-		document.removeEventListener("click", stopGame)
+		document.querySelectorAll("a").forEach(link => {
+			link.removeEventListener("click", stopGame)
+		})
 	}
 
-	function startGame() {
+	function startGame(event) {
+		if (event.code !== "Space")
+			return ;
+
+		document.removeEventListener("keyup", startGame)
+		gameLoopId = requestAnimationFrame(update)
+
+		document.querySelector(".space-start").remove()
+		document.querySelectorAll("a").forEach(link => {
+			link.addEventListener("click", stopGame)
+		})
+		document.addEventListener("keyup", movePlayerOnce)
+		document.addEventListener("keydown", movePlayerContinuous)
+	}
+
+	function gameSetUp() {
 		if (playerGuest.name == null) {
 			document.getElementById("content").innerHTML = "<p>You need to register first</p>"
 			return ;
@@ -74,16 +91,11 @@
 		context.fillRect(playerUser.x, playerUser.y, playerUser.width, playerUser.height)
 		context.fillRect(playerGuest.x, playerGuest.y, playerGuest.width, playerGuest.height)
 
-		document.querySelectorAll("a").forEach(link => {
-			link.addEventListener("click", stopGame)
-		})
-		gameLoopId = requestAnimationFrame(update)
-		document.addEventListener("keyup", movePlayerOnce)
-		document.addEventListener("keydown", movePlayerContinuous)
-		// window.addEventListener("beforeunload", stopGame)
+		// countdownToStart();
+		document.addEventListener("keyup", startGame)
 	}
 
-	startGame()
+	gameSetUp()
 
 	function outOfBounds(yPosition) {
 		if (yPosition < 0 || yPosition + playerHeight > boardHeight)
@@ -118,7 +130,11 @@
 		document.querySelector(".play-again").addEventListener("click", event => {
 			urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
 		})
-		document.removeEventListener("click", stopGame)
+		document.removeEventListener("keyup", movePlayerOnce);
+		document.removeEventListener("keydown", movePlayerContinuous);
+		document.querySelectorAll("a").forEach(link => {
+			link.removeEventListener("click", stopGame)
+		})
 	}
 
 	function update() {
@@ -187,7 +203,6 @@
 
 	function movePlayerContinuous(event) {
 		// Player 1 - USER
-		console.log("code: " +  event.code)
 		if (event.code == "KeyW")
 			playerUser.velocityY = -3;
 
