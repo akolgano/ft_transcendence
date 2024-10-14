@@ -9,10 +9,9 @@ from django.conf.urls.static import static
 from pong.users import views
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import JsonResponse
-from .views import get_csrf_token
 
 urlpatterns = [
-	path('csrf-token/', get_csrf_token, name='csrf-token'),
+	path('csrf-token/', views.get_csrf_token, name='csrf-token'),
     path('api/admin/', admin.site.urls),
     re_path('api/login', views.login, name='login'),
     re_path('api/logout', views.logout, name='logout'),
