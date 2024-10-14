@@ -1,7 +1,7 @@
 {
 	"navbar" : {
 		"play": "Play",
-		"history": "History",
+		"profile": "Profile",
 		"language": "Language",
 		"friends": "Friends",
 		"dashboard": "Dashboard",
@@ -25,8 +25,10 @@
 		"sign-up-success": "Sign up successful",
 		"login-success": "Login successful",
 		"logout-success": "Logout successful",
+		"logout-error": "Error logging out",
 		"password-show": "Show password",
-		"password-hide": "Hide password"
+		"password-hide": "Hide password",
+		"password-no-match": "Passwords do not match"
 	},
 	"account" : {
 		"update": "Update",
@@ -42,7 +44,12 @@
 		"change-language-unsupported": "Error: Unsupported language.",
 		"change-password-success": "Password changed successfully",
 		"change-password-error": "Error changing password. Try again later.",
-		"change-pic-too-large": "Error changing picture: file too large"
+		"change-pic-too-large": "Error changing picture: file too large",
+		"change-username-success": "Username changed successfully",
+		"change-username-error": "Error changing username",
+		"change-username-taken": "Username already taken",
+		"change-username-empty": "New username cannot be empty",
+		"change-username-same": "This is already your username"
 	},
 	"dash" : {
 		"error-load": "Error loading dashboard.",
@@ -76,13 +83,22 @@
 		"error-no-user": "No user found with this username",
 		"error-yourself": "You cannot add yourself as a friend",
 		"error-empty": "Username is required.",
-		"error-not-friend": "You are not friend with this user"
+		"error-not-friend": "You are not friend with this user",
+		"level": "Level "
 	},
-	"history": {
-		"error-load": "Error loading history.",
+	"profile": {
+		"error-load": "Error loading profile.",
 		"victories": "Victories: ",
 		"losses": "Losses: ",
-		"points": "points"
+		"points": "Points: ",
+		"game-history": "Game history",
+		"tournament-history": "Tournament history",
+		"first": "First: ",
+		"second": "Second: ",
+		"third": "Third: ",
+		"fourth": "Fourth: ",
+		"online": "🟢 online",
+		"offline": "🔴 offline"
 	},
 	"404": "Transcendent error: page not found",
 	"error-fetch": "Unexpected error, please try again later."

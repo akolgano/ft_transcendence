@@ -203,3 +203,32 @@ CORS_ALLOW_METHODS = [
 ]
 STATIC_URL = 'static/'
 STATICFILES_DIRS = ['/app/frontend',]
+
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'django.log', 
+            'level': 'DEBUG',
+        },
+    },
+    'loggers': {
+        # 'django': {
+        #     'handlers': ['console', 'file'],
+        #     'level': 'DEBUG',
+        #     'propagate': True,
+        # },
+        'pong': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}

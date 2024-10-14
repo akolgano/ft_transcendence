@@ -9,25 +9,18 @@ docker-compose exec django python manage.py inspectdb
 docker-compose exec django python manage.py test pong.tests.tests
 
 
-curl -X POST http://127.0.0.1:8000/signup \
+curl -k -X POST https://localhost/api/signup \
 -H "Content-Type: application/json" \
 -d '{"username": "anna", "password": "Pass1234!", "email": "anna@mail.com"}'
 
 
-POST http://127.0.0.1:8000/signup Content-Type: application/json
+###
 
-{ "username": "anna", "password": "Pass1234!", "email": "anna@mail.com" }
+curl -k -X POST https://localhost/api/login Content-Type: application/json {"username":"anna", "password": "Pass1234!"}
 
 ###
 
-curl -X POST http://127.0.0.1:8000/login Content-Type: application/json { "username": "anna", "password": "Pass1234!" }
-
-###
-
-GET http://127.0.0.1:8000/test_token Content-Type: application/json Authorization: token xxx
-
-
-curl -H "Authorization: Token 5644fccd75046dd83d01116deffdf2c4370f7aac" -H "Content-Type: application/json" http://127.0.0.1:8000/test_token
+curl -H "Authorization: Token 5644fccd75046dd83d01116deffdf2c4370f7aac" -H "Content-Type: application/json" https://localhost/api/test_token
 
 
 
@@ -39,23 +32,34 @@ django    | You have 22 unapplied migration(s). Your project may not work proper
 django    | Run 'python manage.py migrate' to apply them.
 
 
-anna@anna-VirtualBox:~/ft_transcendence/srcs/pong/users$ docker-compose exec django python manage.py test pong.tests.tests
-Found 23 test(s).
+anna@anna-VirtualBox:~/ft_transcendence$ docker-compose exec django python manage.py test pong.tests.tests
+Found 34 test(s).
 Creating test database for alias 'default'...
 System check identified no issues (0 silenced).
+test_change_language_missing_field (pong.tests.tests.ChangeLanguageTests.test_change_language_missing_field) ... ok
+test_change_language_success (pong.tests.tests.ChangeLanguageTests.test_change_language_success) ... ok
+test_change_language_unsupported (pong.tests.tests.ChangeLanguageTests.test_change_language_unsupported) ... ok
 test_change_password_invalid_old_password (pong.tests.tests.ChangePasswordTestCase.test_change_password_invalid_old_password) ... ok
 test_change_password_missing_fields (pong.tests.tests.ChangePasswordTestCase.test_change_password_missing_fields) ... ok
 test_change_password_success (pong.tests.tests.ChangePasswordTestCase.test_change_password_success) ... ok
 test_change_password_weak_new_password (pong.tests.tests.ChangePasswordTestCase.test_change_password_weak_new_password) ... ok
 test_change_profile_picture (pong.tests.tests.ChangeProfilePictureTestCase.test_change_profile_picture) ... ok
+test_change_username_success (pong.tests.tests.ChangeUsernameTests.test_change_username_success) ... ok
+test_change_username_username_taken (pong.tests.tests.ChangeUsernameTests.test_change_username_username_taken) ... ok
 test_get_friends (pong.tests.tests.FriendListTests.test_get_friends) ... ok
 test_get_friends_no_auth (pong.tests.tests.FriendListTests.test_get_friends_no_auth) ... ok
 test_add_friend (pong.tests.tests.FriendTests.test_add_friend) ... ok
 test_remove_friend (pong.tests.tests.FriendTests.test_remove_friend) ... ok
+test_user_stats_not_found (pong.tests.tests.GetGameResultTests.test_user_stats_not_found) ... ok
+test_valid_user_stats_retrieval (pong.tests.tests.GetGameResultTests.test_valid_user_stats_retrieval) ... ok
 test_create_user_with_language (pong.tests.tests.LanguageTestCases.test_create_user_with_language) ... ok
 test_login_invalid_password (pong.tests.tests.LoginApiTests.test_login_invalid_password) ... ok
 test_login_success (pong.tests.tests.LoginApiTests.test_login_success) ... ok
 test_login_user_not_found (pong.tests.tests.LoginApiTests.test_login_user_not_found) ... ok
+test_logout_success (pong.tests.tests.LogoutApiTests.test_logout_success) ... ok
+test_invalid_score_format (pong.tests.tests.SaveGameResultTests.test_invalid_score_format) ... ok
+test_missing_required_fields (pong.tests.tests.SaveGameResultTests.test_missing_required_fields) ... ok
+test_valid_game_result_submission (pong.tests.tests.SaveGameResultTests.test_valid_game_result_submission) ... ok
 test_signup_duplicate_username (pong.tests.tests.SignupApiTests.test_signup_duplicate_username) ... ok
 test_signup_empty_request (pong.tests.tests.SignupApiTests.test_signup_empty_request) ... ok
 test_signup_missing_password (pong.tests.tests.SignupApiTests.test_signup_missing_password) ... ok
@@ -68,39 +72,43 @@ test_get_user_info_unauthenticated (pong.tests.tests.UserInfoTests.test_get_user
 test_get_user_info_user_not_found (pong.tests.tests.UserInfoTests.test_get_user_info_user_not_found) ... ok
 
 ----------------------------------------------------------------------
-Ran 23 tests in 35.731s
+Ran 34 tests in 37.402s
 
 OK
-curl -X POST http://127.0.0.1:8000/signup -H "Content-Type: application/json" -d '{"username": "alex", "password": "Pass1234!9999", "email": "testalex@mail.com"}'
 
-curl -X PATCH http://127.0.0.1:8000/change_password/ Content-Type: application/json {'old_password': 'wrongpassword', 'new_password': 'newpassword456'}
 
-curl -X GET http://localhost:8000/get_friends/ -H "Content-Type: application/json" -H "Authorization: Token 7fd95b26d7f0c116e424b12ebd2ccf2554b2692f"
 
-----Add friend---------
-curl -X POST http://localhost:8000/add_friend/ -H "Content-Type: application/json" -H "Authorization: Token 7fd95b26d7f0c116e424b12ebd2ccf2554b2692f" -d '{"username_to_add": "elina"}'
+curl -k -X PATCH https://localhost/api/change_password/ Content-Type: application/json {'old_password': 'wrongpassword', 'new_password': 'newpassword456'}
+
+curl -k -X GET https://localhost/api/get_friends/ -H "Content-Type: application/json" -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b"
+
+----------------Add friend-----------------------
+curl -k -X POST https://localhost/api/add_friend/ -H "Content-Type: application/json" -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b" -d '{"username_to_add": "elina"}'
 
 {"detail":"Friend added successfully.","friend":{"id":3,"username":"elina","email":"elina@example.com","online":false,"language":"fr","profile_picture":"/media/profile_pictures/default.jpg"}} / {"detail":"You are already friends with this user."} / {"detail":"You cannot add yourself as a friend."} / {"detail":"No CustomUser matches the given query."}
 
-------------------------
+----------------Remove friend---------------------
 
-curl -X POST http://localhost:8000/remove_friend/ -H "Content-Type: application/json" -H "Authorization: Token 7fd95b26d7f0c116e424b12ebd2ccf2554b2692f" -d '{"username_to_remove": "elina"}'
+curl -k -X POST https://localhost/api/remove_friend/ -H "Content-Type: application/json" -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b" -d '{"username_to_remove": "elina"}'
 
-curl -X GET http://localhost:8000/player/stats/ \
--H "Authorization: Token 1f7755b7392c8f70a50a0a99be363edff8b416e4"
+-----------------Change language------------------
 
-curl -X GET http://localhost:8000/player/stats/all/ -H "Authorization: Token 1f7755b7392c8f70a50a0a99be363edff8b416e4"
-
-
-curl -X POST http://localhost:8000/game/result/ -H "Authorization: Token 1f7755b7392c8f70a50a0a99be363edff8b416e4" -H "Content-Type: application/json" -d '{"opponent_username": "elina", "is_ai": false, "score": [5, 2] }'
-
-
-curl -X POST http://localhost:8000/game/result/ -H "Authorization: Token 1f7755b7392c8f70a50a0a99be363edff8b416e4" -H "Content-Type: application/json" -d '{"opponent_username": "computer", "is_ai": true, "score": [5, 2] }'
-
-----Change language---------
-
-curl -X PATCH http://localhost:8000/change_language/ -H "Authorization: Token cc237650a8591835493dce0984299fec780eeda4" -H "Content-Type: application/json" -d '{"language": "fr"}' 
+curl -k -X PATCH https://localhost/api/change_language/ -H "Authorization: Token cc237650a8591835493dce0984299fec780eeda4" -H "Content-Type: application/json" -d '{"language": "fr"}' 
 
 {"detail":"Language changed successfully."} / {"error":"Language is required."} / {"error":"Unsupported language."}
-----------------------------
 
+------------------Save game result------------------
+
+curl -k -X POST https://localhost/api/game/result/ -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b" -H "Content-Type: application/json" -d '{"opponent_username": "melina", "is_ai": false, "score": [5, 2], "game_duration": "00:00:01", "progression": [0,0,0,0,0,1,1]}'
+
+------------------Get game results for the user---
+curl -k -X GET https://localhost/api/player/stats/anna/ -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b"
+
+---------------------logout------------------------------
+curl -k -X POST https://localhost/api/logout/ -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b" -H "Content-Type: application/json" -d '{"username": "anna"}' 
+
+-----------------Change username-------------------------
+
+curl -k -X PATCH https://localhost/api/change_username/ -H "Authorization: Token 541a7cf4d6c9ca416702629292f6d336a448ce6e" -H "Content-Type: application/json" -d '{"new_username": "ana"}' 
+
+{"detail":"Username changed successfully."}/{"error":"Username already taken."}/{"error":"New username is required."}

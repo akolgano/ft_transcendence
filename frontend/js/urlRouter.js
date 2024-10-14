@@ -8,7 +8,7 @@
 
 // ---------------------------------------- TRANSLATOR ----------------------------------------
 
-let siteLanguage = "fr"
+let siteLanguage = "en"
 let last_page = "/"
 
 var translator = new Translator({
@@ -37,6 +37,9 @@ function registerLanguageToggle() {
 		siteLanguage = event.target.getAttribute('data-language');
 		console.log("Translating page to: " + siteLanguage);
 		translator.translatePageTo(siteLanguage);
+		const placeholderUsername = document.getElementById("add-friend-input")
+		if (placeholderUsername)
+			placeholderUsername.placeholder = translator.translateForKey("auth.username", siteLanguage);
 		});
 	})
 }
@@ -72,11 +75,18 @@ const urlRoutes = {
 		scripts: ["../js/removeFriend.js", "../js/friends.js", "../js/addFriend.js"],
 		auth: true,
 	},
-	"/history": {
-		template: "static/history.html",
-		title: "History",
-		description: "Game history",
-		scripts: ["../js/history.js"],
+	"/profile": {
+		template: "static/profile.html",
+		title: "profile",
+		description: "Game profile",
+		scripts: ["../js/profile.js"],
+		auth: true,
+	},
+	"/profile/:username": {
+		template: "static/profile.html",
+		title: "profile",
+		description: "Game profile",
+		scripts: ["../js/profile.js"],
 		auth: true,
 	},
 	"/signup": {
@@ -97,7 +107,7 @@ const urlRoutes = {
 		template: "static/account.html",
 		title: "account",
 		description: "Your account",
-		scripts: ["../js/account.js", "../js/changePassword.js", "../js/changePicture.js", "../js/defaultLanguage.js"],
+		scripts: ["../js/account.js", "../js/changePassword.js", "../js/changePicture.js", "../js/defaultLanguage.js", "../js/changeUsername.js"],
 		auth: true,
 	},
 	"/dashboard": {
@@ -141,6 +151,20 @@ const addEventSpaLinks = (node) => {
 	})
 }
 
+function handleDynamicRoutes(location) {
+	let split_location = location.split("/");
+	if (split_location.length == 3 && split_location[1] == "profile")
+	{
+		let param = split_location[2];
+		let route = "/profile/:username";
+		console.log("Dynamic route");
+		console.log("Param: " + param);
+		return { "route": route, "param": param}
+	}
+	else
+		return null;
+}
+
 // Function that handles the url location
 const urlLocationHandler = async () => {
 
@@ -155,13 +179,24 @@ const urlLocationHandler = async () => {
 		location = "/";
 
 	// Not logged in and route needs authentication
-	if (localStorage.getItem("token") == null && urlRoutes[location].auth == true)
+	if (localStorage.getItem("token") == null && urlRoutes[location] && urlRoutes[location].auth == true)
 		location = "/login"
 
 	// Get the route, get the html, add it to the div
+	let dynamic = handleDynamicRoutes(location)
+	if (dynamic)
+		location = dynamic.route;
+
 	const route = urlRoutes[location] || urlRoutes["404"];
 	content = document.getElementById("content")
 	content.innerHTML = route.content;
+
+	if (dynamic)
+	{
+		let profileDiv = document.querySelector(".profile-page");
+		if (profileDiv)
+			profileDiv.setAttribute("data-username", dynamic.param);
+	}
 
 	// Translate only new content.
 	translateNewContent(content)

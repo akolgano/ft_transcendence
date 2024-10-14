@@ -22,10 +22,11 @@ const displayAlert = (key, type) => {
 		key = "error-fetch";
 	const content = document.querySelector("#content");
 	const alert = `<div class="alert alert-${type} alert-dismissible fade show position-absolute" role="alert">
-	${translator.translateForKey(key, siteLanguage)}
+	<span data-i18n="${key}"></span>
 	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>`
 	content.insertAdjacentHTML("beforebegin", alert);
+	translateNewContent(document.querySelector(".alert"));
 }
 
 const removeAlert = () => {
@@ -42,7 +43,7 @@ function checkPasswordMatch() {
 	{
 		const errorPassword = document.querySelector(".repeat-password-error");
 		let errorTag = document.createElement("p");
-		errorTag.innerHTML = "Passwords do not match";
+		errorTag.innerHTML = translator.translateForKey("auth.password-no-match", siteLanguage);
 		errorPassword.appendChild(errorTag);
 		return (false);
 	}
