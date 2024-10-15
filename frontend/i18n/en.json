@@ -22,7 +22,8 @@
 		"start-tour": "Start Tournament",
 		"back-tour-select": "Back to Tournament Selection",
 		"tour-header": "THE 42 PONG TOURNAMENT<br> The matches today are ...",
-		"tour-over": "Tournament Over!"
+		"tour-over": "Tournament Over!",
+		"wsm1vwsm2": "Winner Semi-Final 1<br>vs<br>Winner Semi-Final 2"
 	},	
 	"navbar" : {
 		"play": "Play",

@@ -5,23 +5,15 @@
     height: 100vh;
     margin: 0;
     background-color: #000;
-    color: #fff;
+    color: #aaa;
     font-family: Arial, sans-serif;
-}
-.game-options {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.game-options h1 {
-    text-align: center;
-    margin-bottom: 20px; /* Add some spacing after the heading */
 }
 .game-containerAI, .game-containerPP {
     display: none;
     flex-direction: column;
     align-items: center;
-    color: white;
+    color: #aaa;
+    position: relative; /* This will make the absolute positioning relative to this container */    
 }
 canvas {
     border: 2px solid #fff;
@@ -29,10 +21,10 @@ canvas {
 .game-over-modalAI, .game-over-modalPP {
     display: none;
     position: absolute;
-    top: 60%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(50, 50, 50, 0.8);
     color: #fff;
     padding: 20px;
     border-radius: 10px;
@@ -51,17 +43,19 @@ canvas {
     justify-content: space-between;
     width: 800px;
     margin-bottom: 10px;
-    color: white;
+    color: black;
     font-size: 20px;
     font-family: Arial, sans-serif;
 }
 .match-label {
     position: absolute;
-    top: 350px; /* Adjust this value as needed */
+    color: black;
+    top: -50px; /* Adjust this value as needed */
     left: 50%;
     transform: translateX(-50%);
     font-size: 24px;
     font-weight: bold;
     text-align: center;
     z-index: 1;
+    width: 100%; /* Ensure it spans the width for centering */    
 }

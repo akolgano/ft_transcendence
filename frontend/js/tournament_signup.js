@@ -1,5 +1,4 @@
 	function startTournament() {
-		document.getElementById('gameOptions').style.display = 'none';
 		// Hide the player name form
     	document.getElementById('playerNameForm').style.display = 'none';
 		document.getElementById('tourOptions').style.display = 'block';
@@ -61,3 +60,5 @@
 		alert('Please enter names for all players.');
 	    }
 	}
+
+	startTournament();

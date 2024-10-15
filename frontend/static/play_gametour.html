@@ -1,0 +1,90 @@
+<div id="gameContainerPP" class="game-containerPP text-center mt-5">
+    <!-- Match Label Display -->
+    <div id="matchLabel" class="match-label">Practice Match
+    </div>
+    <div class="player-tags">
+        <div id="player2Name">Player 2</div>
+        <div id="player1Name">Player 1</div>
+    </div>
+        <canvas id="pongGameCanvasPP"></canvas>
+    <div id="gameOverModalPP" class="game-over-modalPP">
+        <h1 data-i18n="play.game-over">Game Over!</h1>
+        <p>Winner: <span id="winner-name-pp"></span></p>
+        <button class="btn btn-success btn-lg me-3 mb-2"  
+                onclick="startPlayerVsPlayer('Player1', 'Player2')" 
+                data-i18n="play.restart">Restart</button>
+        <button id="retnMenubtn"
+                class="btn btn-warning btn-lg mb-2" 
+                data-i18n="play.back-menu">Return to Game Menu
+        </button>
+    </div>
+    <div id="gameOverModalTournament" class="game-over-modalPP">
+        <h1 data-i18n="play.game-over">Game Over!</h1>
+        <p>Winner: <span id="winner-name-ppt"></span></p>
+        <button class="btn btn-success btn-lg me-3 mb-2" 
+                onclick="updateTournamentBracket()" 
+                data-i18n="play.back-tournament">Return to Tournament Dashboard
+        </button>        
+    </div>
+</div>
+
+<!-- Tournament options to select 2 options via buttons -->    
+<div id="tourOptions" class ="tour-options text-center mt-5">
+	<h1 class="mb-4" data-i18n="tour.welcome">WELCOME TO<br>42 PONG TOURNAMENT<br><br>The matches today are ...</h1>
+	<button class="btn btn-primary btn-lg me-3 mb-2 px-5 py-3 fs-4"  
+            onclick="getPlayerName(4)" 
+            data-i18n="tour.tour-4P">Tournament - 4 Players
+    </button>
+	<button class="btn btn-success btn-lg me-3 mb-2 px-5 py-3 fs-4" 
+            onclick="getPlayerName(8)" 
+            data-i18n="tour.tour-8P">Tournament - 8 Players
+    </button><br>
+	<div class="center-button mt-3">
+        <button id="retnMenubtn1"
+                class="btn btn-warning btn-lg me-3 mb-2 px-5 py-3 fs-4"
+                onclick="btnUrlRoute('/play')"
+                data-i18n="play.back-menu">Return to Game Menu
+        </button>
+    </div>
+</div>
+
+<!-- Player Name Form -->
+<div id="playerNameForm" class="player-name-form mt-5" style="display:none;">
+    <h1 class="text-center"data-i18n="tour.enter-names">Please enter name of players<br><br></h1>
+    <form id="playerForm" class="text-center">
+	<!-- Dynamic Player Name Inputs will go here -->
+    </form>
+    <div class="d-flex justify-content-center mt-3">
+	    <button class="btn btn-success btn-lg me-3 mb-2" 
+                onclick="finalisePlayer()"
+                data-i18n="tour.start-tour">Start Tournament
+        </button>
+	    <button class="btn btn-warning btn-lg mb-2" 
+                onclick="startTournament()" 
+                data-i18n="tour.back-tour-select">Back to Tournament Selection
+        </button>
+    </div>    
+</div>
+
+<!-- Tournament Match Diagram and Buttons -->
+<div id="tournamentContainer" class="tournament-container mt-5" style="display: none;">
+	<h1 class="text-center" data-i18n="tour.tour-header">WELCOME TO<br>42 PONG TOURNAMENT<br><br>The matches today are ...</h1>
+	<div id="tournamentBracket" class="tournament-bracket text-center">
+    	<!-- Matches will be populated here dynamically -->
+	</div>
+    <div class="text-center mt-4">
+	    <button id="nextMatchButton" 
+               onclick="startNextMatch()" 
+               style="display: none;">Start Match 1
+        </button>
+    </div>   
+    <div id="tournamentOverModal" class="tournament-over-modal">
+        <h1 data-i18n="tour.tour-over"></h1>
+        <p>Tournament Champion: <span id="winner-name-tour"></span></p>
+        <button id="retnMenubtn2"
+                class="btn btn-warning btn-lg mb-2"
+                onclick="btnUrlRoute('/play')"
+                data-i18n="play.back-menu">Return to Game Menu
+        </button>
+    </div>  
+</div>

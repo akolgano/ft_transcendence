@@ -1,6 +1,3 @@
-let matchIndex = 0;
-let winners = [];
-let tournamentMatches = [];
 
 function startTournamentSequence(playerNames) {
     console.log('Tournament Sequence started:', playerNames);
@@ -55,12 +52,12 @@ function updateTournamentBracket() {
         bracket += `
             <br><br>
             <div class='match-box'>
-                <div class='match-title'>Semi-Final 1: <br>Winner Match 1 <br>vs<br> Winner Match 2</div>
+                <div class='match-title'>Semi-Final 1: <br>Winner Match 1 vs Winner Match 2</div>
                 <div class='winner-placeholder'>Winner: <span id='winnerSemi1'></span></div>
             </div>
-            <br>           
+            <br><br><br><br>            
             <div class='match-box'>
-                <div class='match-title'>Semi-Final 2: <br>Winner Match 3 <br>vs<br> Winner Match 4</div>
+                <div class='match-title'>Semi-Final 2: <br>Winner Match 3 vs Winner Match 4</div>
                 <div class='winner-placeholder'>Winner: <span id='winnerSemi2'></span></div>
             </div>
         `;
@@ -71,8 +68,8 @@ function updateTournamentBracket() {
         bracket += `
             <br><br><br><br><br><br><br>
             <div class='match-box'>
-                <div class='match-title'>Winner<br>Semi-Final 1<br>vs<br>Winner<br>Semi-Final 2</div>
-                <div class='winner-placeholder'>Winner: <span id='winnerFinal'></span></div>
+                <div class='match-title' data-i18n="tour.wsm1vwsm2"></div>
+                <div class='winner-placeholder' data-i18n="play.winner">Winner: <span id='winnerFinal'></span></div>
             </div>
         `;
         bracket += "</div>"; // Close final
@@ -81,10 +78,6 @@ function updateTournamentBracket() {
         document.getElementById("nextMatchButton").innerText = `Start Match ${matchIndex + 1}`;
         document.getElementById("matchLabel").textContent = `Quarter-Final Match ${matchIndex + 1}`;
         console.log(document.getElementById("matchLabel").textContent);
-        // }
-        // if (matchIndex > 0) {
-        // document.getElementById(`winner-qf${matchIndex}`).textContent = `${winner}`;
-        // console.log(document.getElementById(`winner-qf${matchIndex}`).textContent);        
         } else if (matchIndex === 4) {
         document.getElementById("nextMatchButton").innerText = `Proceed to Semi-Final`;           
         }
@@ -98,7 +91,7 @@ function updateTournamentBracket() {
             let winnerText = winners[index] ? winners[index] : ""; // Set to "TBD" if winner is undefined
             bracket += `
                 <div class='match-box'>
-                    <div class='match-title'>Semi-Final ${index + 1} <br>${match[0]} vs ${match[1]}</div>
+                    <div class='match-title'>Semi-Final ${index + 1}: <br>${match[0]} vs ${match[1]}</div>
                     <div class='winner-placeholder'>Winner: ${winnerText}</div>
                 </div>
             `;
@@ -110,7 +103,7 @@ function updateTournamentBracket() {
             bracket += `
                 <br>
                 <div class='match-box'>
-                    <div class='match-title'>Winner<br>Semi-Final 1<br>vs<br>Winner<br>Semi-Final 2</div>
+                    <div class='match-title'>Winner Semi-Final 1<br>vs<br>Winner Semi-Final 2</div>
                     <div class='winner-placeholder'>Winner: <span id='winnerFinal'></span></div>
                 </div>
             `;
@@ -157,7 +150,7 @@ function startNextMatch() {
         let ply1 = match[0];
         let ply2 = match[1];
         // Call PvP mode, passing the current players
-        startPvPtour(ply1, ply2);
+        startPvP(ply1, ply2);
     } else if (winners.length > 1) {
         // print current round winners before moving to next round
         
@@ -185,7 +178,7 @@ function showTournamentOverModal() {
         tournamentMode = false;
     }
 
-async function startPvPtour(ply1, ply2) {
+async function startPvP(ply1, ply2) {
     // This function should start a PvP match between the two players
     console.log(`Starting match between ${ply1} and ${ply2}`);
     document.getElementById("tournamentContainer").style.display = "none";    

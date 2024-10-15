@@ -8,11 +8,11 @@
 
 // ---------------------------------------- TRANSLATOR ----------------------------------------
 
-let siteLanguage = "fr"
+let siteLanguage = "en"
 let last_page = "/"
 
 var translator = new Translator({
-	defaultLanguage: "fr",
+	defaultLanguage: "en",
 	detectLanguage: false,
 	selector: "[data-i18n]",
 	debug: true,
@@ -58,16 +58,37 @@ const urlRoutes = {
 		template: "static/play.html",
 		title: "Home",
 		description: "Home page",
-		scripts: ["../js/pong_game.js", "../js/tournament_signup.js", "../js/tournament_match.js"],
+		scripts: ["../js/gameOption.js"],
 		auth: true,
 	},
 	"/play": {
 		template: "static/play.html",
-		title: "Game",
+		title: "Game Option",
 		description: "Game page",
-		scripts: ["../js/pong_game.js", "../js/tournament_signup.js", "../js/tournament_match.js"],
+		scripts: ["../js/gameOption.js"],
 		auth: true,
 	},
+	"/play_gamePvP": {
+		template: "static/play_gamePvP.html",
+		title: "Game PvP",
+		description: "Game PvP page",
+		scripts: ["../js/pong_game.js", "../js/gameOverOption.js"],
+		auth: true,
+	},		
+	"/play_gamePvAI": {
+		template: "static/play_gamePvAI.html",
+		title: "Game PvAI",
+		description: "Game PvAI page",
+		scripts: ["../js/pong_gameAI.js", "../js/gameOverOption.js"],
+		auth: true,
+	},			
+	"/play_gametour": {
+		template: "static/play_gametour.html",
+		title: "Game Tournament",
+		description: "Game Tournament page",
+		scripts: ["../js/pong_gameTour.js", "../js/tourOption.js", "../js/tournament_signup.js", "../js/tournament_match.js"],
+		auth: true,	
+	},	
 	"/friends": {
 		template: "static/friends.html",
 		title: "Friends",
@@ -133,6 +154,12 @@ function spaHandler(e) {
 const urlRoute = (event) => {
 	window.history.pushState({}, "", event.target.href);
 	urlLocationHandler();
+};
+
+const btnUrlRoute = (url) => {
+    // Push the new state to the history without reloading the page
+    window.history.pushState({}, "", url);
+    urlLocationHandler(); // Call the routing handler
 };
 
 const translateNewContent = (node) => {
@@ -209,6 +236,7 @@ const urlLocationHandler = async () => {
 	document
 	.querySelector('meta[name="description"]')
 	.setAttribute("content", route.description);
+
 };
 
 const addScripts = (scripts) => {

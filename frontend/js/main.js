@@ -1,3 +1,36 @@
+//Pong Game Global variables
+        let ball, player1, player2, playerAI;
+        let players = [], currentRound = 0, tournamentMode = false;  // Declare for tournament
+        const canvasTournament = document.getElementById('pongGameCanvasTournament');
+        let ctxTournament;
+    
+        const canvasAI = document.getElementById('pongGameCanvasAI');
+	const canvasPP = document.getElementById('pongGameCanvasPP');
+	
+	let activeCanvas;
+        let ctx;
+        
+        let wPressed = false;
+        let sPressed = false;
+        let ArrowUpPressed = false;
+        let ArrowDownPressed = false; 
+
+        let gameOver = false;
+        let isPaused = false;
+        let readyKickoff = false;      
+        let winner = '';
+        let gameLoopId = null;
+
+	let isPlayerAI = false;
+	let lastUpdateTime = 0;
+	let updateInterval = 1000;  // AI "sees" the ball every 1 second
+	let predictedY = 200;  // Initialize with the center position
+
+	// global variables tournament match
+	let matchIndex = 0;
+	let winners = [];
+	let tournamentMatches = [];
+
 const togglePassword = (event) => {
 	event.preventDefault()
 

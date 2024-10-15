@@ -1,15 +1,4 @@
 console.log("PONG GAME SCRIPT");
-   
-	// Function to show game options
-	function showGameOptions() {
-	document.getElementById('gameOptions').style.display = 'flex';
-	document.getElementById('tourOptions').style.display = 'none';		
-	document.getElementById('gameContainerAI').style.display = 'none';
-	document.getElementById('gameContainerPP').style.display = 'none';
-	document.getElementById('tournamentContainer').style.display = 'none';
-	document.getElementById('tournamentOverModal').style.display = 'none';
-	tournamentMode = false;	
-	}
 
 	function setActiveCanvas(canvasId) {
 		activeCanvas = document.getElementById(canvasId);  // Assign the active canvas
@@ -45,6 +34,7 @@ console.log("PONG GAME SCRIPT");
 	async function startPvPpractice() {
 	    // This function should start a PvP match between the two players
 	    console.log(`Starting practice match between Player1 and Player2`);
+	    document.getElementById("tournamentContainer").style.display = "none";
 	    document.getElementById('gameOverModalTournament').style.display = 'none';
 	    tournamentMode = false;
 	    gameOver = true;
@@ -54,7 +44,6 @@ console.log("PONG GAME SCRIPT");
 
     // Function to start Player vs Player game
 	function startPlayerVsPlayer(p1, p2) {
-		// document.getElementById('gameOptions').style.display = 'none';
 		document.getElementById('gameContainerPP').style.display = 'flex';
 		setActiveCanvas('pongGameCanvasPP');  // Use the Player vs Player canvas
 		ctx = activeCanvas.getContext('2d');           
@@ -123,71 +112,6 @@ console.log("PONG GAME SCRIPT");
 		countdownToStart(3);
 	}
 
-    // Function to start Player vs AI game
-    function startPlayerVsAI() {
-	    tournamentMode = false;
-	    gameOver = true;    	
-		cancelAnimationFrame(gameLoopId); // Stop the existing game loop    	
-		document.getElementById('gameOptions').style.display = 'none';
-		document.getElementById('gameContainerAI').style.display = 'flex';
-		setActiveCanvas('pongGameCanvasAI');  // Use the Player vs AI canvas
-		ctx = activeCanvas.getContext('2d');
-
-		document.getElementById('gameOverModalAI').style.display = 'none';
-		console.log("Initializing Player vs AI game");
-		const gameOverModal = document.querySelector('.game-over-modalAI');                
-		gameOverModal.style.display = 'none'; // Hide modal
-
-		wPressed = false;
-		sPressed = false;
-		ArrowUpPressed = false;
-		ArrowDownPressed = false; 
-		isPlayerAI = true;
-
-		gameOver = false;
-		isPaused = false;
-		readyKickoff = false;      
-		winner = '';
-		gameLoopId = null;
-
-		lastUpdateTime = 0;
-		updateInterval = 1000;  // AI "sees" the ball every 1 second
-		predictedY = activeCanvas.height / 2;
-
-		ball = {
-			x: activeCanvas.width / 2,
-			y: activeCanvas.height / 2,
-			radius: 10,
-			velocityX: 5,
-			velocityY: 5,
-			speed: 5,
-			color: "#FFF"
-		};
-
-		playerAI = {
-			x: 3,
-			y: (activeCanvas.height - 100) / 2,
-			width: 15,
-			height: 100,
-			score: 0,
-			color: "#EEE"
-		};
-
-		player1 = {
-			x: activeCanvas.width - 18,
-			y: (activeCanvas.height - 100) / 2,
-			width: 15,
-			height: 100,
-			score: 0,
-			color: "#EEE"
-		};
-
-		document.addEventListener('keydown', keyDownHandler);
-		document.addEventListener('keyup', keyUpHandler);
-
-		countdownToStart(3);
-		}
-//
     function keyDownHandler(event) {
       switch(event.key) {
 	case 'p':
@@ -470,5 +394,3 @@ function isContact(ball, paddle) {
 		}
 		gameLoopId = requestAnimationFrame(gameLoop);
 	}
-	
-startPvPpractice();

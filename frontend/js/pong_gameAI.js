@@ -1,5 +1,5 @@
 console.log("PONG GAME SCRIPT");
-   
+	    
 	// Function to show game options
 	function showGameOptions() {
 	document.getElementById('gameOptions').style.display = 'flex';
@@ -45,6 +45,7 @@ console.log("PONG GAME SCRIPT");
 	async function startPvPpractice() {
 	    // This function should start a PvP match between the two players
 	    console.log(`Starting practice match between Player1 and Player2`);
+	    document.getElementById("tournamentContainer").style.display = "none";
 	    document.getElementById('gameOverModalTournament').style.display = 'none';
 	    tournamentMode = false;
 	    gameOver = true;
@@ -128,7 +129,6 @@ console.log("PONG GAME SCRIPT");
 	    tournamentMode = false;
 	    gameOver = true;    	
 		cancelAnimationFrame(gameLoopId); // Stop the existing game loop    	
-		document.getElementById('gameOptions').style.display = 'none';
 		document.getElementById('gameContainerAI').style.display = 'flex';
 		setActiveCanvas('pongGameCanvasAI');  // Use the Player vs AI canvas
 		ctx = activeCanvas.getContext('2d');
@@ -170,7 +170,7 @@ console.log("PONG GAME SCRIPT");
 			width: 15,
 			height: 100,
 			score: 0,
-			color: "#EEE"
+			color: "#0EE"
 		};
 
 		player1 = {
@@ -179,7 +179,7 @@ console.log("PONG GAME SCRIPT");
 			width: 15,
 			height: 100,
 			score: 0,
-			color: "#EEE"
+			color: "#0EE"
 		};
 
 		document.addEventListener('keydown', keyDownHandler);
@@ -471,4 +471,4 @@ function isContact(ball, paddle) {
 		gameLoopId = requestAnimationFrame(gameLoop);
 	}
 	
-startPvPpractice();
+startPlayerVsAI();

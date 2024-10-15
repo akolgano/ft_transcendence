@@ -21,8 +21,9 @@
 		"enter-names": "Enter Jouers Names",
 		"start-tour": "Start Tornimen",
 		"back-tour-select": "Back to Tornimen Selection",
-		"tour-header": "DE 42 PONG TORNIMEN<br> The matches today are ...",
-		"tour-over": "Tornimen Over!"
+		"tour-header": "DE 42 PONG TORNIMEN<br> De matches today are ...",
+		"tour-over": "Tornimen Over!",
+		"wsm1vwsm2": "Jualan Semi-Finale 1<br>vs<br>Jualan Semi-Finale 2"
 	},		
 	"navbar" : {
 		"play": "Jouer",
