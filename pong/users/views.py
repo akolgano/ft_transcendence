@@ -45,24 +45,19 @@ def logout(request):
 @api_view(['POST'])
 def signup(request):
     serializer = UserSerializer(data=request.data)
+
     if serializer.is_valid():
-        email = request.data.get('email')
-        if User.objects.filter(email=email).exists():
-            return Response({"error": "Email already taken."}, status=status.HTTP_400_BAD_REQUEST)
-        password = request.data.get('password')
-        if not password:
-            return Response({"error": "Password is required."}, status=status.HTTP_400_BAD_REQUEST)
-        try:
-            validate_password(request.data['password'])
-        except ValidationError as e:
-            return Response({"error": e.messages}, status=status.HTTP_400_BAD_REQUEST)
-        serializer.save()
-        user = User.objects.get(username=request.data['username'])
-        user.set_password(request.data['password']) #hash pass with this function
-        user.save()
+        user = serializer.save()
+        
         PlayerStats.objects.create(user=user)
         token = Token.objects.create(user=user)
-        return Response({'token': token.key, 'user': serializer.data}, status=status.HTTP_201_CREATED)
+        
+        response_data = {
+            'token': token.key,
+            'user': serializer.data
+        }
+        return Response(response_data, status=status.HTTP_201_CREATED)
+
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
