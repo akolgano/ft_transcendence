@@ -1,7 +1,9 @@
 # created by virtualenv automatically
 *.pyc
+*.swp
 __pycache__/
 /bin/
 /lib/
-/pong/ssl
 /logs/
+django.log
+.vscode/

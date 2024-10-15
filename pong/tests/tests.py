@@ -62,6 +62,24 @@ class LoginApiTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 @override_settings(SECURE_SSL_REDIRECT=False)
+class LogoutApiTests(APITestCase):
+
+    def setUp(self):
+        self.user = CustomUser.objects.create_user(username='testuser', password='testpassword', email = 'dummy')
+        self.token, created = Token.objects.get_or_create(user=self.user)
+
+    def test_logout_success(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/api/logout/', {
+            'username': 'testuser'
+        }, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('logout successfully', response.data)
+        response = self.client.get('/api/change_language/', format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertIn('detail', response.data) 
+
+@override_settings(SECURE_SSL_REDIRECT=False)
 class SignupApiTests(APITestCase):
     
     def setUp(self):
@@ -363,11 +381,13 @@ class LanguageTestCases(APITestCase):
 
 @override_settings(SECURE_SSL_REDIRECT=False)
 class SaveGameResultTests(APITestCase):
+    """
+    Tests api/game/result/
+    """
 
     def setUp(self):
         self.client = APIClient()
         self.user = CustomUser.objects.create_user(username='user1', password='testpass', email = 'dummy1')
-        self.opponent = CustomUser.objects.create_user(username='opponent1', password='testpass', email = 'dummy2')
         self.token = Token.objects.create(user=self.user)
 
     def test_valid_game_result_submission(self):
@@ -375,28 +395,22 @@ class SaveGameResultTests(APITestCase):
         response = self.client.post('/api/game/result/', {
             'opponent_username': 'opponent1',
             'is_ai': False,
-            'score': [3, 1]
+            'score': [5, 1],
+            'progression': [0,0,0,0,0,1,1],
+            'game_duration': '00:00:01', 
         }, format='json')
         self.assertEqual(response.status_code, 201)
         self.assertEqual(GameResult.objects.count(), 1)
         self.assertEqual(PlayerStats.objects.get(user=self.user).victories, 1)
-        self.assertEqual(PlayerStats.objects.get(user=self.opponent).losses, 1)
-
-    def test_opponent_not_found(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.post('/api/game/result/', {
-            'opponent_username': 'unknown_user',
-            'is_ai': False,
-            'score': [2, 2]
-        }, format='json')
-        self.assertEqual(response.status_code, 404)
 
     def test_invalid_score_format(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         response = self.client.post('/api/game/result/', {
             'opponent_username': 'opponent1',
             'is_ai': False,
-            'score': 'invalid_score'
+            'score': 'invalid_score',
+            'progression': [0,0,0,0,0,1,1],
+            'game_duration': '00:00:01', 
         }, format='json')
         self.assertEqual(response.status_code, 400)
 
@@ -408,23 +422,11 @@ class SaveGameResultTests(APITestCase):
         }, format='json')
         self.assertEqual(response.status_code, 400)
 
-    def test_score_tie_scenario(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.post('/api/game/result/', {
-            'opponent_username': 'opponent1',
-            'is_ai': False,
-            'score': [2, 2]
-        }, format='json')
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(PlayerStats.objects.get(user=self.user).victories, 0)
-        self.assertEqual(PlayerStats.objects.get(user=self.opponent).victories, 0)
-
 @override_settings(SECURE_SSL_REDIRECT=False)
 class GetGameResultTests(APITestCase):
 
     def setUp(self):
         self.user = CustomUser.objects.create_user(username='user1', password='testpass', email = 'dummy1')
-        self.opponent = CustomUser.objects.create_user(username='opponent1', password='testpass', email = 'dummy2')
         self.token = Token.objects.create(user=self.user)
 
     def test_valid_user_stats_retrieval(self):
@@ -432,10 +434,12 @@ class GetGameResultTests(APITestCase):
         response = self.client.post('/api/game/result/', {
             'opponent_username': 'opponent1',
             'is_ai': False,
-            'score': [3, 1]
+            'score': [5, 1],
+            'progression': [0,0,0,0,0,1,1],
+            'game_duration': '00:00:01', 
         }, format='json')
         self.assertEqual(response.status_code, 201)
-        response = self.client.get('/api/player/stats/')
+        response = self.client.get('/api/player/stats/user1/')
         self.assertEqual(response.status_code, 200)
         self.assertTrue('username' in response.data)
         self.assertTrue('victories' in response.data)
@@ -443,35 +447,8 @@ class GetGameResultTests(APITestCase):
 
     def test_user_stats_not_found(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.get('/api/player/stats/')
+        response = self.client.get('/api/player/stats/nonexistentuser/')
         self.assertEqual(response.status_code, 404)
-
-@override_settings(SECURE_SSL_REDIRECT=False)
-class AllPlayerStatsTests(APITestCase):
-
-    def setUp(self):
-        self.user = CustomUser.objects.create_user(username='user1', password='testpass', email = 'dummy1')
-        self.opponent = CustomUser.objects.create_user(username='opponent1', email = 'dummy2', password='testpass')
-        self.token = Token.objects.create(user=self.user)
-        self.url = '/api/player/stats/all/'
-
-    def test_get_all_player_stats(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.post('/api/game/result/', {
-            'opponent_username': 'opponent1',
-            'is_ai': False,
-            'score': [3, 1]
-        }, format='json')
-        self.assertEqual(response.status_code, 201)
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        self.assertIsInstance(response.data, list)
-
-    def test_no_player_stats_available(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, [])
 
 @override_settings(SECURE_SSL_REDIRECT=False)
 class ChangeLanguageTests(APITestCase):
@@ -503,3 +480,31 @@ class ChangeLanguageTests(APITestCase):
         })
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data, {"error": "Unsupported language."})
+
+
+@override_settings(SECURE_SSL_REDIRECT=False)
+class ChangeUsernameTests(APITestCase):
+
+    def setUp(self):
+        self.user = CustomUser.objects.create_user(username='user1', email = 'dummy', password='testpass', language ='en')
+        self.user1 = CustomUser.objects.create_user(username='user2', email = 'dummy1', password='testpass', language ='en')
+        self.token = Token.objects.create(user=self.user)
+
+    def test_change_username_success(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.patch('/api/change_username/', {
+            'new_username': 'new_username',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {"detail": "Username changed successfully."})
+        response = self.client.get('/api/get_user_info/')
+        self.assertEqual(response.data['username'], 'new_username')
+
+
+    def test_change_username_username_taken(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.patch('/api/change_username/', {
+            'new_username': 'user2',
+        })
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, {"error": "Username already taken."})

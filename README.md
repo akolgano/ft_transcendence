@@ -9,11 +9,8 @@ docker-compose build --no-cache
 docker-compose up
 ```
 
-The Makefile is currently not working
-
 ## Migrations
 
-You dont need to run migrations after docker-compose anymore. Django will pick it up during docker-compose up.
 ```
 docker exec -it django python3 manage.py makemigrations
 docker exec -it django python3 manage.py migrate
@@ -24,10 +21,10 @@ If there were any migrations, you have to stop the container (CONTROL-C) and sta
 ## Frontend
 
 ```
-Just go to https://localhost (you dont need to run server anymore)
+Just go to https://localhost
 ```
 
-Example: https://localhost/login will work now
+Example: https://localhost/login
 
 ## Check the database for tests
 

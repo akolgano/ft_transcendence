@@ -28,7 +28,7 @@ function addFriendToHTML(user) {
 					<img src="http://localhost:8000${user.profile_picture}" alt="avatar" class="rounded-circle border-1 avatar-mini object-fit-cover">
 					<a class="mb-0 px-2" href="/" id ="friend-username">${user.username}</a>
 				</div>
-				<p class="mb-0">Level 3</p>
+				<div><span class="mb-0" data-i18n="friends.level"></span><span class="mb-0">3</span></div>
 			</div>
 		</div>
 
@@ -44,7 +44,7 @@ function addFriendToHTML(user) {
 
 	const newFriendCard = document.querySelector(`.friend-card[data-username="${user.username}"]`);
 	translateNewContent(newFriendCard);
-	document.getElementById("add-friend").value = "";
+	document.getElementById("add-friend-input").value = "";
 }
 
 function addFriendEvent() {
