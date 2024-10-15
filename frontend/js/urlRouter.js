@@ -26,7 +26,13 @@ async function fetchCSRFToken() {
 		if (response.ok)
 		{
 			document.querySelector('meta[name="csrf-token"]').setAttribute('content', data.csrfToken);
+			console.log("CSRFToken: " + data.csrfToken )
+			console.log("Data: " + JSON.stringify(data))
 			CSRFToken = data.csrfToken
+			console.log("CSRFToken: " + CSRFToken )
+		}
+		else {
+			console.log("error response NOK")
 		}
 	} else {
 		data = await response.text();
