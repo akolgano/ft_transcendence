@@ -9,13 +9,29 @@ from pong.users.models import CustomUser, PlayerStats
 
 sample_data = [
     ('computer', 'computer@example.com', 'password', False, 'en', 'profile_pictures/default.jpg'),
-    ('elina', 'elina@example.com', 'password', False, 'fr', '/profile_pictures/default.jpg'),
+    ('elina', 'elina@example.com', 'password', False, 'fr', 'profile_pictures/default.jpg'),
     ('emily', 'emily@example.com', 'password', False, 'es', 'profile_pictures/default.jpg'),
-    ('alice', 'alice@example.com', 'password', False, 'es', '/profile_pictures/default.jpg'),
-    ('alex', 'alex@example.com', 'password', False, 'es', '/profile_pictures/default.jpg'),
+    ('alice', 'alice@example.com', 'password', False, 'es', 'profile_pictures/default.jpg'),
+    ('alex', 'alex@example.com', 'password', False, 'es', 'profile_pictures/redpanda.jpg'),
 ]
 
 def insert_sample_data():
+
+    admin_user = CustomUser.objects.filter(username='admin').first()
+    if admin_user:
+        player_stats, created_stats = PlayerStats.objects.get_or_create(
+            user=admin_user,
+            defaults={
+                'victories': 0,
+                'losses': 0,
+            }
+        )
+        if created_stats:
+            print("Inserted PlayerStats for admin.")
+        else:
+            print("PlayerStats already exists for admin.")
+    else:
+        print("Admin user not found!")
     for username, email, password, online, language, profile_picture in sample_data:
         try:
             user, created = CustomUser.objects.get_or_create(

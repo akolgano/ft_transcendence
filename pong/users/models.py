@@ -46,6 +46,15 @@ class CustomUser(AbstractUser):
         #return list(self.get_friends())
         return list(self.get_friends_initiated())
 
+    def save(self, *args, **kwargs):
+        if self.pk:
+            old_image = CustomUser.objects.get(pk=self.pk).profile_picture
+
+            if old_image and old_image.name != self.profile_picture.name and old_image.name != 'profile_pictures/default.jpg':
+                if os.path.isfile(old_image.path):
+                    os.remove(old_image.path)
+        super().save(*args, **kwargs)
+        
 class Friendship(models.Model):
     from_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='friendships_created', on_delete=models.CASCADE)
     to_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='friendships_received', on_delete=models.CASCADE)
