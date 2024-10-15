@@ -1,41 +1,45 @@
 // Dummy data for demonstration
 
-{
+//{
 
-
+/*
     const recent_games = [
     { date_time: '2024-10-02T17:00:00Z', end_time: '2024-10-02T17:04:30Z', score: [5, 1], progression: [[1, 0], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1]] },
     { date_time: '2024-10-02T17:05:00Z', end_time: '2024-10-02T17:08:10Z', score: [4, 5], progression: [[1, 0], [2, 0], [3, 0], [4, 0], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5]] },
     { date_time: '2024-10-02T17:09:00Z', end_time: '2024-10-02T17:14:50Z', score: [3, 5], progression: [[0, 1], [1, 1], [1, 2], [2, 2], [2, 3], [3, 3], [3, 4], [3, 5]] },
     { date_time: '2024-10-02T17:15:10Z', end_time: '2024-10-02T17:18:00Z', score: [5, 4], progression: [[1, 0], [1, 1], [2, 1], [3, 1], [3, 2], [3, 3], [4, 3], [4, 4], [5, 4]] }
     ]
-
+*/
 
 
 // Fetch user stats and game results from the API
 async function fetchDashboardData() {
     removeAlert(); //check
     try {
-        const response = await fetch("https://localhost/api/player/stats/", {
+        // Make a GET request to the API to fetch player stats
+        const response = await fetch(`https://localhost/api/player/stats/${JSON.parse(localStorage.getItem("user")).username}`, {
             headers: {
-                'Authorization': `Token ${localStorage.getItem("token")}`,
-                'Accept': 'application/json',
+                'Authorization': `Token ${localStorage.getItem("token")}`, // Use the stored token for authentication
+                'Accept': 'application/json', // Expect a JSON response
             },
             method: 'GET',
         });
 
-        let data;
+        let data; // Variable to hold the response data
         const contentType = response.headers.get('Content-Type');
+        // Check if the response is in JSON format
         if (contentType && contentType.includes('application/json')) {
-            data = await response.json();
+            data = await response.json(); // Parse JSON data
         } else {
-            data = await response.text();
+            data = await response.text(); // If not JSON, just get plain text
         }
 
+        // If the request failed (response not ok)
         if (!response.ok) {
             console.log("Error: " + JSON.stringify(data));
             throw new Error(JSON.stringify(data.detail) || 'An error occurred');
         }
+        // If data is received successfully
         if (data)
         {
             console.log("Dashboard data: " + JSON.stringify(data)); // dash log
@@ -69,7 +73,8 @@ function updateDashboard(data) {
     }
 
     // Prepare game result data for the chart
-    const gameResults = recent_games;
+    // const gameResults = recent_games;
+    const gameResults = data.game_results; // amended oct 15
     const labels = gameResults.map(result => {
         const date = new Date(result.date_time);
         return date.toLocaleDateString('en-GB', { timeZone: 'UTC' }) + ' ' + date.toLocaleTimeString('en-GB', { timeZone: 'UTC' });
@@ -92,6 +97,7 @@ function renderCharts(labels, playerScores, opponentScores, victories, losses, g
     renderIntensityChart(labels, gameResults);
     renderMarginPieChart(gameResults);
     
+    /*
     // Remove any previous score progression charts
     const progressionsContainer = document.getElementById('progressionsContainer');
     progressionsContainer.innerHTML = '';
@@ -108,6 +114,7 @@ function renderCharts(labels, playerScores, opponentScores, victories, losses, g
         
         progressionsContainer.appendChild(listItem);
     });
+    */
 }
 
 // Function to render the line chart (Player vs. Opponent scores)
@@ -209,10 +216,17 @@ function renderPieChart(chartId, labels, data, backgroundColors) {
 
 // Function to render the bar chart for game durations
 function renderBarChart(labels, gameResults) {
-    const gameDurations = gameResults.map(result => {
+    /*const gameDurations = gameResults.map(result => {
         const startTime = new Date(result.date_time);
         const endTime = new Date(result.end_time);
         return (endTime - startTime) / 60000;
+    });*/
+
+    const gameDurations = gameResults.map(result => {
+        const durationParts = result.game_duration.split(':'); // Split the "HH:MM:SS" format
+        const minutes = parseInt(durationParts[1]); // Extract the minutes
+        const seconds = parseInt(durationParts[2]); // Extract the seconds
+        return minutes + (seconds / 60); // Convert duration to minutes (fractional)
     });
 
     const ctxBar = document.getElementById('gameDurationChart').getContext('2d');
@@ -263,12 +277,21 @@ function renderBarChart(labels, gameResults) {
 
 // Function to render the bar chart for game intensity (Scores per minute)
 function renderIntensityChart(labels, gameResults) {
-    const gameIntensity = gameResults.map(result => {
+    /*const gameIntensity = gameResults.map(result => {
         const startTime = new Date(result.date_time);
         const endTime = new Date(result.end_time);
         const duration = (endTime - startTime) / 60000;
         const totalScore = result.score[0] + result.score[1];
         return totalScore / duration;
+    });*/
+
+    const gameIntensity = gameResults.map(result => {
+        const durationParts = result.game_duration.split(':'); // Split the "HH:MM:SS" format
+        const minutes = parseInt(durationParts[1]); // Extract the minutes
+        const seconds = parseInt(durationParts[2]); // Extract the seconds
+        const duration = minutes + (seconds / 60); // Convert duration to minutes (fractional)
+        const totalScore = result.score[0] + result.score[1]; // Calculate total score
+        return totalScore / duration; // Calculate intensity (points per minute)
     });
 
     const ctxIntensity = document.getElementById('gameIntensityChart').getContext('2d');
@@ -344,6 +367,7 @@ function renderMarginPieChart(gameResults) {
     ]);
 }
 
+/*
 // Function to open the modal and render the progression chart
 function openGameProgressionModal(scoreProgression, gameNumber) {
     const modal = new bootstrap.Modal(document.getElementById('gameProgressionModal'));
@@ -423,9 +447,9 @@ function renderScoreProgressionChart(scoreProgression, canvasId, gameNumber) {
         }
     });
 }
-
+*/
 
 // Call the fetchDashboardData function to get the data and render the charts
 fetchDashboardData();
 
-}
+//}

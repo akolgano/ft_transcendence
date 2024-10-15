@@ -44,26 +44,5 @@
     <h6 style="margin-left: 10px;" data-i18n="dash.large-margins"></h6>
     </div>
     <canvas id="gameMarginChart" class="w-100 mb-4"></canvas> <!-- Bootstrap width and margin-bottom -->
-
-    <!-- New section for score progression of all games -->
-    <h4 data-i18n="dash.game-progression"></h4> <!-- Label for new charts -->
-    <div id="progressionsContainer" class="w-100 mb-4"></div> <!-- New container to hold multiple progression charts -->
 </div>
 
-<!-- Bootstrap Modal to display score progression charts -->
-<div class="modal fade" id="gameProgressionModal" tabindex="-1" aria-labelledby="gameProgressionModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="gameProgressionModalLabel">Game Progression</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <canvas id="scoreProgressionChartModal" class="w-100 mb-4"></canvas> <!-- Canvas for dynamic chart -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>

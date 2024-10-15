@@ -1,22 +1,5 @@
 
-function formatDate(date) {
 
-	const utcDate = new Date(date)
-
-	const options = {
-		timeZone: 'Asia/Singapore',
-		day: '2-digit',
-		month: '2-digit',
-		year: 'numeric',
-		hour: '2-digit',
-		minute: '2-digit',
-		hour12: false
-	};
-
-	// Get the formatted date and time string
-	const formattedDate = utcDate.toLocaleString('en-GB', options);
-	return (formattedDate);
-}
 
 function addGameResults(game_results) {
 
