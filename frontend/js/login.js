@@ -58,7 +58,7 @@ async function login(e) {
 	}
 }
 
-const loginScript = () => {
+function loginScript () {
 	document.querySelectorAll(".toggle-password").forEach(node => {
 		node.addEventListener("click", togglePassword)
 	});

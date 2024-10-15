@@ -1,3 +1,5 @@
+let gameData = {};
+
 const togglePassword = (event) => {
 	event.preventDefault()
 
@@ -86,3 +88,9 @@ function resetErrorField() {
 		div.innerHTML = ""
 	});
 }
+
+const hasDuplicates = (arr) => arr.length !== new Set(arr).size;
+const SEMI1 = 1;
+const SEMI2 = 2;
+const MINIFINALS = 3;
+const FINALS = 4;

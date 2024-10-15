@@ -5,7 +5,8 @@
 		"language": "Idioma",
 		"friends": "Amigos",
 		"dashboard": "Tablero",
-		"welcome": "Hola, "
+		"welcome": "Hola, ",
+		"tournament": "Tournament"
 	},
 	"auth" : {
 		"username": "Nombre de usuario",
@@ -78,6 +79,7 @@
 	"game": {
 		"play": "Play 🏓",
 		"opponent-name": "Opponent's name",
+		"user-name": "Name for user",
 		"opponent": "opponent",
 		"opponent-name-error": "Opponent's name cannot be the same as the user"
 	},

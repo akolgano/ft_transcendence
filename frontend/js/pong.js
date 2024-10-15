@@ -92,7 +92,6 @@
 		context.fillRect(playerUser.x, playerUser.y, playerUser.width, playerUser.height)
 		context.fillRect(playerGuest.x, playerGuest.y, playerGuest.width, playerGuest.height)
 
-		// countdownToStart();
 		document.addEventListener("keyup", startGame)
 	}
 
