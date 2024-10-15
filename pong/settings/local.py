@@ -165,11 +165,9 @@ AUTH_USER_MODEL = 'users.CustomUser'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# CORS_ALLOWED_ORIGINS = [
-#     "https://localhost:3000",
-#     "http://localhost:3000",
-#     "https://localhost:443",
-# ]
+CORS_ALLOWED_ORIGINS = [
+    "https://localhost",
+]
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
@@ -188,7 +186,9 @@ APPEND_SLASH = True  # This is the default setting
 CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_HEADERS = [
-    "content-type",
+    'Content-Type',
+    'X-CSRFToken',
+    'Authorization',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -215,7 +215,7 @@ LOGGING = {
         },
         'file': {
             'class': 'logging.FileHandler',
-            'filename': 'django.log', 
+            'filename': 'django.log',
             'level': 'DEBUG',
         },
     },

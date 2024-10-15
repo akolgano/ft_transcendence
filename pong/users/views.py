@@ -20,11 +20,13 @@ from .models import GameResult, PlayerStats
 from .serializers import GameResultSerializer, PlayerStatsSerializer
 from rest_framework.views import APIView
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.middleware.csrf import get_token
+from django.http import JsonResponse
 User = get_user_model()
 
 @ensure_csrf_cookie
 def get_csrf_token(request):
-    csrf_token = request.META.get("CSRF_COOKIE")
+    csrf_token = get_token(request)
     if csrf_token:
         return JsonResponse({"csrfToken": csrf_token})
     else:

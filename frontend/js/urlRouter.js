@@ -14,36 +14,43 @@ let CSRFToken;
 
 
 async function fetchCSRFToken() {
-	const response = await fetch('https://localhost/csrf-token/', {
-		credentials: 'include'  // include cookies in the request
-	});
-	let data;
+	try {
+		const response = await fetch('https://localhost/api/csrf-token/', {
+			method: 'GET',
+			credentials: 'include',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
 
-	const contentType = response.headers.get('Content-Type');
-	if (contentType && contentType.includes('application/json')) {
-		data = await response.json();
-		// Set the CSRF token in the meta tag for future use
-		if (response.ok)
-		{
-			document.querySelector('meta[name="csrf-token"]').setAttribute('content', data.csrfToken);
-			console.log("CSRFToken: " + data.csrfToken )
-			console.log("Data: " + JSON.stringify(data))
-			CSRFToken = data.csrfToken
-			console.log("CSRFToken: " + CSRFToken )
+		let data;
+		const contentType = response.headers.get('Content-Type');
+		if (contentType && contentType.includes('application/json')) {
+			data = await response.json();
+			if (!response.ok) {
+				console.log("Error: " + JSON.stringify(data))
+				throw new Error('An error occurred');
+			}
+			if (data)
+			{
+				document.querySelector('meta[name="csrf-token"]').setAttribute('content', data.csrfToken);
+				CSRFToken = data.csrfToken
+				console.log("CSRFToken: " + CSRFToken )
+			}
+			else {
+				console.log("Error getting CSRF token")
+			}
 		}
 		else {
-			console.log("error response NOK")
+			data = await response.text();
+			throw new Error('An error occurred');
 		}
-	} else {
-		data = await response.text();
-		console.log("error: " + data);
+	} catch {
+		console.log("Error getting CSRF token");
 	}
 }
 
-
 fetchCSRFToken();
-console.log("CSRFToken: " + CSRFToken)
-
 
 var translator = new Translator({
 	defaultLanguage: "fr",

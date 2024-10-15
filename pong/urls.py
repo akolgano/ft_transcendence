@@ -10,7 +10,7 @@ from pong.users import views
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 urlpatterns = [
-	path('csrf-token/', views.get_csrf_token, name='csrf-token'),
+	path('api/csrf-token/', views.get_csrf_token, name='csrf-token'),
     path('api/admin/', admin.site.urls),
     re_path('api/login', views.login, name='login'),
     re_path('api/logout', views.logout, name='logout'),
