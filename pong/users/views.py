@@ -16,7 +16,7 @@ from django.core.exceptions import ValidationError
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound
-from .models import GameResult, PlayerStats
+from .models import GameResult, PlayerStats, TournamentResult
 from .serializers import GameResultSerializer, PlayerStatsSerializer
 from rest_framework.views import APIView
 User = get_user_model()
@@ -291,3 +291,23 @@ def change_username(request):
         return Response({"detail": "Username changed successfully."}, status=status.HTTP_200_OK)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def save_tournament_result(request):
+    user = request.user
+    results = request.data.get('results')
+
+    if isinstance(results, list):
+        if len(results) != 4 or not all(isinstance(s, str) for s in results):
+            return Response({'error': 'Invalid results format.'}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({'error': 'Invalid results format.'}, status=status.HTTP_400_BAD_REQUEST)
+    tournament_result = TournamentResult.objects.create(
+        user=user,
+        results=results
+    )
+
+    return Response({'detail': 'Tournament result saved successfully.'}, status=status.HTTP_201_CREATED)

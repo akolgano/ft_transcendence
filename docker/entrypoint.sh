@@ -10,7 +10,12 @@ echo "Applying migrations..."
 python manage.py makemigrations
 python manage.py migrate
 
-if ! python manage.py shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='$DJANGO_SUPERUSER_USERNAME').exists()"; then
+echo $DJANGO_SUPERUSER_USERNAME
+echo $DJANGO_SUPERUSER_EMAIL
+
+SUPERUSER_EXISTS=$(python manage.py shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); print(User.objects.filter(username='$DJANGO_SUPERUSER_USERNAME').exists())")
+echo $SUPERUSER_EXISTS
+if [ "$SUPERUSER_EXISTS" = "False" ]; then
   echo "Creating superuser..."
   python manage.py createsuperuser --noinput --username "$DJANGO_SUPERUSER_USERNAME" --email "$DJANGO_SUPERUSER_EMAIL"
 else

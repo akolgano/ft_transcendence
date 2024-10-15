@@ -92,3 +92,13 @@ class PlayerStats(models.Model):
 
     class Meta:
         verbose_name_plural = 'Stats'
+
+
+class TournamentResult(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    results = models.JSONField()
+    date_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date_time']
+        verbose_name_plural = 'Tournament Results'    
