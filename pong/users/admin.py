@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from .models import CustomUser, Friendship, GameResult, PlayerStats
+from .models import CustomUser, Friendship, GameResult, PlayerStats, TournamentResult
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.html import format_html
 from django.core.exceptions import ValidationError
@@ -127,3 +127,4 @@ class PlayerStatsAdmin(admin.ModelAdmin):
 
 admin.site.register(GameResult, GameResultAdmin)
 admin.site.register(PlayerStats, PlayerStatsAdmin)
+admin.site.register(TournamentResult)

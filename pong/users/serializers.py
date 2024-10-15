@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
-from .models import GameResult, PlayerStats
+from .models import GameResult, PlayerStats, TournamentResult
 import re
 User = get_user_model()
 
@@ -72,3 +72,8 @@ class ChangeUsernameSerializer(serializers.Serializer):
         if User.objects.filter(username=value).exists():
             raise serializers.ValidationError("Username already taken.")
         return value
+
+class TournamentResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TournamentResult
+        fields = ['results', 'date_time']
