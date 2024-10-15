@@ -8,7 +8,7 @@ from rest_framework import status
 #from django.contrib.auth.models import User
 from .models import CustomUser, Friendship
 from rest_framework.authtoken.models import Token
-from .serializers import UserSerializer, FriendSerializer, ChangePasswordSerializer
+from .serializers import UserSerializer, FriendSerializer, ChangePasswordSerializer, ChangeUsernameSerializer
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.password_validation import validate_password
@@ -283,12 +283,11 @@ def change_language(request):
 @permission_classes([IsAuthenticated])
 def change_username(request):
     user = request.user
-    new_username = request.data.get('new_username')
-    if not new_username:
-        return Response({"error": "New username is required."}, status=status.HTTP_400_BAD_REQUEST)
-    if User.objects.filter(username=new_username).exists():
-        return Response({"error": "Username already taken."}, status=status.HTTP_400_BAD_REQUEST)
+    serializer = ChangeUsernameSerializer(data=request.data)
 
-    user.username = new_username
-    user.save()
-    return Response({"detail": "Username changed successfully."}, status=status.HTTP_200_OK)
+    if serializer.is_valid():
+        user.username = serializer.validated_data['new_username']
+        user.save()
+        return Response({"detail": "Username changed successfully."}, status=status.HTTP_200_OK)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
