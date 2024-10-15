@@ -88,12 +88,40 @@ function resetErrorField() {
 	});
 }
 
+const escapeHTML = (str) => str
+.replace(/&/g, '&amp;')
+.replace(/</g, '&lt;')
+.replace(/>/g, '&gt;')
+.replace(/"/g, '&quot;')
+.replace(/'/g, '&#39;');
+
 function sanitize(param) {
 	let parser = new DOMParser();
 	let doc = parser.parseFromString(param, 'text/html');
 	let sanitized = doc.body.textContent || "";
-	return sanitized.trim();  // Return trimmed content
+	return (escapeHTML(sanitized.trim()));  // Return trimmed content
 }
+
+function sanitize_picture(picture) {
+	let profile_pic = "http://localhost:8000" + picture;
+	if (sanitize(profile_pic) !== profile_pic)
+		profile_pic = "http://localhost:8000/default.jpg"
+	return (profile_pic);
+}
+
+// function sanitizeFormData(formData) {
+// 	let sanitizedFormData = new FormData();
+
+// 	for (const [key, value] of formData.entries()) {
+// 		if (key === "password") {
+// 			sanitizedFormData.append(key, value);
+// 			console.log("No sanitizing password");
+// 		}
+// 		sanitizedFormData.append(key, sanitize(value));
+// 		console.log("sanitizing")
+// 	}
+// 	return (sanitizedFormData);
+// }
 
 // console.log("sanitized 1: " + sanitize("<script>alert(1)<script>"))
 // console.log("sanitized 2: " + sanitize(`<img src="x" onerror="alert('XSS attacks!')">`))

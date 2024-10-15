@@ -35,9 +35,10 @@
 			}
 			if (data.user)
 			{
+				data.user.profile_picture = sanitize_picture(data.user.profile_picture);
 				localStorage.setItem("user", JSON.stringify(data.user));
-				document.querySelector('.avatar-sm').src = "http://localhost:8000" + JSON.parse(localStorage.getItem("user")).profile_picture;
-				document.querySelector(".profile-pic").src = "http://localhost:8000" + JSON.parse(localStorage.getItem("user")).profile_picture;
+				document.querySelector('.avatar-sm').src = JSON.parse(localStorage.getItem("user")).profile_picture;
+				document.querySelector(".profile-pic").src = JSON.parse(localStorage.getItem("user")).profile_picture;
 				displayAlert("account.change-pic-success", "success");
 				document.getElementById("profile_picture").value = "";
 			}

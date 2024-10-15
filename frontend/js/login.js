@@ -4,7 +4,6 @@
 
 		e.preventDefault();
 		const formData = new FormData(loginForm);
-
 		removeAlert();
 		try {
 			const response = await fetch("https://localhost/api/login", {
@@ -31,6 +30,8 @@
 				console.log("User: " + JSON.stringify(data.user));
 
 				localStorage.setItem("auth", 1);
+
+				data.user.profile_picture = sanitize_picture(data.user.profile_picture);
 				localStorage.setItem("user", JSON.stringify(data.user));
 
 				siteLanguage = data.user.language;
