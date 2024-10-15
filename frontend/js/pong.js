@@ -30,8 +30,7 @@
 		width: playerWidth,
 		height: playerHeight,
 		velocityY: playerVelocityY,
-		score: 0,
-		name: JSON.parse(localStorage.getItem("user")).username
+		score: 0
 	}
 
 	let playerGuest = {
@@ -40,8 +39,7 @@
 		width: playerWidth,
 		height: playerHeight,
 		velocityY: playerVelocityY,
-		score: 0,
-		name : localStorage.getItem("guestName")
+		score: 0
 	}
 
 	function stopGame() {
@@ -73,11 +71,47 @@
 		document.addEventListener("keydown", movePlayerContinuous)
 	}
 
+	function prepareGame() {
+		console.log("GAME")
+		playerUser.name = JSON.parse(localStorage.getItem("user")).username;
+		playerGuest.name = localStorage.getItem("guestName");
+	}
+
+	function prepareTournament() {
+		console.log("TOURNAMENT")
+		switch (gameData.currentGame) {
+			case SEMI1:
+				playerUser.name = gameData.firstSemi[0];
+				playerGuest.name = gameData.firstSemi[1];
+				break;
+			case SEMI2:
+				playerUser.name = gameData.secondSemi[0];
+				playerGuest.name = gameData.secondSemi[1];
+				break;
+			case MINIFINALS:
+				playerUser.name = gameData.miniFinals[0];
+				playerGuest.name = gameData.miniFinals[1];
+				break;
+			case FINALS:
+				playerUser.name = gameData.finals[0];
+				playerGuest.name = gameData.finals[1];
+				break;
+			default:
+				break;
+		}
+	}
+
 	function gameSetUp() {
-		if (playerGuest.name == null) {
+
+		if (localStorage.getItem("guestName"))
+			prepareGame();
+		else if (Object.keys(gameData).length !== 0)
+			prepareTournament();
+		else {
 			document.getElementById("content").innerHTML = "<p>You need to register first</p>"
 			return ;
 		}
+
 		document.getElementById("playerUser").innerHTML = 0
 		document.getElementById("playerGuest").innerHTML = 0
 		document.querySelector(".name-opponent").innerHTML = playerGuest.name;
@@ -118,18 +152,55 @@
 		context.fillRect(player.x, player.y, player.width, player.height)
 	}
 
-	function endOfGame() {
+	function endSimpleGame(winner, looser) {
 		document.querySelector(".modalEndOfGame").style.display = "block";
-		const winner = playerGuest.score > playerUser.score ? playerGuest.name : playerUser.name
-		const looser = (winner == playerGuest.name ? playerUser.name : playerGuest.name)
 		document.querySelector(".modal-title-winner").innerHTML = winner
 		document.querySelector(".modal-score").innerHTML = `${playerUser.score} - ${playerGuest.score}`
 		document.querySelector(".modal-looser").innerHTML = looser
-
 		localStorage.removeItem("guestName");
 		document.querySelector(".play-again").addEventListener("click", event => {
 			urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
 		})
+	}
+
+	function endTournament(winner, looser) {
+		switch (gameData.currentGame) {
+
+			case SEMI1:
+				gameData.finals.push(winner);
+				gameData.miniFinals.push(looser);
+				gameData.currentGame = SEMI2;
+				break;
+			case SEMI2:
+				gameData.finals.push(winner);
+				gameData.miniFinals.push(looser);
+				gameData.currentGame = MINIFINALS;
+				break;
+			case MINIFINALS:
+				gameData.third = winner;
+				gameData.fourth = looser;
+				gameData.currentGame = FINALS;
+				break;
+			case FINALS:
+				gameData.first = winner;
+				gameData.second = looser;
+				gameData.currentGame = null;
+				break;
+			default:
+				break;
+		}
+		urlRoute({ target: { href: "/announceGame" }, preventDefault: () => {} });
+	}
+
+	function endOfGame() {
+		const winner = playerGuest.score > playerUser.score ? playerGuest.name : playerUser.name
+		const looser = (winner == playerGuest.name ? playerUser.name : playerGuest.name)
+
+		if (localStorage.getItem("guestName"))
+			endSimpleGame(winner, looser);
+		else if (Object.keys(gameData).length !== 0)
+			endTournament(winner, looser);
+
 		document.removeEventListener("keyup", movePlayerOnce);
 		document.removeEventListener("keydown", movePlayerContinuous);
 		document.querySelectorAll("a").forEach(link => {
@@ -150,7 +221,7 @@
 	}
 
 	function update() {
-		if (playerGuest.score == 5 || playerUser.score == 5)
+		if (playerGuest.score == 2 || playerUser.score == 2)
 		{
 			endOfGame();
 			return ;
