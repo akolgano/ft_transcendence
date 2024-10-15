@@ -19,5 +19,9 @@ fi
 
 python docker/fill_db.py
 
-echo "Starting Gunicorn server..."
-exec gunicorn pong.wsgi:application --bind 0.0.0.0:8000
+# echo "Starting Gunicorn server..."
+# exec gunicorn pong.wsgi:application --bind 0.0.0.0:8000
+
+
+echo "Starting development server..."
+exec python manage.py runserver 0.0.0.0:8000
