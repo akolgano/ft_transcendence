@@ -42,7 +42,7 @@
 				user.username = new_username;
 				localStorage.setItem("user", JSON.stringify(user));
 				console.log(JSON.parse(localStorage.getItem("user")))
-				document.querySelector(".navbar-username").innerHTML = `${user.username}!`;
+				document.querySelector(".navbar-username").innerText = `${user.username}!`;
 				displayAlert("account.change-username-success", "success");
 			}
 			else

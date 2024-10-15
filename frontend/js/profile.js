@@ -36,7 +36,7 @@ function addGameResults(game_results) {
 			if (game.is_ai === true)
 				opponent = "🤖 AI"
 			else
-				opponent = `⛹️‍♀️ ${game.opponent_username}`
+				opponent = `⛹️‍♀️ ${sanitize(game.opponent_username)}`
 
 			const gameHTML = `
 			<div class="game-card border rounded bg-light w-100 d-inline-block p-1 mb-2 bg-success-subtle">
@@ -56,11 +56,11 @@ function updateProfileCard(data)
 	let points = (data.victories * 10) - (data.losses * 5);
 	if (points < 0) points = 0;
 
-	document.querySelector('.card-username').innerHTML = data.username
-	document.querySelector(".profile-pic").src = "http://localhost:8000" + data.profile_picture
-	document.querySelector(".user-points").innerHTML = `&nbsp;${points}&nbsp;`
-	document.querySelector(".user-victories").innerHTML = `&nbsp;${data.victories}&nbsp`
-	document.querySelector(".user-losses").innerHTML = `&nbsp;${data.losses}&nbsp`
+	document.querySelector('.card-username').innerText = data.username
+	document.querySelector(".profile-pic").src = sanitize_picture(data.profile_picture)
+	document.querySelector(".user-points").innerText = ` ${points}`
+	document.querySelector(".user-victories").innerText = ` ${data.victories} `
+	document.querySelector(".user-losses").innerText = ` ${data.losses} `
 
 	if (data.username !== JSON.parse(localStorage.getItem("user")).username)
 	{

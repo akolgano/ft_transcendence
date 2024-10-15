@@ -5,20 +5,21 @@ function displayFriends(data) {
 	const friendsList = document.querySelector(".friends-list");
 
 	data.forEach(user => {
+		const profile_pic = sanitize_picture(user.profile_picture)
 		const userHTML = `
-	<div class="friend-card" data-username=${user.username}>
+	<div class="friend-card" data-username=${sanitize(user.username)}>
 		<div class="border rounded bg-light w-50 mb-2 d-inline-block align-middle">
-			<div class="d-flex justify-content-between p-2">
+			<div class="d-flex justify-content-between p-1">
 				<div class="d-flex">
-					<img src="http://localhost:8000${user.profile_picture}" alt="avatar" class="rounded-circle border-1 avatar-mini object-fit-cover">
-					<a class="mb-0 px-2 spa" href="/profile/${user.username}" id ="friend-username">${user.username}</a>
+					<img src="${profile_pic}" alt="avatar" class="rounded-circle border-1 avatar-mini object-fit-cover">
+					<a class="mb-0 px-3 spa" href="/profile/${sanitize(user.username)}" id ="friend-username">${sanitize(user.username)}</a>
 				</div>
 				<div><span class="mb-0" data-i18n="friends.level"></span><span class="mb-0">3</span></div>
 			</div>
 		</div>
 
 		<div class="d-inline-block">
-			<button type="submit" class="btn btn-danger mb-2 removeFriend" data-username=${user.username} data-i18n="friends.remove"></button>
+			<button type="submit" class="btn btn-danger mb-2 removeFriend" data-username=${sanitize(user.username)} data-i18n="friends.remove"></button>
 		</div>
 	</div>`
 		friendsList.insertAdjacentHTML("beforeend", userHTML);

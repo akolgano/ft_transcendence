@@ -10,7 +10,7 @@
 
 	document.querySelector('.input-username').value = user.username
 	document.querySelector('.input-email').value = user.email
-	document.querySelector(".profile-pic").src = "http://localhost:8000" + user.profile_picture
+	document.querySelector(".profile-pic").src = user.profile_picture
 
 	let formLanguage =  document.getElementById("defaultLanguage");
 	let options = formLanguage.querySelectorAll(".select-lang");
