@@ -112,3 +112,6 @@ curl -k -X POST https://localhost/api/logout/ -H "Authorization: Token 43c11a654
 curl -k -X PATCH https://localhost/api/change_username/ -H "Authorization: Token 541a7cf4d6c9ca416702629292f6d336a448ce6e" -H "Content-Type: application/json" -d '{"new_username": "ana"}' 
 
 {"detail":"Username changed successfully."}/{"error":"Username already taken."}/{"error":"New username is required."}
+
+-----------------Save tournament result-----------------
+curl -k -X POST https://localhost/api/tournament/result/ -H "Authorization: Token 63091c63772cb4d1316f400131c5a0d54624ec9a" -H "Content-Type: application/json" -d '{"results": ["anna", "guest1", "guest2", "guest3"]}'

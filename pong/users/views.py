@@ -17,7 +17,7 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound
 from .models import GameResult, PlayerStats, TournamentResult
-from .serializers import GameResultSerializer, PlayerStatsSerializer
+from .serializers import GameResultSerializer, PlayerStatsSerializer, TournamentResultSerializer
 from rest_framework.views import APIView
 User = get_user_model()
 
@@ -246,8 +246,10 @@ def get_player(request, username):
     try:
         stats = PlayerStats.objects.get(user=user)
         game_results = GameResult.objects.filter(user=user)
+        tournament_results = TournamentResult.objects.filter(user=user)
         stats_data = PlayerStatsSerializer(stats).data
         stats_data['game_results'] = GameResultSerializer(game_results, many=True).data
+        stats_data['tournaments'] = TournamentResultSerializer(tournament_results, many=True).data
 
         return Response(stats_data)
     except PlayerStats.DoesNotExist:
@@ -299,7 +301,6 @@ def change_username(request):
 def save_tournament_result(request):
     user = request.user
     results = request.data.get('results')
-
     if isinstance(results, list):
         if len(results) != 4 or not all(isinstance(s, str) for s in results):
             return Response({'error': 'Invalid results format.'}, status=status.HTTP_400_BAD_REQUEST)
