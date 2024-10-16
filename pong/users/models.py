@@ -85,17 +85,6 @@ class GameResult(models.Model):
     def __str__(self):
         return f"{self.user.username} vs {self.opponent_username} - Score: {self.score} - Duration: {self.game_duration}"
     
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        player_stats, created = PlayerStats.objects.get_or_create(user=self.user)
-        if self.score[0] > self.score[1]: 
-            player_stats.victories += 1
-            player_stats.points += 10
-        else: 
-            player_stats.losses += 1
-            player_stats.points -=5
-        player_stats.save()
-
 class PlayerStats(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     victories = models.IntegerField(default=0)
@@ -114,19 +103,4 @@ class TournamentResult(models.Model):
     class Meta:
         ordering = ['-date_time']
         verbose_name_plural = 'Tournament Results' 
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
-        if self.user.username in self.results:
-            place = self.results.index(self.user.username)
-            player_stats, created = PlayerStats.objects.get_or_create(user=self.user)
-
-            if place == 0:
-                player_stats.points += 20
-            elif place == 1:
-                player_stats.points += 10
-            elif place == 2:
-                player_stats.points -= 5
-            
-            player_stats.save()  
+ 
