@@ -102,6 +102,19 @@ class GameResultAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'opponent_username')
     ordering = ('-date_time',)
 
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+
+        player_stats, created = PlayerStats.objects.get_or_create(user=obj.user)
+        user_score, opponent_score = obj.score
+
+        if user_score > opponent_score:
+            player_stats.victories += 1
+        elif user_score < opponent_score:
+            player_stats.losses += 1
+        
+        player_stats.save()
+
 
 class PlayerStatsAdmin(admin.ModelAdmin):
     """
@@ -111,6 +124,24 @@ class PlayerStatsAdmin(admin.ModelAdmin):
     list_display = ('user', 'victories', 'losses', 'points')
     search_fields = ('user__username',)
 
+class TournamentResultAdmin(admin.ModelAdmin):
+    list_display = ('user', 'results','date_time')
+    ordering = ('-date_time',)
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+
+        player_stats, created = PlayerStats.objects.get_or_create(user=obj.user)
+        results = obj.results
+        place = results.index(obj.user.username)
+        if place == 0:
+            player_stats.points += 20
+        elif place == 1:
+            player_stats.points += 10
+        elif place == 3:
+            player_stats.points -= 5
+        player_stats.save()
+
 admin.site.register(GameResult, GameResultAdmin)
 admin.site.register(PlayerStats, PlayerStatsAdmin)
-admin.site.register(TournamentResult)
+admin.site.register(TournamentResult, TournamentResultAdmin)

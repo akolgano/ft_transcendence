@@ -12,7 +12,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound
 from .models import GameResult, PlayerStats, TournamentResult
@@ -32,7 +32,7 @@ def login(request):
     return Response({'token': token.key, 'user': serializer.data})
 
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def logout(request):
     user = get_object_or_404(User, username=request.data['username'])
@@ -65,13 +65,13 @@ def signup(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def test_token(request):
     return Response("passed!")
 
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def change_profile_picture(request):
     user = request.user
@@ -95,7 +95,7 @@ def get_friends(request):
     return Response({'friends': serializer.data}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_user_info(request):
     user = request.user
@@ -103,7 +103,7 @@ def get_user_info(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_user_by_id(request, user_id):
     try:
@@ -116,7 +116,7 @@ def get_user_by_id(request, user_id):
 
 
 @api_view(['PATCH'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def change_password(request):
     serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
@@ -178,7 +178,7 @@ def user_friends_view(request):
         friends = user.get_friends()
         friends_list = [{
             'username': friend.to_user.username,
-            'points': PlayerStats.objects.get(user=friend.to_user).points,
+            'points': PlayerStats.objects.get_or_create(user=friend.to_user, defaults={'points': 0})[0].points,
             'profile_picture': friend.to_user.profile_picture.url if friend.to_user.profile_picture else None
         } for friend in friends]
         return Response({'user': user.username, 'friends': friends_list})
@@ -267,7 +267,7 @@ def all_players(request):
     return Response(serializer.data)
 
 @api_view(['PATCH'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def change_language(request):
     user = request.user
@@ -283,7 +283,7 @@ def change_language(request):
 
 
 @api_view(['PATCH'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def change_username(request):
     user = request.user
