@@ -102,27 +102,13 @@ class GameResultAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'opponent_username')
     ordering = ('-date_time',)
 
-    def save_model(self, request, obj, form, change):
-        super().save_model(request, obj, form, change)
-
-        # Update player statistics
-        player_stats, created = PlayerStats.objects.get_or_create(user=obj.user)
-        user_score, opponent_score = obj.score
-
-        if user_score > opponent_score:
-            player_stats.victories += 1
-        elif user_score < opponent_score:
-            player_stats.losses += 1
-        
-        player_stats.save()
-
 
 class PlayerStatsAdmin(admin.ModelAdmin):
     """
     Admin interface for managing PlayerStats instances.
     """
 
-    list_display = ('user', 'victories', 'losses')
+    list_display = ('user', 'victories', 'losses', 'points')
     search_fields = ('user__username',)
 
 admin.site.register(GameResult, GameResultAdmin)

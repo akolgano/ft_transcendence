@@ -5,7 +5,6 @@
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
-#from django.contrib.auth.models import User
 from .models import CustomUser, Friendship
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, FriendSerializer, ChangePasswordSerializer, ChangeUsernameSerializer
@@ -179,8 +178,9 @@ def user_friends_view(request):
         friends = user.get_friends()
         friends_list = [{
             'username': friend.to_user.username,
+            'points': PlayerStats.objects.get(user=friend.to_user).points,
             'profile_picture': friend.to_user.profile_picture.url if friend.to_user.profile_picture else None
-        } for friend in friends] 
+        } for friend in friends]
         return Response({'user': user.username, 'friends': friends_list})
     except Exception as e:
         return Response({'error': str(e)}, status=400)
@@ -225,8 +225,10 @@ def save_game_result(request):
     player_stats, created = PlayerStats.objects.get_or_create(user=user)
     if score[0] > score[1]: 
         player_stats.victories += 1
+        player_stats.points += 10
     else: 
         player_stats.losses += 1
+        player_stats.points -=5
     player_stats.save()
 
     return Response({'detail': 'Score saved successfully.'}, status=status.HTTP_201_CREATED)
@@ -259,8 +261,8 @@ def get_player(request, username):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def all_player_stats(request):
-    stats = PlayerStats.objects.all()
+def all_players(request):
+    stats = PlayerStats.objects.all().order_by("-points")
     serializer = PlayerStatsSerializer(stats, many=True)
     return Response(serializer.data)
 
@@ -311,4 +313,13 @@ def save_tournament_result(request):
         results=results
     )
 
+    player_stats, created = PlayerStats.objects.get_or_create(user=user)
+    place = results.index(user.username)
+    if place == 0:
+        player_stats.points += 20
+    elif place == 1:
+        player_stats.points += 10
+    elif place == 3:
+        player_stats.points -= 5
+    player_stats.save()
     return Response({'detail': 'Tournament result saved successfully.'}, status=status.HTTP_201_CREATED)
