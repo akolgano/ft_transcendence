@@ -18,6 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'online', 'language', 'profile_picture']
 
 class FriendSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = User
         fields = ['username', 'profile_picture']
@@ -27,7 +28,7 @@ class ChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(required=True, write_only=True)
 
     def validate(self, attrs):
-        user = self.context['request'].user  # Accessing the request context
+        user = self.context['request'].user
         old_password = attrs.get('old_password')
         new_password = attrs.get('new_password')
         

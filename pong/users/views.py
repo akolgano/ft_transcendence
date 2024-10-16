@@ -5,7 +5,6 @@
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
-#from django.contrib.auth.models import User
 from .models import CustomUser, Friendship
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, FriendSerializer, ChangePasswordSerializer, ChangeUsernameSerializer
@@ -179,8 +178,9 @@ def user_friends_view(request):
         friends = user.get_friends()
         friends_list = [{
             'username': friend.to_user.username,
+            'points': PlayerStats.objects.get(user=friend.to_user).points,
             'profile_picture': friend.to_user.profile_picture.url if friend.to_user.profile_picture else None
-        } for friend in friends] 
+        } for friend in friends]
         return Response({'user': user.username, 'friends': friends_list})
     except Exception as e:
         return Response({'error': str(e)}, status=400)
@@ -315,7 +315,6 @@ def save_tournament_result(request):
 
     player_stats, created = PlayerStats.objects.get_or_create(user=user)
     place = results.index(user.username)
-    print(place)
     if place == 0:
         player_stats.points += 20
     elif place == 1:
