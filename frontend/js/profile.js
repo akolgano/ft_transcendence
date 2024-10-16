@@ -1,52 +1,39 @@
 
-function formatDate(date) {
 
-	const utcDate = new Date(date)
-
-	const options = {
-		timeZone: 'Asia/Singapore',
-		day: '2-digit',
-		month: '2-digit',
-		year: 'numeric',
-		hour: '2-digit',
-		minute: '2-digit',
-		hour12: false
-	};
-
-	// Get the formatted date and time string
-	const formattedDate = utcDate.toLocaleString('en-GB', options);
-	return (formattedDate);
-}
 
 function addGameResults(game_results) {
+	const gameResultsDiv = document.getElementById("game-history-container");
 
-	const gameResultsDiv = document.getElementById("game-history-container")
-
-	if (game_results.length == 0)
-	{
-		const gameHTML = "<p>No game results yet</p>"
+	if (game_results.length == 0) {
+		const gameHTML = "<p>No game results yet</p>";
 		gameResultsDiv.insertAdjacentHTML("beforeend", gameHTML);
-	}
-	else
-	{
-		game_results.forEach(game => {
-			const result = (game.score[0] > game.score[1] ? "🏆" : "🥀")
-			const date = formatDate(game.date_time)
+	} else {
+		game_results.forEach((game, index) => {
+			const result = (game.score[0] > game.score[1] ? "🏆" : "🥀");
+			const date = formatDate(game.date_time);
 			let opponent;
 			if (game.is_ai === true)
-				opponent = "🤖 AI"
+				opponent = "🤖 AI";
 			else
-				opponent = `⛹️‍♀️ ${game.opponent_username}`
+				opponent = `⛹️‍♀️ ${game.opponent_username}`;
 
 			const gameHTML = `
-			<div class="game-card border rounded bg-light w-100 d-inline-block p-1 mb-2 bg-success-subtle">
+			<div class="game-card border rounded bg-light w-100 d-inline-block p-1 mb-2 bg-success-subtle" data-index="${index}">
 				<div class="d-flex justify-content-between px-2">
 					<p class="my-1 me-5">${result}&nbsp;&nbsp;${game.score[0]} - ${game.score[1]}</p>
 					<p class="my-1 flex-grow-1">${opponent}</p>
 					<p class="my-1">${date}</p>
 				</div>
-			</div>`
+			</div>`;
 			gameResultsDiv.insertAdjacentHTML("beforeend", gameHTML);
+		});
+
+		// Add hover event to each game card
+		document.querySelectorAll('.game-card').forEach((card, index) => {
+			card.addEventListener('mouseenter', (event) => {
+				const gameData = game_results[index];
+				openGameProgressionModal(gameData.progression, index + 1); // Open modal with game progression
+			});
 		});
 	}
 }
@@ -149,5 +136,103 @@ function profileScript() {
 	console.log("urlArgument: " +  urlArgument);
 	fetchHistory(urlArgument);
 }
+
+
+// Add the modal and chart rendering functions here
+
+function openGameProgressionModal(scoreProgression, gameNumber) {
+	const modal = new bootstrap.Modal(document.getElementById('gameProgressionModal'));
+	const canvasId = 'scoreProgressionChartModal';
+
+	// Clear the existing chart (if any)
+	const canvas = document.getElementById(canvasId);
+	const ctx = canvas.getContext('2d');
+	if (Chart.getChart(canvasId)) {
+		Chart.getChart(canvasId).destroy();
+	}
+
+	// Render the progression chart inside the modal
+	renderScoreProgressionChart(scoreProgression, canvasId, gameNumber);
+
+	// Open the modal
+	modal.show();
+}
+
+function renderScoreProgressionChart(scoreProgression, canvasId, gameNumber) {
+    const ctxProgression = document.getElementById(canvasId).getContext('2d');
+
+    // Initialize player and opponent score arrays
+    let playerProgression = [];
+    let opponentProgression = [];
+
+    // Initialize counters for scores
+    let playerScore = 0;
+    let opponentScore = 0;
+
+    // Go through the progression array
+    scoreProgression.forEach(score => {
+        if (score === 0) {
+            playerScore++;  // User scores
+        } else if (score === 1) {
+            opponentScore++;  // Opponent scores
+        }
+
+        // Push the current score for both player and opponent to their respective arrays
+        playerProgression.push(playerScore);
+        opponentProgression.push(opponentScore);
+    });
+
+    new Chart(ctxProgression, {
+        type: 'line',
+        data: {
+            labels: playerProgression.map((_, index) => `${index + 1}`),  // Labels: Point 1, Point 2, etc.
+            datasets: [
+                {
+                    //label: `You - Game ${gameNumber}`,
+                    data: playerProgression,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 4,
+                    fill: false,
+                    pointStyle: 'line' // Use line style for legend
+                },
+                {
+                    //label: `Opponent - Game ${gameNumber}`,
+                    data: opponentProgression,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 4,
+                    fill: false,
+                    pointStyle: 'line' // Use line style for legend
+                }
+            ]
+        },
+        options: {
+            scales: {
+                x: { ticks: { font: { size: 16 } } },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        font: { size: 16 }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    titleFont: { size: 16 },
+                    bodyFont: { size: 16 }
+                }
+            },
+            elements: {
+                point: {
+                    radius: 0 // Keep circular points visible on the chart
+                }
+            }
+        }
+    });
+}
+
 
 profileScript()
