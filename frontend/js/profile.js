@@ -54,23 +54,16 @@ function addGameResults(game_results) {
 
 function updateProfileCard(data)
 {
-	let points = (data.victories * 10) - (data.losses * 5);
-	if (points < 0) points = 0;
-
 	document.querySelector('.card-username').innerHTML = data.username
 	document.querySelector(".profile-pic").src = "http://localhost:8000" + data.profile_picture
-	document.querySelector(".user-points").innerHTML = `&nbsp;${points}&nbsp;`
+	document.querySelector(".user-points").innerHTML = `&nbsp;${data.points}&nbsp;`
 	document.querySelector(".user-victories").innerHTML = `&nbsp;${data.victories}&nbsp`
 	document.querySelector(".user-losses").innerHTML = `&nbsp;${data.losses}&nbsp`
 
 	if (data.username !== JSON.parse(localStorage.getItem("user")).username)
 	{
 		const online_text = document.querySelector(".online-status")
-
-		// TO DO delete this line:
-		data.online_status = false;
-
-		if (data.online_status === true)
+		if (data.online === true)
 			online_text.setAttribute("data-i18n", "profile.online")
 		else
 			online_text.setAttribute("data-i18n", "profile.offline")
@@ -136,10 +129,8 @@ function getArgument() {
 	const profileDiv = document.querySelector(".profile-page");
 	const user = JSON.parse(localStorage.getItem("user")).username
 
-	if (profileDiv === null) {
-		console.log("ERROR")
+	if (profileDiv === null)
 		return (user)
-	}
 
 	let username = profileDiv.getAttribute('data-username');
 
@@ -201,6 +192,3 @@ function profileScript() {
 }
 
 profileScript()
-
-
-// History data: {"username":"alex","profile_picture":"/media/profile_pictures/redpanda.jpg","victories":0,"losses":0,"online":true,"points":-5,"game_results":[],"tournaments":[{"results":["p1","p2","alex","p4"],"date_time":"2024-10-16T08:07:43.237261Z"}]}
