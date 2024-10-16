@@ -1,16 +1,3 @@
-// Dummy data for demonstration
-
-//{
-
-/*
-    const recent_games = [
-    { date_time: '2024-10-02T17:00:00Z', end_time: '2024-10-02T17:04:30Z', score: [5, 1], progression: [[1, 0], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1]] },
-    { date_time: '2024-10-02T17:05:00Z', end_time: '2024-10-02T17:08:10Z', score: [4, 5], progression: [[1, 0], [2, 0], [3, 0], [4, 0], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5]] },
-    { date_time: '2024-10-02T17:09:00Z', end_time: '2024-10-02T17:14:50Z', score: [3, 5], progression: [[0, 1], [1, 1], [1, 2], [2, 2], [2, 3], [3, 3], [3, 4], [3, 5]] },
-    { date_time: '2024-10-02T17:15:10Z', end_time: '2024-10-02T17:18:00Z', score: [5, 4], progression: [[1, 0], [1, 1], [2, 1], [3, 1], [3, 2], [3, 3], [4, 3], [4, 4], [5, 4]] }
-    ]
-*/
-
 
 // Fetch user stats and game results from the API
 async function fetchDashboardData() {
@@ -97,29 +84,31 @@ function renderCharts(labels, playerScores, opponentScores, victories, losses, g
     renderIntensityChart(labels, gameResults);
     renderMarginPieChart(gameResults);
     
-    /*
-    // Remove any previous score progression charts
-    const progressionsContainer = document.getElementById('progressionsContainer');
-    progressionsContainer.innerHTML = '';
-
-    gameResults.forEach((gameResult, index) => {
-        const listItem = document.createElement('div');
-        listItem.classList.add('game-list-item', 'mb-2');
-        listItem.textContent = `Game ${index + 1}`;
-        
-        // Add hover event listener to open modal and render chart
-        listItem.addEventListener('mouseenter', () => {
-            openGameProgressionModal(gameResult.progression, index + 1);
-        });
-        
-        progressionsContainer.appendChild(listItem);
-    });
-    */
+    
 }
 
 // Function to render the line chart (Player vs. Opponent scores)
 function renderLineChart(labels, playerScores, opponentScores) {
+    const chartContainer = document.getElementById('gameResultsChart').parentNode;
     const ctx = document.getElementById('gameResultsChart').getContext('2d');
+    
+    // Check if there is data
+    if (!labels || labels.length === 0 || !playerScores || playerScores.length === 0 || !opponentScores || opponentScores.length === 0) {
+        // Hide the chart canvas
+        document.getElementById('gameResultsChart').style.display = 'none';
+
+        // Display the "No data" message
+        const noDataMessage = document.createElement('p');
+        noDataMessage.textContent = 'No game results available.';
+        noDataMessage.classList.add('text-center', 'mt-4', 'text-muted'); // Bootstrap classes for styling
+        chartContainer.appendChild(noDataMessage);
+
+        return; // Exit the function, don't render the chart
+    }
+
+    // Show the chart canvas if data exists
+    document.getElementById('gameResultsChart').style.display = 'block';
+
     new Chart(ctx, {
         type: 'line',
         data: {
@@ -130,14 +119,16 @@ function renderLineChart(labels, playerScores, opponentScores) {
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 4,
                     fill: false,
-                    pointStyle: 'line'
+                    pointRadius: 3,  // Show a small dot for each point
+                    pointHoverRadius: 5  // Increase hover size for better visibility
                 },
                 {
                     data: opponentScores,
                     borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 4,
                     fill: false,
-                    pointStyle: 'line'
+                    pointRadius: 3,  // Show a small dot for each point
+                    pointHoverRadius: 5  // Increase hover size for better visibility
                 }
             ]
         },
@@ -174,7 +165,7 @@ function renderLineChart(labels, playerScores, opponentScores) {
             },
             elements: {
                 point: {
-                    radius: 0 // Remove the default point circles from the chart lines
+                    radius: 3 // Remove the default point circles from the chart lines
                 }
             }
         }
@@ -182,11 +173,21 @@ function renderLineChart(labels, playerScores, opponentScores) {
 }
 
 
-
-
 // Function to render a pie chart (Victories and Losses or Margins)
 function renderPieChart(chartId, labels, data, backgroundColors) {
+    const chartContainer = document.getElementById(chartId).parentNode;
     const ctxPie = document.getElementById(chartId).getContext('2d');
+    
+    // Check if both victories and losses are 0
+    if (!data || data.length === 0 || (data[0] === 0 && data[1] === 0)) {
+        // Hide the pie chart canvas
+        document.getElementById(chartId).style.display = 'none';
+        return; // Exit the function, don't render the pie chart
+    }
+
+    // Show the pie chart canvas if data exists
+    document.getElementById(chartId).style.display = 'block';
+
     new Chart(ctxPie, {
         type: 'pie',
         data: {
@@ -216,11 +217,15 @@ function renderPieChart(chartId, labels, data, backgroundColors) {
 
 // Function to render the bar chart for game durations
 function renderBarChart(labels, gameResults) {
-    /*const gameDurations = gameResults.map(result => {
-        const startTime = new Date(result.date_time);
-        const endTime = new Date(result.end_time);
-        return (endTime - startTime) / 60000;
-    });*/
+    const chartContainer = document.getElementById('gameDurationChart').parentNode;
+    const ctxBar = document.getElementById('gameDurationChart').getContext('2d');
+
+    // Check if there is data
+    if (!gameResults || gameResults.length === 0) {
+        // Hide the bar chart canvas
+        document.getElementById('gameDurationChart').style.display = 'none';
+        return; // Exit the function, don't render the bar chart
+    }
 
     const gameDurations = gameResults.map(result => {
         const durationParts = result.game_duration.split(':'); // Split the "HH:MM:SS" format
@@ -229,7 +234,9 @@ function renderBarChart(labels, gameResults) {
         return minutes + (seconds / 60); // Convert duration to minutes (fractional)
     });
 
-    const ctxBar = document.getElementById('gameDurationChart').getContext('2d');
+    // Show the bar chart canvas if data exists
+    document.getElementById('gameDurationChart').style.display = 'block';
+
     new Chart(ctxBar, {
         type: 'bar',
         data: {
@@ -277,13 +284,15 @@ function renderBarChart(labels, gameResults) {
 
 // Function to render the bar chart for game intensity (Scores per minute)
 function renderIntensityChart(labels, gameResults) {
-    /*const gameIntensity = gameResults.map(result => {
-        const startTime = new Date(result.date_time);
-        const endTime = new Date(result.end_time);
-        const duration = (endTime - startTime) / 60000;
-        const totalScore = result.score[0] + result.score[1];
-        return totalScore / duration;
-    });*/
+    const chartContainer = document.getElementById('gameIntensityChart').parentNode;
+    const ctxIntensity = document.getElementById('gameIntensityChart').getContext('2d');
+
+    // Check if there is data
+    if (!gameResults || gameResults.length === 0) {
+        // Hide the intensity chart canvas
+        document.getElementById('gameIntensityChart').style.display = 'none';
+        return; // Exit the function, don't render the intensity chart
+    }
 
     const gameIntensity = gameResults.map(result => {
         const durationParts = result.game_duration.split(':'); // Split the "HH:MM:SS" format
@@ -294,7 +303,9 @@ function renderIntensityChart(labels, gameResults) {
         return totalScore / duration; // Calculate intensity (points per minute)
     });
 
-    const ctxIntensity = document.getElementById('gameIntensityChart').getContext('2d');
+    // Show the intensity chart canvas if data exists
+    document.getElementById('gameIntensityChart').style.display = 'block';
+
     new Chart(ctxIntensity, {
         type: 'bar',
         data: {
@@ -367,87 +378,6 @@ function renderMarginPieChart(gameResults) {
     ]);
 }
 
-/*
-// Function to open the modal and render the progression chart
-function openGameProgressionModal(scoreProgression, gameNumber) {
-    const modal = new bootstrap.Modal(document.getElementById('gameProgressionModal'));
-    const canvasId = 'scoreProgressionChartModal';
-    
-    // Clear the existing chart (if any)
-    const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext('2d');
-    if (Chart.getChart(canvasId)) {
-        Chart.getChart(canvasId).destroy();
-    }
-
-    // Render the progression chart inside the modal
-    renderScoreProgressionChart(scoreProgression, canvasId, gameNumber);
-
-    // Open the modal
-    modal.show();
-}
-
-// Function to render the score progression chart in the modal
-function renderScoreProgressionChart(scoreProgression, canvasId, gameNumber) {
-    const ctxProgression = document.getElementById(canvasId).getContext('2d');
-    const playerProgression = scoreProgression.map(score => score[0]);
-    const opponentProgression = scoreProgression.map(score => score[1]);
-
-    new Chart(ctxProgression, {
-        type: 'line',
-        data: {
-            labels: playerProgression.map((_, index) => `Point ${index + 1}`),  // Labels: Point 1, Point 2, etc.
-            datasets: [
-                {
-                    label: `You - Game ${gameNumber}`,
-                    data: playerProgression,
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 4,
-                    fill: false,
-                    pointStyle: 'line' // Use line style for legend
-                },
-                {
-                    label: `Opponent - Game ${gameNumber}`,
-                    data: opponentProgression,
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 4,
-                    fill: false,
-                    pointStyle: 'line' // Use line style for legend
-                }
-            ]
-        },
-        options: {
-            scales: {
-                x: { ticks: { font: { size: 16 } } },
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1,
-                        font: { size: 16 }
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    labels: {
-                        font: { size: 18 },
-                        usePointStyle: true // Display lines in the legend
-                    }
-                },
-                tooltip: {
-                    titleFont: { size: 16 },
-                    bodyFont: { size: 16 }
-                }
-            },
-            elements: {
-                point: {
-                    radius: 0 // Keep circular points visible on the chart
-                }
-            }
-        }
-    });
-}
-*/
 
 // Call the fetchDashboardData function to get the data and render the charts
 fetchDashboardData();
