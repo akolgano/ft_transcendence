@@ -19,7 +19,7 @@ function formatDate(date) {
 }
 
 function addGameResults(game_results) {
-
+	document.querySelector(".profile-page").classList.remove("d-none")
 	const gameResultsDiv = document.getElementById("game-history-container")
 
 	if (game_results.length == 0)
@@ -75,13 +75,59 @@ function updateProfileCard(data)
 			online_text.setAttribute("data-i18n", "profile.offline")
 		translateNewContent(document.getElementById("profile-user-online"))
 	}
+}
 
+function addTournamentResults(tournaments) {
+
+	let tournamentResultsDiv = document.querySelector(".tournament-history-container")
+	if (tournaments.length === 0) {
+		const tournamentHTML = "<p>No tournament results yet</p>"
+		tournamentResultsDiv.insertAdjacentHTML("beforeend", tournamentHTML);
+		return ;
+	}
+
+	tournaments.forEach(result => {
+		const resultHTML = `
+		<div class="d-flex justify-content-between align-items-baseline w-100 mb-4">
+			<div class="date-card rounded bg-light w-25 mb-2 py-1 px-3 bg-info-subtle border-info">
+				<p class="my-1">${formatDate(result.date_time)}</p>
+			</div>
+
+			<div class="ranking-container w-70 d-flex flex-column">
+				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[0] === user ? "border border-warning" : ""}">
+					<p class="my-1">🥇&nbsp;</p>
+					<p class="w-20 my-1" data-i18n="profile.first"></p>
+					<p class="my-1"><b>${result.results[0]}</b></p>
+				</div>
+				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[1] === user ? "border border-warning" : ""}">
+					<p class="my-1">🥈&nbsp;</p>
+					<p class="w-20 my-1" data-i18n="profile.second"></p>
+					<p class="my-1"><b>${result.results[1]}</b></p>
+				</div>
+				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[2] === user ? "border border-warning" : ""}">
+					<p class="my-1">🥉&nbsp;</p>
+					<p class="w-20 my-1" data-i18n="profile.third"></p>
+					<p class="my-1"><b>${result.results[2]}</b></p>
+				</div>
+				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[3] === user ? "border border-warning" : ""}">
+					<p class="my-1">🪨&nbsp;</p>
+					<p class="w-20 my-1" data-i18n="profile.fourth"></p>
+					<p class="my-1"><b>${result.results[3]}</b></p>
+				</div>
+			</div>
+		</div>`
+		tournamentResultsDiv.insertAdjacentHTML("beforeend", resultHTML);
+	});
+	translateNewContent(tournamentResultsDiv)
 }
 
 function addResultsToHTML(data) {
 
 	updateProfileCard(data);
+	console.log("ADD RESULTS TO HTML")
 	addGameResults(data.game_results);
+	console.log("ADD TOURNAMENTS TO HTML")
+	addTournamentResults(data.tournaments)
 }
 
 function getArgument() {
@@ -123,6 +169,8 @@ async function fetchHistory(urlArgument) {
 		}
 
 		if (!response.ok) {
+			if (data.error === "User not found")
+				document.querySelector("#content").innerHTML = "<p>No user found with this username</p>"
 			console.log("Error: " + JSON.stringify(data))
 			throw new Error(JSON.stringify(data.detail) || 'An error occurred');
 		}
@@ -140,7 +188,7 @@ async function fetchHistory(urlArgument) {
 	} catch (error) {
 		removeAlert();
 		displayAlert("profile.error-load", "danger");
-		console.log(error.message)
+		// console.log(error.message)
 	}
 }
 
@@ -151,3 +199,6 @@ function profileScript() {
 }
 
 profileScript()
+
+
+// History data: {"username":"alex","profile_picture":"/media/profile_pictures/redpanda.jpg","victories":0,"losses":0,"online":true,"points":-5,"game_results":[],"tournaments":[{"results":["p1","p2","alex","p4"],"date_time":"2024-10-16T08:07:43.237261Z"}]}
