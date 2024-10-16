@@ -90,7 +90,9 @@
 		"third": "Troisième: ",
 		"fourth": "Quatrième: ",
 		"online": "🟢 en ligne",
-		"offline": "🔴 hors ligne"
+		"offline": "🔴 hors ligne",
+		"tour-no-result": "No tournament result yet",
+		"game-no-result": "No game result yet"
 	},
 	"404": "Erreur transcendente : page non trouvée",
 	"error-fetch": "Erreur inattendue, veuillez réessayer plus tard."

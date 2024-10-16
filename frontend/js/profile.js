@@ -24,8 +24,9 @@ function addGameResults(game_results) {
 
 	if (game_results.length == 0)
 	{
-		const gameHTML = "<p>No game results yet</p>"
+		const gameHTML = `<p data-i18n="profile.game-no-result"></p>`
 		gameResultsDiv.insertAdjacentHTML("beforeend", gameHTML);
+		translateNewContent(gameResultsDiv)
 	}
 	else
 	{
@@ -80,9 +81,12 @@ function updateProfileCard(data)
 function addTournamentResults(tournaments) {
 
 	let tournamentResultsDiv = document.querySelector(".tournament-history-container")
+	const user = JSON.parse(localStorage.getItem("user")).username;
+
 	if (tournaments.length === 0) {
-		const tournamentHTML = "<p>No tournament results yet</p>"
+		const tournamentHTML = `<p data-i18n="profile.tour-no-result">No tournament results yet</p>`
 		tournamentResultsDiv.insertAdjacentHTML("beforeend", tournamentHTML);
+		translateNewContent(tournamentResultsDiv)
 		return ;
 	}
 
@@ -124,9 +128,7 @@ function addTournamentResults(tournaments) {
 function addResultsToHTML(data) {
 
 	updateProfileCard(data);
-	console.log("ADD RESULTS TO HTML")
 	addGameResults(data.game_results);
-	console.log("ADD TOURNAMENTS TO HTML")
 	addTournamentResults(data.tournaments)
 }
 
