@@ -61,7 +61,7 @@ class PlayerStatsSerializer(serializers.ModelSerializer):
     profile_picture = serializers.ImageField(source='user.profile_picture', read_only=True)
     class Meta:
         model = PlayerStats
-        fields = ['username', 'profile_picture', 'victories', 'losses', 'online']
+        fields = ['username', 'profile_picture', 'victories', 'losses', 'online', 'points']
 
 class ChangeUsernameSerializer(serializers.Serializer):
     new_username = serializers.CharField(required=True, min_length=1, max_length=20)

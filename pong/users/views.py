@@ -225,8 +225,10 @@ def save_game_result(request):
     player_stats, created = PlayerStats.objects.get_or_create(user=user)
     if score[0] > score[1]: 
         player_stats.victories += 1
+        player_stats.points += 10
     else: 
         player_stats.losses += 1
+        player_stats.points -=5
     player_stats.save()
 
     return Response({'detail': 'Score saved successfully.'}, status=status.HTTP_201_CREATED)
@@ -259,8 +261,8 @@ def get_player(request, username):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def all_player_stats(request):
-    stats = PlayerStats.objects.all()
+def all_players(request):
+    stats = PlayerStats.objects.all().order_by("-points")
     serializer = PlayerStatsSerializer(stats, many=True)
     return Response(serializer.data)
 
@@ -311,4 +313,14 @@ def save_tournament_result(request):
         results=results
     )
 
+    player_stats, created = PlayerStats.objects.get_or_create(user=user)
+    place = results.index(user.username)
+    print(place)
+    if place == 0:
+        player_stats.points += 20
+    elif place == 1:
+        player_stats.points += 10
+    elif place == 3:
+        player_stats.points -= 5
+    player_stats.save()
     return Response({'detail': 'Tournament result saved successfully.'}, status=status.HTTP_201_CREATED)
