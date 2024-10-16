@@ -170,6 +170,11 @@ const urlLocationHandler = () => {
 	let location = window.location.pathname;
 	last_page = window.location.pathname;
 
+	if (location[location.length -1] === "/")
+		location[location.length -1] = "";
+
+	console.log("Location: " + location)
+
 	// Logged in but user tries to go to login or sign up
 	if (localStorage.getItem("token") && (location == "/login" || location == "/signup"))
 		location = "/";
