@@ -108,7 +108,7 @@ class PlayerStatsAdmin(admin.ModelAdmin):
     Admin interface for managing PlayerStats instances.
     """
 
-    list_display = ('user', 'victories', 'losses')
+    list_display = ('user', 'victories', 'losses', 'points')
     search_fields = ('user__username',)
 
 admin.site.register(GameResult, GameResultAdmin)
