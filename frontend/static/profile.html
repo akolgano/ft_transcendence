@@ -135,10 +135,23 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="gameProgressionModalLabel">Game Progression</h5>
+        <h5 class="modal-title" id="gameProgressionModalLabel" data-i18n="dash.game-progression">Game Progression</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        <!-- Turquoise line and label for "You" -->
+        <div style="display: flex; align-items: center; margin: 10px 0;">
+          <hr style="border: 2px solid rgba(75, 192, 192, 1); width: 5%; margin: 0; opacity: 1;">
+          <h6 style="margin-left: 10px;" data-i18n="dash.you">You</h6>
+        </div>
+
+        <!-- Red line and label for "Opponent" -->
+        <div style="display: flex; align-items: center; margin: 10px 0;">
+          <hr style="border: 2px solid rgba(255, 99, 132, 1); width: 5%; margin: 0; opacity: 1;">
+          <h6 style="margin-left: 10px;" data-i18n="dash.opponent">Opponent</h6>
+        </div>
+
+        <!-- Dynamic chart canvas -->
         <canvas id="scoreProgressionChartModal" class="w-100 mb-4"></canvas> <!-- Canvas for dynamic chart -->
       </div>
       <div class="modal-footer">
@@ -147,3 +160,4 @@
     </div>
   </div>
 </div>
+

@@ -184,10 +184,10 @@ function renderScoreProgressionChart(scoreProgression, canvasId, gameNumber) {
     new Chart(ctxProgression, {
         type: 'line',
         data: {
-            labels: playerProgression.map((_, index) => `Point ${index + 1}`),  // Labels: Point 1, Point 2, etc.
+            labels: playerProgression.map((_, index) => `${index + 1}`),  // Labels: Point 1, Point 2, etc.
             datasets: [
                 {
-                    label: `You - Game ${gameNumber}`,
+                    //label: `You - Game ${gameNumber}`,
                     data: playerProgression,
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 4,
@@ -195,7 +195,7 @@ function renderScoreProgressionChart(scoreProgression, canvasId, gameNumber) {
                     pointStyle: 'line' // Use line style for legend
                 },
                 {
-                    label: `Opponent - Game ${gameNumber}`,
+                    //label: `Opponent - Game ${gameNumber}`,
                     data: opponentProgression,
                     borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 4,
@@ -217,10 +217,7 @@ function renderScoreProgressionChart(scoreProgression, canvasId, gameNumber) {
             },
             plugins: {
                 legend: {
-                    labels: {
-                        font: { size: 18 },
-                        usePointStyle: true // Display lines in the legend
-                    }
+                    display: false
                 },
                 tooltip: {
                     titleFont: { size: 16 },
