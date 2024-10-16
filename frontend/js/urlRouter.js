@@ -10,6 +10,7 @@
 
 let siteLanguage = "en"
 let last_page = "/"
+const baseUrl = "https://localhost"
 
 var translator = new Translator({
 	defaultLanguage: "fr",
@@ -48,73 +49,73 @@ function registerLanguageToggle() {
 
 const urlRoutes = {
 	404: {
-		template: "static/404.html",
+		template: "/static/404.html",
 		title: "404",
 		description: "Page not found",
 		scripts: [],
 		auth: false,
 	},
 	"/": {
-		template: "static/play.html",
+		template: "/static/play.html",
 		title: "Home",
 		description: "Home page",
-		scripts: ["../js/game.js"],
+		scripts: ["/js/game.js"],
 		auth: true,
 	},
 	"/play": {
-		template: "static/play.html",
+		template: "/static/play.html",
 		title: "Home",
 		description: "Home page",
-		scripts: ["../js/game.js"],
+		scripts: ["/js/game.js"],
 		auth: true,
 	},
 	"/friends": {
-		template: "static/friends.html",
+		template: "/static/friends.html",
 		title: "Friends",
 		description: "All your friends",
-		scripts: ["../js/removeFriend.js", "../js/friends.js", "../js/addFriend.js"],
+		scripts: ["/js/removeFriend.js", "/js/friends.js", "/js/addFriend.js"],
 		auth: true,
 	},
 	"/profile": {
-		template: "static/profile.html",
+		template: "/static/profile.html",
 		title: "profile",
 		description: "Game profile",
-		scripts: ["../js/profile.js"],
+		scripts: ["/js/profile.js"],
 		auth: true,
 	},
 	"/profile/:username": {
-		template: "static/profile.html",
+		template: "/static/profile.html",
 		title: "profile",
 		description: "Game profile",
-		scripts: ["../js/profile.js"],
+		scripts: ["/js/profile.js"],
 		auth: true,
 	},
 	"/signup": {
-		template: "static/signup.html",
+		template: "/static/signup.html",
 		title: "Sign up",
 		description: "Sign up to play pong",
-		scripts: ["../js/signup.js"],
+		scripts: ["/js/signup.js"],
 		auth: false,
 	},
 	"/login": {
-		template: "static/login.html",
+		template: "/static/login.html",
 		title: "Log in",
 		description: "Log in to play pong",
-		scripts: ["../js/login.js"],
+		scripts: ["/js/login.js"],
 		auth: false,
 	},
 	"/account": {
-		template: "static/account.html",
+		template: "/static/account.html",
 		title: "account",
 		description: "Your account",
-		scripts: ["../js/account.js", "../js/changePassword.js", "../js/changePicture.js", "../js/defaultLanguage.js", "../js/changeUsername.js"],
+		scripts: ["/js/account.js", "/js/changePassword.js", "/js/changePicture.js", "/js/defaultLanguage.js", "/js/changeUsername.js"],
 		auth: true,
 	},
 	"/dashboard": {
-		template: "static/dashboard.html",
+		template: "/static/dashboard.html",
 		title: "dashboard",
 		description: "Your dashboard",
-		scripts: ["../js/dashboard.js"],
+		scripts: ["/js/dashboard.js"],
 		auth: true,
 	},
 };
@@ -157,8 +158,6 @@ function handleDynamicRoutes(location) {
 	{
 		let param = split_location[2];
 		let route = "/profile/:username";
-		console.log("Dynamic route");
-		console.log("Param: " + param);
 		return { "route": route, "param": param}
 	}
 	else
@@ -166,10 +165,15 @@ function handleDynamicRoutes(location) {
 }
 
 // Function that handles the url location
-const urlLocationHandler = async () => {
+const urlLocationHandler = () => {
 
 	let location = window.location.pathname;
 	last_page = window.location.pathname;
+
+	if (location[location.length -1] === "/")
+		location[location.length -1] = "";
+
+	console.log("Location: " + location)
 
 	// Logged in but user tries to go to login or sign up
 	if (localStorage.getItem("token") && (location == "/login" || location == "/signup"))
@@ -182,9 +186,11 @@ const urlLocationHandler = async () => {
 	if (localStorage.getItem("token") == null && urlRoutes[location] && urlRoutes[location].auth == true)
 		location = "/login"
 
-	// Get the route, get the html, add it to the div
 	let dynamic = handleDynamicRoutes(location)
-	if (dynamic)
+
+	if (localStorage.getItem("token") == null && dynamic)
+		location = "/login"
+	else if (dynamic)
 		location = dynamic.route;
 
 	const route = urlRoutes[location] || urlRoutes["404"];
@@ -231,14 +237,14 @@ const loadScripts = (scripts) => {
 // Fetch all the pages already to have everything on the client side.
 const fetchTemplate = async (route) => {
 	try {
-		const response = await fetch(route.template);
+		const response = await fetch(baseUrl + route.template);
 		const html = await response.text()
 		route.content = html;
 
 		route.scriptContent = []
 
 		for (let script of route.scripts) {
-			const scriptResponse = await fetch(script)
+			const scriptResponse = await fetch(baseUrl + script)
 			const scriptText = await scriptResponse.text()
 			route.scriptContent.push(scriptText);
 		}
@@ -249,10 +255,11 @@ const fetchTemplate = async (route) => {
 }
 
 const fetchPages = async () => {
+	console.log("FETCHING PAGES")
 	for (let route in urlRoutes) {
 		await fetchTemplate(urlRoutes[route])
 	}
-	const logoutResponse = await fetch("../js/logout.js")
+	const logoutResponse = await fetch(baseUrl + "/js/logout.js")
 	logoutScript = await logoutResponse.text()
 
 	// call the urlLocationHandler function to handle the initial url
@@ -294,7 +301,7 @@ const run = async () => {
 	await fetchPages();
 
 	if (localStorage.getItem("token"))
-			updateNavbar(true)
+		updateNavbar(true)
 	else
 		updateNavbar(false)
 
