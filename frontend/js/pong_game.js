@@ -1,16 +1,4 @@
 console.log("PONG GAME SCRIPT");
-   
-	// Function to show game options
-	function showGameOptions() {
-	document.getElementById('gameOptions').style.display = 'flex';
-	document.getElementById('tourOptions').style.display = 'none';		
-	document.getElementById('gameContainerAI').style.display = 'none';
-	document.getElementById('gameContainerPP').style.display = 'none';
-	document.getElementById('tournamentContainer').style.display = 'none';
-	document.getElementById('tournamentOverModal').style.display = 'none';
-	tournamentMode = false;	
-	}
-
 	function setActiveCanvas(canvasId) {
 		activeCanvas = document.getElementById(canvasId);  // Assign the active canvas
 		ctx = activeCanvas.getContext('2d');  // Set the context for the active canvas
@@ -67,9 +55,12 @@ console.log("PONG GAME SCRIPT");
 		sPressed = false;
 		ArrowUpPressed = false;
 		ArrowDownPressed = false; 
-		isPlayerAI = false;
+		is_ai = false;
 		
 		gameOver = false;
+		gameStartTime = new Date();
+		progression = [];
+
 		isPaused = false;
 		readyKickoff = false;      
 		winner = '';
@@ -142,9 +133,12 @@ console.log("PONG GAME SCRIPT");
 		sPressed = false;
 		ArrowUpPressed = false;
 		ArrowDownPressed = false; 
-		isPlayerAI = true;
+		is_ai = true;
 
 		gameOver = false;
+		gameStartTime = new Date();
+		progression = [];
+
 		isPaused = false;
 		readyKickoff = false;      
 		winner = '';
@@ -249,7 +243,7 @@ console.log("PONG GAME SCRIPT");
 	ball.x = activeCanvas.width / 2;
 	ball.y = activeCanvas.height / 2;
 	player1.y = activeCanvas.height / 2 - player1.height / 2;
-	if (isPlayerAI) {
+	if (is_ai) {
         playerAI.y = activeCanvas.height / 2 - 100 / 2;
         } else {
         player2.y = activeCanvas.height / 2 - 100 / 2;
@@ -341,7 +335,7 @@ function isContact(ball, paddle) {
 		if (ArrowUpPressed && player1.y > 0) player1.y -= paddleSpeed;
 		if (ArrowDownPressed && (player1.y + player1.height) < activeCanvas.height) player1.y += paddleSpeed;
 			
-		if (isPlayerAI) {			
+		if (is_ai) {			
 			if ((Math.abs(predictedY - (playerAI.y + playerAI.height / 2)) > aiBuffer) && ball.velocityX < 0)
 			{
 			    let playerAIDirection = predictedY < playerAI.y + playerAI.height / 2 ? -1 : 1;
@@ -367,7 +361,7 @@ function isContact(ball, paddle) {
 		}
 
 		let player = player1;
-		if (isPlayerAI) {
+		if (is_ai) {
 			player = (ball.x < activeCanvas.width / 2) ? playerAI : player1;
 		} else {
 			player = (ball.x < activeCanvas.width / 2) ? player2 : player1;
@@ -380,25 +374,33 @@ function isContact(ball, paddle) {
 
 		if(ball.x - ball.radius < 0) {
 		    player1.score++;
+			progression.push(0);  // Record the progression (0 for player 1)
 		    kickOff();
 		} else if(ball.x + ball.radius > activeCanvas.width) {
-		    if (isPlayerAI) {	
-		    playerAI.score++;
+		    if (is_ai) {	
+				playerAI.score++;
+				progression.push(1);  // Record the progression (1 for player 2 or AI)
 		    } else {
-		    player2.score++;}
+				player2.score++;
+				progression.push(1);  // Record the progression (1 for player 2 or AI)
+			}
 		    kickOff();
 		}
 		
-		if (isPlayerAI) {
-		if(playerAI.score === 1 || player1.score === 1) {
+		if (is_ai) {
+		if(playerAI.score === 5 || player1.score === 5) {
 		    gameOver = true;
-		    winner = playerAI.score === 1 ? 'Player AI' : 'Player 1';
+		    winner = playerAI.score === 5 ? 'Player AI' : 'Player 1';
 		    console.log("WinnerAI:", winner);  // Debugging to see what the winner is
+			gameEndTime = new Date();  // Record the end time
+			prepGameAndSend();
 		}} else {
-		if(player2.score === 1 || player1.score === 1) {
+		if(player2.score === 5 || player1.score === 5) {
 		    gameOver = true;
-		    winner = player2.score === 1 ? player2.name : player1.name;
+		    winner = player2.score === 5 ? player2.name : player1.name;
 		    console.log("WinnerPP:", winner);  // Debugging to see what the winner is
+			gameEndTime = new Date();  // Record the end time
+			prepGameAndSend();
 		}}
 	}
 //
@@ -416,12 +418,11 @@ function isContact(ball, paddle) {
 	}
 //
 	function render() {
-		
 		drawRect(0, 0, activeCanvas.width, activeCanvas.height, '#000'); // outer-perimeter	
 		drawRect(activeCanvas.width/2 - 2, 0, 4, activeCanvas.height, '#FFF'); // centre-line
 		drawCircle(ball.x, ball.y, ball.radius, ball.color);
 		drawRect(player1.x, player1.y, player1.width, player1.height, player1.color);
-		if (isPlayerAI) {
+		if (is_ai) {
 		drawRect(playerAI.x, playerAI.y, playerAI.width, playerAI.height, playerAI.color);
 		drawText(playerAI.score, activeCanvas.width / 4, 40);
 		} else { 
@@ -460,7 +461,7 @@ function isContact(ball, paddle) {
 			matchIndex++;
 			console.log(winners, matchIndex);
 			}
-			else if (isPlayerAI) {
+			else if (is_ai) {
 			showGameOverModalAI();
 			} else {
 			showGameOverModalPP();
@@ -470,5 +471,63 @@ function isContact(ball, paddle) {
 		}
 		gameLoopId = requestAnimationFrame(gameLoop);
 	}
-	
+
+	// Function to calculate game duration
+	function calculateGameDuration(startTime, endTime) {
+		const durationMs = endTime - startTime;  // Duration in milliseconds
+		const seconds = Math.floor((durationMs / 1000) % 60);
+		const minutes = Math.floor((durationMs / (1000 * 60)) % 60);
+		const hours = Math.floor((durationMs / (1000 * 60 * 60)) % 24);
+		
+		// Format duration as HH:MM:SS
+		return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+	// Function at end of match to prepare and send game data
+	function prepGameAndSend() {
+		const gameDuration = calculateGameDuration(gameStartTime, gameEndTime);
+		score = [player1.score, player2.score];
+
+		// Create gameData object
+		const gameData = {
+			username: player1.name,
+			date_time: gameStartTime.toISOString(),
+			opponent_username: is_ai ? playerAI : player2.name,  // Conditional assignment
+			is_ai: is_ai,
+			score: score,
+			game_duration: gameDuration,
+			progression: progression
+		};
+		
+		console.log("Username: " + gameData.username);
+		console.log("Date and Time: " + gameData.date_time);
+		console.log("Opponent Username: " + gameData.opponent_username);
+		console.log("Is AI: " + gameData.is_ai);
+		console.log("Score: " + gameData.score);
+		console.log("Game Duration: " + gameData.game_duration);
+		console.log("Progression: " + gameData.progression);
+
+		// Send gameData to the server via POST request
+		sendGameDataToServer(gameData);
+	}
+
+	// Function to send game data to the server via a POST request
+	function sendGameDataToServer(gameData) {
+		fetch('https://localhost/api/game/result/', {
+			method: 'POST',
+			headers: {
+				'Authorization': 'Token aae1e7a8e278a85d245e20a87e466529af6d2643',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(gameData),
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Game data successfully sent:', data);
+		})
+		.catch(error => {
+			console.error('Error sending game data:', error);
+		});
+	}
+
 startPvPpractice();

@@ -56,7 +56,7 @@ console.log("PONG GAME SCRIPT");
 		sPressed = false;
 		ArrowUpPressed = false;
 		ArrowDownPressed = false; 
-		isPlayerAI = false;
+		is_ai = false;
 		
 		gameOver = false;
 		isPaused = false;
@@ -173,7 +173,7 @@ console.log("PONG GAME SCRIPT");
 	ball.x = activeCanvas.width / 2;
 	ball.y = activeCanvas.height / 2;
 	player1.y = activeCanvas.height / 2 - player1.height / 2;
-	if (isPlayerAI) {
+	if (is_ai) {
         playerAI.y = activeCanvas.height / 2 - 100 / 2;
         } else {
         player2.y = activeCanvas.height / 2 - 100 / 2;
@@ -265,7 +265,7 @@ function isContact(ball, paddle) {
 		if (ArrowUpPressed && player1.y > 0) player1.y -= paddleSpeed;
 		if (ArrowDownPressed && (player1.y + player1.height) < activeCanvas.height) player1.y += paddleSpeed;
 			
-		if (isPlayerAI) {			
+		if (is_ai) {			
 			if ((Math.abs(predictedY - (playerAI.y + playerAI.height / 2)) > aiBuffer) && ball.velocityX < 0)
 			{
 			    let playerAIDirection = predictedY < playerAI.y + playerAI.height / 2 ? -1 : 1;
@@ -291,7 +291,7 @@ function isContact(ball, paddle) {
 		}
 
 		let player = player1;
-		if (isPlayerAI) {
+		if (is_ai) {
 			player = (ball.x < activeCanvas.width / 2) ? playerAI : player1;
 		} else {
 			player = (ball.x < activeCanvas.width / 2) ? player2 : player1;
@@ -306,14 +306,14 @@ function isContact(ball, paddle) {
 		    player1.score++;
 		    kickOff();
 		} else if(ball.x + ball.radius > activeCanvas.width) {
-		    if (isPlayerAI) {	
+		    if (is_ai) {	
 		    playerAI.score++;
 		    } else {
 		    player2.score++;}
 		    kickOff();
 		}
 		
-		if (isPlayerAI) {
+		if (is_ai) {
 		if(playerAI.score === 1 || player1.score === 1) {
 		    gameOver = true;
 		    winner = playerAI.score === 1 ? 'Player AI' : 'Player 1';
@@ -345,7 +345,7 @@ function isContact(ball, paddle) {
 		drawRect(activeCanvas.width/2 - 2, 0, 4, activeCanvas.height, '#FFF'); // centre-line
 		drawCircle(ball.x, ball.y, ball.radius, ball.color);
 		drawRect(player1.x, player1.y, player1.width, player1.height, player1.color);
-		if (isPlayerAI) {
+		if (is_ai) {
 		drawRect(playerAI.x, playerAI.y, playerAI.width, playerAI.height, playerAI.color);
 		drawText(playerAI.score, activeCanvas.width / 4, 40);
 		} else { 
@@ -384,7 +384,7 @@ function isContact(ball, paddle) {
 			matchIndex++;
 			console.log(winners, matchIndex);
 			}
-			else if (isPlayerAI) {
+			else if (is_ai) {
 			showGameOverModalAI();
 			} else {
 			showGameOverModalPP();

@@ -1,35 +1,44 @@
 //Pong Game Global variables
-        let ball, player1, player2, playerAI;
-        let players = [], currentRound = 0, tournamentMode = false;  // Declare for tournament
-        const canvasTournament = document.getElementById('pongGameCanvasTournament');
-        let ctxTournament;
-    
-        const canvasAI = document.getElementById('pongGameCanvasAI');
-	const canvasPP = document.getElementById('pongGameCanvasPP');
-	
-	let activeCanvas;
-        let ctx;
-        
-        let wPressed = false;
-        let sPressed = false;
-        let ArrowUpPressed = false;
-        let ArrowDownPressed = false; 
+	let ball, player1, player2, playerAI;
+	let players = [], currentRound = 0, tournamentMode = false;  // Declare for tournament
+	const canvasTournament = document.getElementById('pongGameCanvasTournament');
+	let ctxTournament;
 
-        let gameOver = false;
-        let isPaused = false;
-        let readyKickoff = false;      
-        let winner = '';
-        let gameLoopId = null;
+	const canvasAI = document.getElementById('pongGameCanvasAI');
+	const canvasPP = document.getElementById('pongGameCanvasPP');
+
+	let activeCanvas;
+	let ctx;
+	
+	let wPressed = false;
+	let sPressed = false;
+	let ArrowUpPressed = false;
+	let ArrowDownPressed = false; 
+
+	let gameOver = false;
+	let isPaused = false;
+	let readyKickoff = false;      
+	let winner = '';
+	let gameLoopId = null;
 
 	let isPlayerAI = false;
 	let lastUpdateTime = 0;
 	let updateInterval = 1000;  // AI "sees" the ball every 1 second
 	let predictedY = 200;  // Initialize with the center position
 
-	// global variables tournament match
+	// Tournament Global variables
 	let matchIndex = 0;
 	let winners = [];
 	let tournamentMatches = [];
+
+	// Game Data Global variables
+	let username = "";  // Assume this is dynamically set during login or game start
+	let opponent_username = "";  // Assume this is also dynamically set
+	let is_ai = false;  // Whether the opponent is AI
+	let score = [0, 0];  // Initial score of the game
+	let gameStartTime = null;  // To record the start time of the game
+	let gameEndTime = null;  // To record the end time of the game
+	let progression = [];  // This will hold the progression of the game
 
 const togglePassword = (event) => {
 	event.preventDefault()

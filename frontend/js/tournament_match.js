@@ -68,7 +68,7 @@ function updateTournamentBracket() {
         bracket += `
             <br><br><br><br><br><br><br>
             <div class='match-box'>
-                <div class='match-title' data-i18n="tour.wsm1vwsm2"></div>
+                <div class='match-title' data-i18n="tour.wsm1vwsm2">Winner Semi-Final 1<br>vs<br>Winner Semi-Final 2</div>
                 <div class='winner-placeholder' data-i18n="play.winner">Winner: <span id='winnerFinal'></span></div>
             </div>
         `;
