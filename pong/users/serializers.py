@@ -77,4 +77,4 @@ class ChangeUsernameSerializer(serializers.Serializer):
 class TournamentResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = TournamentResult
-        fields = ['results', 'date_time']
+        fields = ['results', 'date_time', 'nickname']

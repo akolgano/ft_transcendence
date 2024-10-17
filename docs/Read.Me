@@ -100,7 +100,7 @@ curl -k -X PATCH https://localhost/api/change_language/ -H "Authorization: Token
 
 ------------------Save game result------------------
 
-curl -k -X POST https://localhost/api/game/result/ -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b" -H "Content-Type: application/json" -d '{"opponent_username": "melina", "is_ai": false, "score": [5, 2], "game_duration": "00:00:01", "progression": [0,0,0,0,0,1,1]}'
+curl -k -X POST https://localhost/api/game/result/ -H "Authorization: Token fa50a46acd6196e9b8a9cd9d032e3dfe8c3faf1a" -H "Content-Type: application/json" -d '{"opponent_username": "melina", "is_ai": false, "score": [5, 2], "game_duration": "00:00:01", "progression": [0,0,0,0,0,1,1]}'
 
 ------------------Get game results for the user---
 curl -k -X GET https://localhost/api/player/stats/anna/ -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b"
@@ -115,7 +115,9 @@ curl -k -X PATCH https://localhost/api/change_username/ -H "Authorization: Token
 {"detail":"Username changed successfully."}/{"error":"Username already taken."}/{"error":"New username is required."}
 
 -----------------Save tournament result-----------------
-curl -k -X POST https://localhost/api/tournament/result/ -H "Authorization: Token 63091c63772cb4d1316f400131c5a0d54624ec9a" -H "Content-Type: application/json" -d '{"results": ["anna", "guest1", "guest2", "guest3"]}'
+curl -k -X POST https://localhost/api/tournament/result/ -H "Authorization: Token 59c5fa225f9d3aa02d3f8d80ed33cb7e18e98fa2" -H "Content-Type: application/json" -d '{"results": ["anna", "guest1", "guest2", "guest3"], "nickname" : "anna"}'
+
+{"error":"No nickname in results."}/{"detail":"Tournament result saved successfully."}
 
 -----------------Get all users ordered by points--------
 curl -k -X GET https://localhost/api/all_players/ -H "Authorization: Token dd5a0ddcf5849520e5c84971e6e0abf70e176b7e"
