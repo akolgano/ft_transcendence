@@ -192,24 +192,14 @@ def save_game_result(request):
     user = request.user
     is_ai = request.data.get('is_ai')
     game_duration = request.data.get('game_duration')
-    if is_ai == "0":
+    if is_ai is False:
         opponent_username = request.data.get('opponent_username')
     else:
         opponent_username = ''
-    score = request.POST.getlist('score[]')
-
-    try:
-        score = list(map(int, score))  # Converts '["5", "2"]' to [5, 2]
-    except ValueError:
-        return Response({'error': 'Invalid score format.'}, status=status.HTTP_400_BAD_REQUEST)
+    score = request.data.get('score')
 
 # Proceed
-    progression = request.POST.getlist('progression[]')
-    try:
-        progression = list(map(int, progression))  # Converts '["5", "2"]' to [5, 2]
-    except ValueError:
-        return Response({'error': 'Invalid format progression.'}, status=status.HTTP_400_BAD_REQUEST)
-
+    progression = request.data.get('progression')
     if User.objects.filter(username=opponent_username).exists():
         return Response({'error': 'Opponent username is already registered.'}, status=status.HTTP_400_BAD_REQUEST)
     if score is None:
