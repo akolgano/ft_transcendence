@@ -19,24 +19,28 @@ function addGameResults(game_results) {
 
 			const gameHTML = `
 			<div class="game-card border rounded bg-light w-100 d-inline-block p-1 mb-2 bg-success-subtle" data-index="${index}">
-				<div class="d-flex justify-content-between px-2">
-					<p class="my-1 me-5">${result}&nbsp;&nbsp;${game.score[0]} - ${game.score[1]}</p>
-					<p class="my-1 flex-grow-1">${opponent}</p>
-					<p class="my-1">${date}</p>
-				</div>
+			    <div class="d-flex justify-content-between px-2">
+			        <p class="my-1 me-5">${result}&nbsp;&nbsp;${game.score[0]} - ${game.score[1]}</p>
+			        <p class="my-1 flex-grow-1">${opponent}</p>
+			        <p class="my-1">${date}</p>
+			        <button class="btn btn-primary my-1 show-chart-btn ms-4" data-index="${index}">📊</button>
+			    </div>
 			</div>`;
+
+
 			gameResultsDiv.insertAdjacentHTML("beforeend", gameHTML);
 		});
 
-		// Add hover event to each game card
-		document.querySelectorAll('.game-card').forEach((card, index) => {
-			card.addEventListener('mouseenter', (event) => {
+		// Add click event listener to each button
+		document.querySelectorAll('.show-chart-btn').forEach((button, index) => {
+			button.addEventListener('click', () => {
 				const gameData = game_results[index];
 				openGameProgressionModal(gameData.progression, index + 1); // Open modal with game progression
 			});
 		});
 	}
 }
+
 
 function updateProfileCard(data)
 {
