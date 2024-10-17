@@ -24,6 +24,7 @@ function setUpTournament(players) {
 	gameData.secondSemi = draw.slice(2, 4);
 	gameData.miniFinals = [];
 	gameData.finals = [];
+	gameData.nickname = players[0]
 }
 
 function validateTourUsernames(event) {

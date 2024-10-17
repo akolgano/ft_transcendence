@@ -52,17 +52,20 @@ async function sendSimpleGameData(opponent, scoreUser, scoreGuest, duration, pro
 
 
 
-async function sendTournamentData() {
+async function sendTournamentData(results, nickname) {
 	let formData = new FormData()
-
+	formData.append("results", results)
+	formData.append("nickname", nickname)
+	console.log("Results: " + results)
 	try {
 		const response = await fetch("https://localhost/api/tournament/result/", {
 			headers: {
 				'Authorization': `Token ${localStorage.getItem("token")}`,
 				'Accept': 'application/json',
+				'Content-Type': 'application/json'
 			},
 			method: 'POST',
-			body: formData,
+			body: JSON.stringify({"results": results, "nickname": nickname}),
 		})
 
 		let data;
@@ -86,7 +89,6 @@ async function sendTournamentData() {
 			console.log("Error saving data: " + data.message);
 		}
 	} catch (error) {
-
 		console.log(error.message)
 	}
 }

@@ -191,11 +191,8 @@ def user_friends_view(request):
 def save_game_result(request):
     user = request.user
     is_ai = request.data.get('is_ai')
-    print(is_ai)
     game_duration = request.data.get('game_duration')
-    print(request.data.get('opponent_username'))
-    if is_ai is "0":
-        print("here")
+    if is_ai == "0":
         opponent_username = request.data.get('opponent_username')
     else:
         opponent_username = ''

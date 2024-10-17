@@ -220,6 +220,7 @@
 				gameData.first = winner;
 				gameData.second = looser;
 				gameData.currentGame = null;
+				sendTournamentData([gameData.first, gameData.second, gameData.third, gameData.fourth], gameData.nickname)
 				break;
 			default:
 				break;
