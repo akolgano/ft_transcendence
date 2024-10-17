@@ -362,9 +362,7 @@ function renderIntensityChart(labels, gameResults) {
                     callbacks: {
                         label: function (context) {
                             const game = gameResults[context.dataIndex];
-                            const startTime = new Date(game.date_time).toLocaleTimeString('en-GB', { timeZone: 'UTC' });
-                            const endTime = new Date(game.end_time).toLocaleTimeString('en-GB', { timeZone: 'UTC' });
-                            return `Intensity: ${context.raw.toFixed(2)} scores/min (Start: ${startTime}, End: ${endTime})`;
+                            return `Intensity: ${context.raw.toFixed(2)} scores/min`;
                         }
                     }
                 }
