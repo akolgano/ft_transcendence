@@ -106,7 +106,14 @@
 		"mini-finals": "Mini finals: ",
 		"finals": "Finals: ",
 		"tournament": "Tournament",
-		"winner": "Winner: "
+		"winner": "Winner: ",
+		"start": "Start tournament",
+		"congrats": "🎉 Congratulations",
+		"you-won": "You won",
+		"against": "against",
+		"play-again": "Play another game",
+		"press-start": "Press SPACE to start",
+		"play-ai": "Play agianst AI"
 	},
 	"404": "Transcendent error: page not found",
 	"error-fetch": "Unexpected error, please try again later."

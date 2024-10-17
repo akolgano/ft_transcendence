@@ -6,7 +6,7 @@
 				<span class="text-uppercase fs-5 name-user"><b>USER</b></span>
 				<span id="playerUser" class="fs-5"></span>
 			</div>
-			<p class="space-start text-danger">Press SPACE to start</p>
+			<p class="space-start text-danger" data-i18n="game.press-start">Press SPACE to start</p>
 			<div>
 				<span class="text-uppercase fs-5 name-opponent"><b>OPPONENT </b></span>
 				<span id="playerGuest" class="fs-5"></span>
@@ -21,18 +21,17 @@
 	<div class="modal-dialog">
 	  <div class="modal-content">
 		<div class="modal-header d-flex justify-content-start">
-			<h5 class="modal-title">Congratulations&nbsp;</h5>
+			<h5 class="modal-title me-1" data-i18n="game.congrats">&nbsp;</h5>
 			<h5 class="modal-title modal-title-winner"></h5>
-			<h5 class="modal-title">&nbsp;🎉</h5>
 		</div>
 		<div class="modal-body d-flex justify-content-start">
-		  <p>You won&nbsp;</p>
-		  <p class="modal-score"></p>
-		  <p>&nbsp;against&nbsp;</p>
-		  <p class="modal-looser"></p>
+			<p data-i18n="game.you-won" class="me-1"></p>
+			<p class="modal-score me-2"></p>
+			<p data-i18n="game.against" class="me-1"></p>
+			<p class="modal-looser"></p>
 		</div>
 		<div class="modal-footer">
-		  <button type="button" class="btn btn-success play-again">Start another game</button>
+		  <button type="button" class="btn btn-success play-again" data-i18n="game.play-again"></button>
 		</div>
 	  </div>
 	</div>

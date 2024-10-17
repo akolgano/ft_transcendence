@@ -2,7 +2,7 @@
 
 	<h2 data-i18n="game.tournament"></h2>
 
-	<h4>Semi-finals</h4>
+	<h4 data-i18n="semi-finals"></h4>
 	<div class="semi-1-container rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-between">
 		<div class="d-flex justify-content-start">
 			<p class="my-1 me-2" data-i18n="game.semi-1"></p>
@@ -27,7 +27,7 @@
 	</div>
 
 
-	<h4>Finals</h4>
+	<h4 data-i18n="finals"></h4>
 	<div class="mini-finals-container rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-between">
 		<div class="d-flex justify-content-start">
 			<p class="my-1 me-2" data-i18n="game.mini-finals"></p>
@@ -51,11 +51,15 @@
 	</div>
 
 	<div class="d-flex justify-content-center">
-		<a href="/pong" class="btn btn-success spa d-none play-btn">Play</a>
+		<a href="/pong" class="btn btn-success spa d-none play-btn" data-i18n="game.play"></a>
 	</div>
 
 	<div class="tournament-results d-none w-50 mx-auto">
-		<h4 class="my-3 text-center">Congratulations winner! </h4>
+		<div class="d-flex justify-content-center">
+			<h4 class="my-3 text-center me-1" data-i18n="game.congrats"></h4>
+			<h4 class="my-3 text-center me-1 congrats-winner"></h4>
+			<h4 class="my-3 text-center">!!</h4>
+		</div>
 		<div class="ranking-container d-flex flex-column">
 			<div class="rounded bg-light mb-2 py-1 px-3 bg-info-subtle d-flex justify-content-start">
 				<p class="my-1">🥇&nbsp;</p>

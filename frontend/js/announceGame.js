@@ -51,6 +51,7 @@ function tournamentOverview(params) {
 		addWinner(gameData.finals[1], ".semi-2-winner")
 		addWinner(gameData.third, ".mini-finals-winner")
 		addWinner(gameData.first, ".finals-winner")
+		addWinner(gameData.first, ".congrats-winner")
 
 		document.querySelector(".mini-finals").innerText = ` ${gameData.miniFinals[0]} 🆚 ${gameData.miniFinals[1]}`
 		document.querySelector(".finals").innerText = ` ${gameData.finals[0]} 🆚 ${gameData.finals[1]}`
