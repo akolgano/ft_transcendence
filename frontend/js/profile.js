@@ -23,7 +23,7 @@ function addGameResults(game_results) {
 			        <p class="my-1 me-5">${result}&nbsp;&nbsp;${game.score[0]} - ${game.score[1]}</p>
 			        <p class="my-1 flex-grow-1">${opponent}</p>
 			        <p class="my-1">${date}</p>
-			        <button class="btn btn-primary my-1 show-chart-btn ms-4" data-index="${index}">📊</button>
+			        <a class="my-1 show-chart-btn ms-4 spa" data-index="${index}">📊</a>
 			    </div>
 			</div>`;
 
