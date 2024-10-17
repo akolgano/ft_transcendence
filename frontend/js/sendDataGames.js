@@ -7,9 +7,16 @@ async function sendSimpleGameData(opponent, scoreUser, scoreGuest, duration, pro
 			headers: {
 				'Authorization': `Token ${localStorage.getItem("token")}`,
 				'Accept': 'application/json',
+				'Content-Type': 'application/json'
 			},
 			method: 'POST',
-			body: formData,
+			body: JSON.stringify({
+				"opponent_username": opponent,
+				"score": [scoreUser, scoreGuest],
+				"game_duration": duration,
+				"progression": progression,
+				"is_ai": is_ai
+			}),
 		})
 
 		let data;
@@ -80,6 +87,3 @@ async function sendTournamentData(results, nickname) {
 		console.log(error.message)
 	}
 }
-
-
-// '{"opponent_username": "melina", "is_ai": false, "score": [5, 2], "game_duration": "00:00:01", "progression": [0,0,0,0,0,1,1]}
