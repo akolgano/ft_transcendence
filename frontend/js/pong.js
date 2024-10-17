@@ -45,6 +45,7 @@
 	let progression = [];
 	let timeStart;
 	let duration;
+	let intervalID = null;
 
 	function stopGame() {
 		console.log("Canceling Animation frame")
@@ -65,6 +66,8 @@
 			return ;
 
 		document.removeEventListener("keyup", startGame)
+		if (playerGuest.name === "AI")
+			intervalID = setInterval(playerAI, 1000);
 		gameLoopId = requestAnimationFrame(update)
 
 		if (localStorage.getItem("guestName"))
@@ -176,6 +179,10 @@
 	}
 	function endSimpleGame(winner, looser) {
 
+		if (intervalID) {
+			clearInterval(intervalID)
+			intervalID = null;
+		}
 		getDuration()
 		document.querySelector(".modalEndOfGame").style.display = "block";
 		document.querySelector(".modal-title-winner").innerHTML = winner
@@ -233,17 +240,38 @@
 			link.removeEventListener("click", stopGame)
 		})
 	}
+	function predictBallPosition(secondsAhead) {
+		let predictedBallY = ball.y + ball.velocityY * secondsAhead * 1000 / 1000;
+
+		// Check for wall bounces and adjust the predicted position
+		if (predictedBallY <= 0 || predictedBallY >= boardHeight) {
+			let remainingDistance = Math.abs(predictedBallY - boardHeight);
+			if (predictedBallY < 0) {
+				predictedBallY = Math.abs(predictedBallY); // Bounce from top wall
+			} else if (predictedBallY > boardHeight) {
+				predictedBallY = boardHeight - remainingDistance; // Bounce from bottom wall
+			}
+		}
+
+		return predictedBallY;
+	}
 
 	function playerAI() {
-		if (ball.velocityX > 0)
-		{
-			if ((playerGuest.y + playerGuest.height / 2) * computerLevel  > ball.y)
-				playerGuest.velocityY = -3;
-			if ((playerGuest.y + playerGuest.height / 2) * computerLevel < ball.y)
-				playerGuest.velocityY = 3;
+		console.log("In AI");
+
+		// Only update if the ball is moving toward the AI player
+		if (ball.velocityX > 0) {
+			let futureBallY = predictBallPosition(1); // Predict ball position 1 second into the future
+
+			// Move AI player based on predicted ball position
+			if ((playerGuest.y + playerGuest.height / 2) * computerLevel > futureBallY) {
+				playerGuest.velocityY = -3; // Move up
+			} else if ((playerGuest.y + playerGuest.height / 2) * computerLevel < futureBallY) {
+				playerGuest.velocityY = 3; // Move down
+			}
+		} else {
+			playerGuest.velocityY = 0; // Stop moving when the ball is not heading toward the AI
 		}
-		else
-			playerGuest.velocityY = 0;
 	}
 
 	function update() {
@@ -267,8 +295,8 @@
 
 		context.fillRect(ball.x, ball.y, ball.width, ball.height)
 
-		if (playerGuest.name === "AI")
-			playerAI()
+		// if (playerGuest.name === "AI")
+		// 	intervalID = setInterval(playerAI, 1000);
 
 		// COLLISION WITH PADDLE
 		if (ball.y + ball.height >= playerUser.y && ball.y <= (playerUser.y + playerUser.height))
