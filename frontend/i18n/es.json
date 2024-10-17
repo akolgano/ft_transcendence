@@ -91,7 +91,9 @@
 		"third": "Tercero: ",
 		"fourth": "Cuarto: ",
 		"online": "🟢 en línea",
-		"offline": "🔴 offline S"
+		"offline": "🔴 offline S",
+		"tour-no-result": "No tournament result yet S",
+		"game-no-result": "No game result yet S"
 	},
 	"game": {
 		"play": "Play 🏓",

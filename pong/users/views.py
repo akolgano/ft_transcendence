@@ -5,7 +5,6 @@
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
-#from django.contrib.auth.models import User
 from .models import CustomUser, Friendship
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, FriendSerializer, ChangePasswordSerializer, ChangeUsernameSerializer
@@ -13,7 +12,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound
 from .models import GameResult, PlayerStats, TournamentResult
@@ -33,7 +32,7 @@ def login(request):
     return Response({'token': token.key, 'user': serializer.data})
 
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def logout(request):
     user = get_object_or_404(User, username=request.data['username'])
@@ -66,13 +65,13 @@ def signup(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def test_token(request):
     return Response("passed!")
 
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def change_profile_picture(request):
     user = request.user
@@ -96,7 +95,7 @@ def get_friends(request):
     return Response({'friends': serializer.data}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_user_info(request):
     user = request.user
@@ -104,7 +103,7 @@ def get_user_info(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_user_by_id(request, user_id):
     try:
@@ -117,7 +116,7 @@ def get_user_by_id(request, user_id):
 
 
 @api_view(['PATCH'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def change_password(request):
     serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
@@ -179,6 +178,7 @@ def user_friends_view(request):
         friends = user.get_friends()
         friends_list = [{
             'username': friend.to_user.username,
+            'points': PlayerStats.objects.get_or_create(user=friend.to_user, defaults={'points': 0})[0].points,
             'profile_picture': friend.to_user.profile_picture.url if friend.to_user.profile_picture else None
         } for friend in friends]
         return Response({'user': user.username, 'friends': friends_list})
@@ -191,8 +191,11 @@ def user_friends_view(request):
 def save_game_result(request):
     user = request.user
     is_ai = request.data.get('is_ai')
+    print(is_ai)
     game_duration = request.data.get('game_duration')
-    if not is_ai:
+    print(request.data.get('opponent_username'))
+    if is_ai is "0":
+        print("here")
         opponent_username = request.data.get('opponent_username')
     else:
         opponent_username = ''
@@ -235,10 +238,12 @@ def save_game_result(request):
         progression = progression
     )
     player_stats, created = PlayerStats.objects.get_or_create(user=user)
-    if score[0] > score[1]: 
+    if score[0] > score[1]:
         player_stats.victories += 1
-    else: 
+        player_stats.points += 10
+    else:
         player_stats.losses += 1
+        player_stats.points -=5
     player_stats.save()
 
     return Response({'detail': 'Score saved successfully.'}, status=status.HTTP_201_CREATED)
@@ -271,13 +276,13 @@ def get_player(request, username):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def all_player_stats(request):
-    stats = PlayerStats.objects.all()
+def all_players(request):
+    stats = PlayerStats.objects.all().order_by("-points")
     serializer = PlayerStatsSerializer(stats, many=True)
     return Response(serializer.data)
 
 @api_view(['PATCH'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def change_language(request):
     user = request.user
@@ -293,7 +298,7 @@ def change_language(request):
 
 
 @api_view(['PATCH'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def change_username(request):
     user = request.user
@@ -323,4 +328,13 @@ def save_tournament_result(request):
         results=results
     )
 
+    player_stats, created = PlayerStats.objects.get_or_create(user=user)
+    place = results.index(user.username)
+    if place == 0:
+        player_stats.points += 20
+    elif place == 1:
+        player_stats.points += 10
+    elif place == 3:
+        player_stats.points -= 5
+    player_stats.save()
     return Response({'detail': 'Tournament result saved successfully.'}, status=status.HTTP_201_CREATED)

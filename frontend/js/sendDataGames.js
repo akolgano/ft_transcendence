@@ -1,14 +1,19 @@
 async function sendSimpleGameData(opponent, scoreUser, scoreGuest, duration, progression) {
 	let formData = new FormData()
-	let score = [scoreUser, scoreGuest]
+
 	formData.append("opponent_username", opponent);
-	formData.append("score[]", score[0]);  // Append first element
-	formData.append("score[]", score[1]);
+	formData.append("score[]", scoreUser);  // Append first element
+	formData.append("score[]",  scoreGuest);
 	formData.append("game_duration", duration);
 	formData.append("progression", progression)
-	formData.append("is_ai", 0);
+	if (opponent === "AI")
+		formData.append("is_ai", 1);
+	else
+		formData.append("is_ai", 0);
 
-
+	for (var pair of formData.entries()) {
+		console.log(pair[0]+ ', ' + pair[1]);
+	}
 	try {
 		const response = await fetch("https://localhost/api/game/result/", {
 			headers: {

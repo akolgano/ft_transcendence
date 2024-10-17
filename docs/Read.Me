@@ -80,7 +80,8 @@ OK
 
 curl -k -X PATCH https://localhost/api/change_password/ Content-Type: application/json {'old_password': 'wrongpassword', 'new_password': 'newpassword456'}
 
-curl -k -X GET https://localhost/api/get_friends/ -H "Content-Type: application/json" -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b"
+
+curl -k -X GET https://localhost/api/get_friends/ -H "Content-Type: application/json" -H "Authorization: Token dd5a0ddcf5849520e5c84971e6e0abf70e176b7e"
 
 ----------------Add friend-----------------------
 curl -k -X POST https://localhost/api/add_friend/ -H "Content-Type: application/json" -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b" -d '{"username_to_add": "elina"}'
@@ -115,3 +116,14 @@ curl -k -X PATCH https://localhost/api/change_username/ -H "Authorization: Token
 
 -----------------Save tournament result-----------------
 curl -k -X POST https://localhost/api/tournament/result/ -H "Authorization: Token 63091c63772cb4d1316f400131c5a0d54624ec9a" -H "Content-Type: application/json" -d '{"results": ["anna", "guest1", "guest2", "guest3"]}'
+
+-----------------Get all users ordered by points--------
+curl -k -X GET https://localhost/api/all_players/ -H "Authorization: Token dd5a0ddcf5849520e5c84971e6e0abf70e176b7e"
+
+[{"username":"anna","profile_picture":"/media/profile_pictures/default.jpg","victories":0,"losses":0,"online":false,"points":25},
+{"username":"computer","profile_picture":"/media/profile_pictures/default.jpg","victories":0,"losses":0,"online":false,"points":0},
+{"username":"elina","profile_picture":"/media/profile_pictures/default.jpg","victories":0,"losses":0,"online":true,"points":0},
+{"username":"admin","profile_picture":"/media/profile_pictures/default.jpg","victories":0,"losses":0,"online":false,"points":0},
+{"username":"alice","profile_picture":"/media/profile_pictures/default.jpg","victories":0,"losses":0,"online":false,"points":0},
+{"username":"alex","profile_picture":"/media/profile_pictures/redpanda.jpg","victories":0,"losses":0,"online":false,"points":0},
+{"username":"emily","profile_picture":"/media/profile_pictures/default.jpg","victories":0,"losses":0,"online":false,"points":0}]

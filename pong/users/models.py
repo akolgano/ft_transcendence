@@ -84,11 +84,12 @@ class GameResult(models.Model):
         verbose_name_plural = 'Game Results'
     def __str__(self):
         return f"{self.user.username} vs {self.opponent_username} - Score: {self.score} - Duration: {self.game_duration}"
-
+    
 class PlayerStats(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     victories = models.IntegerField(default=0)
     losses = models.IntegerField(default=0)
+    points = models.IntegerField(default=0)
 
     class Meta:
         verbose_name_plural = 'Stats'
@@ -101,4 +102,5 @@ class TournamentResult(models.Model):
 
     class Meta:
         ordering = ['-date_time']
-        verbose_name_plural = 'Tournament Results'    
+        verbose_name_plural = 'Tournament Results' 
+ 

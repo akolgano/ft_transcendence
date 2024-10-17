@@ -181,11 +181,12 @@
 		document.querySelector(".modal-title-winner").innerHTML = winner
 		document.querySelector(".modal-score").innerHTML = `${playerUser.score} - ${playerGuest.score}`
 		document.querySelector(".modal-looser").innerHTML = looser
-		localStorage.removeItem("guestName");
+
 		sendSimpleGameData(playerGuest.name, playerUser.score, playerGuest.score, duration, progression);
 		document.querySelector(".play-again").addEventListener("click", event => {
 			urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
 		})
+		localStorage.removeItem("guestName");
 	}
 
 	function endTournament(winner, looser) {
