@@ -40,6 +40,10 @@
 	width: 70%;
 }
 
+.w-25 {
+	width: 25%;
+}
+
 .text-sm {
 	font-size: 10px;
 }
