@@ -5,7 +5,8 @@
 		"language": "Language",
 		"friends": "Friends",
 		"dashboard": "Dashboard",
-		"welcome": "Welcome, "
+		"welcome": "Welcome, ",
+		"tournament": "Tournament"
 	},
 	"auth" : {
 		"username": "Username",
@@ -93,6 +94,28 @@
 		"offline": "🔴 offline",
 		"tour-no-result": "No tournament result yet",
 		"game-no-result": "No game result yet"
+	},
+	"game": {
+		"play": "Play 🏓",
+		"opponent-name": "Opponent's name",
+		"user-name": "Name for user",
+		"opponent": "opponent",
+		"opponent-name-error": "Opponent's name cannot be the same as the user",
+		"semi-1": "First semi-finals: ",
+		"semi-2": "Second semi-finals: ",
+		"mini-finals": "Mini finals: ",
+		"semi-finals": "Semi finals: ",
+		"finals": "Finals: ",
+		"tournament": "Tournament",
+		"winner": "Winner: ",
+		"start": "Start tournament",
+		"congrats": "🎉 Congratulations",
+		"you-won": "You won",
+		"against": "against",
+		"play-again": "Play another game",
+		"press-start": "Press SPACE to start",
+		"play-ai": "Play agianst AI",
+		"not-registered": "You need to register first"
 	},
 	"404": "Transcendent error: page not found",
 	"error-fetch": "Unexpected error, please try again later."
