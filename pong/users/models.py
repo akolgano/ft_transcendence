@@ -35,14 +35,6 @@ class CustomUser(AbstractUser):
             from_user=self
         ).distinct()
 
-    # def get_friends(self):
-    #     """this user is either the initiator or receiver of the friendship."""
-    #     from django.db.models import Q
-    #     return CustomUser.objects.filter(
-    #         Q(friendships_created__from_user=self) |
-    #         Q(friendships_received__to_user=self)
-    #     ).distinct()
-
     def get_friends(self):
         #return list(self.get_friends())
         return list(self.get_friends_initiated())
@@ -72,7 +64,7 @@ class Friendship(models.Model):
 
 class GameResult(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user', on_delete=models.CASCADE)
-    opponent_username = models.CharField(max_length = 20)
+    opponent_username = models.CharField(max_length = 20, null=True)
     is_ai = models.BooleanField(default=False)
     score = models.JSONField()
     progression = models.JSONField()
@@ -97,6 +89,7 @@ class PlayerStats(models.Model):
 
 class TournamentResult(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    nickname = models.CharField(max_length = 20)
     results = models.JSONField()
     date_time = models.DateTimeField(auto_now_add=True)
 

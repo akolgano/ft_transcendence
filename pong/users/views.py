@@ -228,7 +228,7 @@ def save_game_result(request):
         player_stats.points += 10
     else: 
         player_stats.losses += 1
-        player_stats.points -=5
+        player_stats.points = max(0, player_stats.points - 5)
     player_stats.save()
 
     return Response({'detail': 'Score saved successfully.'}, status=status.HTTP_201_CREATED)
@@ -247,12 +247,11 @@ def get_player(request, username):
 
     try:
         stats = PlayerStats.objects.get(user=user)
-        game_results = GameResult.objects.filter(user=user)
-        tournament_results = TournamentResult.objects.filter(user=user)
+        game_results = GameResult.objects.filter(user=user).order_by('-date_time')
+        tournament_results = TournamentResult.objects.filter(user=user).order_by('-date_time')
         stats_data = PlayerStatsSerializer(stats).data
         stats_data['game_results'] = GameResultSerializer(game_results, many=True).data
         stats_data['tournaments'] = TournamentResultSerializer(tournament_results, many=True).data
-
         return Response(stats_data)
     except PlayerStats.DoesNotExist:
         return Response({"error": "No results for this user"}, status=status.HTTP_404_NOT_FOUND)
@@ -303,6 +302,7 @@ def change_username(request):
 def save_tournament_result(request):
     user = request.user
     results = request.data.get('results')
+    nickname = request.data.get('nickname')
     if isinstance(results, list):
         if len(results) != 4 or not all(isinstance(s, str) for s in results):
             return Response({'error': 'Invalid results format.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -310,16 +310,21 @@ def save_tournament_result(request):
         return Response({'error': 'Invalid results format.'}, status=status.HTTP_400_BAD_REQUEST)
     tournament_result = TournamentResult.objects.create(
         user=user,
-        results=results
+        results=results,
+        nickname=nickname
     )
 
     player_stats, created = PlayerStats.objects.get_or_create(user=user)
-    place = results.index(user.username)
-    if place == 0:
-        player_stats.points += 20
-    elif place == 1:
-        player_stats.points += 10
-    elif place == 3:
-        player_stats.points -= 5
-    player_stats.save()
-    return Response({'detail': 'Tournament result saved successfully.'}, status=status.HTTP_201_CREATED)
+    try:
+        place = results.index(nickname)
+        if place == 0:
+            player_stats.points += 20
+        elif place == 1:
+            player_stats.points += 10
+        elif place == 3:
+            player_stats.points = max(0, player_stats.points - 5)
+        player_stats.save()
+        return Response({'detail': 'Tournament result saved successfully.'}, status=status.HTTP_201_CREATED)
+    except:
+        return Response({'error': 'No nickname in results.'}, status=status.HTTP_400_BAD_REQUEST)
+            

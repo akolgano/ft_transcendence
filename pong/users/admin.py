@@ -110,8 +110,10 @@ class GameResultAdmin(admin.ModelAdmin):
 
         if user_score > opponent_score:
             player_stats.victories += 1
+            player_stats.points += 10
         elif user_score < opponent_score:
             player_stats.losses += 1
+            player_stats.points = max(0, player_stats.points - 5)
         
         player_stats.save()
 
@@ -125,7 +127,7 @@ class PlayerStatsAdmin(admin.ModelAdmin):
     search_fields = ('user__username',)
 
 class TournamentResultAdmin(admin.ModelAdmin):
-    list_display = ('user', 'results','date_time')
+    list_display = ('user', 'nickname', 'results','date_time')
     ordering = ('-date_time',)
 
     def save_model(self, request, obj, form, change):
@@ -133,13 +135,13 @@ class TournamentResultAdmin(admin.ModelAdmin):
 
         player_stats, created = PlayerStats.objects.get_or_create(user=obj.user)
         results = obj.results
-        place = results.index(obj.user.username)
+        place = results.index(obj.nickname)
         if place == 0:
             player_stats.points += 20
         elif place == 1:
             player_stats.points += 10
         elif place == 3:
-            player_stats.points -= 5
+            player_stats.points = max(0, player_stats.points - 5)
         player_stats.save()
 
 admin.site.register(GameResult, GameResultAdmin)
