@@ -47,6 +47,8 @@
 	let duration;
 	let intervalID = null;
 
+	predictedBallPosition = -1;
+
 	function stopGame() {
 		console.log("Canceling Animation frame")
 		if (gameLoopId) {
@@ -252,26 +254,26 @@
 				predictedBallY = boardHeight - remainingDistance; // Bounce from bottom wall
 			}
 		}
-
 		return predictedBallY;
 	}
 
 	function playerAI() {
-		console.log("In AI");
-
-		// Only update if the ball is moving toward the AI player
-		if (ball.velocityX > 0) {
-			let futureBallY = predictBallPosition(1); // Predict ball position 1 second into the future
-
-			// Move AI player based on predicted ball position
-			if ((playerGuest.y + playerGuest.height / 2) * computerLevel > futureBallY) {
-				playerGuest.velocityY = -3; // Move up
-			} else if ((playerGuest.y + playerGuest.height / 2) * computerLevel < futureBallY) {
-				playerGuest.velocityY = 3; // Move down
+		console.log("HERE AI")
+		predictedBallPosition = predictBallPosition(1);
+		const playerPaddle = (playerGuest.y - playerGuest.height / 2)
+		if (ball.velocityX > 0)
+		{
+			if (playerPaddle * computerLevel  > predictedBallPosition) // Ball is lower, paddle go down
+			{
+				playerGuest.velocityY = -3;
 			}
-		} else {
-			playerGuest.velocityY = 0; // Stop moving when the ball is not heading toward the AI
+			if (playerPaddle * computerLevel < predictedBallPosition)
+			{
+				playerGuest.velocityY = 3;
+			}
 		}
+		else
+			playerGuest.velocityY = 0;
 	}
 
 	function update() {
@@ -295,24 +297,52 @@
 
 		context.fillRect(ball.x, ball.y, ball.width, ball.height)
 
-		// if (playerGuest.name === "AI")
-		// 	intervalID = setInterval(playerAI, 1000);
-
-		// COLLISION WITH PADDLE
-		if (ball.y + ball.height >= playerUser.y && ball.y <= (playerUser.y + playerUser.height))
+		// playerAI()
+		// Check if AI paddle has reached the ball position
+		if (predictedBallPosition >= 0)
 		{
-			if (ball.x <= playerUser.x + playerUser.width && ball.x + ball.width >= playerUser.x)
+			if (predictedBallPosition >= playerGuest.y && predictBallPosition <= playerGuest.y + playerGuest.height) {
+				console.log("AI can stop moving now")
+				playerGuest.velocityY = 0
+			}
+		}
+		// COLLISION WITH PADDLE
+		// USER
+		// if (ball.y + ball.height >= playerUser.y && ball.y <= (playerUser.y + playerUser.height))
+		// {
+		// 	if (ball.x <= playerUser.x + playerUser.width && ball.x + ball.width >= playerUser.x)
+		// 		ball.velocityX *= -1.05
+		// }
+		// // GUEST
+		// if (ball.y + ball.height >= playerGuest.y && ball.y <= (playerGuest.y + playerGuest.height))
+		// {
+		// 	if (ball.x + ball.width >= playerGuest.x && ball.x <= playerGuest.x + playerGuest.width )
+		// 		ball.velocityX *= -1.05
+		// }
+		// if (detectCollision(ball, playerUser)) {
+		// 	if (ball.x <= playerUser.x + playerUser.width) { //left side of ball touches right side of player 1 (left paddle)
+		// 		ball.velocityX *= -1.05;   // flip x direction
+		// 	}
+		// }
+		// else if (detectCollision(ball, playerGuest)) {
+		// 	if (ball.x + ball.width >= playerGuest.x) { //right side of ball touches left side of player 2 (right paddle)
+		// 		ball.velocityX *= -1.05;   // flip x direction
+		// 	}
+		// }
+
+		// Handle Player-Ball collisions
+		if (ball.x - ball.width <= playerUser.x && ball.x >= playerUser.x - playerUser.width) {
+			if (ball.y <= playerUser.y + playerUser.height && ball.y + ball.height >= playerUser.y)
 			{
-				ball.velocityX *= -1.05
+				ball.velocityX *= -1.05;
 			}
 		}
 
-		if (ball.y + ball.height >= playerGuest.y && ball.y <= (playerGuest.y + playerGuest.height))
-		{
-			// console.log("COLLISION???")
-			if (ball.x + ball.width >= playerGuest.x && ball.x <= playerGuest.x + playerGuest.width )
+		// Handle ai-ball collision
+		if (ball.x - ball.width <= playerGuest.x && ball.x >= playerGuest.x - playerGuest.width) {
+			if (ball.y <= playerGuest.y + playerGuest.height && ball.y + ball.height >= playerGuest.y)
 			{
-				ball.velocityX *= -1.05
+				ball.velocityX *= -1.05;
 			}
 		}
 
