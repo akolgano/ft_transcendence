@@ -105,6 +105,7 @@
 		"semi-2": "Second semi-finals: ",
 		"mini-finals": "Mini finals: ",
 		"finals": "Finals: ",
+		"semi-finals": "Semi finals: ",
 		"tournament": "Tournament",
 		"winner": "Winner: ",
 		"start": "Start tournament",
@@ -113,7 +114,8 @@
 		"against": "against",
 		"play-again": "Play another game",
 		"press-start": "Press SPACE to start",
-		"play-ai": "Play agianst AI"
+		"play-ai": "Play agianst AI",
+		"not-registered": "You need to register first F"
 	},
 	"404": "Erreur Transcendente: page non trouvée",
 	"error-fetch": "Unexpected error, please try again later."

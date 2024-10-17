@@ -119,7 +119,13 @@
 		else if (Object.keys(gameData).length !== 0)
 			prepareTournament();
 		else {
-			document.getElementById("content").innerHTML = "<p>You need to register first</p>"
+
+			const content = document.getElementById("content");
+			let error = document.createElement("p");
+			error.setAttribute("data-i18n", "game.not-registered")
+			content.innerHTML = ""
+			content.appendChild(error)
+			translateNewContent(content)
 			return ;
 		}
 

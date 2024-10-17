@@ -63,4 +63,23 @@ function tournamentOverview(params) {
 	}
 }
 
-tournamentOverview()
+function initialPage()
+{
+	const tournamentBoard =  document.querySelector(".tournament-container")
+
+	if (Object.keys(gameData).length === 0)
+	{
+		const content = document.getElementById("content");
+		let error = document.createElement("p");
+		error.setAttribute("data-i18n", "game.not-registered")
+		content.appendChild(error)
+		translateNewContent(content)
+		return (1)
+	}
+	else
+		tournamentBoard.classList.remove("d-none")
+	return (0)
+}
+
+if (!initialPage())
+	tournamentOverview()
