@@ -228,7 +228,7 @@ def save_game_result(request):
         player_stats.points += 10
     else: 
         player_stats.losses += 1
-        player_stats.points -=5
+        player_stats.points = max(0, player_stats.points - 5)
     player_stats.save()
 
     return Response({'detail': 'Score saved successfully.'}, status=status.HTTP_201_CREATED)
@@ -320,6 +320,6 @@ def save_tournament_result(request):
     elif place == 1:
         player_stats.points += 10
     elif place == 3:
-        player_stats.points -= 5
+        player_stats.points = max(0, player_stats.points - 5)
     player_stats.save()
     return Response({'detail': 'Tournament result saved successfully.'}, status=status.HTTP_201_CREATED)

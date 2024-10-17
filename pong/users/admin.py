@@ -110,8 +110,10 @@ class GameResultAdmin(admin.ModelAdmin):
 
         if user_score > opponent_score:
             player_stats.victories += 1
+            player_stats.points += 10
         elif user_score < opponent_score:
             player_stats.losses += 1
+            player_stats.points = max(0, player_stats.points - 5)
         
         player_stats.save()
 
@@ -139,7 +141,7 @@ class TournamentResultAdmin(admin.ModelAdmin):
         elif place == 1:
             player_stats.points += 10
         elif place == 3:
-            player_stats.points -= 5
+            player_stats.points = max(0, player_stats.points - 5)
         player_stats.save()
 
 admin.site.register(GameResult, GameResultAdmin)
