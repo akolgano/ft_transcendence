@@ -46,8 +46,22 @@ async function fetchDashboardData() {
 }
 
 // Update the dashboard with the actual data from the API
+// Update the dashboard with the actual data from the API
 function updateDashboard(data) {
-    // Update player stats 
+    // Check if game results are present
+    const gameResults = data.game_results; // This is already fetching gameResults
+
+    if (!gameResults || gameResults.length === 0) {
+        // Hide the dashboard content and show the "No data" message
+        document.getElementById('dashboardContent').classList.add('d-none');
+        document.getElementById('noDataMessage').classList.remove('d-none');
+    } else {
+        // Show the dashboard content and hide the "No data" message
+        document.getElementById('dashboardContent').classList.remove('d-none');
+        document.getElementById('noDataMessage').classList.add('d-none');
+    }
+
+    // Proceed to update player stats and render charts
     let victoriesElement = document.getElementById('victories');
     let lossesElement = document.getElementById('losses');
 
@@ -60,8 +74,6 @@ function updateDashboard(data) {
     }
 
     // Prepare game result data for the chart
-    // const gameResults = recent_games;
-    const gameResults = data.game_results; // amended oct 15
     const labels = gameResults.map(result => {
         const date = new Date(result.date_time);
         return date.toLocaleDateString('en-GB', { timeZone: 'UTC' }) + ' ' + date.toLocaleTimeString('en-GB', { timeZone: 'UTC' });
@@ -72,6 +84,7 @@ function updateDashboard(data) {
     // Render the charts with actual data
     renderCharts(labels, playerScores, opponentScores, data.victories, data.losses, gameResults);
 }
+
 
 // This function contains all the chart rendering code
 function renderCharts(labels, playerScores, opponentScores, victories, losses, gameResults) {
