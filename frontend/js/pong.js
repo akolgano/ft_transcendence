@@ -42,6 +42,10 @@
 		score: 0
 	}
 
+	let progression = [];
+	let timeStart;
+	let duration;
+
 	function stopGame() {
 		console.log("Canceling Animation frame")
 		if (gameLoopId) {
@@ -63,6 +67,8 @@
 		document.removeEventListener("keyup", startGame)
 		gameLoopId = requestAnimationFrame(update)
 
+		if (localStorage.getItem("guestName"))
+			timeStart = new Date();
 		document.querySelector(".space-start").remove()
 		document.querySelectorAll("a").forEach(link => {
 			link.addEventListener("click", stopGame)
@@ -138,11 +144,16 @@
 	}
 
 	function addScore(user, userId) {
+		if (user === playerUser)
+			progression.push(0);
+		else
+			progression.push(1);
 		user.score += 1;
 		document.getElementById(userId).innerHTML = user.score
 		ball.velocityX *= -1;
 		ball.x = boardWidth / 2;
 		ball.y = boardHeight / 2;
+
 	}
 
 	function calculateNewPosition(player) {
@@ -152,12 +163,26 @@
 		context.fillRect(player.x, player.y, player.width, player.height)
 	}
 
+	function getDuration() {
+		let end_time = new Date();
+		let distance = (end_time - timeStart);
+		const hours = Math.floor(distance / 3600000);
+		distance -= hours * 3600000;
+		const minutes = Math.floor(distance / 60000);
+		distance -= minutes * 60000;
+		const seconds = Math.floor(distance / 1000);
+		duration = `${hours}:${minutes}:${seconds}`
+		console.log("Duration: " + duration)
+	}
 	function endSimpleGame(winner, looser) {
+
+		getDuration()
 		document.querySelector(".modalEndOfGame").style.display = "block";
 		document.querySelector(".modal-title-winner").innerHTML = winner
 		document.querySelector(".modal-score").innerHTML = `${playerUser.score} - ${playerGuest.score}`
 		document.querySelector(".modal-looser").innerHTML = looser
 		localStorage.removeItem("guestName");
+		sendSimpleGameData(playerGuest.name, playerUser.score, playerGuest.score, duration, progression);
 		document.querySelector(".play-again").addEventListener("click", event => {
 			urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
 		})
@@ -249,7 +274,6 @@
 		{
 			if (ball.x <= playerUser.x + playerUser.width && ball.x + ball.width >= playerUser.x)
 			{
-
 				ball.velocityX *= -1.05
 			}
 		}
@@ -260,7 +284,6 @@
 			if (ball.x + ball.width >= playerGuest.x && ball.x <= playerGuest.x + playerGuest.width )
 			{
 				ball.velocityX *= -1.05
-
 			}
 		}
 
@@ -270,9 +293,7 @@
 			addScore(playerUser, "playerUser")
 
 		for (let i = 10; i < board.height; i += 30)
-		{
 			context.fillRect(board.width / 2 - 4, i, 2, 10)
-		}
 	}
 
 	function detectCollision(a, b) {

@@ -180,7 +180,7 @@ def user_friends_view(request):
         friends_list = [{
             'username': friend.to_user.username,
             'profile_picture': friend.to_user.profile_picture.url if friend.to_user.profile_picture else None
-        } for friend in friends] 
+        } for friend in friends]
         return Response({'user': user.username, 'friends': friends_list})
     except Exception as e:
         return Response({'error': str(e)}, status=400)
@@ -196,8 +196,20 @@ def save_game_result(request):
         opponent_username = request.data.get('opponent_username')
     else:
         opponent_username = ''
-    score = request.data.get('score')
-    progression = request.data.get('progression')
+    score = request.POST.getlist('score[]')
+
+    try:
+        score = list(map(int, score))  # Converts '["5", "2"]' to [5, 2]
+    except ValueError:
+        return Response({'error': 'Invalid score format.'}, status=status.HTTP_400_BAD_REQUEST)
+
+# Proceed
+    progression = request.POST.getlist('progression[]')
+    try:
+        progression = list(map(int, progression))  # Converts '["5", "2"]' to [5, 2]
+    except ValueError:
+        return Response({'error': 'Invalid format progression.'}, status=status.HTTP_400_BAD_REQUEST)
+
     if User.objects.filter(username=opponent_username).exists():
         return Response({'error': 'Opponent username is already registered.'}, status=status.HTTP_400_BAD_REQUEST)
     if score is None:

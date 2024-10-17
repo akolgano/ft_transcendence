@@ -121,7 +121,7 @@ const urlRoutes = {
 		template: "static/pong.html",
 		title: "Pong game",
 		description: "Your pong",
-		scripts: ["../js/pong.js"],
+		scripts: ["../js/pong.js", "../js/sendDataGames.js"],
 		auth: true,
 	},
 	"/tournamentRegistration": {
