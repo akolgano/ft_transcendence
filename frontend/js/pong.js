@@ -130,7 +130,6 @@
 			translateNewContent(content)
 			return ;
 		}
-
 		document.getElementById("pongContent").classList.remove("d-none")
 		document.getElementById("playerUser").innerHTML = 0
 		document.getElementById("playerGuest").innerHTML = 0
@@ -197,7 +196,8 @@
 			intervalID = null;
 		}
 		getDuration()
-		document.querySelector(".modalEndOfGame").style.display = "block";
+		document.querySelector(".modalEndOfGame").classList.remove("d-none")
+		document.querySelector(".modalEndOfGame").style.display = "block"
 		document.querySelector(".modal-title-winner").innerHTML = winner
 		document.querySelector(".modal-score").innerHTML = `${playerUser.score} - ${playerGuest.score}`
 		document.querySelector(".modal-looser").innerHTML = looser
