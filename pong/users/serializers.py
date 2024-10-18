@@ -17,7 +17,7 @@ class NoStripCharField(serializers.CharField):
         return data
 
 class UserSerializer(serializers.ModelSerializer):
-    username = NoStripCharField(required=True, min_length=1, max_length=30)
+    username = NoStripCharField(required=True, min_length=1, max_length=20)
     email = NoStripCharField(required=True)
     password = NoStripCharField(write_only=True, required=True, min_length=8)
 
