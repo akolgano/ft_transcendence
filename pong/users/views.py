@@ -197,6 +197,7 @@ def save_game_result(request):
     else:
         opponent_username = ''
     score = request.data.get('score')
+# Proceed
     progression = request.data.get('progression')
     if User.objects.filter(username=opponent_username).exists():
         return Response({'error': 'Opponent username is already registered.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -223,10 +224,10 @@ def save_game_result(request):
         progression = progression
     )
     player_stats, created = PlayerStats.objects.get_or_create(user=user)
-    if score[0] > score[1]: 
+    if score[0] > score[1]:
         player_stats.victories += 1
         player_stats.points += 10
-    else: 
+    else:
         player_stats.losses += 1
         player_stats.points = max(0, player_stats.points - 5)
     player_stats.save()
@@ -303,6 +304,9 @@ def save_tournament_result(request):
     user = request.user
     results = request.data.get('results')
     nickname = request.data.get('nickname')
+    if not nickname:
+        return Response({'error': 'Nickname is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
     if isinstance(results, list):
         if len(results) != 4 or not all(isinstance(s, str) for s in results):
             return Response({'error': 'Invalid results format.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -327,4 +331,3 @@ def save_tournament_result(request):
         return Response({'detail': 'Tournament result saved successfully.'}, status=status.HTTP_201_CREATED)
     except:
         return Response({'error': 'No nickname in results.'}, status=status.HTTP_400_BAD_REQUEST)
-            

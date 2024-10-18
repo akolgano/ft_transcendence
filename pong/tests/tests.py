@@ -7,10 +7,9 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
-from pong.users.models import CustomUser, GameResult, PlayerStats
+from pong.users.models import CustomUser, GameResult, PlayerStats, TournamentResult
 from rest_framework.authtoken.models import Token
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase
 from django.conf import settings
 from django.test import override_settings
 from django.contrib.auth import get_user_model
@@ -18,9 +17,6 @@ import time, os
 
 @override_settings(SECURE_SSL_REDIRECT=False)
 class LoginApiTests(APITestCase):
-
-    #def setUp(self):
-    #    self.user = User.objects.create_user(username='testuser', password='testpassword')
 
     def setUp(self):
         self.user = CustomUser.objects.create_user(username='testuser', password='testpassword', email = 'dummy')
@@ -172,7 +168,7 @@ class SignupApiTests(APITestCase):
         self.assertEqual(response.data['error'][0], 'The password must not contain spaces.')
 
 @override_settings(SECURE_SSL_REDIRECT=False)
-class ChangeProfilePictureTestCase(TestCase):
+class ChangeProfilePictureTestCase(APITestCase):
 
     def setUp(self):
         self.client = APIClient()
@@ -208,7 +204,7 @@ class ChangeProfilePictureTestCase(TestCase):
 User = get_user_model()
 
 @override_settings(SECURE_SSL_REDIRECT=False)
-class FriendTests(TestCase):
+class FriendTests(APITestCase):
 
     def setUp(self):
         self.client = APIClient()
@@ -238,7 +234,7 @@ class FriendTests(TestCase):
         self.assertEqual(response.status_code, 400)
 
 @override_settings(SECURE_SSL_REDIRECT=False)
-class FriendListTests(TestCase):
+class FriendListTests(APITestCase):
 
     def setUp(self):
         self.client = APIClient()
@@ -515,3 +511,62 @@ class ChangeUsernameTests(APITestCase):
         })
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data, {"error": "Username already taken."})
+
+@override_settings(SECURE_SSL_REDIRECT=False)
+class SaveTornamentResultTests(APITestCase):
+    """
+    Tests api/tournament/result/
+    """
+
+    def setUp(self):
+        self.client = APIClient()
+        self.user = CustomUser.objects.create_user(username='user1', password='testpass', email = 'dummy1')
+        self.token = Token.objects.create(user=self.user)
+
+    def test_valid_tournament_result_submission(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/api/tournament/result/', {
+            'nickname': 'mynickname',
+            'results': ["mynickname", "guest1", "guest2", "guest3"],
+        }, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(TournamentResult.objects.count(), 1)
+        self.assertEqual(PlayerStats.objects.get(user=self.user).victories, 0)
+        self.assertEqual(PlayerStats.objects.get(user=self.user).losses, 0)
+        self.assertEqual(PlayerStats.objects.get(user=self.user).points, 20)
+        response = self.client.post('/api/tournament/result/', {
+            'nickname': 'mynickname',
+            'results': ["guest1", "mynickname", "guest2", "guest3"],
+        }, format='json')
+        self.assertEqual(PlayerStats.objects.get(user=self.user).points, 30)
+        response = self.client.post('/api/tournament/result/', {
+            'nickname': 'mynickname',
+            'results': ["guest1", "guest3", "guest2", "mynickname"],
+        }, format='json')
+        self.assertEqual(PlayerStats.objects.get(user=self.user).points, 25)
+
+    def test_invalid_results_format(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/api/tournament/result/', {
+            'nickname': 'mynickname',
+            'results': 'invalid_score', 
+        }, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, {"error": "Invalid results format."})
+
+    def test_missing_required_fields(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/api/tournament/result/', {
+            'results': ["mynickname", "guest1", "guest2", "guest3"],
+        }, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, {"error": "Nickname is required."})
+
+    def test_no_nickname_in_results(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/api/tournament/result/', {
+            'nickname': 'mynickname',
+            'results': ["guest1", "guest2", "guest3", "guest4"],
+        }, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, {"error": "No nickname in results."})

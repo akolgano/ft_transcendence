@@ -75,3 +75,13 @@
     font-size: 1.5rem; /* Adjust the icon size */
     cursor: pointer;
 }
+
+#pongContent {
+	width: 800px;
+}
+
+.modalEndOfGame {
+	display: none;
+	margin-top: 200px;
+}
+

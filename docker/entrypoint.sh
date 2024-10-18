@@ -10,6 +10,9 @@ echo "Applying migrations..."
 python manage.py makemigrations
 python manage.py migrate
 
+echo "Collecting static files..."
+python manage.py collectstatic --noinput
+
 SUPERUSER_EXISTS=$(python manage.py shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); print(User.objects.filter(username='$DJANGO_SUPERUSER_USERNAME').exists())")
 if [ "$SUPERUSER_EXISTS" = "False" ]; then
   echo "Creating superuser..."
