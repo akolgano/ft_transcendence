@@ -76,7 +76,7 @@ function updateDashboard(data) {
     // Prepare game result data for the chart
     const labels = gameResults.map(result => {
         const date = new Date(result.date_time);
-        return date.toLocaleDateString('en-GB', { timeZone: 'UTC' }) + ' ' + date.toLocaleTimeString('en-GB', { timeZone: 'UTC' });
+        return date.toLocaleDateString('en-GB', { timeZone: 'Asia/Singapore' }) + ' ' + date.toLocaleTimeString('en-GB', { timeZone: 'Asia/Singapore' });
     });
     const playerScores = gameResults.map(result => result.score[0]);
     const opponentScores = gameResults.map(result => result.score[1]);
