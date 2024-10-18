@@ -304,6 +304,9 @@ def save_tournament_result(request):
     user = request.user
     results = request.data.get('results')
     nickname = request.data.get('nickname')
+    if not nickname:
+        return Response({'error': 'Nickname is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
     if isinstance(results, list):
         if len(results) != 4 or not all(isinstance(s, str) for s in results):
             return Response({'error': 'Invalid results format.'}, status=status.HTTP_400_BAD_REQUEST)
