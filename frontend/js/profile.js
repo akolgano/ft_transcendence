@@ -20,14 +20,18 @@ function addGameResults(game_results) {
 				opponent = `⛹️‍♀️ ${game.opponent_username}`
 
 			const gameHTML = `
-			<div class="game-card border rounded bg-light w-100 d-inline-block p-1 mb-2 bg-success-subtle">
-				<div class="d-flex justify-content-between px-2">
-					<p class="my-1 me-5">${result}&nbsp;&nbsp;${game.score[0]} - ${game.score[1]}</p>
-					<p class="my-1 flex-grow-1">${opponent}</p>
-					<p class="my-1">${date}</p>
-				</div>
-				<button class="btn btn-primary show-chart-btn" data-index="${index}">📊 Show Progression</button>
-			</div>`
+		    <div class="game-card border rounded bg-light w-100 d-inline-block p-1 mb-2 bg-success-subtle">
+		        <div class="d-flex justify-content-between align-items-center px-2">
+		            <div class="d-flex">
+		                <p class="my-1 me-5">${result}&nbsp;&nbsp;${game.score[0]} - ${game.score[1]}</p>
+		                <p class="my-1">${opponent}</p>
+		            </div>
+		            <div class="d-flex ms-auto align-items-center">
+		                <p class="my-1 me-3">${date}</p>
+		                <button class="btn btn-primary show-chart-btn" data-index="${index}">📊</button>
+		            </div>
+		        </div>
+		    </div>`;
 			gameResultsDiv.insertAdjacentHTML("beforeend", gameHTML);
 		});
 
