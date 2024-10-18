@@ -14,37 +14,6 @@ services:
            POSTGRES_USER: ${POSTGRES_USER}
            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
-  # django:
-  #   container_name: django
-  #   build: .
-  #   command: >
-  #     sh -c "
-  #       while ! nc -z $POSTGRES_HOST 5432; do
-  #       echo 'Waiting for PostgreSQL...';
-  #       sleep 1;
-  #       done &&
-  #       python manage.py makemigrations &&
-  #       python manage.py migrate &&
-  #       python manage.py createsuperuser --noinput ||
-  #       echo 'Superuser already exists' &&
-  #       python fill_db.py &&
-  #       python manage.py runserver 0.0.0.0:8000"
-
-  #   volumes:
-  #     - .:/app
-  #   ports:
-  #     - "8000:8000"
-  #   depends_on:
-  #     - postgres
-  #   environment:
-  #          POSTGRES_HOST: ${POSTGRES_HOST}
-  #          POSTGRES_DB: ${POSTGRES_DB}
-  #          POSTGRES_USER: ${POSTGRES_USER}
-  #          POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-  #          PIPELINE: local
-  #          DJANGO_SUPERUSER_USERNAME: admin
-  #          DJANGO_SUPERUSER_PASSWORD: admin
-  #          DJANGO_SUPERUSER_EMAIL: barbayjuliette95@gmail.com
   django:
     container_name: django
     build:
