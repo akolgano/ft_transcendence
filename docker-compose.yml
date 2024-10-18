@@ -73,6 +73,8 @@ services:
     volumes:
       - ./frontend:/usr/share/nginx/html 
       - ./logs:/var/log/nginx
+      - ./pong/staticfiles:/app/pong/staticfiles
+      - ./pong/media:/app/pong/media
     ports:
       - "80:80"
       - "443:443"
