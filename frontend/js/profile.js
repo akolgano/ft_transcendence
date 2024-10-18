@@ -28,7 +28,7 @@ function addGameResults(game_results) {
 		            </div>
 		            <div class="d-flex ms-auto align-items-center">
 		                <p class="my-1 me-3">${date}</p>
-		                <button class="btn btn-primary show-chart-btn" data-index="${index}">📊</button>
+		                <button class="show-chart-btn" data-index="${index}">📊</button>
 		            </div>
 		        </div>
 		    </div>`;

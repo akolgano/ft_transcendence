@@ -65,3 +65,13 @@
     width: 600px !important;
     height: 600px !important;
 }
+
+.show-chart-btn {
+    background: none;
+    border: none; /* Remove the border */
+    outline: none; /* Remove any default button outline (like when focused) */
+    padding: 0;
+    color: inherit; /* Inherit the text color from the parent */
+    font-size: 1.5rem; /* Adjust the icon size */
+    cursor: pointer;
+}
