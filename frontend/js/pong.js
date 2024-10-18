@@ -119,7 +119,6 @@
 		else if (Object.keys(gameData).length !== 0)
 			prepareTournament();
 		else {
-
 			const content = document.getElementById("content");
 			let error = document.createElement("p");
 			error.setAttribute("data-i18n", "game.not-registered")
@@ -129,6 +128,7 @@
 			return ;
 		}
 
+		document.getElementById("pongContent").classList.remove("d-none")
 		document.getElementById("playerUser").innerHTML = 0
 		document.getElementById("playerGuest").innerHTML = 0
 		document.querySelector(".name-opponent").innerHTML = playerGuest.name;
