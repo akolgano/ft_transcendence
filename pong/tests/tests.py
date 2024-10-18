@@ -76,7 +76,7 @@ class LogoutApiTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('logout successfully', response.data)
         response = self.client.get('/api/change_language/', format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertIn('detail', response.data) 
 
 @override_settings(SECURE_SSL_REDIRECT=False)
@@ -246,12 +246,14 @@ class FriendListTests(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='password123', email='user2@example.com')
         self.user3 = User.objects.create_user(username='user3', password='password123', email='user3@example.com')
 
-        self.client.force_authenticate(user=self.user1)
+        self.token1, _ = Token.objects.get_or_create(user=self.user1)
+        self.token2, _ = Token.objects.get_or_create(user=self.user2)
+        self.token3, _ = Token.objects.get_or_create(user=self.user3)
 
     def test_get_friends(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token1.key)
         response = self.client.post('/api/add_friend/', {'username_to_add': self.user2.username})
         self.assertEqual(response.status_code, 200) 
-
         response = self.client.post('/api/add_friend/', {'username_to_add': self.user3.username})
         self.assertEqual(response.status_code, 200)
         response = self.client.get('/api/get_friends/')
@@ -263,9 +265,14 @@ class FriendListTests(TestCase):
         self.assertEqual(friends[1]['username'], 'user3')
 
     def test_get_friends_no_auth(self):
-        self.client.force_authenticate(user=None)
         response = self.client.get('/api/get_friends/')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_valid_user_with_no_friends(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token3.key)
+        response = self.client.get('/api/get_friends/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['friends'], [])
 
 @override_settings(SECURE_SSL_REDIRECT=False)
 class UserInfoTests(APITestCase):
@@ -298,7 +305,7 @@ class UserInfoTests(APITestCase):
         # Test unauthenticated access
         url = f'/api/get_user_info/{self.user1.id}/'
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 @override_settings(SECURE_SSL_REDIRECT=False)
 class ChangePasswordTestCase(APITestCase):

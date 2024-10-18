@@ -5,19 +5,18 @@
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
-#from django.contrib.auth.models import User
 from .models import CustomUser, Friendship
 from rest_framework.authtoken.models import Token
-from .serializers import UserSerializer, FriendSerializer, ChangePasswordSerializer
+from .serializers import UserSerializer, FriendSerializer, ChangePasswordSerializer, ChangeUsernameSerializer
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound
-from .models import GameResult, PlayerStats
-from .serializers import GameResultSerializer, PlayerStatsSerializer
+from .models import GameResult, PlayerStats, TournamentResult
+from .serializers import GameResultSerializer, PlayerStatsSerializer, TournamentResultSerializer
 from rest_framework.views import APIView
 User = get_user_model()
 
@@ -33,7 +32,7 @@ def login(request):
     return Response({'token': token.key, 'user': serializer.data})
 
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def logout(request):
     user = get_object_or_404(User, username=request.data['username'])
@@ -66,13 +65,13 @@ def signup(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def test_token(request):
     return Response("passed!")
 
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def change_profile_picture(request):
     user = request.user
@@ -96,7 +95,7 @@ def get_friends(request):
     return Response({'friends': serializer.data}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_user_info(request):
     user = request.user
@@ -104,7 +103,7 @@ def get_user_info(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_user_by_id(request, user_id):
     try:
@@ -117,7 +116,7 @@ def get_user_by_id(request, user_id):
 
 
 @api_view(['PATCH'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def change_password(request):
     serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
@@ -179,8 +178,9 @@ def user_friends_view(request):
         friends = user.get_friends()
         friends_list = [{
             'username': friend.to_user.username,
+            'points': PlayerStats.objects.get_or_create(user=friend.to_user, defaults={'points': 0})[0].points,
             'profile_picture': friend.to_user.profile_picture.url if friend.to_user.profile_picture else None
-        } for friend in friends] 
+        } for friend in friends]
         return Response({'user': user.username, 'friends': friends_list})
     except Exception as e:
         return Response({'error': str(e)}, status=400)
@@ -225,8 +225,10 @@ def save_game_result(request):
     player_stats, created = PlayerStats.objects.get_or_create(user=user)
     if score[0] > score[1]: 
         player_stats.victories += 1
+        player_stats.points += 10
     else: 
         player_stats.losses += 1
+        player_stats.points = max(0, player_stats.points - 5)
     player_stats.save()
 
     return Response({'detail': 'Score saved successfully.'}, status=status.HTTP_201_CREATED)
@@ -245,10 +247,11 @@ def get_player(request, username):
 
     try:
         stats = PlayerStats.objects.get(user=user)
-        game_results = GameResult.objects.filter(user=user)
+        game_results = GameResult.objects.filter(user=user).order_by('-date_time')
+        tournament_results = TournamentResult.objects.filter(user=user).order_by('-date_time')
         stats_data = PlayerStatsSerializer(stats).data
         stats_data['game_results'] = GameResultSerializer(game_results, many=True).data
-
+        stats_data['tournaments'] = TournamentResultSerializer(tournament_results, many=True).data
         return Response(stats_data)
     except PlayerStats.DoesNotExist:
         return Response({"error": "No results for this user"}, status=status.HTTP_404_NOT_FOUND)
@@ -257,13 +260,13 @@ def get_player(request, username):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def all_player_stats(request):
-    stats = PlayerStats.objects.all()
+def all_players(request):
+    stats = PlayerStats.objects.all().order_by("-points")
     serializer = PlayerStatsSerializer(stats, many=True)
     return Response(serializer.data)
 
 @api_view(['PATCH'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def change_language(request):
     user = request.user
@@ -279,16 +282,49 @@ def change_language(request):
 
 
 @api_view(['PATCH'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def change_username(request):
     user = request.user
-    new_username = request.data.get('new_username')
-    if not new_username:
-        return Response({"error": "New username is required."}, status=status.HTTP_400_BAD_REQUEST)
-    if User.objects.filter(username=new_username).exists():
-        return Response({"error": "Username already taken."}, status=status.HTTP_400_BAD_REQUEST)
+    serializer = ChangeUsernameSerializer(data=request.data)
 
-    user.username = new_username
-    user.save()
-    return Response({"detail": "Username changed successfully."}, status=status.HTTP_200_OK)
+    if serializer.is_valid():
+        user.username = serializer.validated_data['new_username']
+        user.save()
+        return Response({"detail": "Username changed successfully."}, status=status.HTTP_200_OK)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def save_tournament_result(request):
+    user = request.user
+    results = request.data.get('results')
+    nickname = request.data.get('nickname')
+    if isinstance(results, list):
+        if len(results) != 4 or not all(isinstance(s, str) for s in results):
+            return Response({'error': 'Invalid results format.'}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({'error': 'Invalid results format.'}, status=status.HTTP_400_BAD_REQUEST)
+    tournament_result = TournamentResult.objects.create(
+        user=user,
+        results=results,
+        nickname=nickname
+    )
+
+    player_stats, created = PlayerStats.objects.get_or_create(user=user)
+    try:
+        place = results.index(nickname)
+        if place == 0:
+            player_stats.points += 20
+        elif place == 1:
+            player_stats.points += 10
+        elif place == 3:
+            player_stats.points = max(0, player_stats.points - 5)
+        player_stats.save()
+        return Response({'detail': 'Tournament result saved successfully.'}, status=status.HTTP_201_CREATED)
+    except:
+        return Response({'error': 'No nickname in results.'}, status=status.HTTP_400_BAD_REQUEST)
+            

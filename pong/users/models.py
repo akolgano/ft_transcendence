@@ -5,10 +5,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+import os
 
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True, null=False, blank=False)
+    username = models.CharField(max_length = 20, unique=True)
 
     profile_picture = models.ImageField(
         upload_to='profile_pictures/',
@@ -33,18 +35,19 @@ class CustomUser(AbstractUser):
             from_user=self
         ).distinct()
 
-    # def get_friends(self):
-    #     """this user is either the initiator or receiver of the friendship."""
-    #     from django.db.models import Q
-    #     return CustomUser.objects.filter(
-    #         Q(friendships_created__from_user=self) |
-    #         Q(friendships_received__to_user=self)
-    #     ).distinct()
-
     def get_friends(self):
         #return list(self.get_friends())
         return list(self.get_friends_initiated())
 
+    def save(self, *args, **kwargs):
+        if self.pk:
+            old_image = CustomUser.objects.get(pk=self.pk).profile_picture
+
+            if old_image and old_image.name != self.profile_picture.name and old_image.name != 'profile_pictures/default.jpg':
+                if os.path.isfile(old_image.path):
+                    os.remove(old_image.path)
+        super().save(*args, **kwargs)
+        
 class Friendship(models.Model):
     from_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='friendships_created', on_delete=models.CASCADE)
     to_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='friendships_received', on_delete=models.CASCADE)
@@ -61,7 +64,7 @@ class Friendship(models.Model):
 
 class GameResult(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user', on_delete=models.CASCADE)
-    opponent_username = models.CharField(max_length = 20)
+    opponent_username = models.CharField(max_length = 20, null=True)
     is_ai = models.BooleanField(default=False)
     score = models.JSONField()
     progression = models.JSONField()
@@ -73,11 +76,24 @@ class GameResult(models.Model):
         verbose_name_plural = 'Game Results'
     def __str__(self):
         return f"{self.user.username} vs {self.opponent_username} - Score: {self.score} - Duration: {self.game_duration}"
-
+    
 class PlayerStats(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     victories = models.IntegerField(default=0)
     losses = models.IntegerField(default=0)
+    points = models.IntegerField(default=0)
 
     class Meta:
         verbose_name_plural = 'Stats'
+
+
+class TournamentResult(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    nickname = models.CharField(max_length = 20)
+    results = models.JSONField()
+    date_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date_time']
+        verbose_name_plural = 'Tournament Results' 
+ 

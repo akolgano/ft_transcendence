@@ -80,7 +80,8 @@ OK
 
 curl -k -X PATCH https://localhost/api/change_password/ Content-Type: application/json {'old_password': 'wrongpassword', 'new_password': 'newpassword456'}
 
-curl -k -X GET https://localhost/api/get_friends/ -H "Content-Type: application/json" -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b"
+
+curl -k -X GET https://localhost/api/get_friends/ -H "Content-Type: application/json" -H "Authorization: Token dd5a0ddcf5849520e5c84971e6e0abf70e176b7e"
 
 ----------------Add friend-----------------------
 curl -k -X POST https://localhost/api/add_friend/ -H "Content-Type: application/json" -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b" -d '{"username_to_add": "elina"}'
@@ -99,7 +100,7 @@ curl -k -X PATCH https://localhost/api/change_language/ -H "Authorization: Token
 
 ------------------Save game result------------------
 
-curl -k -X POST https://localhost/api/game/result/ -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b" -H "Content-Type: application/json" -d '{"opponent_username": "melina", "is_ai": false, "score": [5, 2], "game_duration": "00:00:01", "progression": [0,0,0,0,0,1,1]}'
+curl -k -X POST https://localhost/api/game/result/ -H "Authorization: Token fa50a46acd6196e9b8a9cd9d032e3dfe8c3faf1a" -H "Content-Type: application/json" -d '{"opponent_username": "melina", "is_ai": false, "score": [5, 2], "game_duration": "00:00:01", "progression": [0,0,0,0,0,1,1]}'
 
 ------------------Get game results for the user---
 curl -k -X GET https://localhost/api/player/stats/anna/ -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b"
@@ -112,3 +113,19 @@ curl -k -X POST https://localhost/api/logout/ -H "Authorization: Token 43c11a654
 curl -k -X PATCH https://localhost/api/change_username/ -H "Authorization: Token 541a7cf4d6c9ca416702629292f6d336a448ce6e" -H "Content-Type: application/json" -d '{"new_username": "ana"}' 
 
 {"detail":"Username changed successfully."}/{"error":"Username already taken."}/{"error":"New username is required."}
+
+-----------------Save tournament result-----------------
+curl -k -X POST https://localhost/api/tournament/result/ -H "Authorization: Token 59c5fa225f9d3aa02d3f8d80ed33cb7e18e98fa2" -H "Content-Type: application/json" -d '{"results": ["anna", "guest1", "guest2", "guest3"], "nickname" : "anna"}'
+
+{"error":"No nickname in results."}/{"detail":"Tournament result saved successfully."}
+
+-----------------Get all users ordered by points--------
+curl -k -X GET https://localhost/api/all_players/ -H "Authorization: Token dd5a0ddcf5849520e5c84971e6e0abf70e176b7e"
+
+[{"username":"anna","profile_picture":"/media/profile_pictures/default.jpg","victories":0,"losses":0,"online":false,"points":25},
+{"username":"computer","profile_picture":"/media/profile_pictures/default.jpg","victories":0,"losses":0,"online":false,"points":0},
+{"username":"elina","profile_picture":"/media/profile_pictures/default.jpg","victories":0,"losses":0,"online":true,"points":0},
+{"username":"admin","profile_picture":"/media/profile_pictures/default.jpg","victories":0,"losses":0,"online":false,"points":0},
+{"username":"alice","profile_picture":"/media/profile_pictures/default.jpg","victories":0,"losses":0,"online":false,"points":0},
+{"username":"alex","profile_picture":"/media/profile_pictures/redpanda.jpg","victories":0,"losses":0,"online":false,"points":0},
+{"username":"emily","profile_picture":"/media/profile_pictures/default.jpg","victories":0,"losses":0,"online":false,"points":0}]
