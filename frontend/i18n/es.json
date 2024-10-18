@@ -61,7 +61,15 @@
 		"game-duration": "Duración de los juegos",
 		"game-intensity": "Intensidad de los juegos",
 		"game-margin": "Distribución del margen de los juegos",
-		"player-results": "Resultados del jugador"
+		"game-progression": "Game Score Progression S",
+		"you": "You S",
+		"opponent": "Opponent S",
+		"victories": "Victories S",
+		"losses": "Losses S",
+		"close-games": "Close games (1) S",
+		"moderate-games": "Moderate game (2-3) S",
+		"large-margins": "Large magins (4) S",
+		"player-results": "Resultados del Jugador"
 	},
 	"friends": {
 		"add-title": "Agregar un nuevo amigo",

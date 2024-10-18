@@ -71,3 +71,50 @@
 	</div>
 
 </div>
+
+<!-- Modal to display score progression charts -->
+<div class="modal fade" id="gameProgressionModal" tabindex="-1" aria-labelledby="gameProgressionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="gameProgressionModalLabel" data-i18n="dash.game-progression">Game Progression</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+			  <div style="display: flex; justify-content: center; align-items: center; gap: 40px; margin: 10px 0;">
+			    <!-- Turquoise line and label for "You" -->
+			    <div style="display: flex; align-items: center;">
+			      <hr style="border: 2px solid rgba(75, 192, 192, 1); width: 50px; margin: 0; opacity: 1;">
+			      <h6 style="margin-left: 10px;" data-i18n="dash.you">You</h6>
+			    </div>
+
+			    <!-- Red line and label for "Opponent" -->
+			    <div style="display: flex; align-items: center;">
+			      <h6 style="margin-right: 10px;" data-i18n="dash.opponent">Opponent</h6>
+			      <hr style="border: 2px solid rgba(255, 99, 132, 1); width: 50px; margin: 0; opacity: 1;">
+			    </div>
+			  </div>
+
+			  <!-- "(Player's Score)" text -->
+			  <div class="row">
+			    <div class="col">
+			      <p class="text-start">Y-axis: Player's Score</p>
+			    </div>
+			  </div>
+
+        <!-- Dynamic chart canvas -->
+        <canvas id="scoreProgressionChartModal" class="w-100 mb-4"></canvas> <!-- Canvas for dynamic chart -->
+        <!-- "(X-axis: Score summation of the game)" text -->
+			  <div class="row">
+			    <div class="col text-center">
+			      <p>X-axis: Score summation of the game</p>
+			    </div>
+			  </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+

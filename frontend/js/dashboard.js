@@ -1,41 +1,32 @@
-// Dummy data for demonstration
-
-{
-
-
-    const recent_games = [
-        { date_time: '2024-10-02T17:00:00Z', end_time: '2024-10-02T17:04:30Z', score: [5, 0] },
-        { date_time: '2024-10-02T17:05:00Z', end_time: '2024-10-02T17:08:10Z', score: [4, 5] },
-        { date_time: '2024-10-02T17:09:00Z', end_time: '2024-10-02T17:14:50Z', score: [3, 5] },
-        { date_time: '2024-10-02T17:15:10Z', end_time: '2024-10-02T17:18:00Z', score: [5, 4] },
-    ]
-
-
 
 // Fetch user stats and game results from the API
 async function fetchDashboardData() {
     removeAlert(); //check
     try {
-        const response = await fetch("https://localhost/api/player/stats/", {
+        // Make a GET request to the API to fetch player stats
+        const response = await fetch(`https://localhost/api/player/stats/${JSON.parse(localStorage.getItem("user")).username}`, {
             headers: {
-                'Authorization': `Token ${localStorage.getItem("token")}`,
-                'Accept': 'application/json',
+                'Authorization': `Token ${localStorage.getItem("token")}`, // Use the stored token for authentication
+                'Accept': 'application/json', // Expect a JSON response
             },
             method: 'GET',
         });
 
-        let data;
+        let data; // Variable to hold the response data
         const contentType = response.headers.get('Content-Type');
+        // Check if the response is in JSON format
         if (contentType && contentType.includes('application/json')) {
-            data = await response.json();
+            data = await response.json(); // Parse JSON data
         } else {
-            data = await response.text();
+            data = await response.text(); // If not JSON, just get plain text
         }
 
+        // If the request failed (response not ok)
         if (!response.ok) {
             console.log("Error: " + JSON.stringify(data));
             throw new Error(JSON.stringify(data.detail) || 'An error occurred');
         }
+        // If data is received successfully
         if (data)
         {
             console.log("Dashboard data: " + JSON.stringify(data)); // dash log
@@ -55,8 +46,22 @@ async function fetchDashboardData() {
 }
 
 // Update the dashboard with the actual data from the API
+// Update the dashboard with the actual data from the API
 function updateDashboard(data) {
-    // Update player stats 
+    // Check if game results are present
+    const gameResults = data.game_results; // This is already fetching gameResults
+
+    if (!gameResults || gameResults.length === 0) {
+        // Hide the dashboard content and show the "No data" message
+        document.getElementById('dashboardContent').classList.add('d-none');
+        document.getElementById('noDataMessage').classList.remove('d-none');
+    } else {
+        // Show the dashboard content and hide the "No data" message
+        document.getElementById('dashboardContent').classList.remove('d-none');
+        document.getElementById('noDataMessage').classList.add('d-none');
+    }
+
+    // Proceed to update player stats and render charts
     let victoriesElement = document.getElementById('victories');
     let lossesElement = document.getElementById('losses');
 
@@ -69,7 +74,6 @@ function updateDashboard(data) {
     }
 
     // Prepare game result data for the chart
-    const gameResults = recent_games;
     const labels = gameResults.map(result => {
         const date = new Date(result.date_time);
         return date.toLocaleDateString('en-GB', { timeZone: 'UTC' }) + ' ' + date.toLocaleTimeString('en-GB', { timeZone: 'UTC' });
@@ -81,26 +85,63 @@ function updateDashboard(data) {
     renderCharts(labels, playerScores, opponentScores, data.victories, data.losses, gameResults);
 }
 
+
 // This function contains all the chart rendering code
 function renderCharts(labels, playerScores, opponentScores, victories, losses, gameResults) {
-    // Line chart for player and opponent scores
+    renderLineChart(labels, playerScores, opponentScores);
+    renderPieChart('victoryLossChart', ['Victories', 'Losses'], [victories, losses], [
+        'rgba(75, 192, 192, 0.6)',
+        'rgba(255, 99, 132, 0.6)'
+    ]);
+    renderBarChart(labels, gameResults);
+    renderIntensityChart(labels, gameResults);
+    renderMarginPieChart(gameResults);
+    
+    
+}
+
+// Function to render the line chart (Player vs. Opponent scores)
+function renderLineChart(labels, playerScores, opponentScores) {
+    const chartContainer = document.getElementById('gameResultsChart').parentNode;
     const ctx = document.getElementById('gameResultsChart').getContext('2d');
+    
+    // Check if there is data
+    if (!labels || labels.length === 0 || !playerScores || playerScores.length === 0 || !opponentScores || opponentScores.length === 0) {
+        // Hide the chart canvas
+        document.getElementById('gameResultsChart').style.display = 'none';
+
+        // Display the "No data" message
+        const noDataMessage = document.createElement('p');
+        noDataMessage.textContent = 'No game results available.';
+        noDataMessage.classList.add('text-center', 'mt-4', 'text-muted'); // Bootstrap classes for styling
+        chartContainer.appendChild(noDataMessage);
+
+        return; // Exit the function, don't render the chart
+    }
+
+    // Show the chart canvas if data exists
+    document.getElementById('gameResultsChart').style.display = 'block';
+
     new Chart(ctx, {
         type: 'line',
         data: {
             labels: labels,
             datasets: [
                 {
-                    label: 'Player',
                     data: playerScores,
                     borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 4
+                    borderWidth: 4,
+                    fill: false,
+                    pointRadius: 3,  // Show a small dot for each point
+                    pointHoverRadius: 5  // Increase hover size for better visibility
                 },
                 {
-                    label: 'Opponent',
                     data: opponentScores,
-                    borderColor: 'rgba(255, 99, 132, 1)',  // Different color for opponent's scores
-                    borderWidth: 4
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 4,
+                    fill: false,
+                    pointRadius: 3,  // Show a small dot for each point
+                    pointHoverRadius: 5  // Increase hover size for better visibility
                 }
             ]
         },
@@ -108,60 +149,66 @@ function renderCharts(labels, playerScores, opponentScores, victories, losses, g
             scales: {
                 x: {
                     ticks: {
-                        font: {
-                            size: 16  // Increase font size of the x-axis labels
-                        }
+                        font: { size: 16 }
+                    },
+                    title: {
+                        display: false, // Hide 'Date / Time'
                     }
                 },
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        stepSize: 1,  // Ensure the scale increments by whole numbers
-                        callback: function(value) {
-                            return Number.isInteger(value) ? value : '';  // Display only whole numbers
-                        },
-                        font: {
-                            size: 16  // Increase font size of the y-axis labels
-                        }
+                        stepSize: 1,
+                        callback: (value) => Number.isInteger(value) ? value : '',
+                        font: { size: 16 }
+                    },
+                    title: {
+                        display: false, // Hide 'Points'
                     }
                 }
             },
             plugins: {
                 legend: {
-                    labels: {
-                        font: {
-                            size: 18  // Increase font size of the legend (Player and Opponent)
-                        }
-                    }
+                    display: false, // Hide legend
                 },
                 tooltip: {
-                    titleFont: {
-                        size: 16  // Increase font size of tooltip titles
-                    },
-                    bodyFont: {
-                        size: 16  // Increase font size of tooltip text
-                    }
+                    titleFont: { size: 16 },
+                    bodyFont: { size: 16 }
+                }
+            },
+            elements: {
+                point: {
+                    radius: 3 // Remove the default point circles from the chart lines
                 }
             }
         }
     });
+}
 
-    // Pie chart for victories and losses
-    const ctxPie = document.getElementById('victoryLossChart').getContext('2d');
+
+// Function to render a pie chart (Victories and Losses or Margins)
+function renderPieChart(chartId, labels, data, backgroundColors) {
+    const chartContainer = document.getElementById(chartId).parentNode;
+    const ctxPie = document.getElementById(chartId).getContext('2d');
+    
+    // Check if both victories and losses are 0
+    if (!data || data.length === 0 || (data[0] === 0 && data[1] === 0)) {
+        // Hide the pie chart canvas
+        document.getElementById(chartId).style.display = 'none';
+        return; // Exit the function, don't render the pie chart
+    }
+
+    // Show the pie chart canvas if data exists
+    document.getElementById(chartId).style.display = 'block';
+
     new Chart(ctxPie, {
         type: 'pie',
         data: {
-            labels: ['Victories', 'Losses'],
+            labels: labels,
             datasets: [{
-                data: [victories, losses],
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.6)', // Color for victories
-                    'rgba(255, 99, 132, 0.6)'  // Color for losses
-                ],
-                borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(255, 99, 132, 1)'
-                ],
+                data: data,
+                backgroundColor: backgroundColors,
+                borderColor: backgroundColors.map(color => color.replace('0.6', '1')),
                 borderWidth: 1
             }]
         },
@@ -169,42 +216,48 @@ function renderCharts(labels, playerScores, opponentScores, victories, losses, g
             responsive: true,
             plugins: {
                 legend: {
-                    position: 'top',
-                    labels: {
-                        font: {
-                            size: 18  // Increase font size of the legend (Victories and Losses)
-                        }
-                    }
+                    display: false // This will remove the legend
                 },
                 tooltip: {
-                    titleFont: {
-                        size: 16  // Increase font size of tooltip titles
-                    },
-                    bodyFont: {
-                        size: 16  // Increase font size of tooltip text
-                    }
+                    titleFont: { size: 16 },
+                    bodyFont: { size: 16 }
                 }
             }
         }
     });
+}
 
-    // Prepare game result data for the game duration bar chart
-    const gameDurations = gameResults.map((result) => {
-        const startTime = new Date(result.date_time);
-        const endTime = new Date(result.end_time);
-        return (endTime - startTime) / 60000;  // Duration in minutes
+
+// Function to render the bar chart for game durations
+function renderBarChart(labels, gameResults) {
+    const chartContainer = document.getElementById('gameDurationChart').parentNode;
+    const ctxBar = document.getElementById('gameDurationChart').getContext('2d');
+
+    // Check if there is data
+    if (!gameResults || gameResults.length === 0) {
+        // Hide the bar chart canvas
+        document.getElementById('gameDurationChart').style.display = 'none';
+        return; // Exit the function, don't render the bar chart
+    }
+
+    const gameDurations = gameResults.map(result => {
+        const durationParts = result.game_duration.split(':'); // Split the "HH:MM:SS" format
+        const minutes = parseInt(durationParts[1]); // Extract the minutes
+        const seconds = parseInt(durationParts[2]); // Extract the seconds
+        return minutes + (seconds / 60); // Convert duration to minutes (fractional)
     });
 
-    // Render the bar chart for game durations
-    const ctxBar = document.getElementById('gameDurationChart').getContext('2d');
+    // Show the bar chart canvas if data exists
+    document.getElementById('gameDurationChart').style.display = 'block';
+
     new Chart(ctxBar, {
         type: 'bar',
         data: {
-            labels: labels,  // Use all labels as we now have a duration for each game
+            labels: labels,
             datasets: [{
                 label: 'Game Duration (minutes)',
-                data: gameDurations,  // Duration for each game
-                backgroundColor: 'rgba(153, 102, 255, 0.6)',  // Color for the bars
+                data: gameDurations,
+                backgroundColor: 'rgba(153, 102, 255, 0.6)',
                 borderColor: 'rgba(153, 102, 255, 1)',
                 borderWidth: 2
             }]
@@ -212,204 +265,132 @@ function renderCharts(labels, playerScores, opponentScores, victories, losses, g
         options: {
             scales: {
                 x: {
-                    ticks: {
-                        font: {
-                            size: 16  // Increase font size of the x-axis labels
-                        }
+                    ticks: { font: { size: 16 } },
+                    title: {
+                        display: false,
                     }
                 },
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        stepSize: 1,  // Ensure the scale increments by whole numbers
-                        callback: function(value) {
-                            return Number.isInteger(value) ? value : '';  // Display only whole numbers
-                        },
-                        font: {
-                            size: 16  // Increase font size of the y-axis labels
-                        }
+                        stepSize: 1,
+                        callback: (value) => Number.isInteger(value) ? value : '',
+                        font: { size: 16 }
+                    },
+                    title: {
+                        display: false,
                     }
                 }
             },
             plugins: {
                 legend: {
-                    labels: {
-                        font: {
-                            size: 18  // Increase font size of the legend (Game Duration)
-                        }
-                    }
+                    display: false
                 },
                 tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const game = data.recent_games[context.dataIndex];
-                            const startTime = new Date(game.date_time).toLocaleTimeString('en-GB', { timeZone: 'UTC' });
-                            const endTime = new Date(game.end_time).toLocaleTimeString('en-GB', { timeZone: 'UTC' });
-                            return `Duration: ${context.raw} mins (Start: ${startTime}, End: ${endTime})`;
-                        }
-                    },
-                    titleFont: {
-                        size: 16  // Increase font size of tooltip titles
-                    },
-                    bodyFont: {
-                        size: 16  // Increase font size of tooltip text
-                    }
+                    titleFont: { size: 16 },
+                    bodyFont: { size: 16 }
                 }
             }
         }
     });
+}
 
+// Function to render the bar chart for game intensity (Scores per minute)
+function renderIntensityChart(labels, gameResults) {
+    const chartContainer = document.getElementById('gameIntensityChart').parentNode;
+    const ctxIntensity = document.getElementById('gameIntensityChart').getContext('2d');
 
-    // Prepare game intensity data (scores per minute)
-    const gameIntensity = gameResults.map((result) => {
-        const startTime = new Date(result.date_time);
-        const endTime = new Date(result.end_time);
-        const duration = (endTime - startTime) / 60000;  // Duration in minutes
-        const totalScore = result.score[0] + result.score[1];  // Total score for both player and opponent
-        return totalScore / duration;  // Scores per minute (intensity)
+    // Check if there is data
+    if (!gameResults || gameResults.length === 0) {
+        // Hide the intensity chart canvas
+        document.getElementById('gameIntensityChart').style.display = 'none';
+        return; // Exit the function, don't render the intensity chart
+    }
+
+    const gameIntensity = gameResults.map(result => {
+        const durationParts = result.game_duration.split(':'); // Split the "HH:MM:SS" format
+        const minutes = parseInt(durationParts[1]); // Extract the minutes
+        const seconds = parseInt(durationParts[2]); // Extract the seconds
+        const duration = minutes + (seconds / 60); // Convert duration to minutes (fractional)
+        const totalScore = result.score[0] + result.score[1]; // Calculate total score
+        return totalScore / duration; // Calculate intensity (points per minute)
     });
 
-    // Render the heatmap-style bar chart for game intensity
-    const ctxIntensity = document.getElementById('gameIntensityChart').getContext('2d');
+    // Show the intensity chart canvas if data exists
+    document.getElementById('gameIntensityChart').style.display = 'block';
+
     new Chart(ctxIntensity, {
         type: 'bar',
         data: {
-            labels: labels,  // Use the same labels for game dates
+            labels: labels,
             datasets: [{
-                label: 'Game Intensity (Scores per Minute)',
-                data: gameIntensity,  // Scores per minute for each game
+                label: 'Game Intensity (Points per Minute)',
+                data: gameIntensity,
                 backgroundColor: gameIntensity.map(value => {
-                    // Generate color based on intensity: more intense games are darker
-                    const intensity = Math.min(value / Math.max(...gameIntensity), 1);  // Normalize intensity between 0 and 1
-                    return `rgba(255, 99, 132, ${intensity})`;  // Red gradient (change color if needed)
+                    const intensity = Math.min(value / Math.max(...gameIntensity), 1);
+                    return `rgba(255, 99, 132, ${intensity})`;
                 }),
-                borderColor: 'rgba(255, 99, 132, 1)',  // Border color for each bar
+                borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 2
             }]
         },
         options: {
             scales: {
                 x: {
-                    ticks: {
-                        font: {
-                            size: 16  // Increase font size of the x-axis labels
-                        }
+                    ticks: { font: { size: 16 } },
+                    title: {
+                        display: false,
                     }
                 },
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        stepSize: 1,  // Ensure the scale increments by whole numbers
-                        callback: function(value) {
-                            return Number.isInteger(value) ? value : '';  // Display only whole numbers
-                        },
-                        font: {
-                            size: 16  // Increase font size of the y-axis labels
-                        }
+                        stepSize: 1,
+                        callback: (value) => Number.isInteger(value) ? value : '',
+                        font: { size: 16 }
+                    },
+                    title: {
+                        display: false,
                     }
                 }
             },
             plugins: {
-                legend: {
-                    labels: {
-                        font: {
-                            size: 18  // Increase font size of the legend (Game Intensity)
-                        }
-                    }
-                },
+                legend: { display: false },
                 tooltip: {
+                    titleFont: { size: 16 },
+                    bodyFont: { size: 16 },
                     callbacks: {
-                        label: function(context) {
-                            const game = data.recent_games[context.dataIndex];
-                            const startTime = new Date(game.date_time).toLocaleTimeString('en-GB', { timeZone: 'UTC' });
-                            const endTime = new Date(game.end_time).toLocaleTimeString('en-GB', { timeZone: 'UTC' });
-                            return `Intensity: ${context.raw.toFixed(2)} scores/min (Start: ${startTime}, End: ${endTime})`;
+                        label: function (context) {
+                            const game = gameResults[context.dataIndex];
+                            return `Intensity: ${context.raw.toFixed(2)} scores/min`;
                         }
-                    },
-                    titleFont: {
-                        size: 16  // Increase font size of tooltip titles
-                    },
-                    bodyFont: {
-                        size: 16  // Increase font size of tooltip text
-                    }
-                }
-            }
-        }
-    });
-
-    // Prepare data for game margins
-    const gameMargins = gameResults.map(result => Math.abs(result.score[0] - result.score[1]));
-
-    // Group margins into categories
-    const marginCategories = {
-        "Close Games (1)": 0,
-        "Moderate Games (2-3)": 0,
-        "Large Margins (4+)": 0
-    };
-
-    // Classify each game based on its margin
-    gameMargins.forEach(margin => {
-        if (margin <= 1) {
-            marginCategories["Close Games (1)"]++;
-        } else if (margin <= 3) {
-            marginCategories["Moderate Games (2-3)"]++;
-        } else {
-            marginCategories["Large Margins (4+)"]++;
-        }
-    });
-
-    // Data for pie chart
-    const marginLabels = Object.keys(marginCategories);
-    const marginData = Object.values(marginCategories);
-
-    // Render the pie chart for game margins
-    const ctxMargin = document.getElementById('gameMarginChart').getContext('2d');
-    new Chart(ctxMargin, {
-        type: 'pie',
-        data: {
-            labels: marginLabels,  // Label categories
-            datasets: [{
-                data: marginData,  // Data values for each category
-                backgroundColor: [
-                    'rgba(54, 162, 235, 0.6)', // Blue for close games
-                    'rgba(255, 205, 86, 0.6)', // Yellow for moderate games
-                    'rgba(255, 99, 132, 0.6)'  // Red for large margins
-                ],
-                borderColor: [
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 205, 86, 1)',
-                    'rgba(255, 99, 132, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                    labels: {
-                        font: {
-                            size: 18  // Increase font size of the legend (Game Margins)
-                        }
-                    }
-                },
-                tooltip: {
-                    titleFont: {
-                        size: 16  // Increase font size of tooltip titles
-                    },
-                    bodyFont: {
-                        size: 16  // Increase font size of tooltip text
                     }
                 }
             }
         }
     });
 }
+
+// Function to render the pie chart for game margins
+function renderMarginPieChart(gameResults) {
+    const gameMargins = gameResults.map(result => Math.abs(result.score[0] - result.score[1]));
+
+    const marginCategories = { "Close Games (1)": 0, "Moderate Games (2-3)": 0, "Large Margins (4+)": 0 };
+    gameMargins.forEach(margin => {
+        if (margin <= 1) marginCategories["Close Games (1)"]++;
+        else if (margin <= 3) marginCategories["Moderate Games (2-3)"]++;
+        else marginCategories["Large Margins (4+)"]++;
+    });
+
+    renderPieChart('gameMarginChart', Object.keys(marginCategories), Object.values(marginCategories), [
+        'rgba(54, 162, 235, 0.6)',
+        'rgba(255, 205, 86, 0.6)',
+        'rgba(255, 99, 132, 0.6)'
+    ]);
+}
+
 
 // Call the fetchDashboardData function to get the data and render the charts
 fetchDashboardData();
 
-}
-//    })
-//    .catch(error => console.error('Error fetching dashboard data:', error));}
+//}
