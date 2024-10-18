@@ -5,7 +5,8 @@
 		"language": "Idioma",
 		"friends": "Amigos",
 		"dashboard": "Panel de control",
-		"welcome": "Hola, "
+		"welcome": "Hola, ",
+		"tournament": "Tournament"
 	},
 	"auth" : {
 		"username": "Nombre de usuario",
@@ -94,6 +95,33 @@
 		"tour-no-result": "No tournament result yet S",
 		"game-no-result": "No game result yet S"
 	},
-	"404": "Error trascendental: página no encontrada",
+	"game": {
+		"play": "Play 🏓",
+		"opponent-name": "Opponent's name",
+		"user-name": "Name for user",
+		"opponent": "opponent",
+		"opponent-name-error": "Opponent's name cannot be the same as the user",
+		"semi-1": "First semi-finals: ",
+		"semi-2": "Second semi-finals: ",
+		"mini-finals": "Mini finals: ",
+		"finals": "Finals: ",
+		"semi-finals": "Semi finals: ",
+		"tournament": "Tournament",
+		"winner": "Winner: ",
+		"start": "Start tournament",
+		"congrats": "🎉 Congratulations",
+		"you-won": "You won",
+		"against": "against",
+		"play-again": "Play another game",
+		"press-start": "Press SPACE to start",
+		"play-ai": "Play against AI",
+		"not-registered": "You need to register first S",
+		"reg-no-ai": "I know you are not AI",
+		"reg-alphanum": "Only use alphanumeric characters",
+		"reg-duplicate": "Each player needs a different name",
+		"reg-same-user": "Game name cannot be the username of the user",
+		"max-size": "15 char maximum for game name"
+	},
+	"404": "Error transcendente: Parece que esta página no existe",
 	"error-fetch": "Error inesperado, por favor inténtalo de nuevo más tarde."
 }

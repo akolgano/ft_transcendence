@@ -56,17 +56,17 @@ const urlRoutes = {
 		auth: false,
 	},
 	"/": {
-		template: "/static/play.html",
+		template: "/static/gameRegistration.html",
 		title: "Home",
 		description: "Home page",
-		scripts: ["/js/game.js"],
+		scripts: ["/js/gameRegistration.js"],
 		auth: true,
 	},
-	"/play": {
-		template: "/static/play.html",
+	"/gameRegistration": {
+		template: "/static/gameRegistration.html",
 		title: "Home",
 		description: "Home page",
-		scripts: ["/js/game.js"],
+		scripts: ["/js/gameRegistration.js"],
 		auth: true,
 	},
 	"/friends": {
@@ -118,6 +118,27 @@ const urlRoutes = {
 		scripts: ["/js/dashboard.js"],
 		auth: true,
 	},
+	"/pong": {
+		template: "/static/pong.html",
+		title: "Pong game",
+		description: "Your pong",
+		scripts: ["/js/pong.js", "/js/sendDataGames.js"],
+		auth: true,
+	},
+	"/tournamentRegistration": {
+		template: "/static/tournamentRegistration.html",
+		title: "Tournament",
+		description: "Registration",
+		scripts: ["/js/tournamentRegistration.js"],
+		auth: true,
+	},
+	"/announceGame": {
+		template: "/static/announceGame.html",
+		title: "Tournament",
+		description: "Registration",
+		scripts: ["/js/announceGame.js"],
+		auth: true,
+	}
 };
 
 let logoutScript;
@@ -306,7 +327,8 @@ const run = async () => {
 		updateNavbar(false)
 
 	addEventSpaLinks(document);
-	window.onpopstate = urlLocationHandler; // Ensures correct routing when using back/forward buttons from history
+	window.addEventListener('onpopstate', urlLocationHandler)
+	// window.onpopstate = urlLocationHandler; // Ensures correct routing when using back/forward buttons from history
 	window.route = urlRoute; // Make the urlRoute function globally accessible.
 }
 
