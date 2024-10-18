@@ -307,7 +307,7 @@ const updateNavbar = (loggedIn) => {
 		let welcome = translator.translateForKey("navbar.welcome", siteLanguage)
 		navbar.querySelector(".navbar-text").innerHTML = welcome;
 		navbar.querySelector(".navbar-username").innerHTML = `${JSON.parse(localStorage.getItem("user")).username}!`;
-		navbar.querySelector('.avatar-sm').src = "http://localhost:8000" + JSON.parse(localStorage.getItem("user")).profile_picture;
+		navbar.querySelector('.avatar-sm').src = "https://localhost" + JSON.parse(localStorage.getItem("user")).profile_picture;
 
 		// Add logout script
 		const script = document.createElement("script");
