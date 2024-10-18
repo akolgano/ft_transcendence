@@ -52,6 +52,15 @@ function checkPasswordMatch() {
 	return (true);
 }
 
+function registrationError(translation, selector) {
+	const errorGuestName = document.querySelector(selector);
+	let errorTag = document.createElement("p");
+	errorTag.setAttribute("data-i18n", translation)
+	errorGuestName.appendChild(errorTag)
+	translateNewContent(errorGuestName)
+	return (null);
+}
+
 function addErrorToHTML(data) {
 	for (const key in data)
 	{

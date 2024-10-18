@@ -2,13 +2,27 @@ console.log("GAME SCRIPT")
 
 function checkGuestName(params) {
 	const guestName = document.getElementById("opponent-name").value;
+	let error = 0
 
-	if (guestName === JSON.parse(localStorage.getItem("user")).username){
-		const errorGuestName = document.querySelector(".opponent-error");
-		let errorTag = document.createElement("p");
-		errorTag.innerHTML = translator.translateForKey("game.opponent-name-error", siteLanguage);
-		errorGuestName.appendChild(errorTag);
-		return (NULL);
+	if (guestName.size > 20)
+	{
+		error = 1
+		return registrationError("game.max-size", ".opponent-error");
+	}
+	if ((!guestName.match(/^[0-9a-zA-Z_]+$/)))
+	{
+		error = 1
+		return registrationError("game.reg-alphanum", ".opponent-error");
+	}
+	if ( guestName === "AI")
+	{
+		error = 1
+		return registrationError("game.reg-no-ai", ".opponent-error");
+	}
+	if (guestName === JSON.parse(localStorage.getItem("user")).username)
+	{
+		error = 1
+		return registrationError("game.reg-same-user", ".opponent-error")
 	}
 	return guestName;
 }

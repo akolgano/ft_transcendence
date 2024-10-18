@@ -34,18 +34,35 @@ function validateTourUsernames(event) {
 	const TournamentForm = document.getElementById("opponentsNameForm")
 	const formData = new FormData(TournamentForm)
 	const players = [formData.get("user-name"), formData.get("opponent-name-1"), formData.get("opponent-name-2"), formData.get("opponent-name-3")];
+	let error = 0;
 
 	players.forEach((player, index) => {
+		if (player.size > 20)
+		{
+			error = 1;
+			registrationError("game.max-size", `.tournament-reg-error-${index}`)
+		}
 		if (index != 0 && player === JSON.parse(localStorage.getItem("user")).username)
-			addErrorForm("Game name cannot be the username of the user", `.tournament-reg-error-${index}`)
-		else if (!player.match(/^[0-9a-zA-Z]+$/))
-			addErrorForm("Game name has to be alphanumeric", `.tournament-reg-error-${index}`)
-		else if (player === "AI")
-			addErrorForm("I know you are not AI.", `.tournament-reg-error-${index}`)
+		{
+			error = 1;
+			registrationError("game.reg-same-user", `.tournament-reg-error-${index}`)
+		}
+		if (!player.match(/^[0-9a-zA-Z_]+$/))
+		{
+			error = 1
+			registrationError("game.reg-alphanum", `.tournament-reg-error-${index}`)
+		}
+		if (player === "AI")
+		{
+			error = 1;
+			return registrationError("game.reg-no-ai", `.tournament-reg-error-${index}`)
+		}
 	});
 
+	if (error)
+		return ;
 	if (hasDuplicates(players))
-		return (addErrorForm("Each user needs a different game name", ".tournament-reg-error-3"))
+		return (registrationError("game.reg-duplicate", ".tournament-reg-error-3"))
 
 	setUpTournament(players);
 	urlRoute({ target: { href: '/announceGame' }, preventDefault: () => {} });

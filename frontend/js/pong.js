@@ -56,6 +56,8 @@
 			cancelAnimationFrame(gameLoopId);
 			gameLoopId = null
 		}
+		document.removeEventListener("keyup", startGame)
+		window.removeEventListener("onpopstate", stopGame)
 		document.removeEventListener("keyup", movePlayerOnce);
 		document.removeEventListener("keydown", movePlayerContinuous);
 		document.querySelectorAll("a").forEach(link => {
@@ -78,6 +80,7 @@
 		document.querySelectorAll("a").forEach(link => {
 			link.addEventListener("click", stopGame)
 		})
+		window.addEventListener('onpopstate', stopGame)
 		document.addEventListener("keyup", movePlayerOnce)
 		document.addEventListener("keydown", movePlayerContinuous)
 	}
@@ -142,6 +145,8 @@
 		context.fillStyle = "white";
 		context.fillRect(playerUser.x, playerUser.y, playerUser.width, playerUser.height)
 		context.fillRect(playerGuest.x, playerGuest.y, playerGuest.width, playerGuest.height)
+		for (let i = 10; i < board.height; i += 30)
+			context.fillRect(board.width / 2 - 4, i, 2, 10)
 
 		document.addEventListener("keyup", startGame)
 	}
@@ -357,7 +362,6 @@
 			addScore(playerGuest, "playerGuest")
 		else if (ball.x + ball.width > boardWidth)
 			addScore(playerUser, "playerUser")
-
 		for (let i = 10; i < board.height; i += 30)
 			context.fillRect(board.width / 2 - 4, i, 2, 10)
 	}

@@ -115,7 +115,12 @@
 		"play-again": "Play another game",
 		"press-start": "Press SPACE to start",
 		"play-ai": "Play against AI",
-		"not-registered": "You need to register first S"
+		"not-registered": "You need to register first S",
+		"reg-no-ai": "I know you are not AI",
+		"reg-alphanum": "Only use alphanumeric characters",
+		"reg-duplicate": "Each player needs a different name",
+		"reg-same-user": "Game name cannot be the username of the user",
+		"max-size": "15 char maximum for game name"
 	},
 	"404": "Error transcendente: Parece que esta página no existe",
 	"error-fetch": "Error inesperado, por favor inténtalo de nuevo más tarde."
