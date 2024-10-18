@@ -57,7 +57,7 @@
 			gameLoopId = null
 		}
 		document.removeEventListener("keyup", startGame)
-		window.removeEventListener("onpopstate", stopGame)
+		window.removeEventListener("popstate", stopGame)
 		document.removeEventListener("keyup", movePlayerOnce);
 		document.removeEventListener("keydown", movePlayerContinuous);
 		document.querySelectorAll("a").forEach(link => {
@@ -77,22 +77,16 @@
 		if (localStorage.getItem("guestName"))
 			timeStart = new Date();
 		document.querySelector(".space-start").remove()
-		document.querySelectorAll("a").forEach(link => {
-			link.addEventListener("click", stopGame)
-		})
-		window.addEventListener('onpopstate', stopGame)
 		document.addEventListener("keyup", movePlayerOnce)
 		document.addEventListener("keydown", movePlayerContinuous)
 	}
 
 	function prepareGame() {
-		console.log("GAME")
 		playerUser.name = JSON.parse(localStorage.getItem("user")).username;
 		playerGuest.name = localStorage.getItem("guestName");
 	}
 
 	function prepareTournament() {
-		console.log("TOURNAMENT")
 		switch (gameData.currentGame) {
 			case SEMI1:
 				playerUser.name = gameData.firstSemi[0];
@@ -149,6 +143,10 @@
 			context.fillRect(board.width / 2 - 4, i, 2, 10)
 
 		document.addEventListener("keyup", startGame)
+		document.querySelectorAll("a").forEach(link => {
+			link.addEventListener("click", stopGame)
+		})
+		window.addEventListener('popstate', stopGame)
 	}
 
 	gameSetUp()
@@ -188,7 +186,6 @@
 		distance -= minutes * 60000;
 		const seconds = Math.floor(distance / 1000);
 		duration = `${hours}:${minutes}:${seconds}`
-		console.log("Duration: " + duration)
 	}
 	function endSimpleGame(winner, looser) {
 

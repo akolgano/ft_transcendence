@@ -327,8 +327,7 @@ const run = async () => {
 		updateNavbar(false)
 
 	addEventSpaLinks(document);
-	window.addEventListener('onpopstate', urlLocationHandler)
-	// window.onpopstate = urlLocationHandler; // Ensures correct routing when using back/forward buttons from history
+	window.addEventListener('popstate', urlLocationHandler) // Ensures correct routing when using back/forward buttons from history
 	window.route = urlRoute; // Make the urlRoute function globally accessible.
 }
 
