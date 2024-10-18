@@ -28,7 +28,7 @@ Example: https://localhost/login
 
 ## Check the database for tests
 
-You can go to localhost:8000/api/admin to manage the database.
+You can go to https://localhost/api/admin/ to manage the database.
 User and password: admin
 
 ## Translations
