@@ -192,12 +192,11 @@ def save_game_result(request):
     user = request.user
     is_ai = request.data.get('is_ai')
     game_duration = request.data.get('game_duration')
-    if is_ai is False:
+    if not is_ai:
         opponent_username = request.data.get('opponent_username')
     else:
         opponent_username = ''
     score = request.data.get('score')
-
 # Proceed
     progression = request.data.get('progression')
     if User.objects.filter(username=opponent_username).exists():
