@@ -49,7 +49,7 @@ function addGameResults(game_results) {
 function updateProfileCard(data)
 {
 	document.querySelector('.card-username').innerHTML = data.username
-	document.querySelector(".profile-pic").src = "http://localhost:8000" + data.profile_picture
+	document.querySelector(".profile-pic").src = "https://localhost" + data.profile_picture
 	document.querySelector(".user-points").innerHTML = `&nbsp;${data.points}&nbsp;`
 	document.querySelector(".user-victories").innerHTML = `&nbsp;${data.victories}&nbsp`
 	document.querySelector(".user-losses").innerHTML = `&nbsp;${data.losses}&nbsp`
