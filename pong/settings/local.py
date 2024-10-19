@@ -10,9 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import logging
+import logging.config
 from pathlib import Path
 import os
-
+#from logstash_async.handler import AsynchronousLogstashHandler
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -183,29 +185,62 @@ STATIC_URL = '/staticfiles/'
 STATICFILES_DIRS = ['/app/frontend',]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-        'file': {
-            'class': 'logging.FileHandler',
-            'filename': 'django.log', 
-            'level': 'DEBUG',
-        },
-    },
-    'loggers': {
-        # 'django': {
-        #     'handlers': ['console', 'file'],
-        #     'level': 'DEBUG',
-        #     'propagate': True,
-        # },
-        'pong': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#         'file': {
+#             'class': 'logging.FileHandler',
+#             'filename': 'django.log', 
+#             'level': 'DEBUG',
+#         },
+#     },
+#     'loggers': {
+#         # 'django': {
+#         #     'handlers': ['console', 'file'],
+#         #     'level': 'DEBUG',
+#         #     'propagate': True,
+#         # },
+#         'pong': {
+#             'handlers': ['console', 'file'],
+#             'level': 'DEBUG',
+#             'propagate': False,
+#         },
+#     },
+# }
+
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'verbose': {
+#             'format': '{levelname} {asctime} {module} {message}',
+#             'style': '{',
+#         },
+#         'simple': {
+#             'format': '{levelname} {message}',
+#             'style': '{',
+#         },
+#     },
+#     'handlers': {
+#         'logstash': {
+#             'level': 'DEBUG',
+#             'class': 'logstash_async.handler.AsynchronousLogstashHandler',
+#             'host': 'localhost',  # Change to your Logstash server IP if necessary
+#             'port': 5044,         # Default Logstash port for Beats input
+#             'database_path': '/tmp/logstash.db',  # Optional
+#             'transport': 'logstash_async.transport.UdpTransport',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['logstash'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#     },
+# }

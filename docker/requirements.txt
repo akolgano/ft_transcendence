@@ -9,3 +9,4 @@ django-passwords==0.3.12
 django-sslserver==0.22
 Pillow
 django-cors-headers
+logstash-async
