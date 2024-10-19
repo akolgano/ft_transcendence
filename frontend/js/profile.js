@@ -65,10 +65,9 @@ function updateProfileCard(data)
 	}
 }
 
-function addTournamentResults(tournaments) {
+function addTournamentResults(tournaments, user) {
 
 	let tournamentResultsDiv = document.querySelector(".tournament-history-container")
-	const user = JSON.parse(localStorage.getItem("user")).username;
 
 	if (tournaments.length === 0) {
 		const tournamentHTML = `<p data-i18n="profile.tour-no-result">No tournament results yet</p>`
@@ -117,7 +116,7 @@ function addResultsToHTML(data) {
 
 	updateProfileCard(data);
 	addGameResults(data.game_results);
-	addTournamentResults(data.tournaments)
+	addTournamentResults(data.tournaments, data.username)
 }
 
 function getArgument() {
@@ -182,7 +181,7 @@ async function fetchHistory(urlArgument) {
 
 function profileScript() {
 	const urlArgument = getArgument();
-	console.log("urlArgument: " +  urlArgument);
+	// console.log("urlArgument: " +  urlArgument);
 	fetchHistory(urlArgument);
 }
 

@@ -8,7 +8,7 @@ function shuffleArray(array) {
 		array[j] = temp;
 	}
 	return array;
- }
+}
 
 function addErrorForm(message, selector){
 	let errorTag = document.createElement("p");
@@ -17,6 +17,7 @@ function addErrorForm(message, selector){
 }
 
 function setUpTournament(players) {
+	gameData.nickname = players[0]
 	gameData.players = players;
 	gameData.currentGame = SEMI1;
 	const draw = shuffleArray(players);
@@ -24,7 +25,6 @@ function setUpTournament(players) {
 	gameData.secondSemi = draw.slice(2, 4);
 	gameData.miniFinals = [];
 	gameData.finals = [];
-	gameData.nickname = players[0]
 }
 
 function validateTourUsernames(event) {
