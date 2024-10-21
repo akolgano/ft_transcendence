@@ -235,8 +235,15 @@
 
 // --------------------------------------------- UPDATE -------------------------------------------------
 
+function detectCollision(a, b) {
+    return a.x < b.x + b.width &&   //a's top left corner doesn't reach b's top right corner
+           a.x + a.width > b.x &&   //a's top right corner passes b's top left corner
+           a.y < b.y + b.height &&  //a's top left corner doesn't reach b's bottom left corner
+           a.y + a.height > b.y;    //a's bottom left corner passes b's top left corner
+}
+
 function update() {
-	if (playerGuest.score == 8 || playerUser.score == 8)
+	if (playerGuest.score == 5 || playerUser.score == 5)
 	{
 		endOfGame();
 		return ;
@@ -275,7 +282,6 @@ function update() {
 					ball.velocityX *= -1.05;
 				else
 					ball.velocityX *= -1;
-				console.log("Velocity: " + ball.velocityX)
 				hitLast = true
 			}
 		}
@@ -289,13 +295,28 @@ function update() {
 					ball.velocityX *= -1.05;
 				else
 					ball.velocityX *= -1;
-				console.log("Velocity: " + ball.velocityX)
 				hitLast = true;
 			}
 		}
 	}
 	else
 		hitLast = false;
+
+
+	// if (detectCollision(ball, playerUser) && !hitLast) {
+    //     if (ball.x <= playerUser.x + playerUser.width) { //left side of ball touches right side of player 1 (left paddle)
+    //         ball.velocityX *= -1;   // flip x direction
+	// 		hitLast = true
+    //     }
+    // }
+    // else if (detectCollision(ball, playerGuest) && !hitLast) {
+    //     if (ball.x + ballWidth >= playerGuest.x) { //right side of ball touches left side of player 2 (right paddle)
+    //         ball.velocityX *= -1;   // flip x direction
+	// 		hitLast = true
+    //     }
+    // }
+	// else
+	// 	hitLast = false
 
 	if (ball.x < 0)
 		addScore(playerGuest, "playerGuest", 3)
@@ -307,6 +328,7 @@ function update() {
 }
 
 // --------------------------------------------- GAME HELPERS -------------------------------------------------
+
 
 	function outOfBounds(yPosition) {
 		if (yPosition < 0 || yPosition + playerHeight > boardHeight)
