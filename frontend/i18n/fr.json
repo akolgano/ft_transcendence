@@ -93,7 +93,8 @@
 		"error-no-user": "Aucun utilisateur trouvé avec ce nom d'utilisateur",
 		"error-yourself": "Vous ne pouvez pas vous ajouter en tant qu'ami",
 		"error-empty": "Le nom d'utilisateur à ajouter est requis.",
-		"error-fetch": "Erreur inattendue lors de la récupération"
+		"error-fetch": "Erreur inattendue lors de la récupération",
+		"level": "points"
 	},
 	"profile": {
 		"error-load": "Erreur lors du chargement du profil.",
