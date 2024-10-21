@@ -29,7 +29,15 @@
 		"logout-error": "Error logging out",
 		"password-show": "Afficher le mot de passe",
 		"password-hide": "Cacher le mot de passe",
-		"password-no-match": "Les mots de passe ne correspondent pas"
+		"password-no-match": "Les mots de passe ne correspondent pas",
+		"username-too-long": "Le nom d'utilisateur ne peut pas dépasser 20 caractères",
+		"username-invalid-char": "Le nom d'utilisateur ne peut contenir que des lettres, des chiffres et des underscores",
+		"password-too-short": "Le mot de passe doit comporter au moins 8 caractères",
+		"username-taken": "Nom d'utilisateur déjà pris",
+		"username-space": "Le nom d'utilisateur ne peut pas avoir d'espaces au début ou à la fin.",
+		"email-taken": "L'email est déjà pris.",
+		"email-invalid": "Entrez une adresse email valide.",
+		"email-space": "L'email ne peut pas avoir d'espaces au début ou à la fin."
 	},
 	"account" : {
 		"update": "Mettre à jour",
@@ -46,11 +54,12 @@
 		"change-password-success": "Mot de passe changé avec succès",
 		"change-password-error": "Erreur lors du changement de mot de passe",
 		"change-pic-too-large": "Erreur lors du changement de photo : fichier trop volumineux",
-		"change-username-success": "Username changed successfully",
-		"change-username-error": "Error changing username",
-		"change-username-taken": "Username already taken",
-		"change-username-empty": "New username cannot be empty",
-		"change-username-same": "This is already your username"
+		"change-username-success": "Nom d'utilisateur changé avec succès",
+		"change-username-error": "Erreur lors du changement de nom d'utilisateur",
+		"change-username-taken": "Nom d'utilisateur déjà pris",
+		"change-username-empty": "Le nouveau nom d'utilisateur ne peut pas être vide",
+		"change-username-same": "C'est déjà votre nom d'utilisateur",
+		"old-pass-incorrect": "L'ancien mot de passe est incorrect."
 	},
 	"dash" : {
 		"error-load": "Erreur lors du chargement du tableau de bord.",
@@ -71,8 +80,7 @@
 		"losses": "Losses F",
 		"close-games": "Close games (1) F",
 		"moderate-games": "Moderate game (2-3) F",
-		"large-margins": "Large magins (4) F",
-		"player-results": "Résultats du Joueur"
+		"large-margins": "Large magins (4) F"
 	},
 	"friends": {
 		"add-title": "Ajouter un nouvel ami",
@@ -88,7 +96,7 @@
 		"error-yourself": "Vous ne pouvez pas vous ajouter en tant qu'ami",
 		"error-empty": "Le nom d'utilisateur à ajouter est requis.",
 		"error-fetch": "Erreur inattendue lors de la récupération",
-		"level": "Niveau "
+		"level": "points"
 	},
 	"profile": {
 		"error-load": "Erreur lors du chargement du profil.",
@@ -107,31 +115,32 @@
 		"game-no-result": "No game result yet F"
 	},
 	"game": {
-		"play": "Play 🏓",
-		"opponent-name": "Opponent's name",
-		"user-name": "Name for user",
-		"opponent": "opponent",
-		"opponent-name-error": "Opponent's name cannot be the same as the user",
-		"semi-1": "First semi-finals: ",
-		"semi-2": "Second semi-finals: ",
-		"mini-finals": "Mini finals: ",
-		"finals": "Finals: ",
-		"semi-finals": "Semi finals: ",
-		"tournament": "Tournament",
-		"winner": "Winner: ",
-		"start": "Start tournament",
-		"congrats": "🎉 Congratulations",
-		"you-won": "You won",
-		"against": "against",
-		"play-again": "Play another game",
-		"press-start": "Press SPACE to start",
-		"play-ai": "Play against AI",
-		"not-registered": "You need to register first F",
-		"reg-no-ai": "I know you are not AI",
-		"reg-alphanum": "Only use alphanumeric characters",
-		"reg-duplicate": "Each player needs a different name",
-		"reg-same-user": "Game name cannot be the username of the user",
-		"max-size": "15 char maximum for game name"
+		"play": "Jouer 🏓",
+		"opponent-name": "Nom de l'adversaire",
+		"user-name": "Nom pour l'utilisateur",
+		"opponent": "adversaire",
+		"opponent-name-error": "Le nom de l'adversaire ne peut pas être le même que celui de l'utilisateur",
+		"semi-1": "Première demi-finale : ",
+		"semi-2": "Deuxième demi-finale : ",
+		"mini-finals": "Mini finales : ",
+		"finals": "Finales : ",
+		"semi-finals": "Demi-finales : ",
+		"tournament": "Tournoi",
+		"winner": "Gagnant : ",
+		"start": "Démarrer le tournoi",
+		"congrats": "🎉 Félicitations",
+		"you-won": "Vous avez gagné",
+		"against": "contre",
+		"play-again": "Jouer une autre partie",
+		"press-start": "Appuyez sur ESPACE pour commencer",
+		"play-ai": "Jouer contre l'IA",
+		"not-registered": "Vous devez d'abord vous inscrire",
+		"reg-no-ai": "Je sais que vous n'êtes pas une IA",
+		"reg-alphanum": "Utilisez uniquement des caractères alphanumériques",
+		"reg-duplicate": "Chaque joueur a besoin d'un nom différent",
+		"reg-same-user": "Le nom du jeu ne peut pas être le même que le nom d'utilisateur",
+		"max-size": "20 caractères maximum pour le nom du jeu",
+		"trailing-spaces": "Le nom du jeu ne peut pas avoir d'espaces au début ou à la fin."
 	},
 	"404": "Erreur Transcendente: page non trouvée",
 	"error-fetch": "Unexpected error, please try again later."

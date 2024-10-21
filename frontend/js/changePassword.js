@@ -7,7 +7,7 @@
 		let oldPassword = document.getElementById("old-password").value;
 		let newPassword = document.getElementById("password").value;
 
-		resetErrorField();
+		resetErrorField(".password-reset-error");
 		if (!checkPasswordMatch())
 			return ;
 

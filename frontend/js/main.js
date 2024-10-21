@@ -25,14 +25,18 @@ const togglePassword = (event) => {
 	let button = event.currentTarget;
 	let passwordId = button.getAttribute("data-password-field")
 	let passwordField = document.getElementById(passwordId)
+	const passwordDiv = document.querySelector(".set-password")
+	let togglePassword = document.querySelector(`[data-password-field="${passwordId}"]`)
 
 	if (passwordField.type == "password") {
 		passwordField.type = "text"
-		button.innerHTML = translator.translateForKey("auth.password-hide", siteLanguage)
+		togglePassword.setAttribute("data-i18n", "auth.password-hide")
+		translateNewContent(passwordDiv)
 	}
 	else {
 		passwordField.type = "password"
-		button.innerHTML = translator.translateForKey("auth.password-show", siteLanguage)
+		togglePassword.setAttribute("data-i18n", "auth.password-show")
+		translateNewContent(passwordDiv)
 	}
 }
 
@@ -56,19 +60,60 @@ const removeAlert = () => {
 		alert.remove();
 }
 
+function validEmail() {
+	const email = document.getElementById("email").value
+	let error = 0
+	if (email !== email.trim())
+	{
+		error = 1;
+		registrationError("auth.email-space", ".email-error")
+	}
+	if (!email.match(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/))
+	{
+		error = 1
+		registrationError("auth.email-invalid", ".email-error")
+	}
+	return (error ? false : true)
+}
+
+function validUsername() {
+	const username = document.getElementById("username").value
+	let error = 0
+	if (username.length > 20)
+	{
+		error = 1
+		registrationError("auth.username-too-long", ".username-error")
+	}
+	if (username !== username.trim())
+	{
+		error = 1;
+		registrationError("auth.username-space", ".username-error")
+	}
+	if (!username.match(/^[\p{L}\d_]+$/u))
+	{
+		error = 1
+		registrationError("auth.username-invalid-char", ".username-error")
+	}
+	return (error ? false : true)
+}
+
 function checkPasswordMatch() {
 	let newPassword = document.getElementById("password").value;
 	let repeatPassword = document.getElementById("confirm-password").value;
+	let error = 0
+
+	if (newPassword.length < 8)
+	{
+		error = 1
+		registrationError("auth.password-too-short", ".repeat-password-error")
+	}
 
 	if (newPassword !== repeatPassword)
 	{
-		const errorPassword = document.querySelector(".repeat-password-error");
-		let errorTag = document.createElement("p");
-		errorTag.innerHTML = translator.translateForKey("auth.password-no-match", siteLanguage);
-		errorPassword.appendChild(errorTag);
-		return (false);
+		error = 1
+		registrationError("auth.password-no-match", ".repeat-password-error")
 	}
-	return (true);
+	return (error === 1 ? false : true)
 }
 
 function registrationError(translation, selector) {
@@ -80,7 +125,26 @@ function registrationError(translation, selector) {
 	return (null);
 }
 
+function getTranslation(message) {
+	if (message === "Username is already taken.")
+		return ("auth.username-taken")
+	else if (message === "Username can only contain letters, numbers, and underscores.")
+		return ("auth.username-invalid-char")
+	else if (message === "Username cannot have leading or trailing spaces.")
+		return "auth.username-space"
+	else if (message === "Email is already taken.")
+		return "auth.email-taken"
+	else if (message === "Email cannot have leading or trailing spaces.")
+		return "auth.email-space"
+	else if (message === "Enter a valid email address.")
+		return "auth.email-invalid"
+	else if (message === "Old password is incorrect.")
+		return "account.old-pass-incorrect"
+	return (null)
+}
+
 function addErrorToHTML(data) {
+	console.log("IN addErrorToHTML()")
 	for (const key in data)
 	{
 		let errorClass;
@@ -104,14 +168,19 @@ function addErrorToHTML(data) {
 
 		data[key].forEach(message => {
 			let errorTag = document.createElement("p");
-			errorTag.innerHTML = message;
+			let translation = getTranslation(message)
+			if (translation === null)
+				errorTag.innerHTML = message;
+			else
+				errorTag.setAttribute("data-i18n", translation)
 			errorDiv.appendChild(errorTag);
 		});
+		translateNewContent(errorDiv)
 	}
 }
 
-function resetErrorField() {
-	const errorDivs = document.querySelectorAll(".form-error");
+function resetErrorField(selector) {
+	const errorDivs = document.querySelectorAll(selector);
 
 	errorDivs.forEach(div => {
 		div.innerHTML = ""

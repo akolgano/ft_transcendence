@@ -29,7 +29,7 @@ function setUpTournament(players) {
 
 function validateTourUsernames(event) {
 	event.preventDefault();
-	resetErrorField();
+	resetErrorField(".form-error");
 
 	const TournamentForm = document.getElementById("opponentsNameForm")
 	const formData = new FormData(TournamentForm)
@@ -37,7 +37,7 @@ function validateTourUsernames(event) {
 	let error = 0;
 
 	players.forEach((player, index) => {
-		if (player.size > 20)
+		if (player.length > 20)
 		{
 			error = 1;
 			registrationError("game.max-size", `.tournament-reg-error-${index}`)
@@ -47,10 +47,15 @@ function validateTourUsernames(event) {
 			error = 1;
 			registrationError("game.reg-same-user", `.tournament-reg-error-${index}`)
 		}
-		if (!player.match(/^[0-9a-zA-Z_]+$/))
+		if (!player.match(/^[\p{L}\d_]+$/u))
 		{
 			error = 1
 			registrationError("game.reg-alphanum", `.tournament-reg-error-${index}`)
+		}
+		if (player != player.trim())
+		{
+			error = 1
+			registrationError("game.trailing-spaces", `.tournament-reg-error-${index}`);
 		}
 		if (player === "AI")
 		{
@@ -59,10 +64,14 @@ function validateTourUsernames(event) {
 		}
 	});
 
+	if (hasDuplicates(players))
+	{
+		error = 1
+		return (registrationError("game.reg-duplicate", ".tournament-reg-error-3"))
+	}
+
 	if (error)
 		return ;
-	if (hasDuplicates(players))
-		return (registrationError("game.reg-duplicate", ".tournament-reg-error-3"))
 
 	setUpTournament(players);
 	urlRoute({ target: { href: '/announceGame' }, preventDefault: () => {} });

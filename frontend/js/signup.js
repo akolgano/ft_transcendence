@@ -2,8 +2,15 @@
 async function addEventSignUpForm(e) {
 
 	e.preventDefault();
-	resetErrorField();
+	resetErrorField(".form-error");
+	let error = 0
 	if (!checkPasswordMatch())
+		error = 1
+	if (!validUsername())
+		error = 1
+	if (!validEmail())
+		error = 1
+	if (error)
 		return ;
 
 	const formData = new FormData(signupForm);
