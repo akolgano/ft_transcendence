@@ -93,8 +93,7 @@
 		"error-no-user": "No se encontró ningún usuario con este nombre",
 		"error-yourself": "No puedes agregarte a ti mismo como amigo",
 		"error-empty": "Se requiere el nombre de usuario para agregar.",
-		"error-fetch": "Error inesperado al recuperar la información",
-		"level": "Nivel "
+		"error-fetch": "Error inesperado al recuperar la información"
 	},
 	"profile": {
 		"error-load": "Error al cargar el perfil.",

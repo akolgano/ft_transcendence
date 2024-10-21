@@ -93,8 +93,7 @@
 		"error-no-user": "No user found with this username",
 		"error-yourself": "You cannot add yourself as a friend",
 		"error-empty": "Username is required.",
-		"error-not-friend": "You are not friend with this user",
-		"level": "Level "
+		"error-not-friend": "You are not friend with this user"
 	},
 	"profile": {
 		"error-load": "Error loading profile.",

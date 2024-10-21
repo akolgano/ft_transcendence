@@ -13,7 +13,7 @@ function displayFriends(data) {
 					<img src="https://localhost${user.profile_picture}" alt="avatar" class="rounded-circle border-1 avatar-mini object-fit-cover">
 					<a class="mb-0 px-2 spa" href="/profile/${user.username}" id ="friend-username">${user.username}</a>
 				</div>
-				<div><span class="mb-0" data-i18n="friends.level"></span><span class="mb-0">3</span></div>
+				<div><span class="mb-0 me-1">🔥</span><span class="mb-0 me-1">${user.points}</span></div>
 			</div>
 		</div>
 
