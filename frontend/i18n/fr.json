@@ -29,7 +29,10 @@
 		"logout-error": "Error logging out",
 		"password-show": "Afficher le mot de passe",
 		"password-hide": "Cacher le mot de passe",
-		"password-no-match": "Les mots de passe ne correspondent pas"
+		"password-no-match": "Les mots de passe ne correspondent pas",
+		"username-too-long": "Username cannot be more than 20 characters",
+		"username-invalid-char": "Username can only contain letters, numbers and underscore",
+		"password-too-short": "Password must be at least 8 characters"
 	},
 	"account" : {
 		"update": "Mettre à jour",
@@ -69,8 +72,7 @@
 		"losses": "Losses F",
 		"close-games": "Close games (1) F",
 		"moderate-games": "Moderate game (2-3) F",
-		"large-margins": "Large magins (4) F",
-		"player-results": "Résultats du Joueur"
+		"large-margins": "Large magins (4) F"
 	},
 	"friends": {
 		"add-title": "Ajouter un nouvel ami",
@@ -129,7 +131,7 @@
 		"reg-alphanum": "Only use alphanumeric characters",
 		"reg-duplicate": "Each player needs a different name",
 		"reg-same-user": "Game name cannot be the username of the user",
-		"max-size": "15 char maximum for game name"
+		"max-size": "20 char maximum for game name F"
 	},
 	"404": "Erreur Transcendente: page non trouvée",
 	"error-fetch": "Unexpected error, please try again later."

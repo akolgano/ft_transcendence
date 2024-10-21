@@ -3,6 +3,9 @@
 
 	changeUsername.addEventListener("submit", async (e) => {
 		e.preventDefault();
+		resetErrorField(".username-error")
+		if (!validUsername())
+			return ;
 
 		const new_username = document.getElementById("username").value
 		if (new_username === JSON.parse(localStorage.getItem("user")).username)
@@ -34,7 +37,7 @@
 
 			if (!response.ok) {
 				console.log("Data json: " + JSON.stringify(data))
-				throw new Error(data.error || 'An error occurred');
+				throw new Error(data.new_username || 'An error occurred');
 			}
 			if (data.detail)
 			{
@@ -52,9 +55,9 @@
 			}
 		} catch (error) {
 			if (error.message == "Username already taken.")
-				displayAlert("account.change-username-taken", "danger");
+				registrationError("account.change-username-taken", ".username-error")
 			else if (error.message == "New username is required.")
-				displayAlert("account.change-username-empty", "danger");
+				registrationError("account.change-username-empty", ".username-error")
 			else
 				displayAlert("account.change-username-error", "danger");
 			console.log(error.message)

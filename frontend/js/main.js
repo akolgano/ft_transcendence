@@ -25,14 +25,18 @@ const togglePassword = (event) => {
 	let button = event.currentTarget;
 	let passwordId = button.getAttribute("data-password-field")
 	let passwordField = document.getElementById(passwordId)
+	const passwordDiv = document.querySelector(".set-password")
+	let togglePassword = document.querySelector(`[data-password-field="${passwordId}"]`)
 
 	if (passwordField.type == "password") {
 		passwordField.type = "text"
-		button.innerHTML = translator.translateForKey("auth.password-hide", siteLanguage)
+		togglePassword.setAttribute("data-i18n", "auth.password-hide")
+		translateNewContent(passwordDiv)
 	}
 	else {
 		passwordField.type = "password"
-		button.innerHTML = translator.translateForKey("auth.password-show", siteLanguage)
+		togglePassword.setAttribute("data-i18n", "auth.password-show")
+		translateNewContent(passwordDiv)
 	}
 }
 
@@ -56,19 +60,39 @@ const removeAlert = () => {
 		alert.remove();
 }
 
+function validUsername() {
+	const username = document.getElementById("username").value
+	let error = 0
+	if (username.length > 20)
+	{
+		error = 1
+		return (registrationError("auth.username-too-long", ".username-error"))
+	}
+	else if (!username.match(/^[\p{L}\d_]+$/u))
+	{
+		error = 1
+		return (registrationError("auth.username-invalid-char", ".username-error"))
+	}
+	return (error ? false : true)
+}
+
 function checkPasswordMatch() {
 	let newPassword = document.getElementById("password").value;
 	let repeatPassword = document.getElementById("confirm-password").value;
+	let error = 0
+
+	if (newPassword.length < 8)
+	{
+		error = 1
+		registrationError("auth.password-too-short", ".repeat-password-error")
+	}
 
 	if (newPassword !== repeatPassword)
 	{
-		const errorPassword = document.querySelector(".repeat-password-error");
-		let errorTag = document.createElement("p");
-		errorTag.innerHTML = translator.translateForKey("auth.password-no-match", siteLanguage);
-		errorPassword.appendChild(errorTag);
-		return (false);
+		error = 1
+		registrationError("auth.password-no-match", ".repeat-password-error")
 	}
-	return (true);
+	return (error === 1 ? false : true)
 }
 
 function registrationError(translation, selector) {
@@ -110,8 +134,8 @@ function addErrorToHTML(data) {
 	}
 }
 
-function resetErrorField() {
-	const errorDivs = document.querySelectorAll(".form-error");
+function resetErrorField(selector) {
+	const errorDivs = document.querySelectorAll(selector);
 
 	errorDivs.forEach(div => {
 		div.innerHTML = ""

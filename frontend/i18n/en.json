@@ -29,7 +29,10 @@
 		"logout-error": "Error logging out",
 		"password-show": "Show password",
 		"password-hide": "Hide password",
-		"password-no-match": "Passwords do not match"
+		"password-no-match": "Passwords do not match",
+		"username-too-long": "Username cannot be more than 20 characters",
+		"username-invalid-char": "Username can only contain letters, numbers and underscore",
+		"password-too-short": "Password must be at least 8 characters"
 	},
 	"account" : {
 		"update": "Update",
@@ -128,7 +131,7 @@
 		"reg-alphanum": "Only use alphanumeric characters",
 		"reg-duplicate": "Each player needs a different name",
 		"reg-same-user": "Game name cannot be the username of the user",
-		"max-size": "15 char maximum for game name"
+		"max-size": "20 char maximum for game name"
 	},
 	"404": "Transcendent error: page not found",
 	"error-fetch": "Unexpected error, please try again later."
