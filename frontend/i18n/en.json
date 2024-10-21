@@ -64,6 +64,8 @@
 		"game-progression": "Game Score Progression",
 		"you": "You",
 		"opponent": "Opponent",
+		"yaxis-player-score": "Y-axis: Player's Score",
+		"xaxis-score-summation": "X-axis: Score summation of the game",
 		"victories": "Victories",
 		"losses": "Losses",
 		"close-games": "Close games (1)",
