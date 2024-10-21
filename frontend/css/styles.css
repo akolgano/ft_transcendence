@@ -48,11 +48,6 @@
 	font-size: 10px;
 }
 
-/* Container width */
-.dashboard-container {
-	max-width: 800px;
-	margin-left: 0; /* Align the container to the left */
-}
 
 /* Game Margin Chart custom size */
 #gameMarginChart, #victoryLossChart {
