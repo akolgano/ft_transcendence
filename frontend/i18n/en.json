@@ -32,7 +32,12 @@
 		"password-no-match": "Passwords do not match",
 		"username-too-long": "Username cannot be more than 20 characters",
 		"username-invalid-char": "Username can only contain letters, numbers and underscore",
-		"password-too-short": "Password must be at least 8 characters"
+		"password-too-short": "Password must be at least 8 characters",
+		"username-taken": "Username already taken EN",
+		"username-space": "Username cannot have leading or trailing spaces.",
+		"email-taken": "Email is already taken.",
+		"email-invalid": "Enter a valid email address.",
+		"email-space": "Email cannot have leading or trailing spaces."
 	},
 	"account" : {
 		"update": "Update",
@@ -53,7 +58,8 @@
 		"change-username-error": "Error changing username",
 		"change-username-taken": "Username already taken",
 		"change-username-empty": "New username cannot be empty",
-		"change-username-same": "This is already your username"
+		"change-username-same": "This is already your username",
+		"old-pass-incorrect": "Old password is incorrect."
 	},
 	"dash" : {
 		"error-load": "Error loading dashboard.",

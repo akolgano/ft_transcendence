@@ -30,9 +30,14 @@
 		"password-show": "Mostrar contraseña",
 		"password-hide": "Ocultar contraseña",
 		"password-no-match": "Las contraseñas no coinciden",
-		"username-too-long": "Username cannot be more than 20 characters",
-		"username-invalid-char": "Username can only contain letters, numbers and underscore",
-		"password-too-short": "Password must be at least 8 characters"
+		"username-too-long": "Username cannot be more than 20 characters ES",
+		"username-invalid-char": "Username can only contain letters, numbers and underscore ES",
+		"password-too-short": "Password must be at least 8 characters ES",
+		"username-taken": "Username already taken ES",
+		"username-space": "Username cannot have leading or trailing spaces. ES",
+		"email-taken": "Email is already taken. ES",
+		"email-invalid": "Enter a valid email address. ES",
+		"email-space": "Email cannot have leading or trailing spaces. ES"
 	},
 	"account" : {
 		"update": "Actualizar",
@@ -49,11 +54,12 @@
 		"change-password-success": "Contraseña cambiada con éxito",
 		"change-password-error": "Error al cambiar la contraseña",
 		"change-pic-too-large": "Error al cambiar la foto: archivo demasiado grande",
-		"change-username-success": "Username changed successfully",
-		"change-username-error": "Error changing username",
-		"change-username-taken": "Username already taken",
-		"change-username-empty": "New username cannot be empty",
-		"change-username-same": "This is already your username"
+		"change-username-success": "Username changed successfullyES",
+		"change-username-error": "Error changing usernameES",
+		"change-username-taken": "Username already takenES",
+		"change-username-empty": "New username cannot be emptyES",
+		"change-username-same": "This is already your usernameES",
+		"old-pass-incorrect": "Old password is incorrect.ES"
 	},
 	"dash" : {
 		"error-load": "Error al cargar el panel de control.",

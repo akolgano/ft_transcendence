@@ -30,9 +30,14 @@
 		"password-show": "Afficher le mot de passe",
 		"password-hide": "Cacher le mot de passe",
 		"password-no-match": "Les mots de passe ne correspondent pas",
-		"username-too-long": "Username cannot be more than 20 characters",
-		"username-invalid-char": "Username can only contain letters, numbers and underscore",
-		"password-too-short": "Password must be at least 8 characters"
+		"username-too-long": "Username cannot be more than 20 characters FR",
+		"username-invalid-char": "Username can only contain letters, numbers and underscore FR",
+		"password-too-short": "Password must be at least 8 characters FR",
+		"username-taken": "Username already taken FR",
+		"username-space": "Username cannot have leading or trailing spaces. FR",
+		"email-taken": "Email is already taken.FR",
+		"email-invalid": "Enter a valid email address.FR",
+		"email-space": "Email cannot have leading or trailing spaces.FR"
 	},
 	"account" : {
 		"update": "Mettre à jour",
@@ -49,11 +54,12 @@
 		"change-password-success": "Mot de passe changé avec succès",
 		"change-password-error": "Erreur lors du changement de mot de passe",
 		"change-pic-too-large": "Erreur lors du changement de photo : fichier trop volumineux",
-		"change-username-success": "Username changed successfully",
-		"change-username-error": "Error changing username",
-		"change-username-taken": "Username already taken",
-		"change-username-empty": "New username cannot be empty",
-		"change-username-same": "This is already your username"
+		"change-username-success": "Username changed successfully FR",
+		"change-username-error": "Error changing username FR",
+		"change-username-taken": "Username already taken FR",
+		"change-username-empty": "New username cannot be empty FR",
+		"change-username-same": "This is already your username FR",
+		"old-pass-incorrect": "Old password is incorrect. FR"
 	},
 	"dash" : {
 		"error-load": "Erreur lors du chargement du tableau de bord.",

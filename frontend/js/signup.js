@@ -8,6 +8,8 @@ async function addEventSignUpForm(e) {
 		error = 1
 	if (!validUsername())
 		error = 1
+	if (!validEmail())
+		error = 1
 	if (error)
 		return ;
 
