@@ -244,7 +244,7 @@ function renderBarChart(labels, gameResults) {
         const durationParts = result.game_duration.split(':'); // Split the "HH:MM:SS" format
         const minutes = parseInt(durationParts[1]); // Extract the minutes
         const seconds = parseInt(durationParts[2]); // Extract the seconds
-        return minutes + (seconds / 60); // Convert duration to minutes (fractional)
+        return { minutes, seconds }; // Return an object with minutes and seconds
     });
 
     // Show the bar chart canvas if data exists
@@ -256,7 +256,7 @@ function renderBarChart(labels, gameResults) {
             labels: labels,
             datasets: [{
                 label: 'Game Duration (minutes)',
-                data: gameDurations,
+                data: gameDurations.map(d => d.minutes + (d.seconds / 60)), // Convert to fractional minutes for bar heights
                 backgroundColor: 'rgba(153, 102, 255, 0.6)',
                 borderColor: 'rgba(153, 102, 255, 1)',
                 borderWidth: 2
@@ -287,6 +287,14 @@ function renderBarChart(labels, gameResults) {
                     display: false
                 },
                 tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            const duration = gameDurations[tooltipItem.dataIndex];
+                            const minutes = duration.minutes;
+                            const seconds = duration.seconds;
+                            return `Game Duration (MM:SS): ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+                        }
+                    },
                     titleFont: { size: 16 },
                     bodyFont: { size: 16 }
                 }
@@ -294,6 +302,7 @@ function renderBarChart(labels, gameResults) {
         }
     });
 }
+
 
 // Function to render the bar chart for game intensity (Scores per minute)
 function renderIntensityChart(labels, gameResults) {
