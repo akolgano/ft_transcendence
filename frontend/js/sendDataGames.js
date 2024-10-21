@@ -51,7 +51,8 @@ async function sendTournamentData(results, nickname) {
 	let formData = new FormData()
 	formData.append("results", results)
 	formData.append("nickname", nickname)
-	console.log("Results: " + results)
+	// console.log("Results: " + results)
+	// console.log("nickname: " + nickname)
 	try {
 		const response = await fetch("https://localhost/api/tournament/result/", {
 			headers: {

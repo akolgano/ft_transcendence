@@ -65,10 +65,9 @@ function updateProfileCard(data)
 	}
 }
 
-function addTournamentResults(tournaments) {
+function addTournamentResults(tournaments, user) {
 
 	let tournamentResultsDiv = document.querySelector(".tournament-history-container")
-	const user = JSON.parse(localStorage.getItem("user")).username;
 
 	if (tournaments.length === 0) {
 		const tournamentHTML = `<p data-i18n="profile.tour-no-result">No tournament results yet</p>`
@@ -78,6 +77,7 @@ function addTournamentResults(tournaments) {
 	}
 
 	tournaments.forEach(result => {
+		const nickname = result.nickname;
 		const resultHTML = `
 		<div class="d-flex justify-content-between align-items-baseline w-100 mb-4">
 			<div class="date-card rounded bg-light w-25 mb-2 py-1 px-3 bg-info-subtle border-info">
@@ -85,25 +85,25 @@ function addTournamentResults(tournaments) {
 			</div>
 
 			<div class="ranking-container w-70 d-flex flex-column">
-				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[0] === user ? "border border-warning" : ""}">
+				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[0] === nickname ? "border border-warning border-2" : ""}">
 					<p class="my-1">🥇&nbsp;</p>
 					<p class="w-20 my-1" data-i18n="profile.first"></p>
-					<p class="my-1"><b>${result.results[0]}</b></p>
+					<p class="my-1"><b>${result.results[0]}${result.results[0] === nickname ? "&nbsp;(" + user + ")" : ""}</b></p>
 				</div>
-				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[1] === user ? "border border-warning" : ""}">
+				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[1] === nickname ? "border border-warning border-2" : ""}">
 					<p class="my-1">🥈&nbsp;</p>
 					<p class="w-20 my-1" data-i18n="profile.second"></p>
-					<p class="my-1"><b>${result.results[1]}</b></p>
+					<p class="my-1"><b>${result.results[1]}${result.results[1] === nickname ? "&nbsp;(" + user + ")" : ""}</b></p>
 				</div>
-				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[2] === user ? "border border-warning" : ""}">
+				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[2] === nickname ? "border border-warning border-2" : ""}">
 					<p class="my-1">🥉&nbsp;</p>
 					<p class="w-20 my-1" data-i18n="profile.third"></p>
-					<p class="my-1"><b>${result.results[2]}</b></p>
+					<p class="my-1"><b>${result.results[2]}${result.results[2] === nickname ? "&nbsp;(" + user + ")" : ""}</b></p>
 				</div>
-				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[3] === user ? "border border-warning" : ""}">
+				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[3] === nickname ? "border border-warning border-2" : ""}">
 					<p class="my-1">🪨&nbsp;</p>
 					<p class="w-20 my-1" data-i18n="profile.fourth"></p>
-					<p class="my-1"><b>${result.results[3]}</b></p>
+					<p class="my-1"><b>${result.results[3]}${result.results[3] === nickname ? "&nbsp;(" + user + ")" : ""}</b></p>
 				</div>
 			</div>
 		</div>`
@@ -116,7 +116,7 @@ function addResultsToHTML(data) {
 
 	updateProfileCard(data);
 	addGameResults(data.game_results);
-	addTournamentResults(data.tournaments)
+	addTournamentResults(data.tournaments, data.username)
 }
 
 function getArgument() {
@@ -181,7 +181,7 @@ async function fetchHistory(urlArgument) {
 
 function profileScript() {
 	const urlArgument = getArgument();
-	console.log("urlArgument: " +  urlArgument);
+	// console.log("urlArgument: " +  urlArgument);
 	fetchHistory(urlArgument);
 }
 
