@@ -55,13 +55,7 @@
 }
 
 /* Game Margin Chart custom size */
-#gameMarginChart {
-    width: 600px !important;
-    height: 600px !important;
-}
-
-/* Game Margin Chart custom size */
-#victoryLossChart {
+#gameMarginChart, #victoryLossChart {
     width: 600px !important;
     height: 600px !important;
 }
