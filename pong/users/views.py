@@ -18,31 +18,56 @@ from rest_framework.exceptions import NotFound
 from .models import GameResult, PlayerStats, TournamentResult
 from .serializers import GameResultSerializer, PlayerStatsSerializer, TournamentResultSerializer
 from rest_framework.views import APIView
+from django.http import Http404
+import logging
+
+logger = logging.getLogger(__name__)
 User = get_user_model()
 
 @api_view(['POST'])
 def login(request):
-    user = get_object_or_404(User, username=request.data['username'])
+    username = request.data.get('username')
+    logger.info(f"Login attempt for username: {username}")
+    try:
+        user = get_object_or_404(User, username=username)
+    except Http404:
+        logger.warning(f"Login failed: User {username} not found.")
+        return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
     if not user.check_password(request.data['password']):
+        logger.warning(f"Login failed for username: {username}: incorrect password")
         return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
     token, created = Token.objects.get_or_create(user=user)
     serializer = UserSerializer(user)
     user.online = True
     user.save()
+    logger.info(f"User {username} logged in successfully.")
     return Response({'token': token.key, 'user': serializer.data})
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def logout(request):
-    user = get_object_or_404(User, username=request.data['username'])
+    username = request.data.get('username')
+    
+    logger.info(f"Logout attempt for username: {username}")
+    try:
+        user = get_object_or_404(User, username=username)
+    except Http404:
+        logger.warning(f"Logout failed: User {username} not found.")
+        return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
     user.online = False
-    request.user.auth_token.delete()
-    user.save()
-    return Response("logout successfully")
+    try:
+        request.user.auth_token.delete()
+        user.save()
+        logger.info(f"User {username} logged out successfully.")
+        return Response("Logout successfully")
+    except Exception as e:
+        logger.error(f"Logout failed for user {username}: {str(e)}")
+        return Response({"detail": "Logout failed."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
 def signup(request):
+    logger.info("Signup attempt")
     serializer = UserSerializer(data=request.data)
 
     if serializer.is_valid():
@@ -55,8 +80,9 @@ def signup(request):
             'token': token.key,
             'user': serializer.data
         }
+        logger.info(f"User {user.username} signed up successfully.")
         return Response(response_data, status=status.HTTP_201_CREATED)
-
+    logger.error("Signup failed with errors: %s", serializer.errors)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
@@ -118,6 +144,7 @@ def change_password(request):
     if serializer.is_valid():
         serializer.save()
         return Response({"detail": "Password changed successfully."}, status=status.HTTP_200_OK)
+    logger.error(serializer.errors)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])

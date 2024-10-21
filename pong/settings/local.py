@@ -14,6 +14,7 @@ import logging
 import logging.config
 from pathlib import Path
 import os
+from pong.logging_handlers import LogstashHandler
 #from logstash_async.handler import AsynchronousLogstashHandler
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -185,6 +186,8 @@ STATIC_URL = '/staticfiles/'
 STATICFILES_DIRS = ['/app/frontend',]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# No ELK just in file django.log
+
 # LOGGING = {
 #     'version': 1,
 #     'disable_existing_loggers': False,
@@ -212,35 +215,31 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 #     },
 # }
 
+# With ELK logs are at http://localhost:5601/app/discover
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'formatters': {
-#         'verbose': {
-#             'format': '{levelname} {asctime} {module} {message}',
-#             'style': '{',
-#         },
-#         'simple': {
-#             'format': '{levelname} {message}',
-#             'style': '{',
-#         },
-#     },
-#     'handlers': {
-#         'logstash': {
-#             'level': 'DEBUG',
-#             'class': 'logstash_async.handler.AsynchronousLogstashHandler',
-#             'host': 'localhost',  # Change to your Logstash server IP if necessary
-#             'port': 5044,         # Default Logstash port for Beats input
-#             'database_path': '/tmp/logstash.db',  # Optional
-#             'transport': 'logstash_async.transport.UdpTransport',
-#         },
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['logstash'],
-#             'level': 'DEBUG',
-#             'propagate': True,
-#         },
-#     },
-# }
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'logstash': {
+            'level': 'DEBUG', 
+            'class': 'pong.logging_handlers.LogstashHandler',
+            'host': 'logstash',
+            'port': 5044,
+            'retries': 15,
+            'retry_delay': 30,
+        },
+    },
+    'loggers': {
+        # 'django': {
+        #     'handlers': ['logstash'],
+        #     'level': 'DEBUG',
+        #     'propagate': True,
+        # },
+        'pong': {
+            'handlers': ['logstash'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}

@@ -27,6 +27,7 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
+      - logstash
     networks:
       - backend
     environment:
@@ -70,7 +71,7 @@ services:
     ports:
       - "9200:9200"
     networks:
-      - elastic
+      - backend
 
   kibana:
     container_name: kibana
@@ -86,7 +87,7 @@ services:
     depends_on:
       - elasticsearch
     networks:
-      - elastic
+      - backend
   logstash:
     container_name: logstash
     restart: always
@@ -103,14 +104,13 @@ services:
       - ELASTICSEARCH_HOST=http://elasticsearch:9200
       - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
     networks:
-      - elastic
+      - backend
 
 volumes:
   postgres_data:
   esdata:
 
+
 networks:
-  elastic:
   backend:
-
-
+    driver: bridge
