@@ -9,10 +9,10 @@
 
 		const new_username = document.getElementById("username").value
 		if (new_username === JSON.parse(localStorage.getItem("user")).username)
-			{
-				displayAlert("account.change-username-same", "danger");
-				return ;
-			}
+		{
+			registrationError("account.change-username-same", ".username-error")
+			return ;
+		}
 		const formData = new FormData();
 		formData.append("new_username", new_username);
 		removeAlert();

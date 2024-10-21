@@ -10,6 +10,11 @@ function checkGuestName(params) {
 		console.log("HERE")
 		registrationError("game.max-size", ".opponent-error");
 	}
+	if (guestName != guestName.trim())
+	{
+		error = 1
+		registrationError("game.trailing-spaces", ".opponent-error");
+	}
 	if ((!guestName.match(/^[\p{L}\d_]+$/u)))
 	{
 		error = 1

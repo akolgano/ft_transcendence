@@ -137,7 +137,8 @@
 		"reg-alphanum": "Only use alphanumeric characters",
 		"reg-duplicate": "Each player needs a different name",
 		"reg-same-user": "Game name cannot be the username of the user",
-		"max-size": "20 char maximum for game name F"
+		"max-size": "20 char maximum for game name F",
+		"trailing-spaces": "Game name cannot have leading or trailing spaces.F"
 	},
 	"404": "Erreur Transcendente: page non trouvée",
 	"error-fetch": "Unexpected error, please try again later."

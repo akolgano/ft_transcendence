@@ -137,7 +137,8 @@
 		"reg-alphanum": "Only use alphanumeric characters",
 		"reg-duplicate": "Each player needs a different name",
 		"reg-same-user": "Game name cannot be the username of the user",
-		"max-size": "20 char maximum for game name"
+		"max-size": "20 char maximum for game name",
+		"trailing-spaces": "Game name cannot have leading or trailing spaces.ES"
 	},
 	"404": "Error transcendente: Parece que esta página no existe",
 	"error-fetch": "Error inesperado, por favor inténtalo de nuevo más tarde."

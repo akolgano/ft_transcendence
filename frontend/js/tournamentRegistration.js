@@ -52,6 +52,11 @@ function validateTourUsernames(event) {
 			error = 1
 			registrationError("game.reg-alphanum", `.tournament-reg-error-${index}`)
 		}
+		if (player != player.trim())
+		{
+			error = 1
+			registrationError("game.trailing-spaces", `.tournament-reg-error-${index}`);
+		}
 		if (player === "AI")
 		{
 			error = 1;
