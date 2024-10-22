@@ -338,6 +338,9 @@ function renderIntensityChart(labels, gameResults) {
         return totalScore / duration; // Calculate intensity (points per minute)
     });
 
+    // Reverse the gameIntensity array to match the labels
+    const reversedGameIntensity = gameIntensity.reverse();
+
     // Show the intensity chart canvas if data exists
     document.getElementById('gameIntensityChart').style.display = 'block';
 
@@ -347,9 +350,9 @@ function renderIntensityChart(labels, gameResults) {
             labels: labels,
             datasets: [{
                 label: 'Game Intensity (Points per Minute)',
-                data: gameIntensity,
-                backgroundColor: gameIntensity.map(value => {
-                    const intensity = Math.min(value / Math.max(...gameIntensity), 1);
+                data: reversedGameIntensity,
+                backgroundColor: reversedGameIntensity.map(value => {
+                    const intensity = Math.min(value / Math.max(...reversedGameIntensity), 1);
                     return `rgba(255, 99, 132, ${intensity})`;
                 }),
                 borderColor: 'rgba(255, 99, 132, 1)',
