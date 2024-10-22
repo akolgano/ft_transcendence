@@ -295,12 +295,15 @@ def change_language(request):
     user = request.user
     new_language = request.data.get('language')
     if not new_language:
+        logger.warning(f"Language change attempt failed: Language is required.")
         return Response({"error": "Language is required."}, status=status.HTTP_400_BAD_REQUEST)
     supported_languages = ['en', 'es', 'fr']
     if new_language not in supported_languages:
+        logger.warning(f"Language change attempt failed: Unsupported language.")
         return Response({"error": "Unsupported language."}, status=status.HTTP_400_BAD_REQUEST)
     user.language = new_language
     user.save()
+    logger.info(f"User {user.username} changed language to '{new_language}' successfully.")
     return Response({"detail": "Language changed successfully."}, status=status.HTTP_200_OK)
 
 
@@ -309,13 +312,15 @@ def change_language(request):
 @permission_classes([IsAuthenticated])
 def change_username(request):
     user = request.user
+    old_username = user.username
     serializer = ChangeUsernameSerializer(data=request.data)
 
     if serializer.is_valid():
         user.username = serializer.validated_data['new_username']
         user.save()
+        logger.info(f"User {old_username} changed username to {user.username} successfully.")
         return Response({"detail": "Username changed successfully."}, status=status.HTTP_200_OK)
-
+    logger.error("Username change failed with errors: %s", serializer.errors)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

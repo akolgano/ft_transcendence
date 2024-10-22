@@ -231,11 +231,11 @@ LOGGING = {
         },
     },
     'loggers': {
-        # 'django': {
-        #     'handlers': ['logstash'],
-        #     'level': 'DEBUG',
-        #     'propagate': True,
-        # },
+        'django': {
+            'handlers': ['logstash'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
         'pong': {
             'handlers': ['logstash'],
             'level': 'DEBUG',
