@@ -115,8 +115,14 @@ function renderLineChart(labels, playerScores, opponentScores) {
     const chartContainer = document.getElementById('gameResultsChart').parentNode;
     const ctx = document.getElementById('gameResultsChart').getContext('2d');
     
+    // Limit the data to the most recent 20 entries
+    const limit = 20;
+    const recentLabels = labels.slice(-limit);
+    const recentPlayerScores = playerScores.slice(-limit);
+    const recentOpponentScores = opponentScores.slice(-limit);
+
     // Check if there is data
-    if (!labels || labels.length === 0 || !playerScores || playerScores.length === 0 || !opponentScores || opponentScores.length === 0) {
+    if (!recentLabels || recentLabels.length === 0 || !recentPlayerScores || recentPlayerScores.length === 0 || !opponentScores || opponentScores.length === 0) {
         // Hide the chart canvas
         document.getElementById('gameResultsChart').style.display = 'none';
 
@@ -135,10 +141,10 @@ function renderLineChart(labels, playerScores, opponentScores) {
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: labels,
+            labels: recentLabels,
             datasets: [
                 {
-                    data: playerScores,
+                    data: recentPlayerScores,
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 4,
                     fill: false,
@@ -146,7 +152,7 @@ function renderLineChart(labels, playerScores, opponentScores) {
                     pointHoverRadius: 5  // Increase hover size for better visibility
                 },
                 {
-                    data: opponentScores,
+                    data: recentOpponentScores,
                     borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 4,
                     fill: false,
@@ -260,16 +266,21 @@ function renderBarChart(labels, gameResults) {
     // Reverse the gameDurations array to match the correct order
     const reversedGameDurations = gameDurations.reverse();
 
+    // Limit the data to the most recent 20 entries
+    const limit = 20;
+    const recentDurations = reversedGameDurations.slice(-limit);
+    const recentLabels = labels.slice(-limit);
+
     // Show the bar chart canvas if data exists
     document.getElementById('gameDurationChart').style.display = 'block';
 
     new Chart(ctxBar, {
         type: 'bar',
         data: {
-            labels: labels,
+            labels: recentLabels,
             datasets: [{
                 label: 'Game Duration (minutes)',
-                data: reversedGameDurations.map(d => d.minutes + (d.seconds / 60)), // Convert to fractional minutes for bar heights
+                data: recentDurations.map(d => d.minutes + (d.seconds / 60)), // Convert to fractional minutes for bar heights
                 backgroundColor: 'rgba(153, 102, 255, 0.6)',
                 borderColor: 'rgba(153, 102, 255, 1)',
                 borderWidth: 2
@@ -302,7 +313,7 @@ function renderBarChart(labels, gameResults) {
                 tooltip: {
                     callbacks: {
                         label: function(tooltipItem) {
-                            const duration = reversedGameDurations[tooltipItem.dataIndex];
+                            const duration = recentDurations[tooltipItem.dataIndex];
                             const minutes = duration.minutes;
                             const seconds = duration.seconds;
                             return `Game Duration (MM:SS): ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
@@ -341,18 +352,23 @@ function renderIntensityChart(labels, gameResults) {
     // Reverse the gameIntensity array to match the labels
     const reversedGameIntensity = gameIntensity.reverse();
 
+    // Limit the data to the most recent 20 entries
+    const limit = 20;
+    const recentLabels = labels.slice(-limit); // Last 20 labels
+    const recentGameIntensity = reversedGameIntensity.slice(-limit); // Last 20 intensity values
+
     // Show the intensity chart canvas if data exists
     document.getElementById('gameIntensityChart').style.display = 'block';
 
     new Chart(ctxIntensity, {
         type: 'bar',
         data: {
-            labels: labels,
+            labels: recentLabels,
             datasets: [{
                 label: 'Game Intensity (Points per Minute)',
-                data: reversedGameIntensity,
-                backgroundColor: reversedGameIntensity.map(value => {
-                    const intensity = Math.min(value / Math.max(...reversedGameIntensity), 1);
+                data: recentGameIntensity,
+                backgroundColor: recentGameIntensity.map(value => {
+                    const intensity = Math.min(value / Math.max(...recentGameIntensity), 1);
                     return `rgba(255, 99, 132, ${intensity})`;
                 }),
                 borderColor: 'rgba(255, 99, 132, 1)',
