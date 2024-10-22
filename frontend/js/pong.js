@@ -48,8 +48,7 @@
 	let duration;
 	let intervalID = null;
 
-	predictedBallPosition = -1;
-
+	let predictedBallPosition = -1;
 
 // --------------------------------------------- END GAME -------------------------------------------------
 
@@ -59,6 +58,10 @@
 
 			cancelAnimationFrame(gameLoopId);
 			gameLoopId = null
+		}
+		if (intervalID) {
+			clearInterval(intervalID)
+			intervalID = null;
 		}
 		document.removeEventListener("keyup", startGame)
 		window.removeEventListener("popstate", stopGame)
@@ -233,14 +236,47 @@
 
 	gameSetUp()
 
-// --------------------------------------------- UPDATE -------------------------------------------------
+// --------------------------------------------- AI PLAYER -------------------------------------------------
 
-function detectCollision(a, b) {
-    return a.x < b.x + b.width &&   //a's top left corner doesn't reach b's top right corner
-           a.x + a.width > b.x &&   //a's top right corner passes b's top left corner
-           a.y < b.y + b.height &&  //a's top left corner doesn't reach b's bottom left corner
-           a.y + a.height > b.y;    //a's bottom left corner passes b's top left corner
+function predictBallPosition() {
+	let predictedBallY = ball.y + (ball.velocityY * 60);
+
+	// Check for wall bounces and adjust the predicted position
+	if (predictedBallY <= 0 || predictedBallY >= boardHeight) {
+		let remainingDistance = Math.abs(predictedBallY - boardHeight);
+		if (predictedBallY < 0) {
+			predictedBallY = Math.abs(predictedBallY); // Bounce from top wall
+		} else if (predictedBallY > boardHeight) {
+			predictedBallY = boardHeight - remainingDistance; // Bounce from bottom wall
+		}
+	}
+	return predictedBallY;
 }
+
+function playerAI() {
+	if (ball.velocityX <= 0)
+	{
+		playerGuest.velocityY = 0;
+		return;
+	}
+	predictedBallPosition = predictBallPosition();
+	console.log("Current ball position: " + ball.y)
+	console.log("Predicted ball position: " + predictedBallPosition)
+	console.log("Player position: " + playerGuest.y)
+
+	if (predictedBallPosition > playerGuest.y + (playerGuest.height * 0.25)) // Ball is higher, go up
+	{
+		console.log("GOING DOWN")
+		playerGuest.velocityY = 3;
+	}
+	if (predictedBallPosition < playerGuest.y + (playerGuest.height * 0.75)) // Ball is lower, go down
+	{
+		console.log("GOING UP")
+		playerGuest.velocityY = -3;
+	}
+}
+
+// --------------------------------------------- UPDATE -------------------------------------------------
 
 function update() {
 	if (playerGuest.score == 5 || playerUser.score == 5)
@@ -260,18 +296,17 @@ function update() {
 
 	context.fillRect(ball.x, ball.y, ball.width, ball.height)
 
-	calculateNewPosition(playerUser);
-	calculateNewPosition(playerGuest)
+	if (predictedBallPosition >= 0 && playerGuest.velocityY !== 0)
+	{
+		if (predictedBallPosition > (playerGuest.y + playerGuest.height * 0.25) && predictedBallPosition < playerGuest.y + (playerGuest.height * 0.75))
+		{
+			console.log("AI CAN STOP MOVING. Predicted ball position is " + predictedBallPosition + ". Paddle position: " + playerGuest.y + "-" + (playerGuest.y + playerGuest.height) )
+			playerGuest.velocityY = 0
+		}
+	}
 
-	// playerAI()
-	// Check if AI paddle has reached the ball position
-	// if (predictedBallPosition >= 0)
-	// {
-	// 	if (predictedBallPosition >= playerGuest.y && predictBallPosition <= playerGuest.y + playerGuest.height) {
-	// 		console.log("AI can stop moving now")
-	// 		playerGuest.velocityY = 0
-	// 	}
-	// }
+	calculateNewPosition(playerUser);
+	calculateNewPosition(playerGuest);
 
 	if (ball.x - ball.width <= playerUser.x && ball.x >= playerUser.x - playerUser.width) {
 		if (ball.y <= playerUser.y + playerUser.height && ball.y + ball.height >= playerUser.y)
@@ -301,22 +336,6 @@ function update() {
 	}
 	else
 		hitLast = false;
-
-
-	// if (detectCollision(ball, playerUser) && !hitLast) {
-    //     if (ball.x <= playerUser.x + playerUser.width) { //left side of ball touches right side of player 1 (left paddle)
-    //         ball.velocityX *= -1;   // flip x direction
-	// 		hitLast = true
-    //     }
-    // }
-    // else if (detectCollision(ball, playerGuest) && !hitLast) {
-    //     if (ball.x + ballWidth >= playerGuest.x) { //right side of ball touches left side of player 2 (right paddle)
-    //         ball.velocityX *= -1;   // flip x direction
-	// 		hitLast = true
-    //     }
-    // }
-	// else
-	// 	hitLast = false
 
 	if (ball.x < 0)
 		addScore(playerGuest, "playerGuest", 3)
@@ -354,41 +373,6 @@ function update() {
 		if (!outOfBounds(nextPlayerPositionA))
 			player.y += player.velocityY
 		context.fillRect(player.x, player.y, player.width, player.height)
-	}
-
-
-	function predictBallPosition(secondsAhead) {
-		let predictedBallY = ball.y + ball.velocityY * secondsAhead * 1000 / 1000;
-
-		// Check for wall bounces and adjust the predicted position
-		if (predictedBallY <= 0 || predictedBallY >= boardHeight) {
-			let remainingDistance = Math.abs(predictedBallY - boardHeight);
-			if (predictedBallY < 0) {
-				predictedBallY = Math.abs(predictedBallY); // Bounce from top wall
-			} else if (predictedBallY > boardHeight) {
-				predictedBallY = boardHeight - remainingDistance; // Bounce from bottom wall
-			}
-		}
-		return predictedBallY;
-	}
-
-	function playerAI() {
-		console.log("HERE AI")
-		predictedBallPosition = predictBallPosition(1);
-		const playerPaddle = (playerGuest.y - playerGuest.height / 2)
-		if (ball.velocityX > 0)
-		{
-			if (playerPaddle * computerLevel  > predictedBallPosition) // Ball is lower, paddle go down
-			{
-				playerGuest.velocityY = -3;
-			}
-			if (playerPaddle * computerLevel < predictedBallPosition)
-			{
-				playerGuest.velocityY = 3;
-			}
-		}
-		else
-			playerGuest.velocityY = 0;
 	}
 
 // --------------------------------------------- MOVEMENTS -------------------------------------------------
