@@ -42,7 +42,7 @@ function validateTourUsernames(event) {
 			error = 1;
 			registrationError("game.max-size", `.tournament-reg-error-${index}`)
 		}
-		if (index != 0 && player === JSON.parse(localStorage.getItem("user")).username)
+		if (index != 0 && player === getCookie("username"))
 		{
 			error = 1;
 			registrationError("game.reg-same-user", `.tournament-reg-error-${index}`)
@@ -70,7 +70,7 @@ function validateTourUsernames(event) {
 
 
 function registrationFormTournament(params) {
-	document.getElementById("user-name").value = JSON.parse(localStorage.getItem("user")).username;
+	document.getElementById("user-name").value = getCookie("username");
 	document.getElementById("opponentsNameForm").addEventListener("submit", validateTourUsernames)
 }
 

@@ -5,17 +5,17 @@
 		node.addEventListener("click", togglePassword)
 	});
 
-	let user = JSON.parse(localStorage.getItem("user"));
-	console.log(user);
+	// let user = JSON.parse(localStorage.getItem("user"));
+	// console.log(user);
 
-	document.querySelector('.input-username').value = user.username
-	document.querySelector('.input-email').value = user.email
-	document.querySelector(".profile-pic").src = "https://localhost" + user.profile_picture
+	document.querySelector('.input-username').value = getCookie("username")
+	document.querySelector('.input-email').value = getCookie("email")
+	document.querySelector(".profile-pic").src = "https://localhost" + getCookie("profile_picture")
 
 	let formLanguage =  document.getElementById("defaultLanguage");
 	let options = formLanguage.querySelectorAll(".select-lang");
 	options.forEach(option => {
-		if (option.getAttribute("value") == user.language) {
+		if (option.getAttribute("value") == getCookie("language")) {
 			option.setAttribute("selected", "selected");
 			return ;
 		}

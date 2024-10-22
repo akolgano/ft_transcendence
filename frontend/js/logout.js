@@ -5,7 +5,7 @@ async function handleLogout(e) {
 	e.preventDefault();
 
 	const formData = new FormData();
-	formData.append("username", JSON.parse(localStorage.getItem("user")).username);
+	formData.append("username", getCookie("username"));
 
 	removeAlert();
 	try {
@@ -35,7 +35,7 @@ async function handleLogout(e) {
 			console.log("Data: " + JSON.stringify(data));
 			displayAlert("auth.logout-success", "success");
 
-			localStorage.removeItem("user")
+			// localStorage.removeItem("user")
 			setCookie("jwt_token", "", -1)
 
 			updateNavbar(false)

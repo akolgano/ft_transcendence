@@ -13,7 +13,7 @@ console.log("DEFAULT LANG SCRIPT")
 		formData.append("language", selectedLanguage);
 
 		removeAlert();
-		if (selectedLanguage == JSON.parse(localStorage.getItem("user")).language)
+		if (selectedLanguage == getCookie("language"))
 		{
 			displayAlert("account.already-language", "warning");
 			return ;
@@ -50,10 +50,11 @@ console.log("DEFAULT LANG SCRIPT")
 				siteLanguage = selectedLanguage;
 
 				// Update user instance of preferred language
-				let user = JSON.parse(localStorage.getItem('user'));
-				user.language = selectedLanguage;
-				localStorage.setItem("user", JSON.stringify(user));
-				console.log("USER: " + user);
+				// let user = JSON.parse(localStorage.getItem('user'));
+				// user.language = selectedLanguage;
+				// localStorage.setItem("user", JSON.stringify(user));
+				setCookie("language", selectedLanguage, 1)
+				// console.log("USER: " + user);
 			}
 			else
 			{

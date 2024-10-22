@@ -56,7 +56,7 @@ function updateProfileCard(data)
 	document.querySelector(".user-victories").innerHTML = `&nbsp;${data.victories}&nbsp`
 	document.querySelector(".user-losses").innerHTML = `&nbsp;${data.losses}&nbsp`
 
-	if (data.username !== JSON.parse(localStorage.getItem("user")).username)
+	if (data.username !== getCookie("username"))
 	{
 		const online_text = document.querySelector(".online-status")
 		if (data.online === true)
@@ -123,7 +123,7 @@ function addResultsToHTML(data) {
 
 function getArgument() {
 	const profileDiv = document.querySelector(".profile-page");
-	const user = JSON.parse(localStorage.getItem("user")).username
+	const user = getCookie("username")
 
 	if (profileDiv === null)
 		return (user)

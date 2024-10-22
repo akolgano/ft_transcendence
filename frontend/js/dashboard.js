@@ -4,7 +4,7 @@ async function fetchDashboardData() {
     removeAlert(); //check
     try {
         // Make a GET request to the API to fetch player stats
-        const response = await fetch(`https://localhost/api/player/stats/${JSON.parse(localStorage.getItem("user")).username}`, {
+        const response = await fetch(`https://localhost/api/player/stats/${getCookie("username")}`, {
             headers: {
                 'Authorization': `Token ${getCookie("jwt_token")}`, // Use the stored token for authentication
                 'Accept': 'application/json', // Expect a JSON response

@@ -31,10 +31,14 @@ async function login(e) {
 		{
 			console.log("User: " + JSON.stringify(data.user));
 
-			localStorage.setItem("user", JSON.stringify(data.user));
+			// localStorage.setItem("user", JSON.stringify(data.user));
 
 			siteLanguage = data.user.language;
 			setCookie("jwt_token", data.token, 1);
+			setCookie("username", data.user.username, 1);
+			setCookie("email", data.user.email, 1)
+			setCookie("language", data.user.language, 1)
+			setCookie("profile_picture", data.user.profile_picture, 1)
 
 			translator.translatePageTo(siteLanguage);
 

@@ -5,7 +5,7 @@
 		e.preventDefault();
 
 		const new_username = document.getElementById("username").value
-		if (new_username === JSON.parse(localStorage.getItem("user")).username)
+		if (new_username === getCookie("username"))
 			{
 				displayAlert("account.change-username-same", "danger");
 				return ;
@@ -38,11 +38,12 @@
 			}
 			if (data.detail)
 			{
-				let user = JSON.parse(localStorage.getItem("user"));
-				user.username = new_username;
-				localStorage.setItem("user", JSON.stringify(user));
-				console.log(JSON.parse(localStorage.getItem("user")))
-				document.querySelector(".navbar-username").innerHTML = `${user.username}!`;
+				// let user = JSON.parse(localStorage.getItem("user"));
+				// user.username = new_username;
+				// localStorage.setItem("user", JSON.stringify(user));
+				// console.log(JSON.parse(localStorage.getItem("user")))
+				setCookie("username", new_username, 1)
+				document.querySelector(".navbar-username").innerHTML = `${getCookie("username")}!`;
 				displayAlert("account.change-username-success", "success");
 			}
 			else

@@ -82,7 +82,7 @@
 	}
 
 	function prepareGame() {
-		playerUser.name = JSON.parse(localStorage.getItem("user")).username;
+		playerUser.name = getCookie("username");
 		playerGuest.name = localStorage.getItem("guestName");
 	}
 

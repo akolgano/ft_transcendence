@@ -19,7 +19,7 @@ function checkGuestName(params) {
 		error = 1
 		return registrationError("game.reg-no-ai", ".opponent-error");
 	}
-	if (guestName === JSON.parse(localStorage.getItem("user")).username)
+	if (guestName === getCookie("username"))
 	{
 		error = 1
 		return registrationError("game.reg-same-user", ".opponent-error")
@@ -61,7 +61,7 @@ function toggleOpponentsField(event) {
 
 function SignUpSimpleGame() {
 
-	document.querySelector(".user-versus").innerText = `${JSON.parse(localStorage.getItem("user")).username} vs.`
+	document.querySelector(".user-versus").innerText = `${getCookie("username")} vs.`
 	document.getElementById("AI-opponent").addEventListener("click", toggleOpponentsField)
 	const registerGuestName = document.getElementById("opponentsNameForm");
 	registerGuestName.addEventListener("submit", registerOpponent);
