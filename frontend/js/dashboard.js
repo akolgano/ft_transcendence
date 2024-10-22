@@ -6,7 +6,7 @@ async function fetchDashboardData() {
         // Make a GET request to the API to fetch player stats
         const response = await fetch(`https://localhost/api/player/stats/${JSON.parse(localStorage.getItem("user")).username}`, {
             headers: {
-                'Authorization': `Token ${localStorage.getItem("token")}`, // Use the stored token for authentication
+                'Authorization': `Token ${getCookie("jwt_token")}`, // Use the stored token for authentication
                 'Accept': 'application/json', // Expect a JSON response
             },
             method: 'GET',
@@ -96,15 +96,15 @@ function renderCharts(labels, playerScores, opponentScores, victories, losses, g
     renderBarChart(labels, gameResults);
     renderIntensityChart(labels, gameResults);
     renderMarginPieChart(gameResults);
-    
-    
+
+
 }
 
 // Function to render the line chart (Player vs. Opponent scores)
 function renderLineChart(labels, playerScores, opponentScores) {
     const chartContainer = document.getElementById('gameResultsChart').parentNode;
     const ctx = document.getElementById('gameResultsChart').getContext('2d');
-    
+
     // Check if there is data
     if (!labels || labels.length === 0 || !playerScores || playerScores.length === 0 || !opponentScores || opponentScores.length === 0) {
         // Hide the chart canvas
@@ -190,7 +190,7 @@ function renderLineChart(labels, playerScores, opponentScores) {
 function renderPieChart(chartId, labels, data, backgroundColors) {
     const chartContainer = document.getElementById(chartId).parentNode;
     const ctxPie = document.getElementById(chartId).getContext('2d');
-    
+
     // Check if both victories and losses are 0
     if (!data || data.length === 0 || (data[0] === 0 && data[1] === 0)) {
         // Hide the pie chart canvas

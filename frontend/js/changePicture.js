@@ -10,7 +10,7 @@
 		try {
 			const response = await fetch("https://localhost/api/change-profile-picture/", {
 				headers: {
-					'Authorization': `Token ${localStorage.getItem("token")}`,
+					'Authorization': `Token ${getCookie("jwt_token")}`,
 					'Accept': 'application/json',
 				},
 				method: 'POST',

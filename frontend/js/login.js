@@ -1,5 +1,6 @@
 
 console.log("SCRIPT LOG IN")
+
 async function login(e) {
 
 	e.preventDefault();
@@ -30,11 +31,10 @@ async function login(e) {
 		{
 			console.log("User: " + JSON.stringify(data.user));
 
-			localStorage.setItem("auth", 1);
 			localStorage.setItem("user", JSON.stringify(data.user));
 
 			siteLanguage = data.user.language;
-			localStorage.setItem("token", data.token);
+			setCookie("jwt_token", data.token, 1);
 
 			translator.translatePageTo(siteLanguage);
 

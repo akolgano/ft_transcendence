@@ -29,7 +29,8 @@
 		"logout-error": "Error logging out",
 		"password-show": "Mostrar contraseña",
 		"password-hide": "Ocultar contraseña",
-		"password-no-match": "Las contraseñas no coinciden"
+		"password-no-match": "Las contraseñas no coinciden",
+		"login-again": "Session expired. Please log in again ES"
 	},
 	"account" : {
 		"update": "Actualizar",

@@ -11,7 +11,7 @@ async function handleLogout(e) {
 	try {
 		const response = await fetch("https://localhost/api/logout", {
 			headers: {
-				'Authorization': `Token ${localStorage.getItem("token")}`,
+				'Authorization': `Token ${getCookie("jwt_token")}`,
 				'Accept': 'application/json',
 			},
 			method: 'POST',
@@ -35,9 +35,9 @@ async function handleLogout(e) {
 			console.log("Data: " + JSON.stringify(data));
 			displayAlert("auth.logout-success", "success");
 
-			localStorage.removeItem("auth")
 			localStorage.removeItem("user")
-			localStorage.removeItem("token")
+			setCookie("jwt_token", "", -1)
+
 			updateNavbar(false)
 			urlRoute({ target: { href: '/' }, preventDefault: () => {} });
 		}

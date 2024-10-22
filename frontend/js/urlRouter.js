@@ -197,19 +197,25 @@ const urlLocationHandler = () => {
 	console.log("Location: " + location)
 
 	// Logged in but user tries to go to login or sign up
-	if (localStorage.getItem("token") && (location == "/login" || location == "/signup"))
+	if (getCookie("jwt_token") != "" && (location == "/login" || location == "/signup"))
 		location = "/";
 
 	if (location.length == 0)
 		location = "/";
 
+	if (getCookie("jwt_token") == "" && document.querySelector(".navbar-username"))
+	{
+		window.location.reload();
+		displayAlert("auth.login-again", "danger")
+	}
+
 	// Not logged in and route needs authentication
-	if (localStorage.getItem("token") == null && urlRoutes[location] && urlRoutes[location].auth == true)
+	if (getCookie("jwt_token") == "" && urlRoutes[location] && urlRoutes[location].auth == true)
 		location = "/login"
 
 	let dynamic = handleDynamicRoutes(location)
 
-	if (localStorage.getItem("token") == null && dynamic)
+	if (getCookie("jwt_token") == "" && dynamic)
 		location = "/login"
 	else if (dynamic)
 		location = dynamic.route;
@@ -292,7 +298,7 @@ const updateNavbar = (loggedIn) => {
 	// HTML
 	let navContent;
 	if (loggedIn)
-		navContent = `<li class="nav-item"><p class="navbar-text d-inline" data-i18n="navbar.welcome"></p><p class="navbar-text navbar-username d-inline m-0 pe-4"></p></li><li class="nav-item dropdown"><a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="./images/profile_pic.jpeg" alt="avatar" class="rounded-circle border-1 avatar-sm object-fit-cover"></a><ul class="dropdown-menu dropdown-menu-end"><li><a class="dropdown-item spa" href="/account" data-i18n="account.title">Account</a></li><li><a class="dropdown-item" href="#">Another action</a></li><li><a class="dropdown-item" href="#" id="logout" data-i18n="auth.log-out"></a></li></ul>`
+		navContent = `<li class="nav-item"><p class="navbar-text d-inline" data-i18n="navbar.welcome"></p><p class="navbar-text navbar-username d-inline m-0 pe-4"></p></li><li class="nav-item dropdown"><a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="./images/profile_pic.jpeg" alt="avatar" class="rounded-circle border-1 avatar-sm object-fit-cover"></a><ul class="dropdown-menu dropdown-menu-end"><li><a class="dropdown-item spa" href="/account" data-i18n="account.title">Account</a></li><li><a class="dropdown-item" href="#" id="logout" data-i18n="auth.log-out"></a></li></ul>`
 	else
 		navContent = '<a class="btn btn-outline-secondary spa" type="button" href="/signup" data-i18n="auth.sign-up"></a><a class="btn btn-outline-secondary spa mx-2" type="button" href="/login" data-i18n="auth.log-in"></a>'
 
@@ -321,7 +327,7 @@ const updateNavbar = (loggedIn) => {
 const run = async () => {
 	await fetchPages();
 
-	if (localStorage.getItem("token"))
+	if (getCookie("jwt_token") != "")
 		updateNavbar(true)
 	else
 		updateNavbar(false)

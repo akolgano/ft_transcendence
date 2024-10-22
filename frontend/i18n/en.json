@@ -29,7 +29,8 @@
 		"logout-error": "Error logging out",
 		"password-show": "Show password",
 		"password-hide": "Hide password",
-		"password-no-match": "Passwords do not match"
+		"password-no-match": "Passwords do not match",
+		"login-again": "Session expired. Please log in again"
 	},
 	"account" : {
 		"update": "Update",

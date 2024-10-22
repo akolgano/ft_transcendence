@@ -17,7 +17,7 @@
 		try {
 			const response = await fetch("https://localhost/api/change_username/", {
 				headers: {
-					'Authorization': `Token ${localStorage.getItem("token")}`,
+					'Authorization': `Token ${getCookie("jwt_token")}`,
 					'Accept': 'application/json',
 				},
 				method: 'PATCH',

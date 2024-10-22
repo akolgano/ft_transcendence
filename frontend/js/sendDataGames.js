@@ -5,7 +5,7 @@ async function sendSimpleGameData(opponent, scoreUser, scoreGuest, duration, pro
 	try {
 		const response = await fetch("https://localhost/api/game/result/", {
 			headers: {
-				'Authorization': `Token ${localStorage.getItem("token")}`,
+				'Authorization': `Token ${getCookie("jwt_token")}`,
 				'Accept': 'application/json',
 				'Content-Type': 'application/json'
 			},
@@ -56,7 +56,7 @@ async function sendTournamentData(results, nickname) {
 	try {
 		const response = await fetch("https://localhost/api/tournament/result/", {
 			headers: {
-				'Authorization': `Token ${localStorage.getItem("token")}`,
+				'Authorization': `Token ${getCookie("jwt_token")}`,
 				'Accept': 'application/json',
 				'Content-Type': 'application/json'
 			},

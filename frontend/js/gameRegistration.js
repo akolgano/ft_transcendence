@@ -45,9 +45,6 @@ function registerOpponent(event) {
 
 	localStorage.setItem("guestName", guestName);
 	urlRoute({ target: { href: "/pong" }, preventDefault: () => {} });
-
-	// opponentsNameForm = document.getElementById("opponentsNameForm")
-	// const formData = new FormData(opponentsNameForm);
 }
 
 function toggleOpponentsField(event) {
@@ -60,11 +57,11 @@ function toggleOpponentsField(event) {
 	}
 	else
 		nameField.disabled = ""
-
 }
 
 function SignUpSimpleGame() {
 
+	document.querySelector(".user-versus").innerText = `${JSON.parse(localStorage.getItem("user")).username} vs.`
 	document.getElementById("AI-opponent").addEventListener("click", toggleOpponentsField)
 	const registerGuestName = document.getElementById("opponentsNameForm");
 	registerGuestName.addEventListener("submit", registerOpponent);
