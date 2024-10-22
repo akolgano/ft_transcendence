@@ -58,8 +58,8 @@
 		"vict": "Victories : ",
 		"loss": "Losses : ",
 		"player-distri": "Player Victory and Loss Distribution",
-		"game-duration": "Game Durations of each game (in minutes)",
-		"game-intensity": "Game Intensity of each game (Scores per minute)",
+		"game-duration": "Game Durations",
+		"game-intensity": "Game Intensity",
 		"game-margin": "Game Margin Distribution of all games",
 		"game-progression": "Game Score Progression",
 		"you": "You",
@@ -71,6 +71,9 @@
 		"close-games": "Close games (1)",
 		"moderate-games": "Moderate game (2-3)",
 		"large-margins": "Large magins (4)",
+		"date-time": "X-axis: Date/Time of Game",
+		"duration-in-mins": "Y-axis: Duration (Minutes)",
+		"score-per-min": "Y-axis: Scores Per Minute",
 		"player-results": "Player Results (Scoreline of each game)"
 	},
 	"friends": {
