@@ -8,7 +8,7 @@ django.setup()
 from pong.users.models import CustomUser, PlayerStats, GameResult, TournamentResult
 
 sample_data = [
-    ('computer', 'computer@example.com', 'password', False, 'en', 'profile_pictures/default.jpg'),
+    ('juliette', 'computer@example.com', 'password', False, 'en', 'profile_pictures/default.jpg'),
     ('elina', 'elina@example.com', 'password', False, 'fr', 'profile_pictures/default.jpg'),
     ('emily', 'emily@example.com', 'password', False, 'es', 'profile_pictures/default.jpg'),
     ('alice', 'alice@example.com', 'password', False, 'es', 'profile_pictures/default.jpg'),
@@ -29,11 +29,11 @@ sample_data_games = [
 ]
 
 sample_data_tournaments = [
-    {"nickname": "mynickname", "results": ["mynickname", "guest1", "guest2", "guest3"]},
-    {"nickname": "mynickname", "results": ["mynickname", "guest1", "guest2", "guest3"]},
-    {"nickname": "mynickname", "results": ["guest3", "guest1", "mynickname", "guest2"]},
-    {"nickname": "mynickname", "results": ["guest3", "mynickname", "guest2", "guest1"]},
-    {"nickname": "mynickname", "results": ["guest3", "guest1", "guest2", "mynickname"]},
+    {"nickname": "alex", "results": ["alex", "anna", "juju", "test"]},
+    {"nickname": "alex1", "results": ["alex1", "jack", "chanika", "chris"]},
+    {"nickname": "alexandra", "results": ["anna", "alexandra", "juliette", "jules"]},
+    {"nickname": "alexander", "results": ["alexander", "sophie", "elisa", "juju"]},
+    {"nickname": "alejandro", "results": ["mariana", "aleja", "irasema", "alejandro"]},
 
 ]
 def insert_sample_data():
@@ -101,7 +101,7 @@ def insert_sample_data_games():
             )
             if created_game:
                 print(f"Inserted GameResult for: {username}")
-                
+
                 player_stats, created_stats = PlayerStats.objects.get_or_create(user=user)
                 score = record['score']
                 if score[0] > score[1]:
@@ -116,7 +116,7 @@ def insert_sample_data_games():
                 print(f"GameResult already exists for: {username}")
 
         except Exception as e:
-            print(f"Error inserting game data: {e}")      
+            print(f"Error inserting game data: {e}")
 
 def insert_sample_data_tournaments():
 
@@ -126,7 +126,7 @@ def insert_sample_data_tournaments():
         print(f"TournamentResults already exist for: {username}. Skipping insertion.")
         return
     for record in sample_data_tournaments:
-        try:        
+        try:
             tournament = TournamentResult(
                 user=user,
                 nickname=record.get('nickname'),
@@ -135,7 +135,7 @@ def insert_sample_data_tournaments():
             tournament.save()
             print(f"Inserted TournamentResult for: {username}")
 
-                
+
             player_stats, created = PlayerStats.objects.get_or_create(user=user)
             results = record.get('results')
             nickname=record.get('nickname')
@@ -150,7 +150,7 @@ def insert_sample_data_tournaments():
             print(f"Updated TournamentResult for: {username}")
 
         except Exception as e:
-            print(f"Error inserting tournament data: {e}")  
+            print(f"Error inserting tournament data: {e}")
 
 def main():
     try:
