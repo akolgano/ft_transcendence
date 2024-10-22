@@ -89,7 +89,8 @@
 			intervalID = null;
 		}
 		getDuration()
-		document.querySelector(".modalEndOfGame").style.display = "block";
+		document.querySelector(".modalEndOfGame").classList.remove("d-none")
+		document.querySelector(".modalEndOfGame").style.display = "block"
 		document.querySelector(".modal-title-winner").innerHTML = winner
 		document.querySelector(".modal-score").innerHTML = `${playerUser.score} - ${playerGuest.score}`
 		document.querySelector(".modal-looser").innerHTML = looser
