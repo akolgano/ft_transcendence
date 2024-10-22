@@ -13,7 +13,7 @@
 	let ballHeight = 10;
 
 	let gameLoopId;
-	let computerLevel = 0.98;
+	let computerLevel = 0.95;
 	let hitLast = false
 
 	let ball = {
@@ -215,6 +215,8 @@
 		document.getElementById("playerGuest").innerHTML = 0
 		document.querySelector(".name-opponent").innerHTML = playerGuest.name;
 		document.querySelector(".name-user").innerHTML = playerUser.name;
+		if (playerGuest.name === "AI")
+			document.querySelector(".opponent-emoji").innerText = "🤖"
 		board = document.getElementById("pongCanvas");
 		board.height = boardHeight;
 		board.width = boardWidth;
@@ -238,18 +240,44 @@
 
 // --------------------------------------------- AI PLAYER -------------------------------------------------
 
-function predictBallPosition() {
-	let predictedBallY = ball.y + (ball.velocityY * 60);
+// function predictBallPosition() {
+// 	let predictedBallY = ball.y + (ball.velocityY * 60);
+// 	let predictedBallX = ball.x + (ball.velocityX * 60)
 
-	// Check for wall bounces and adjust the predicted position
-	if (predictedBallY <= 0 || predictedBallY >= boardHeight) {
-		let remainingDistance = Math.abs(predictedBallY - boardHeight);
-		if (predictedBallY < 0) {
-			predictedBallY = Math.abs(predictedBallY); // Bounce from top wall
-		} else if (predictedBallY > boardHeight) {
-			predictedBallY = boardHeight - remainingDistance; // Bounce from bottom wall
+// 	// Check for wall bounces and adjust the predicted position
+// 	if (predictedBallY <= 0 || predictedBallY >= boardHeight) {
+// 		let remainingDistance = Math.abs(predictedBallY - boardHeight);
+// 		if (predictedBallY < 0) {
+// 			predictedBallY = Math.abs(predictedBallY); // Bounce from top wall
+// 		} else if (predictedBallY > boardHeight) {
+// 			predictedBallY = boardHeight - remainingDistance; // Bounce from bottom wall
+// 		}
+// 	}
+// 	return predictedBallY;
+// }
+
+function predictBallPosition() {
+	let predictedBallY = ball.y;
+	let predictedBallX = ball.x;
+	let velocityX = ball.velocityX;
+	let velocityY = ball.velocityY;
+
+	for (let frames = 0; frames < 60; frames++) {
+		predictedBallX += velocityX;
+		predictedBallY += velocityY;
+
+		// Check for wall bounces in the y-direction (top/bottom)
+		if (predictedBallY <= 0 || predictedBallY >= boardHeight) {
+			velocityY *= -1;
+			predictedBallY = Math.max(0, Math.min(predictedBallY, boardHeight));  // Keep within bounds
+		}
+		// If the ball is going out of bounds horizontally, stop prediction
+		if (predictedBallX >= (board.width - playerGuest.width)) {
+			break;
 		}
 	}
+	if (ball.velocityX > 5.3)
+		return (predictedBallY * computerLevel)
 	return predictedBallY;
 }
 
@@ -260,18 +288,13 @@ function playerAI() {
 		return;
 	}
 	predictedBallPosition = predictBallPosition();
-	console.log("Current ball position: " + ball.y)
-	console.log("Predicted ball position: " + predictedBallPosition)
-	console.log("Player position: " + playerGuest.y)
 
 	if (predictedBallPosition > playerGuest.y + (playerGuest.height * 0.25)) // Ball is higher, go up
 	{
-		console.log("GOING DOWN")
 		playerGuest.velocityY = 3;
 	}
 	if (predictedBallPosition < playerGuest.y + (playerGuest.height * 0.75)) // Ball is lower, go down
 	{
-		console.log("GOING UP")
 		playerGuest.velocityY = -3;
 	}
 }
@@ -300,7 +323,7 @@ function update() {
 	{
 		if (predictedBallPosition > (playerGuest.y + playerGuest.height * 0.25) && predictedBallPosition < playerGuest.y + (playerGuest.height * 0.75))
 		{
-			console.log("AI CAN STOP MOVING. Predicted ball position is " + predictedBallPosition + ". Paddle position: " + playerGuest.y + "-" + (playerGuest.y + playerGuest.height) )
+			// console.log("AI CAN STOP MOVING. Predicted ball position is " + predictedBallPosition + ". Paddle position: " + playerGuest.y + "-" + (playerGuest.y + playerGuest.height) )
 			playerGuest.velocityY = 0
 		}
 	}
@@ -313,11 +336,12 @@ function update() {
 		{
 			if (!hitLast)
 			{
-				if (Math.abs(ball.velocityX) < 5)
+				if (Math.abs(ball.velocityX) < 5.5)
 					ball.velocityX *= -1.05;
 				else
 					ball.velocityX *= -1;
 				hitLast = true
+				console.log("Ball velocity: " + ball.velocityX)
 			}
 		}
 	}
@@ -326,11 +350,12 @@ function update() {
 		{
 			if (!hitLast)
 			{
-				if (Math.abs(ball.velocityX) < 5)
+				if (Math.abs(ball.velocityX) < 5.5)
 					ball.velocityX *= -1.05;
 				else
 					ball.velocityX *= -1;
 				hitLast = true;
+				console.log("Ball velocity: " + ball.velocityX)
 			}
 		}
 	}
