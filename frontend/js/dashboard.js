@@ -81,8 +81,18 @@ function updateDashboard(data) {
     const playerScores = gameResults.map(result => result.score[0]);
     const opponentScores = gameResults.map(result => result.score[1]);
 
-    // Render the charts with actual data
-    renderCharts(labels, playerScores, opponentScores, data.victories, data.losses, gameResults);
+    // Sort game results by date in ascending order
+    const sortedIndices = labels
+        .map((_, index) => index) // Create an array of indices
+        .sort((a, b) => new Date(gameResults[a].date_time) - new Date(gameResults[b].date_time)); // Sort based on date
+
+    // Re-order the arrays based on sorted indices
+    const sortedLabels = sortedIndices.map(index => labels[index]);
+    const sortedPlayerScores = sortedIndices.map(index => playerScores[index]);
+    const sortedOpponentScores = sortedIndices.map(index => opponentScores[index]);
+
+    // Render the charts with sorted data
+    renderCharts(sortedLabels, sortedPlayerScores, sortedOpponentScores, data.victories, data.losses, gameResults);
 }
 
 
