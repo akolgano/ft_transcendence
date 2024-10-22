@@ -257,6 +257,9 @@ function renderBarChart(labels, gameResults) {
         return { minutes, seconds }; // Return an object with minutes and seconds
     });
 
+    // Reverse the gameDurations array to match the correct order
+    const reversedGameDurations = gameDurations.reverse();
+
     // Show the bar chart canvas if data exists
     document.getElementById('gameDurationChart').style.display = 'block';
 
@@ -266,7 +269,7 @@ function renderBarChart(labels, gameResults) {
             labels: labels,
             datasets: [{
                 label: 'Game Duration (minutes)',
-                data: gameDurations.map(d => d.minutes + (d.seconds / 60)), // Convert to fractional minutes for bar heights
+                data: reversedGameDurations.map(d => d.minutes + (d.seconds / 60)), // Convert to fractional minutes for bar heights
                 backgroundColor: 'rgba(153, 102, 255, 0.6)',
                 borderColor: 'rgba(153, 102, 255, 1)',
                 borderWidth: 2
@@ -299,7 +302,7 @@ function renderBarChart(labels, gameResults) {
                 tooltip: {
                     callbacks: {
                         label: function(tooltipItem) {
-                            const duration = gameDurations[tooltipItem.dataIndex];
+                            const duration = reversedGameDurations[tooltipItem.dataIndex];
                             const minutes = duration.minutes;
                             const seconds = duration.seconds;
                             return `Game Duration (MM:SS): ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
