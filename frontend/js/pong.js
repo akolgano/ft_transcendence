@@ -86,7 +86,8 @@
 			intervalID = null;
 		}
 		getDuration()
-		document.querySelector(".modalEndOfGame").style.display = "block";
+		document.querySelector(".modalEndOfGame").classList.remove("d-none")
+		document.querySelector(".modalEndOfGame").style.display = "block"
 		document.querySelector(".modal-title-winner").innerHTML = winner
 		document.querySelector(".modal-score").innerHTML = `${playerUser.score} - ${playerGuest.score}`
 		document.querySelector(".modal-looser").innerHTML = looser
@@ -143,7 +144,6 @@
 			link.removeEventListener("click", stopGame)
 		})
 	}
-
 
 // --------------------------------------------- START GAME -------------------------------------------------
 
@@ -206,7 +206,6 @@
 			translateNewContent(content)
 			return ;
 		}
-
 		document.getElementById("pongContent").classList.remove("d-none")
 		document.getElementById("playerUser").innerHTML = 0
 		document.getElementById("playerGuest").innerHTML = 0
@@ -355,7 +354,6 @@ function update() {
 			player.y += player.velocityY
 		context.fillRect(player.x, player.y, player.width, player.height)
 	}
-
 
 	function predictBallPosition(secondsAhead) {
 		let predictedBallY = ball.y + ball.velocityY * secondsAhead * 1000 / 1000;
