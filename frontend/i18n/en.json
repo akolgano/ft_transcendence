@@ -38,7 +38,8 @@
 		"email-taken": "Email is already taken.",
 		"email-invalid": "Enter a valid email address.",
 		"email-space": "Email cannot have leading or trailing spaces.",
-		"login-again": "Session expired. Please log in again"
+		"login-again": "Session expired. Please log in again",
+		"cert-error": "Please accept the certificates first"
 	},
 	"account" : {
 		"update": "Update",

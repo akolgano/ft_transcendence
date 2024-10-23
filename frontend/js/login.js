@@ -51,11 +51,18 @@ async function login(e) {
 			displayAlert("auth.login-error", "danger");
 		}
 	} catch (error) {
-		console.log("error message: " + error.message)
-		if (error.message === "auth.login-error")
-			displayAlert(error.message, "danger");
+		if (error instanceof TypeError && error.message.includes('Failed to fetch'))
+		{
+				displayAlert("auth.cert-error", "danger");
+				location.reload();
+		}
 		else
-			displayAlert("error-fetch", "danger");
+		{
+			if (error.message === "auth.login-error")
+				displayAlert(error.message, "danger");
+			else
+				displayAlert("error-fetch", "danger");
+		}
 	}
 }
 

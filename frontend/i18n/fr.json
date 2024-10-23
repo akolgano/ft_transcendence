@@ -38,7 +38,8 @@
 		"email-taken": "L'email est déjà pris.",
 		"email-invalid": "Entrez une adresse email valide.",
 		"email-space": "L'email ne peut pas avoir d'espaces au début ou à la fin.",
-		"login-again": "Session expired. Please log in again FR"
+		"login-again": "Session expired. Please log in again FR",
+		"cert-error": "Please accept the certificates first FR"
 	},
 	"account" : {
 		"update": "Mettre à jour",
@@ -71,7 +72,6 @@
 		"game-duration": "Durée des parties",
 		"game-intensity": "Intensité des parties",
 		"game-margin": "Répartition de la marge des parties",
-		"player-results": "Résultats du joueur",
 		"game-progression": "Game Score Progression F",
 		"you": "Vous",
 		"opponent": "Adversaire",
