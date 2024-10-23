@@ -89,16 +89,39 @@
 			intervalID = null;
 		}
 		getDuration()
-		document.querySelector(".modalEndOfGame").classList.remove("d-none")
-		document.querySelector(".modalEndOfGame").style.display = "block"
-		document.querySelector(".modal-title-winner").innerHTML = winner
-		document.querySelector(".modal-score").innerHTML = `${playerUser.score} - ${playerGuest.score}`
-		document.querySelector(".modal-looser").innerHTML = looser
+		if (playerGuest.name === "AI" && playerUser.score < playerGuest.score)
+		{
+			const modalElem = document.querySelector(".modalEndOfGameAIWOn")
+			const modal = new bootstrap.Modal(document.querySelector(".modalEndOfGameAIWOn"));
+			document.querySelector(".ai-score").innerHTML = `${playerUser.score} - ${playerGuest.score}`
+			document.querySelector(".play-again-ai").addEventListener("click", event => {
+				modal.hide()
+				urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
+			})
+			modal.show()
+			modalElem.addEventListener('hide.bs.modal', () => {
+				urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
+			});
+		}
+		else
+		{
+			const modalElem = document.querySelector(".modalEndOfGame")
+			const modal = new bootstrap.Modal(document.querySelector(".modalEndOfGame"));
+			document.querySelector(".modalEndOfGame").style.display = "block"
+			document.querySelector(".modal-title-winner").innerHTML = winner
+			document.querySelector(".modal-score").innerHTML = `${playerUser.score} - ${playerGuest.score}`
+			document.querySelector(".modal-looser").innerHTML = looser
+			document.querySelector(".play-again").addEventListener("click", event => {
+				modal.hide()
+				urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
+			})
+			modal.show()
+			modalElem.addEventListener('hide.bs.modal', () => {
+				urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
+			});
+		}
 
 		sendSimpleGameData(playerGuest.name, playerUser.score, playerGuest.score, duration, progression);
-		document.querySelector(".play-again").addEventListener("click", event => {
-			urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
-		})
 		localStorage.removeItem("guestName");
 	}
 
@@ -303,7 +326,7 @@ function playerAI() {
 // --------------------------------------------- UPDATE -------------------------------------------------
 
 function update() {
-	if (playerGuest.score == 5 || playerUser.score == 5)
+	if (playerGuest.score == 1 || playerUser.score == 1)
 	{
 		endOfGame();
 		return ;

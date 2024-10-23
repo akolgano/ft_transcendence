@@ -145,7 +145,9 @@
 		"reg-duplicate": "Cada jugador necesita un nombre diferente",
 		"reg-same-user": "El nombre del juego no puede ser el nombre de usuario del jugador",
 		"max-size": "Máximo 20 caracteres para el nombre del juego",
-		"trailing-spaces": "El nombre del juego no puede tener espacios al inicio o al final."
+		"trailing-spaces": "El nombre del juego no puede tener espacios al inicio o al final.",
+		"ai-wins-title": "😢 You lost against AI! Maybe next time?SP",
+		"ai-wins-score": "Score: "
 	},
 	"404": "Error transcendente: Parece que esta página no existe",
 	"error-fetch": "Error inesperado, por favor inténtalo de nuevo más tarde."
