@@ -3,7 +3,8 @@ console.log("SCRIPT LOG OUT")
 
 async function handleLogout(e) {
 	e.preventDefault();
-
+	if (!checkValidToken())
+		return;
 	const formData = new FormData();
 	formData.append("username", JSON.parse(localStorage.getItem("user")).username);
 

@@ -40,6 +40,8 @@ function addGameResults(game_results) {
 		// Attach event listeners to "Show Progression" buttons after rendering the game cards
 		document.querySelectorAll('.show-chart-btn').forEach((button) => {
 			button.addEventListener('click', (event) => {
+				if (!checkValidToken())
+					return;
 				const index = event.target.getAttribute('data-index');
 				const gameData = game_results[index];
 				openGameProgressionModal(gameData.progression, parseInt(index) + 1); // Open modal with game progression

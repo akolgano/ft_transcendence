@@ -3,7 +3,8 @@
 
 	changePassword.addEventListener("submit", async (e) => {
 		e.preventDefault();
-
+		if (!checkValidToken())
+			return;
 		let oldPassword = document.getElementById("old-password").value;
 		let newPassword = document.getElementById("password").value;
 

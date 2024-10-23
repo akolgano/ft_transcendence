@@ -5,7 +5,8 @@ console.log("DEFAULT LANG SCRIPT")
 
 	defaultLanguage.addEventListener("submit", async (e) => {
 		e.preventDefault();
-
+		if (!checkValidToken())
+			return;
 		let selectElement = document.getElementById("selectLanguage")
 		let selectedLanguage = selectElement.options[selectElement.selectedIndex].value;
 

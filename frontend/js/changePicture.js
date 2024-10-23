@@ -3,7 +3,8 @@
 
 	changeProfilePic.addEventListener("submit", async (e) => {
 		e.preventDefault();
-
+		if (!checkValidToken())
+			return;
 		const formData = new FormData(changeProfilePic);
 		removeAlert();
 

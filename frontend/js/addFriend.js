@@ -50,9 +50,10 @@ function addFriendToHTML(user) {
 
 function addFriendEvent() {
 	const addFriend = document.getElementById("addFriend");
-
 	addFriend.addEventListener("submit", async (e) => {
 		e.preventDefault();
+		if (!checkValidToken())
+			return;
 		const formData = new FormData(addFriend);
 		removeAlert();
 		try {

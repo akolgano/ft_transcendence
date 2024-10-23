@@ -35,7 +35,8 @@ function checkGuestName(params) {
 
 function registerOpponent(event) {
 	event.preventDefault();
-
+	if (!checkValidToken())
+		return;
 	resetErrorField(".opponent-error");
 	let guestName;
 	const checkbox = document.getElementById("AI-opponent").checked;

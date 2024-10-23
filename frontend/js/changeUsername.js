@@ -3,6 +3,8 @@
 
 	changeUsername.addEventListener("submit", async (e) => {
 		e.preventDefault();
+		if (!checkValidToken())
+			return;
 		resetErrorField(".username-error")
 		if (!validUsername())
 			return ;

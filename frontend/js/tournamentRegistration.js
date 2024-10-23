@@ -29,6 +29,8 @@ function setUpTournament(players) {
 
 function validateTourUsernames(event) {
 	event.preventDefault();
+	if (!checkValidToken())
+		return;
 	resetErrorField(".form-error");
 
 	const TournamentForm = document.getElementById("opponentsNameForm")

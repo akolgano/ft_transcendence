@@ -23,8 +23,9 @@ function removeFriendFromHTML(username) {
 }
 
 async function addEventRemoveButton(e) {
-
 	e.preventDefault();
+	if (!checkValidToken())
+		return;
 	const button = e.target;
 	const username = button.getAttribute("data-username");
 	const formData = new FormData();
