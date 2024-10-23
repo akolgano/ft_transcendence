@@ -96,7 +96,9 @@ def test_token(request):
 @permission_classes([IsAuthenticated])
 def change_profile_picture(request):
     user = request.user
+    logger.info(f"Change photo attempt for username: {username}")
     if 'profile_picture' not in request.FILES:
+        logger.error(f"User {username}: No profile picture uploaded.")
         return Response({"error": "No profile picture uploaded."}, status=status.HTTP_400_BAD_REQUEST)
 
     profile_picture = request.FILES['profile_picture']
@@ -104,6 +106,7 @@ def change_profile_picture(request):
     user.save()
 
     serializer = UserSerializer(user)
+    logger.info(f"User {user.username} changed profile picture successfully.")
     return Response({'user': serializer.data}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
@@ -115,36 +118,38 @@ def get_friends(request):
     serializer = FriendSerializer(friends, many=True)
     return Response({'friends': serializer.data}, status=status.HTTP_200_OK)
 
-@api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def get_user_info(request):
-    user = request.user
-    serializer = UserSerializer(user)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+# @api_view(['GET'])
+# @authentication_classes([TokenAuthentication])
+# @permission_classes([IsAuthenticated])
+# def get_user_info(request):
+#     user = request.user
+#     serializer = UserSerializer(user)
+#     return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def get_user_by_id(request, user_id):
-    try:
-        user = User.objects.get(id=user_id)
-    except User.DoesNotExist:
-        raise NotFound('User not found.')
+# @api_view(['GET'])
+# @authentication_classes([TokenAuthentication])
+# @permission_classes([IsAuthenticated])
+# def get_user_by_id(request, user_id):
+#     try:
+#         user = User.objects.get(id=user_id)
+#     except User.DoesNotExist:
+#         raise NotFound('User not found.')
 
-    serializer = UserSerializer(user)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+#     serializer = UserSerializer(user)
+#     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['PATCH'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def change_password(request):
+    logger.info(f"Change password attempt for username: {username}")
     serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
     if serializer.is_valid():
         serializer.save()
+        logger.info(f"User {user.username} changed password successfully.")
         return Response({"detail": "Password changed successfully."}, status=status.HTTP_200_OK)
-    logger.error(serializer.errors)
+    logger.error("Change password failed with errors: %s", serializer.errors)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
@@ -153,20 +158,26 @@ def change_password(request):
 def add_friend(request):
     user = request.user
     username_to_add = request.data.get('username_to_add')
+    logger.info(f"User {user.username} attempts to add a friend - Request data: {request.data}")
 
     if not username_to_add:
+        logger.error(f"User {user.username}: Username to add is required.")
         return Response({'detail': 'Username to add is required.'}, status=status.HTTP_400_BAD_REQUEST)
 
     user_to_add = get_object_or_404(CustomUser, username=username_to_add)
 
+    logger.info(f"User {user_to_add}")
     if user == user_to_add:
+        logger.warning(f"User {user.username}: You cannot add yourself as a friend.")
         return Response({'detail': 'You cannot add yourself as a friend.'}, status=status.HTTP_400_BAD_REQUEST)
 
     if Friendship.objects.filter(from_user=user, to_user=user_to_add).exists():
+        logger.warning(f"User {user.username}: You are already friends with this user.")
         return Response({'detail': 'You are already friends with this user.'}, status=status.HTTP_400_BAD_REQUEST)
 
     Friendship.objects.create(from_user=user, to_user=user_to_add)
     serializer = UserSerializer(user_to_add)
+    logger.info(f"User {user.username} added a friend {user_to_add.username}")
     return Response({
         'detail': 'Friend added successfully.',
         'friend': serializer.data
@@ -178,17 +189,20 @@ def add_friend(request):
 def remove_friend(request):
     user = request.user
     username_to_remove = request.data.get('username_to_remove')
-
+    logger.info(f"User {user.username} attempts to remove a friend - Request data: {request.data}")
     if not username_to_remove:
+        logger.error(f"User {user.username}: Username to remove is required.")
         return Response({'detail': 'Username to remove is required.'}, status=status.HTTP_400_BAD_REQUEST)
 
     user_to_remove = get_object_or_404(CustomUser, username=username_to_remove)
 
     friendship = Friendship.objects.filter(from_user=user, to_user=user_to_remove).first()
     if not friendship:
+        logger.warning(f"User {user.username}: You are not friends with this user.")
         return Response({'detail': 'You are not friends with this user.'}, status=status.HTTP_400_BAD_REQUEST)
 
     friendship.delete()
+    logger.info(f"User {user.username} removed a friend {username_to_remove}")
     return Response({'detail': 'Friend removed successfully.'}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
@@ -196,6 +210,7 @@ def remove_friend(request):
 @permission_classes([IsAuthenticated])
 def user_friends_view(request):
     user = request.user
+    logger.info(f"Fetching friends for user: {user.username}")
     try:
         friends = user.get_friends()
         friends_list = [{
@@ -203,8 +218,10 @@ def user_friends_view(request):
             'points': PlayerStats.objects.get_or_create(user=friend.to_user, defaults={'points': 0})[0].points,
             'profile_picture': friend.to_user.profile_picture.url if friend.to_user.profile_picture else None
         } for friend in friends]
+        logger.info(f"Successfully retrieved friends for user: {user.username}")
         return Response({'user': user.username, 'friends': friends_list})
     except Exception as e:
+        logger.error(f"Error fetching friends for user: {user.username} - {str(e)}")
         return Response({'error': str(e)}, status=400)
 
 @api_view(['POST'])
@@ -212,6 +229,7 @@ def user_friends_view(request):
 @permission_classes([IsAuthenticated])
 def save_game_result(request):
     user = request.user
+    logger.info(f"Save game result attempt for {user.username} - Request data: {request.data}")
     is_ai = request.data.get('is_ai')
     game_duration = request.data.get('game_duration')
     if not is_ai:
@@ -219,23 +237,27 @@ def save_game_result(request):
     else:
         opponent_username = ''
     score = request.data.get('score')
-# Proceed
+
     progression = request.data.get('progression')
-    if User.objects.filter(username=opponent_username).exists():
-        return Response({'error': 'Opponent username is already registered.'}, status=status.HTTP_400_BAD_REQUEST)
+
     if score is None:
+        logger.error(f"User {user.username}: Score is required.")
         return Response({'error': 'Score is required.'}, status=status.HTTP_400_BAD_REQUEST)
 
     if isinstance(score, list):
         if len(score) != 2 or not all(isinstance(s, int) and 0 <= s <= 5 for s in score):
+            logger.error(f"User {user.username}: Invalid score format")
             return Response({'error': 'Invalid score format.'}, status=status.HTTP_400_BAD_REQUEST)
     else:
+        logger.error(f"User {user.username}: Invalid score format")
         return Response({'error': 'Invalid score format.'}, status=status.HTTP_400_BAD_REQUEST)
 
     if isinstance(progression, list):
         if len(progression) > 9 or not all(isinstance(s, int) and 0 <= s <= 1 for s in progression):
+            logger.error(f"User {user.username}: Invalid progression format")
             return Response({'error': 'Invalid progression format.'}, status=status.HTTP_400_BAD_REQUEST)
     else:
+        logger.error(f"User {user.username}: Invalid progression format")
         return Response({'error': 'Invalid progression format.'}, status=status.HTTP_400_BAD_REQUEST)
     game_result = GameResult.objects.create(
         user=user,
@@ -253,7 +275,7 @@ def save_game_result(request):
         player_stats.losses += 1
         player_stats.points = max(0, player_stats.points - 5)
     player_stats.save()
-
+    logger.info(f"User {user.username}: Response - Score saved successfully.")
     return Response({'detail': 'Score saved successfully.'}, status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
@@ -263,11 +285,13 @@ def get_player(request, username):
     """
     Retrieves player statistics for a specified user.
     """
+    logger.info(f"Attempt player stats for {username} - Request data: {request.data}")
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
+        logger.warning(f"User with username {username} is not found")
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
+    
     try:
         stats = PlayerStats.objects.get(user=user)
         game_results = GameResult.objects.filter(user=user).order_by('-date_time')
@@ -275,18 +299,20 @@ def get_player(request, username):
         stats_data = PlayerStatsSerializer(stats).data
         stats_data['game_results'] = GameResultSerializer(game_results, many=True).data
         stats_data['tournaments'] = TournamentResultSerializer(tournament_results, many=True).data
-        return Response(stats_data)
+        logger.info(f"The player stats for {username} were successfully returned. Response - {stats_data}")
+        return Response(stats_data, status=status.HTTP_200_OK)
     except PlayerStats.DoesNotExist:
+        logger.error(f"No results for user {username}")
         return Response({"error": "No results for this user"}, status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def all_players(request):
-    stats = PlayerStats.objects.all().order_by("-points")
-    serializer = PlayerStatsSerializer(stats, many=True)
-    return Response(serializer.data)
+# @api_view(['GET'])
+# @authentication_classes([TokenAuthentication])
+# @permission_classes([IsAuthenticated])
+# def all_players(request):
+#     stats = PlayerStats.objects.all().order_by("-points")
+#     serializer = PlayerStatsSerializer(stats, many=True)
+#     return Response(serializer.data)
 
 @api_view(['PATCH'])
 @authentication_classes([TokenAuthentication])
@@ -329,15 +355,19 @@ def change_username(request):
 @permission_classes([IsAuthenticated])
 def save_tournament_result(request):
     user = request.user
+    logger.info(f"User {user.username}: Save tournament result attempt - Request data: {request.data}")
     results = request.data.get('results')
     nickname = request.data.get('nickname')
     if not nickname:
+        logger.error(f"User {user.username}: Nickname is required.")
         return Response({'error': 'Nickname is required.'}, status=status.HTTP_400_BAD_REQUEST)
 
     if isinstance(results, list):
         if len(results) != 4 or not all(isinstance(s, str) for s in results):
+            logger.error(f"User {user.username}: Invalid results format")
             return Response({'error': 'Invalid results format.'}, status=status.HTTP_400_BAD_REQUEST)
     else:
+        logger.error(f"User {user.username}: Invalid results format")
         return Response({'error': 'Invalid results format.'}, status=status.HTTP_400_BAD_REQUEST)
     tournament_result = TournamentResult.objects.create(
         user=user,
@@ -355,6 +385,9 @@ def save_tournament_result(request):
         elif place == 3:
             player_stats.points = max(0, player_stats.points - 5)
         player_stats.save()
-        return Response({'detail': 'Tournament result saved successfully.'}, status=status.HTTP_201_CREATED)
-    except:
+        response_data = {'detail': 'Tournament result saved successfully.'}
+        logger.info(f"User {user.username}: Response - {response_data}")
+        return Response(response_data, status=status.HTTP_201_CREATED)
+    except ValueError:
+        logger.error(f"User {user.username}: Nickname '{nickname}' not found in results.")
         return Response({'error': 'No nickname in results.'}, status=status.HTTP_400_BAD_REQUEST)
