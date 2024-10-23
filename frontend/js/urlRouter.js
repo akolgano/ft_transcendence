@@ -185,6 +185,24 @@ function handleDynamicRoutes(location) {
 		return null;
 }
 
+function checkExpiryToken() {
+	if (!localStorage.getItem("token"))
+		return (1)
+	const expiryDate = new Date(localStorage.getItem("expiry_token"))
+	const now = new Date();
+
+	if (now >= expiryDate)
+	{
+		localStorage.removeItem("user")
+		localStorage.removeItem("token")
+		localStorage.removeItem("expiry_token")
+		updateNavbar(false)
+		displayAlert("auth.login-again", "danger")
+		return (0)
+	}
+	return (1);
+}
+
 // Function that handles the url location
 const urlLocationHandler = () => {
 
@@ -202,6 +220,16 @@ const urlLocationHandler = () => {
 
 	if (location.length == 0)
 		location = "/";
+
+	if (localStorage.getItem("token") == null && document.querySelector(".navbar-username"))
+	{
+		window.location.reload();
+		displayAlert("auth.login-again", "danger")
+		return ;
+	}
+
+	if (!checkExpiryToken())
+		location = "/login" ;
 
 	// Not logged in and route needs authentication
 	if (localStorage.getItem("token") == null && urlRoutes[location] && urlRoutes[location].auth == true)

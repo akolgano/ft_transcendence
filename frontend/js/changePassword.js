@@ -54,7 +54,15 @@
 				console.log(data.message);
 			}
 		} catch (error) {
-			if (!formErrors)
+			if (error.message === '"Invalid token."') {
+				localStorage.removeItem("user")
+				localStorage.removeItem("token")
+				localStorage.removeItem("expiry_token")
+				updateNavbar(false)
+				urlRoute({ target: { href: '/login' }, preventDefault: () => {} });
+				displayAlert("auth.login-again", "danger");
+			}
+			else if (!formErrors)
 				displayAlert("account.change-password-error", "danger");
 			console.log(error.message)
 		}

@@ -61,7 +61,15 @@ console.log("DEFAULT LANG SCRIPT")
 				console.log(data.message);
 			}
 		} catch (error) {
-			if (error.message == "Language is required.")
+			if (error.message === '"Invalid token."') {
+				localStorage.removeItem("user")
+				localStorage.removeItem("token")
+				localStorage.removeItem("expiry_token")
+				updateNavbar(false)
+				urlRoute({ target: { href: '/login' }, preventDefault: () => {} });
+				displayAlert("auth.login-again", "danger");
+			}
+			else if (error.message == "Language is required.")
 				displayAlert("account.change-language-empty", "danger");
 			else if (error.message == "Unsupported language.")
 				displayAlert("account.change-language-unsupported", "danger");

@@ -64,7 +64,16 @@ async function addEventRemoveButton(e) {
 			console.log(data.message);
 		}
 	} catch (error) {
-		displayAlert(getErrorKeyRemoveFriend(error.message), "danger");
+		if (error.message === '"Invalid token."') {
+			localStorage.removeItem("user")
+			localStorage.removeItem("token")
+			localStorage.removeItem("expiry_token")
+			updateNavbar(false)
+			urlRoute({ target: { href: '/login' }, preventDefault: () => {} });
+			displayAlert("auth.login-again", "danger");
+		}
+		else
+			displayAlert(getErrorKeyRemoveFriend(error.message), "danger");
 		console.log(error.message)
 	}
 

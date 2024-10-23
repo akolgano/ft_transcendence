@@ -37,7 +37,8 @@
 		"username-space": "El nombre de usuario no puede tener espacios al principio o al final.",
 		"email-taken": "El correo electrónico ya está tomado.",
 		"email-invalid": "Introduce una dirección de correo electrónico válida.",
-		"email-space": "El correo electrónico no puede tener espacios al principio o al final."
+		"email-space": "El correo electrónico no puede tener espacios al principio o al final.",
+		"login-again": "Session expired. Please log in again ES"
 	},
 	"account" : {
 		"update": "Actualizar",

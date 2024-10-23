@@ -54,7 +54,15 @@
 				console.log(data.message);
 			}
 		} catch (error) {
-			if (error.message == "Username already taken.")
+			if (error.message === '"Invalid token."') {
+				localStorage.removeItem("user")
+				localStorage.removeItem("token")
+				localStorage.removeItem("expiry_token")
+				updateNavbar(false)
+				urlRoute({ target: { href: '/login' }, preventDefault: () => {} });
+				displayAlert("auth.login-again", "danger");
+			}
+			else if (error.message == "Username already taken.")
 				registrationError("account.change-username-taken", ".username-error")
 			else if (error.message == "New username is required.")
 				registrationError("account.change-username-empty", ".username-error")

@@ -176,7 +176,16 @@ async function fetchHistory(urlArgument) {
 		}
 	} catch (error) {
 		removeAlert();
-		displayAlert("profile.error-load", "danger");
+		if (error.message === '"Invalid token."') {
+			localStorage.removeItem("user")
+			localStorage.removeItem("token")
+			localStorage.removeItem("expiry_token")
+			updateNavbar(false)
+			urlRoute({ target: { href: '/login' }, preventDefault: () => {} });
+			displayAlert("auth.login-again", "danger");
+		}
+		else
+			displayAlert("profile.error-load", "danger");
 		// console.log(error.message)
 	}
 }

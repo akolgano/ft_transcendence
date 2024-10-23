@@ -37,7 +37,8 @@
 		"username-space": "Username cannot have leading or trailing spaces.",
 		"email-taken": "Email is already taken.",
 		"email-invalid": "Enter a valid email address.",
-		"email-space": "Email cannot have leading or trailing spaces."
+		"email-space": "Email cannot have leading or trailing spaces.",
+		"login-again": "Session expired. Please log in again"
 	},
 	"account" : {
 		"update": "Update",

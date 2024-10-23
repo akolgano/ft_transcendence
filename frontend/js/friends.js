@@ -61,7 +61,16 @@ async function fetchFriends() {
 		}
 	} catch (error) {
 		removeAlert();
-		displayAlert("friends.error-load", "danger");
+		if (error.message === '"Invalid token."') {
+			localStorage.removeItem("user")
+			localStorage.removeItem("token")
+			localStorage.removeItem("expiry_token")
+			updateNavbar(false)
+			urlRoute({ target: { href: '/login' }, preventDefault: () => {} });
+			displayAlert("auth.login-again", "danger");
+		}
+		else
+			displayAlert("friends.error-load", "danger");
 		console.log(error.message)
 	}
 }
