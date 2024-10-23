@@ -12,6 +12,38 @@
 						<div class="opponent-error form-error"></div>
 						<input type="checkbox" name="AI-opponent" id="AI-opponent" class="mt-3">
 						<label for="AI-opponent" class="mt-3" data-i18n="game.play-ai"></label>
+
+						<!-- Game customizations -->
+						<h4 class="mt-3">Game customizations</h4>
+						<!-- Paddle size -->
+						<span data-i18n="game.paddle-size"></span>
+
+						<input type="radio" name="paddle-size" id="small" class="ms-2 game-option">
+						<label for="small" class="">S</label>
+
+						<input type="radio" name="paddle-size" id="medium" class="ms-2 game-option" checked>
+						<label for="medium" class="">M</label>
+
+						<input type="radio" name="paddle-size" id="large" class="ms-2 game-option">
+						<label for="large" class="">L</label>
+						<br>
+
+						<!--  Power up -->
+						<input type="checkbox" name="power-up" id="power-up" class="me-1 game-option">
+						<label for="power-up" data-i18n="game.power-up" data-i18n2="game.power-up-tooltip" data-bs-toggle="tooltip" data-bs-placement="right" class="dotted-underline text-decoration-underline"></label>
+						<br>
+						<!-- Attack -->
+						<input type="checkbox" name="attack" id="attack" class="me-1 game-option">
+						<label for="attack" data-i18n="game.attack" data-i18n2="game.attack-tooltip" data-bs-toggle="tooltip" data-bs-placement="right" class="dotted-underline text-decoration-underline"></label>
+						<br>
+						<!-- Easy mode -->
+						<input type="checkbox" name="easy-mode" id="easy-mode" class="me-1 game-option">
+						<label for="easy-mode" data-i18n="game.easy-mode" data-i18n2="game.easy-tooltip" data-bs-toggle="tooltip" data-bs-placement="right" class="dotted-underline text-decoration-underline"></label>
+						<br>
+						<!-- Default game -->
+						<input type="checkbox" name="default-game" id="default-game" class="me-1 game-default">
+						<label for="default-game" data-i18n="game.default" data-i18n2="game.default-tooltip"data-bs-toggle="tooltip" data-bs-placement="right" class="dotted-underline text-decoration-underline"></label>
+						<br>
 					</div>
 					<div class="mb-3 text-center">
 						<button type="submit" class="btn btn-success" data-i18n="game.play" ></button>

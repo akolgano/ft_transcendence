@@ -64,3 +64,7 @@
 .mt-200 {
 	margin-top: 200px;
 }
+
+.dotted-underline {
+	text-decoration-style: dotted !important;
+}
