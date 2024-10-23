@@ -166,7 +166,6 @@ def add_friend(request):
 
     user_to_add = get_object_or_404(CustomUser, username=username_to_add)
 
-    logger.info(f"User {user_to_add}")
     if user == user_to_add:
         logger.warning(f"User {user.username}: You cannot add yourself as a friend.")
         return Response({'detail': 'You cannot add yourself as a friend.'}, status=status.HTTP_400_BAD_REQUEST)
