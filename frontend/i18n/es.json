@@ -80,6 +80,9 @@
 		"close-games": "Close games (1) S",
 		"moderate-games": "Moderate game (2-3) S",
 		"large-margins": "Large magins (4) S",
+		"date-time": "X-axis: Date/Time of Game S",
+		"duration-in-mins": "Y-axis: Duration (Minutes) S",
+		"score-per-min": "Y-axis: Scores Per Minute S",
 		"player-results": "Resultados del Jugador"
 	},
 	"friends": {
