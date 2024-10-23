@@ -81,7 +81,11 @@
 		"losses": "Losses F",
 		"close-games": "Close games (1) F",
 		"moderate-games": "Moderate game (2-3) F",
-		"large-margins": "Large magins (4) F"
+		"large-margins": "Large magins (4) F",
+		"date-time": "X-axis: Date/Time of Game F",
+		"duration-in-mins": "Y-axis: Duration (Minutes) F",
+		"score-per-min": "Y-axis: Scores Per Minute F",
+		"player-results": "Résultats du Joueur"
 	},
 	"friends": {
 		"add-title": "Ajouter un nouvel ami",

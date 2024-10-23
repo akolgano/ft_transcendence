@@ -12,7 +12,20 @@
                     <hr style="border: 2px solid rgba(255, 99, 132, 1); width: 5%; margin: 0; opacity: 1;">
                     <h6 style="margin-left: 10px;" data-i18n="dash.opponent"></h6>
                 </div>
-                <canvas id="gameResultsChart" class="w-100 mb-4"></canvas> <!-- Bootstrap width and margin-bottom -->
+
+                <div class="row">
+                    <div class="col">
+                        <p class="text-start" data-i18n="dash.yaxis-player-score"></p>
+                    </div>
+                </div>
+
+                <canvas id="gameResultsChart" class="w-100 mb-2"></canvas> <!-- Bootstrap width and margin-bottom -->
+
+                <div class="row">
+                    <div class="col text-center">
+                      <p data-i18n="dash.date-time"></p>
+                    </div>
+                </div>
 
                 <!-- New section for victory/loss pie chart -->
                 <h4 data-i18n="dash.player-distri" class="mt-5 mb-3"></h4> <!-- Add top and bottom margin -->
@@ -27,10 +40,36 @@
                 <canvas id="victoryLossChart" class="w-100 mb-4"></canvas> <!-- Equal width and height -->
 
                 <h4 data-i18n="dash.game-duration" class="mt-5 mb-3"></h4> <!-- Add top and bottom margin -->
-                <canvas id="gameDurationChart" class="w-100 mb-4"></canvas> <!-- Bootstrap width and margin-bottom -->
+                
+                <div class="row">
+                    <div class="col">
+                        <p class="text-start" data-i18n="dash.duration-in-mins"></p>
+                    </div>
+                </div>
+
+                <canvas id="gameDurationChart" class="w-100 mb-2"></canvas> <!-- Bootstrap width and margin-bottom -->
+
+                <div class="row">
+                    <div class="col text-center">
+                      <p data-i18n="dash.date-time"></p>
+                    </div>
+                </div>
 
                 <h4 data-i18n="dash.game-intensity" class="mt-5 mb-3"></h4> <!-- Add top and bottom margin -->
-                <canvas id="gameIntensityChart" class="w-100 mb-4"></canvas> <!-- Bootstrap width and margin-bottom -->
+                
+                <div class="row">
+                    <div class="col">
+                        <p class="text-start" data-i18n="dash.score-per-min"></p>
+                    </div>
+                </div>
+
+                <canvas id="gameIntensityChart" class="w-100 mb-2"></canvas> <!-- Bootstrap width and margin-bottom -->
+
+                <div class="row">
+                    <div class="col text-center">
+                      <p data-i18n="dash.date-time"></p>
+                    </div>
+                </div>
 
                 <h4 data-i18n="dash.game-margin" class="mt-5 mb-3"></h4> <!-- Add top and bottom margin -->
                 <div style="display: flex; align-items: center; margin: 10px 0;">
