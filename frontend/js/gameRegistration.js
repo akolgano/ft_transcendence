@@ -3,37 +3,42 @@ console.log("GAME SCRIPT")
 function checkGuestName(params) {
 	const guestName = document.getElementById("opponent-name").value;
 	let error = 0
-
-	if (guestName.size > 20)
+	console.log("Checking guest name")
+	if (guestName.length > 20)
 	{
 		error = 1
-		return registrationError("game.max-size", ".opponent-error");
+		console.log("HERE")
+		registrationError("game.max-size", ".opponent-error");
 	}
-	if ((!guestName.match(/^[0-9a-zA-Z_]+$/)))
+	if (guestName != guestName.trim())
 	{
 		error = 1
-		return registrationError("game.reg-alphanum", ".opponent-error");
+		registrationError("game.trailing-spaces", ".opponent-error");
+	}
+	if ((!guestName.match(/^[\p{L}\d_]+$/u)))
+	{
+		error = 1
+		registrationError("game.reg-alphanum", ".opponent-error");
 	}
 	if ( guestName === "AI")
 	{
 		error = 1
-		return registrationError("game.reg-no-ai", ".opponent-error");
+		registrationError("game.reg-no-ai", ".opponent-error");
 	}
 	if (guestName === JSON.parse(localStorage.getItem("user")).username)
 	{
 		error = 1
-		return registrationError("game.reg-same-user", ".opponent-error")
+		registrationError("game.reg-same-user", ".opponent-error")
 	}
-	return guestName;
+	return (error ? null : guestName)
 }
 
 function registerOpponent(event) {
 	event.preventDefault();
 
-	resetErrorField();
+	resetErrorField(".opponent-error");
 	let guestName;
 	const checkbox = document.getElementById("AI-opponent").checked;
-	console.log("Checkbox: " + checkbox)
 
 	if (checkbox === true)
 		guestName = "AI"

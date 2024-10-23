@@ -29,7 +29,15 @@
 		"logout-error": "Error logging out",
 		"password-show": "Show password",
 		"password-hide": "Hide password",
-		"password-no-match": "Passwords do not match"
+		"password-no-match": "Passwords do not match",
+		"username-too-long": "Username cannot be more than 20 characters",
+		"username-invalid-char": "Username can only contain letters, numbers and underscore",
+		"password-too-short": "Password must be at least 8 characters",
+		"username-taken": "Username already taken EN",
+		"username-space": "Username cannot have leading or trailing spaces.",
+		"email-taken": "Email is already taken.",
+		"email-invalid": "Enter a valid email address.",
+		"email-space": "Email cannot have leading or trailing spaces."
 	},
 	"account" : {
 		"update": "Update",
@@ -50,7 +58,8 @@
 		"change-username-error": "Error changing username",
 		"change-username-taken": "Username already taken",
 		"change-username-empty": "New username cannot be empty",
-		"change-username-same": "This is already your username"
+		"change-username-same": "This is already your username",
+		"old-pass-incorrect": "Old password is incorrect."
 	},
 	"dash" : {
 		"error-load": "Error loading dashboard.",
@@ -90,7 +99,7 @@
 		"error-yourself": "You cannot add yourself as a friend",
 		"error-empty": "Username is required.",
 		"error-not-friend": "You are not friend with this user",
-		"level": "Level "
+		"level": "points"
 	},
 	"profile": {
 		"error-load": "Error loading profile.",
@@ -133,7 +142,8 @@
 		"reg-alphanum": "Only use alphanumeric characters",
 		"reg-duplicate": "Each player needs a different name",
 		"reg-same-user": "Game name cannot be the username of the user",
-		"max-size": "15 char maximum for game name"
+		"max-size": "20 char maximum for game name",
+		"trailing-spaces": "Game name cannot have leading or trailing spaces."
 	},
 	"404": "Transcendent error: page not found",
 	"error-fetch": "Unexpected error, please try again later."

@@ -25,10 +25,10 @@ function addFriendToHTML(user) {
 		<div class="border rounded bg-light w-50 mb-2 d-inline-block align-middle">
 			<div class="d-flex justify-content-between p-2">
 				<div class="d-flex">
-					<img src="http://localhost:8000${user.profile_picture}" alt="avatar" class="rounded-circle border-1 avatar-mini object-fit-cover">
+					<img src="https://localhost${user.profile_picture}" alt="avatar" class="rounded-circle border-1 avatar-mini object-fit-cover">
 					<a class="mb-0 px-2 spa" href="/profile/${user.username}" id ="friend-username">${user.username}</a>
 				</div>
-				<div><span class="mb-0" data-i18n="friends.level"></span><span class="mb-0">3</span></div>
+				<div><span class="mb-0 me-1">🔥</span><span class="mb-0 me-1">${user.points || 0}</span><span class="mb-0 me-1" data-i18n="friends.level"></span></div>
 			</div>
 		</div>
 
