@@ -10,8 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import logging
+import logging.config
 from pathlib import Path
 import os
+#from pong.logging_handlers import LogstashHandler
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -138,7 +141,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#SECURE_SSL_REDIRECT = True
 AUTH_USER_MODEL = 'users.CustomUser'
 
 MEDIA_URL = '/media/'
@@ -154,8 +156,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-#TODO later after frontend changes
-#SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
 SESSION_COOKIE_SECURE = False  # Ensure cookies are only sent over HTTPS
 
 #CSRF is used for admin 
@@ -183,29 +184,78 @@ STATIC_URL = '/staticfiles/'
 STATICFILES_DIRS = ['/app/frontend',]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# No ELK just in file django.log
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '%(asctime)s %(levelname)s %(message)s',
+            'datefmt': '%a %b %d %H:%M:%S %Z %Y',
+            'style': '%',
+        },
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
         },
         'file': {
             'class': 'logging.FileHandler',
-            'filename': 'django.log', 
+            'filename': 'logs/django.log', 
             'level': 'DEBUG',
+            'formatter' : 'simple',
         },
     },
     'loggers': {
         # 'django': {
         #     'handlers': ['console', 'file'],
-        #     'level': 'DEBUG',
+        #     'level': 'ERROR',
         #     'propagate': True,
         # },
         'pong': {
-            'handlers': ['console', 'file'],
+            'handlers': ['file'],
             'level': 'DEBUG',
+            'propagate': False,
+        },
+        'django.request': {
+            #'handlers': ['console', 'file'],
+            'handlers': ['file'],
+            'level': 'INFO',
             'propagate': False,
         },
     },
 }
+
+# With ELK logs are at http://localhost:5601/app/discover
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'logstash': {
+#             'level': 'DEBUG', 
+#             'class': 'pong.logging_handlers.LogstashHandler',
+#             'host': 'logstash',
+#             'port': 5044,
+#             'retries': 15,
+#             'retry_delay': 30,
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['logstash'],
+#             'level': 'ERROR',
+#             'propagate': True,
+#         },
+#         'pong': {
+#             'handlers': ['logstash'],
+#             'level': 'DEBUG',
+#             'propagate': False,
+#         },
+#     },
+# }
