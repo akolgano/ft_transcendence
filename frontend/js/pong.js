@@ -4,7 +4,6 @@
 	let boardWidth = 800;
 	let boardHeight = 500;
 	let context;
-	// let guestName;
 	let playerHeight = 50;
 
 	let playerWidth = 10;
@@ -30,7 +29,6 @@
 		x: 0,
 		y : boardHeight / 2,
 		width: playerWidth,
-		// height: playerHeight,
 		velocityY: playerVelocityY,
 		score: 0
 	}
@@ -39,7 +37,6 @@
 		x: boardWidth - playerWidth - 0,
 		y : boardHeight / 2,
 		width: playerWidth,
-		// height: playerHeight,
 		velocityY: playerVelocityY,
 		score: 0
 	}
@@ -49,6 +46,12 @@
 	let duration;
 	let intervalID = null;
 	let gameSettings;
+
+	// Game customizations
+	let powerUp = 0;
+	let powerUpStart;
+	let oldSpeedX;
+	let oldSpeedY;
 
 	let predictedBallPosition = -1;
 
@@ -337,8 +340,23 @@ function playerAI() {
 
 // --------------------------------------------- UPDATE -------------------------------------------------
 
+function checkPowerUp() {
+	const now = new Date();
+	const difference = (now - powerUpStart) / 1000; // Result in seconds
+	if (difference >= 3)
+	{
+		console.log("Desactivating power up")
+		ball.velocityX = (ball.velocityX > 0 ? oldSpeedX : -oldSpeedX);
+		ball.velocityY = (ball.velocityY > 0 ? oldSpeedY : -oldSpeedY);
+		powerUp = 0
+		powerUpStart = 0
+		oldSpeedX = 0
+		oldSpeedY = 0
+	}
+}
+
 function update() {
-	if (playerGuest.score == 1 || playerUser.score == 1)
+	if (playerGuest.score == 5 || playerUser.score == 5)
 	{
 		endOfGame();
 		return ;
@@ -372,7 +390,7 @@ function update() {
 		{
 			if (!hitLast)
 			{
-				if (Math.abs(ball.velocityX) < 5.5)
+				if (Math.abs(ball.velocityX) < 5.5 && !powerUp)
 					ball.velocityX *= -1.05;
 				else
 					ball.velocityX *= -1;
@@ -386,7 +404,7 @@ function update() {
 		{
 			if (!hitLast)
 			{
-				if (Math.abs(ball.velocityX) < 5.5)
+				if (Math.abs(ball.velocityX) < 5.5 && !powerUp)
 					ball.velocityX *= -1.05;
 				else
 					ball.velocityX *= -1;
@@ -397,6 +415,8 @@ function update() {
 	}
 	else
 		hitLast = false;
+	if (powerUp)
+		checkPowerUp()
 
 	if (ball.x < 0)
 		addScore(playerGuest, "playerGuest", 3)
@@ -475,6 +495,17 @@ function update() {
 				playerUser.y += 10;
 				playerUser.velocityY = 0
 			}
+		}
+
+		if (event.code == "KeyO" && gameSettings.powerUp && !powerUp)
+		{
+			console.log("Activating power up")
+			powerUp = 1;
+			powerUpStart = new Date();
+			oldSpeedX = Math.abs(ball.velocityX);
+			oldSpeedY = Math.abs(ball.velocityY);
+			ball.velocityX = (ball.velocityX > 0 ? 2 : -2);
+			ball.velocityY = (ball.velocityY > 0 ? 2 : -2);
 		}
 
 		if (playerGuest.name !== "AI") {
