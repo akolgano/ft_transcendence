@@ -39,6 +39,7 @@ async function handleLogout(e) {
 			localStorage.removeItem("user")
 			localStorage.removeItem("token")
 			localStorage.removeItem("expiry_token")
+			localStorage.removeItem("gameSettings")
 			updateNavbar(false)
 			urlRoute({ target: { href: '/' }, preventDefault: () => {} });
 		}
