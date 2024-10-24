@@ -370,14 +370,14 @@ function checkPowerUp() {
 
 function handleCollision() {
 	if (!hitLast)
-		{
-			if (Math.abs(ball.velocityX) < 5.5 && !powerUp)
-				ball.velocityX *= -1.05;
-			else
-				ball.velocityX *= -1;
-			hitLast = true
-			console.log("Ball velocity: " + ball.velocityX)
-		}
+	{
+		if (Math.abs(ball.velocityX) < 5.5 && !powerUp && !gameSettings.easyMode)
+			ball.velocityX *= -1.05;
+		else
+			ball.velocityX *= -1;
+		hitLast = true
+		console.log("Ball velocity: " + ball.velocityX)
+	}
 }
 
 function paddleBallCollision() {
