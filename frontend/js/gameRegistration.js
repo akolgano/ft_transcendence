@@ -33,10 +33,45 @@ function checkGuestName(params) {
 	return (error ? null : guestName)
 }
 
-function registerOpponent(event) {
+function gameOptions(event) {
 	event.preventDefault();
 	if (!checkValidToken())
 		return;
+	if (!registerOpponent())
+		return;
+
+	console.log("Checking game options")
+	let gameSettings = {};
+	const defaultGame = document.getElementById("default-game").checked;
+
+	if (defaultGame === true)
+	{
+		gameSettings.defaultGame = true
+	}
+	else
+	{
+		gameSettings.defaultGame = false
+		gameSettings.powerUp = document.getElementById("power-up").checked;
+		gameSettings.attack = document.getElementById("attack").checked;
+		gameSettings.easyMode = document.getElementById("easy-mode").checked;
+		paddleOptions = document.getElementsByName("paddle-size")
+		for (const option of paddleOptions) {
+			if (option.checked)
+			{
+				gameSettings.paddleSize = option.value
+				break ;
+			}
+		}
+
+	}
+	console.log(gameSettings);
+	localStorage.setItem("gameSettings", JSON.stringify(gameSettings));
+
+	urlRoute({ target: { href: "/pong" }, preventDefault: () => {} });
+}
+
+function registerOpponent() {
+
 	resetErrorField(".opponent-error");
 	let guestName;
 	const checkbox = document.getElementById("AI-opponent").checked;
@@ -46,14 +81,11 @@ function registerOpponent(event) {
 	else {
 		guestName = checkGuestName()
 		if (!guestName)
-			return ;
+			return (null);
 	}
 
 	localStorage.setItem("guestName", guestName);
-	urlRoute({ target: { href: "/pong" }, preventDefault: () => {} });
-
-	// opponentsNameForm = document.getElementById("opponentsNameForm")
-	// const formData = new FormData(opponentsNameForm);
+	return (1);
 }
 
 function toggleOpponentsField(event) {
@@ -74,7 +106,7 @@ function SignUpSimpleGame() {
 	document.querySelector(".user-versus").innerText = `${JSON.parse(localStorage.getItem("user")).username} vs.`
 	document.getElementById("AI-opponent").addEventListener("click", toggleOpponentsField)
 	const registerGuestName = document.getElementById("opponentsNameForm");
-	registerGuestName.addEventListener("submit", registerOpponent);
+	registerGuestName.addEventListener("submit", gameOptions);
 }
 
 SignUpSimpleGame();
