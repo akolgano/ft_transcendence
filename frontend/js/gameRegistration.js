@@ -32,39 +32,20 @@ function checkGuestName(params) {
 	return (error ? null : guestName)
 }
 
+
 function gameOptions(event) {
 	event.preventDefault();
 	if (!checkValidToken())
 		return;
-
+	localStorage.removeItem("gameSettings")
 	guestName = registerOpponent()
 	if (!guestName)
 		return;
 
-	let gameSettings = {};
+	let gameSettings = processGameOptions();
 	gameSettings.guestName = guestName;
-	const defaultGame = document.getElementById("default-game").checked;
+	gameSettings.type = SIMPLE_GAME
 
-	if (defaultGame === true)
-	{
-		gameSettings.defaultGame = true
-	}
-	else
-	{
-		gameSettings.defaultGame = false
-		gameSettings.powerUp = document.getElementById("power-up").checked;
-		gameSettings.attack = document.getElementById("attack").checked;
-		gameSettings.easyMode = document.getElementById("easy-mode").checked;
-		paddleOptions = document.getElementsByName("paddle-size")
-		for (const option of paddleOptions) {
-			if (option.checked)
-			{
-				gameSettings.paddleSize = option.value
-				break ;
-			}
-		}
-	}
-	console.log(gameSettings);
 	localStorage.setItem("gameSettings", JSON.stringify(gameSettings));
 
 	urlRoute({ target: { href: "/pong" }, preventDefault: () => {} });

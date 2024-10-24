@@ -4,7 +4,7 @@
 	let boardWidth = 800;
 	let boardHeight = 500;
 	let context;
-	let guestName;
+	// let guestName;
 	let playerHeight = 50;
 
 	let playerWidth = 10;
@@ -48,6 +48,7 @@
 	let timeStart;
 	let duration;
 	let intervalID = null;
+	let gameSettings;
 
 	let predictedBallPosition = -1;
 
@@ -121,36 +122,37 @@
 		console.log("HERE")
 		sendSimpleGameData(playerGuest.name, playerUser.score, playerGuest.score, duration, progression);
 		localStorage.removeItem("gameSettings");
-		guestName = null
+		gameSettings = null;
 	}
 
 	function endTournament(winner, looser) {
-		switch (gameData.currentGame) {
+		switch (gameSettings.currentGame) {
 
 			case SEMI1:
-				gameData.finals.push(winner);
-				gameData.miniFinals.push(looser);
-				gameData.currentGame = SEMI2;
+				gameSettings.finals.push(winner);
+				gameSettings.miniFinals.push(looser);
+				gameSettings.currentGame = SEMI2;
 				break;
 			case SEMI2:
-				gameData.finals.push(winner);
-				gameData.miniFinals.push(looser);
-				gameData.currentGame = MINIFINALS;
+				gameSettings.finals.push(winner);
+				gameSettings.miniFinals.push(looser);
+				gameSettings.currentGame = MINIFINALS;
 				break;
 			case MINIFINALS:
-				gameData.third = winner;
-				gameData.fourth = looser;
-				gameData.currentGame = FINALS;
+				gameSettings.third = winner;
+				gameSettings.fourth = looser;
+				gameSettings.currentGame = FINALS;
 				break;
 			case FINALS:
-				gameData.first = winner;
-				gameData.second = looser;
-				gameData.currentGame = null;
-				sendTournamentData([gameData.first, gameData.second, gameData.third, gameData.fourth], gameData.nickname)
+				gameSettings.first = winner;
+				gameSettings.second = looser;
+				gameSettings.currentGame = null;
+				sendTournamentData([gameSettings.first, gameSettings.second, gameSettings.third, gameSettings.fourth], gameSettings.nickname)
 				break;
 			default:
 				break;
 		}
+		localStorage.setItem("gameSettings", JSON.stringify(gameSettings));
 		urlRoute({ target: { href: "/announceGame" }, preventDefault: () => {} });
 	}
 
@@ -159,9 +161,9 @@
 		const looser = (winner == playerGuest.name ? playerUser.name : playerGuest.name)
 		if (!checkValidToken())
 			return;
-		if (guestName)
+		if (gameSettings.type == SIMPLE_GAME)
 			endSimpleGame(winner, looser);
-		else if (Object.keys(gameData).length !== 0)
+		else if (gameSettings.type == TOURNAMENT)
 			endTournament(winner, looser);
 		else
 			console.log("elsing")
@@ -183,40 +185,35 @@
 			intervalID = setInterval(playerAI, 1000);
 		gameLoopId = requestAnimationFrame(update)
 
-		if (guestName)
+		if (gameSettings.type === SIMPLE_GAME)
 			timeStart = new Date();
 		document.querySelector(".space-start").remove()
 		document.addEventListener("keyup", movePlayerOnce)
 		document.addEventListener("keydown", movePlayerContinuous)
 	}
 
-	function prepareGame(gameSettings) {
+	function prepareGame() {
 		playerUser.name = JSON.parse(localStorage.getItem("user")).username;
 		playerGuest.name = gameSettings.guestName;
-		playerHeight = parseInt(gameSettings.paddleSize)
-		playerGuest.height = playerHeight;
-		playerUser.height = playerHeight;
 	}
 
 	function prepareTournament() {
-		playerGuest.height = playerHeight;
-		playerUser.height = playerHeight;
-		switch (gameData.currentGame) {
+		switch (gameSettings.currentGame) {
 			case SEMI1:
-				playerUser.name = gameData.firstSemi[0];
-				playerGuest.name = gameData.firstSemi[1];
+				playerUser.name = gameSettings.firstSemi[0];
+				playerGuest.name = gameSettings.firstSemi[1];
 				break;
 			case SEMI2:
-				playerUser.name = gameData.secondSemi[0];
-				playerGuest.name = gameData.secondSemi[1];
+				playerUser.name = gameSettings.secondSemi[0];
+				playerGuest.name = gameSettings.secondSemi[1];
 				break;
 			case MINIFINALS:
-				playerUser.name = gameData.miniFinals[0];
-				playerGuest.name = gameData.miniFinals[1];
+				playerUser.name = gameSettings.miniFinals[0];
+				playerGuest.name = gameSettings.miniFinals[1];
 				break;
 			case FINALS:
-				playerUser.name = gameData.finals[0];
-				playerGuest.name = gameData.finals[1];
+				playerUser.name = gameSettings.finals[0];
+				playerGuest.name = gameSettings.finals[1];
 				break;
 			default:
 				break;
@@ -226,7 +223,9 @@
 	function gameSetUp() {
 
 		gameSettings = JSON.parse(localStorage.getItem("gameSettings"))
-		if (!gameSettings && Object.keys(gameData).length === 0)
+		console.log("In game set up")
+		console.log(JSON.parse(localStorage.getItem("gameSettings")))
+		if (!gameSettings)
 		{
 			const content = document.getElementById("content");
 			let error = document.createElement("p");
@@ -236,14 +235,16 @@
 			translateNewContent(content)
 			return ;
 		}
-		// guestName = gameSettings.guestName
-		if (gameSettings && gameSettings.guestName)
+		if (gameSettings.type == SIMPLE_GAME)
 		{
-			guestName = gameSettings.guestName
-			prepareGame(gameSettings);
+			prepareGame();
 		}
-		else if (Object.keys(gameData).length !== 0)
+		else if (gameSettings.type === TOURNAMENT)
 			prepareTournament();
+
+		playerHeight = parseInt(gameSettings.paddleSize)
+		playerGuest.height = playerHeight;
+		playerUser.height = playerHeight;
 
 		document.getElementById("pongContent").classList.remove("d-none")
 		document.getElementById("playerUser").innerHTML = 0
@@ -444,7 +445,6 @@ function update() {
 
 	function movePlayerContinuous(event) {
 		// Player 1 - USER
-
 		if (event.code == "KeyW")
 			playerUser.velocityY = -3;
 

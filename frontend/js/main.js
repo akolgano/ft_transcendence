@@ -232,3 +232,5 @@ const SEMI1 = 1;
 const SEMI2 = 2;
 const MINIFINALS = 3;
 const FINALS = 4;
+const SIMPLE_GAME = 1;
+const TOURNAMENT = 2;

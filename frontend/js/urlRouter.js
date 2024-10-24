@@ -143,7 +143,7 @@ const urlRoutes = {
 		template: "/static/tournamentRegistration.html",
 		title: "Tournament",
 		description: "Registration",
-		scripts: ["/js/tournamentRegistration.js"],
+		scripts: ["/js/tournamentRegistration.js", "/js/gameCustom.js"],
 		auth: true,
 	},
 	"/announceGame": {
