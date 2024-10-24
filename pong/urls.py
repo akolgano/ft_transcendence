@@ -16,17 +16,16 @@ urlpatterns = [
     re_path('api/test_token', views.test_token, name='test_token'),
     path('api/add_friend/', views.add_friend, name='add_friend'),
     path('api/remove_friend/', views.remove_friend, name='remove_friend'),
-    path('api/get_friends/', views.user_friends_view, name='get_friends'),
     path('api/get_user_info/', views.get_user_info, name='get_user_info'),
+    path('api/get_friends/', views.user_friends_view, name='get_friends'),
     path('api/change_password/', views.change_password, name='change_password'),
     path('api/get_user_info/<int:user_id>/', views.get_user_by_id, name='get_user_by_id'),
     path('api/game/result/', views.save_game_result, name='game_result'),
     path('api/tournament/result/', views.save_tournament_result, name='tournament_result'),
-    path('api/all_players/', views.all_players, name='all_players'),
     path('api/player/stats/<str:username>/', views.get_player, name='player'),
     path('api/change_language/', views.change_language, name='change_language'),
     path('api/change_username/', views.change_username, name='change_username'),
-    re_path('api/change-profile-picture', views.change_profile_picture, name='change_profile_picture'),
+    re_path('api/change_profile_picture', views.change_profile_picture, name='change_profile_picture'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
