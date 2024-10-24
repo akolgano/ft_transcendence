@@ -3,7 +3,6 @@ console.log("GAME SCRIPT")
 function checkGuestName(params) {
 	const guestName = document.getElementById("opponent-name").value;
 	let error = 0
-	console.log("Checking guest name")
 	if (guestName.length > 20)
 	{
 		error = 1
@@ -33,8 +32,26 @@ function checkGuestName(params) {
 	return (error ? null : guestName)
 }
 
-function registerOpponent(event) {
+
+function gameOptions(event) {
 	event.preventDefault();
+	if (!checkValidToken())
+		return;
+	localStorage.removeItem("gameSettings")
+	guestName = registerOpponent()
+	if (!guestName)
+		return;
+
+	let gameSettings = processGameOptions();
+	gameSettings.guestName = guestName;
+	gameSettings.type = SIMPLE_GAME
+
+	localStorage.setItem("gameSettings", JSON.stringify(gameSettings));
+
+	urlRoute({ target: { href: "/pong" }, preventDefault: () => {} });
+}
+
+function registerOpponent() {
 
 	resetErrorField(".opponent-error");
 	let guestName;
@@ -45,14 +62,9 @@ function registerOpponent(event) {
 	else {
 		guestName = checkGuestName()
 		if (!guestName)
-			return ;
+			return (null);
 	}
-
-	localStorage.setItem("guestName", guestName);
-	urlRoute({ target: { href: "/pong" }, preventDefault: () => {} });
-
-	// opponentsNameForm = document.getElementById("opponentsNameForm")
-	// const formData = new FormData(opponentsNameForm);
+	return (guestName);
 }
 
 function toggleOpponentsField(event) {
@@ -70,9 +82,10 @@ function toggleOpponentsField(event) {
 
 function SignUpSimpleGame() {
 
+	document.querySelector(".user-versus").innerText = `${JSON.parse(localStorage.getItem("user")).username} vs.`
 	document.getElementById("AI-opponent").addEventListener("click", toggleOpponentsField)
 	const registerGuestName = document.getElementById("opponentsNameForm");
-	registerGuestName.addEventListener("submit", registerOpponent);
+	registerGuestName.addEventListener("submit", gameOptions);
 }
 
 SignUpSimpleGame();

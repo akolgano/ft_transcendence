@@ -51,7 +51,15 @@ async function addEventSignUpForm(e) {
 	} catch (error) {
 		console.log(error.message)
 		if (!formErrors)
-			displayAlert("error-fetch", "danger");
+		{
+			if (error instanceof TypeError && error.message.includes('Failed to fetch'))
+			{
+				displayAlert("auth.cert-error", "danger");
+				location.reload();
+			}
+			else
+				displayAlert("error-fetch", "danger");
+		}
 	}
 }
 

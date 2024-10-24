@@ -5,7 +5,8 @@ console.log("DEFAULT LANG SCRIPT")
 
 	defaultLanguage.addEventListener("submit", async (e) => {
 		e.preventDefault();
-
+		if (!checkValidToken())
+			return;
 		let selectElement = document.getElementById("selectLanguage")
 		let selectedLanguage = selectElement.options[selectElement.selectedIndex].value;
 
@@ -61,7 +62,15 @@ console.log("DEFAULT LANG SCRIPT")
 				console.log(data.message);
 			}
 		} catch (error) {
-			if (error.message == "Language is required.")
+			if (error.message === '"Invalid token."') {
+				localStorage.removeItem("user")
+				localStorage.removeItem("token")
+				localStorage.removeItem("expiry_token")
+				updateNavbar(false)
+				urlRoute({ target: { href: '/login' }, preventDefault: () => {} });
+				displayAlert("auth.login-again", "danger");
+			}
+			else if (error.message == "Language is required.")
 				displayAlert("account.change-language-empty", "danger");
 			else if (error.message == "Unsupported language.")
 				displayAlert("account.change-language-unsupported", "danger");

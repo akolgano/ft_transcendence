@@ -4,70 +4,70 @@ function addWinner(name, selector) {
 }
 
 
-function tournamentOverview(params) {
+function tournamentOverview(gameSettings) {
 
-	document.querySelector(".semi-1").innerText = ` ${gameData.firstSemi[0]} 🆚 ${gameData.firstSemi[1]}`
-	document.querySelector(".semi-2").innerText = ` ${gameData.secondSemi[0]} 🆚 ${gameData.secondSemi[1]}`
-	if (gameData.currentGame)
+	document.querySelector(".semi-1").innerText = ` ${gameSettings.firstSemi[0]} 🆚 ${gameSettings.firstSemi[1]}`
+	document.querySelector(".semi-2").innerText = ` ${gameSettings.secondSemi[0]} 🆚 ${gameSettings.secondSemi[1]}`
+	if (gameSettings.currentGame)
 		document.querySelector(".play-btn").classList.remove("d-none")
-	if (gameData.currentGame === SEMI1 )
+	if (gameSettings.currentGame === SEMI1 )
 	{
 		document.querySelector(".semi-1-container").classList.add("border", "border-3", "border-warning")
 	}
 
-	else if (gameData.currentGame === SEMI2 )
+	else if (gameSettings.currentGame === SEMI2 )
 	{
 		document.querySelector(".semi-2-container").classList.add("border", "border-3", "border-warning")
-		addWinner(gameData.finals[0], ".semi-1-winner")
+		addWinner(gameSettings.finals[0], ".semi-1-winner")
 
-		// FInals and mini
-		document.querySelector(".mini-finals").innerText = ` ${gameData.miniFinals[0]} 🆚 ?`
-		document.querySelector(".finals").innerText = ` ${gameData.finals[0]} 🆚 ?`
+		document.querySelector(".mini-finals").innerText = ` ${gameSettings.miniFinals[0]} 🆚 ?`
+		document.querySelector(".finals").innerText = ` ${gameSettings.finals[0]} 🆚 ?`
 	}
-	else if (gameData.currentGame === MINIFINALS)
+	else if (gameSettings.currentGame === MINIFINALS)
 	{
-		addWinner(gameData.finals[0], ".semi-1-winner")
-		addWinner(gameData.finals[1], ".semi-2-winner")
+		addWinner(gameSettings.finals[0], ".semi-1-winner")
+		addWinner(gameSettings.finals[1], ".semi-2-winner")
 
 		document.querySelector(".mini-finals-container").classList.add("border", "border-3", "border-warning")
 
-		document.querySelector(".mini-finals").innerText = ` ${gameData.miniFinals[0]} 🆚 ${gameData.miniFinals[1]}`
-		document.querySelector(".finals").innerText = ` ${gameData.finals[0]} 🆚 ${gameData.finals[1]}`
+		document.querySelector(".mini-finals").innerText = ` ${gameSettings.miniFinals[0]} 🆚 ${gameSettings.miniFinals[1]}`
+		document.querySelector(".finals").innerText = ` ${gameSettings.finals[0]} 🆚 ${gameSettings.finals[1]}`
 	}
-	else if (gameData.currentGame === FINALS)
+	else if (gameSettings.currentGame === FINALS)
 	{
-		addWinner(gameData.finals[0], ".semi-1-winner")
-		addWinner(gameData.finals[1], ".semi-2-winner")
-		addWinner(gameData.third, ".mini-finals-winner")
+		addWinner(gameSettings.finals[0], ".semi-1-winner")
+		addWinner(gameSettings.finals[1], ".semi-2-winner")
+		addWinner(gameSettings.third, ".mini-finals-winner")
 
 		document.querySelector(".finals-container").classList.add("border", "border-3", "border-warning")
 
-		document.querySelector(".mini-finals").innerText = ` ${gameData.miniFinals[0]} 🆚 ${gameData.miniFinals[1]}`
-		document.querySelector(".finals").innerText = ` ${gameData.finals[0]} 🆚 ${gameData.finals[1]}`
+		document.querySelector(".mini-finals").innerText = ` ${gameSettings.miniFinals[0]} 🆚 ${gameSettings.miniFinals[1]}`
+		document.querySelector(".finals").innerText = ` ${gameSettings.finals[0]} 🆚 ${gameSettings.finals[1]}`
 	}
-	else if (gameData.currentGame == null)
+	else if (gameSettings.currentGame == null)
 	{
-		addWinner(gameData.finals[0], ".semi-1-winner")
-		addWinner(gameData.finals[1], ".semi-2-winner")
-		addWinner(gameData.third, ".mini-finals-winner")
-		addWinner(gameData.first, ".finals-winner")
-		addWinner(gameData.first, ".congrats-winner")
+		addWinner(gameSettings.finals[0], ".semi-1-winner")
+		addWinner(gameSettings.finals[1], ".semi-2-winner")
+		addWinner(gameSettings.third, ".mini-finals-winner")
+		addWinner(gameSettings.first, ".finals-winner")
+		addWinner(gameSettings.first, ".congrats-winner")
 
-		document.querySelector(".mini-finals").innerText = ` ${gameData.miniFinals[0]} 🆚 ${gameData.miniFinals[1]}`
-		document.querySelector(".finals").innerText = ` ${gameData.finals[0]} 🆚 ${gameData.finals[1]}`
+		document.querySelector(".mini-finals").innerText = ` ${gameSettings.miniFinals[0]} 🆚 ${gameSettings.miniFinals[1]}`
+		document.querySelector(".finals").innerText = ` ${gameSettings.finals[0]} 🆚 ${gameSettings.finals[1]}`
 		document.querySelector(".tournament-results").classList.remove("d-none")
-		document.querySelector(".result-first").innerText = gameData.first;
-		document.querySelector(".result-second").innerText = gameData.second;
-		document.querySelector(".result-third").innerText = gameData.third;
-		document.querySelector(".result-fourth").innerText = gameData.fourth;
+		document.querySelector(".result-first").innerText = gameSettings.first;
+		document.querySelector(".result-second").innerText = gameSettings.second;
+		document.querySelector(".result-third").innerText = gameSettings.third;
+		document.querySelector(".result-fourth").innerText = gameSettings.fourth;
+		localStorage.removeItem("gameSettings")
 	}
 }
 
-function initialPage()
+function initialPage(gameSettings)
 {
 	const tournamentBoard =  document.querySelector(".tournament-container")
 
-	if (Object.keys(gameData).length === 0)
+	if (gameSettings === null)
 	{
 		const content = document.getElementById("content");
 		let error = document.createElement("p");
@@ -81,5 +81,12 @@ function initialPage()
 	return (0)
 }
 
-if (!initialPage())
-	tournamentOverview()
+function announceGameScript() {
+
+	let gameSettings = JSON.parse(localStorage.getItem("gameSettings"))
+
+	if (!initialPage(gameSettings))
+		tournamentOverview(gameSettings)
+}
+
+announceGameScript()

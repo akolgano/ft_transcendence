@@ -13,7 +13,7 @@ function displayFriends(data) {
 					<img src="https://localhost${user.profile_picture}" alt="avatar" class="rounded-circle border-1 avatar-mini object-fit-cover">
 					<a class="mb-0 px-2 spa" href="/profile/${user.username}" id ="friend-username">${user.username}</a>
 				</div>
-				<div><span class="mb-0 me-1">🔥</span><span class="mb-0 me-1">${user.points}</span><span class="mb-0 me-1" data-i18n="friends.level"></span></div>
+				<div><span class="mb-0 me-1">🔥</span><span class="mb-0 me-1">${user.points}</span></div>
 			</div>
 		</div>
 
@@ -61,7 +61,16 @@ async function fetchFriends() {
 		}
 	} catch (error) {
 		removeAlert();
-		displayAlert("friends.error-load", "danger");
+		if (error.message === '"Invalid token."') {
+			localStorage.removeItem("user")
+			localStorage.removeItem("token")
+			localStorage.removeItem("expiry_token")
+			updateNavbar(false)
+			urlRoute({ target: { href: '/login' }, preventDefault: () => {} });
+			displayAlert("auth.login-again", "danger");
+		}
+		else
+			displayAlert("friends.error-load", "danger");
 		console.log(error.message)
 	}
 }

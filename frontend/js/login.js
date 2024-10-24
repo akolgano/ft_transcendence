@@ -30,8 +30,9 @@ async function login(e) {
 		{
 			console.log("User: " + JSON.stringify(data.user));
 
-			localStorage.setItem("auth", 1);
 			localStorage.setItem("user", JSON.stringify(data.user));
+			let expiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
+			localStorage.setItem("expiry_token", expiry)
 
 			siteLanguage = data.user.language;
 			localStorage.setItem("token", data.token);
@@ -50,11 +51,18 @@ async function login(e) {
 			displayAlert("auth.login-error", "danger");
 		}
 	} catch (error) {
-		console.log("error message: " + error.message)
-		if (error.message === "auth.login-error")
-			displayAlert(error.message, "danger");
+		if (error instanceof TypeError && error.message.includes('Failed to fetch'))
+		{
+				displayAlert("auth.cert-error", "danger");
+				location.reload();
+		}
 		else
-			displayAlert("error-fetch", "danger");
+		{
+			if (error.message === "auth.login-error")
+				displayAlert(error.message, "danger");
+			else
+				displayAlert("error-fetch", "danger");
+		}
 	}
 }
 

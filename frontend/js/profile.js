@@ -40,6 +40,8 @@ function addGameResults(game_results) {
 		// Attach event listeners to "Show Progression" buttons after rendering the game cards
 		document.querySelectorAll('.show-chart-btn').forEach((button) => {
 			button.addEventListener('click', (event) => {
+				if (!checkValidToken())
+					return;
 				const index = event.target.getAttribute('data-index');
 				const gameData = game_results[index];
 				openGameProgressionModal(gameData.progression, parseInt(index) + 1); // Open modal with game progression
@@ -89,22 +91,22 @@ function addTournamentResults(tournaments, user) {
 			<div class="ranking-container w-70 d-flex flex-column">
 				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[0] === nickname ? "border border-warning border-2" : ""}">
 					<p class="my-1">🥇&nbsp;</p>
-					<p class="w-20 my-1" data-i18n="profile.first"></p>
+					<p class="w-40 my-1" data-i18n="profile.first"></p>
 					<p class="my-1"><b>${result.results[0]}${result.results[0] === nickname ? "&nbsp;(" + user + ")" : ""}</b></p>
 				</div>
 				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[1] === nickname ? "border border-warning border-2" : ""}">
 					<p class="my-1">🥈&nbsp;</p>
-					<p class="w-20 my-1" data-i18n="profile.second"></p>
+					<p class="w-40 my-1" data-i18n="profile.second"></p>
 					<p class="my-1"><b>${result.results[1]}${result.results[1] === nickname ? "&nbsp;(" + user + ")" : ""}</b></p>
 				</div>
 				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[2] === nickname ? "border border-warning border-2" : ""}">
 					<p class="my-1">🥉&nbsp;</p>
-					<p class="w-20 my-1" data-i18n="profile.third"></p>
+					<p class="w-40 my-1" data-i18n="profile.third"></p>
 					<p class="my-1"><b>${result.results[2]}${result.results[2] === nickname ? "&nbsp;(" + user + ")" : ""}</b></p>
 				</div>
 				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[3] === nickname ? "border border-warning border-2" : ""}">
 					<p class="my-1">🪨&nbsp;</p>
-					<p class="w-20 my-1" data-i18n="profile.fourth"></p>
+					<p class="w-40 my-1" data-i18n="profile.fourth"></p>
 					<p class="my-1"><b>${result.results[3]}${result.results[3] === nickname ? "&nbsp;(" + user + ")" : ""}</b></p>
 				</div>
 			</div>
@@ -176,7 +178,16 @@ async function fetchHistory(urlArgument) {
 		}
 	} catch (error) {
 		removeAlert();
-		displayAlert("profile.error-load", "danger");
+		if (error.message === '"Invalid token."') {
+			localStorage.removeItem("user")
+			localStorage.removeItem("token")
+			localStorage.removeItem("expiry_token")
+			updateNavbar(false)
+			urlRoute({ target: { href: '/login' }, preventDefault: () => {} });
+			displayAlert("auth.login-again", "danger");
+		}
+		else
+			displayAlert("profile.error-load", "danger");
 		// console.log(error.message)
 	}
 }

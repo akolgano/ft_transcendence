@@ -1,41 +1,60 @@
 <div id="pongContent" class="text-center mx-auto d-none">
 
 	<h1>PONG GAME</h1>
-		<div class="d-flex justify-content-between mx-5">
-			<div>
-				<span class="me-2 fs-3">🤾‍♀️</span>
-				<span class="fs-3 name-user me-2"><b>USER</b></span>
-				<span id="playerUser" class="fs-3"></span>
-			</div>
-			<p class="space-start text-danger" data-i18n="game.press-start">Press SPACE to start</p>
-			<div>
-				<span class="me-2 fs-3 opponent-emoji">⛹️‍♀️</span>
-				<span class="fs-3 name-opponent me-2"><b>OPPONENT </b></span>
-				<span id="playerGuest" class="fs-3"></span>
-			</div>
+	<div class="d-flex justify-content-between mx-5">
+		<div>
+			<span class="me-2 fs-3">🤾‍♀️</span>
+			<span class="fs-3 name-user me-2"><b>USER</b></span>
+			<span id="playerUser" class="fs-3"></span>
 		</div>
-		<canvas id="pongCanvas" class="bg-black border border-3 border-warning">
-
-		</canvas>
+		<p class="space-start text-danger" data-i18n="game.press-start">Press SPACE to start</p>
+		<div>
+			<span class="me-2 fs-3 opponent-emoji">⛹️‍♀️</span>
+			<span class="fs-3 name-opponent me-2"><b>OPPONENT </b></span>
+			<span id="playerGuest" class="fs-3"></span>
+		</div>
+	</div>
+	<canvas id="pongCanvas" class="bg-black border border-3 border-warning"></canvas>
+	<div class="d-flex justify-content-between d-none power-up-count">
+		<p class="power-up-user">💪💪💪</p>
+		<p class="text-danger power-up-activated"></p>
+		<p class="power-up-guest">💪💪💪</p>
+	</div>
 </div>
 
-<div class="modal modalEndOfGame d-none" tabindex="-1">
+<div class="modal modalEndOfGame mt-200" tabindex="-1" aria-hidden="true">
 	<div class="modal-dialog">
-	  <div class="modal-content">
-		<div class="modal-header d-flex justify-content-start">
-			<h5 class="modal-title me-1" data-i18n="game.congrats">&nbsp;</h5>
-			<h5 class="modal-title modal-title-winner"></h5>
+		<div class="modal-content">
+			<div class="modal-header d-flex justify-content-start">
+				<h5 class="modal-title me-1" data-i18n="game.congrats"></h5>
+				<h5 class="modal-title modal-title-winner"></h5>
+			</div>
+			<div class="modal-body d-flex justify-content-start">
+				<p data-i18n="game.you-won" class="me-1"></p>
+				<p class="modal-score me-2"></p>
+				<p data-i18n="game.against" class="me-1"></p>
+				<p class="modal-looser"></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success play-again" data-i18n="game.play-again"></button>
+			</div>
 		</div>
-		<div class="modal-body d-flex justify-content-start">
-			<p data-i18n="game.you-won" class="me-1"></p>
-			<p class="modal-score me-2"></p>
-			<p data-i18n="game.against" class="me-1"></p>
-			<p class="modal-looser"></p>
-		</div>
-		<div class="modal-footer">
-		  <button type="button" class="btn btn-success play-again" data-i18n="game.play-again"></button>
-		</div>
-	  </div>
 	</div>
+</div>
 
-  </div>
+<div class="modal modalEndOfGameAIWOn mt-200" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header d-flex justify-content-start">
+				<h5 class="modal-title me-1" data-i18n="game.ai-wins-title"></h5>
+			</div>
+			<div class="modal-body d-flex justify-content-start">
+				<p data-i18n="game.ai-wins-score" class="me-1"></p>
+				<p class="ai-score" class="me-1"></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success play-again-ai" data-i18n="game.play-again"></button>
+			</div>
+		</div>
+	</div>
+</div>

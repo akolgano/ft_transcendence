@@ -1,3 +1,20 @@
+function checkValidToken() {
+	const expiryDate = new Date(localStorage.getItem("expiry_token"))
+	const now = new Date();
+
+	if (!localStorage.getItem("token") || now >= expiryDate)
+	{
+		localStorage.removeItem("user")
+		localStorage.removeItem("token")
+		localStorage.removeItem("expiry_token")
+		updateNavbar(false)
+		window.location.reload();
+		displayAlert("auth.login-again", "danger")
+		return (0)
+	}
+	return (1);
+}
+
 function formatDate(date) {
 
 	const utcDate = new Date(date)
@@ -16,8 +33,6 @@ function formatDate(date) {
 	const formattedDate = utcDate.toLocaleString('en-GB', options);
 	return (formattedDate);
 }
-
-let gameData = {};
 
 const togglePassword = (event) => {
 	event.preventDefault()
@@ -189,29 +204,9 @@ function resetErrorField(selector) {
 
 const hasDuplicates = (arr) => arr.length !== new Set(arr).size;
 
-function getCurrentGame() {
-
-	let nextGame;
-	switch (gameData.currentGame) {
-		case SEMI1:
-			nextGame = "Semi-finals 1"
-			break;
-		case SEMI2:
-			nextGame =  "Semi-finals 2"
-			break;
-		case MINIFINALS:
-			nextGame =  "Mini finals"
-			break;
-		case FINALS:
-			nextGame = "Finals"
-			break;
-		default: "Others"
-			break;
-	}
-	return (nextGame)
-}
-
 const SEMI1 = 1;
 const SEMI2 = 2;
 const MINIFINALS = 3;
 const FINALS = 4;
+const SIMPLE_GAME = 1;
+const TOURNAMENT = 2;
