@@ -3,7 +3,6 @@ console.log("GAME SCRIPT")
 function checkGuestName(params) {
 	const guestName = document.getElementById("opponent-name").value;
 	let error = 0
-	console.log("Checking guest name")
 	if (guestName.length > 20)
 	{
 		error = 1
@@ -37,11 +36,13 @@ function gameOptions(event) {
 	event.preventDefault();
 	if (!checkValidToken())
 		return;
-	if (!registerOpponent())
+
+	guestName = registerOpponent()
+	if (!guestName)
 		return;
 
-	console.log("Checking game options")
 	let gameSettings = {};
+	gameSettings.guestName = guestName;
 	const defaultGame = document.getElementById("default-game").checked;
 
 	if (defaultGame === true)
@@ -62,7 +63,6 @@ function gameOptions(event) {
 				break ;
 			}
 		}
-
 	}
 	console.log(gameSettings);
 	localStorage.setItem("gameSettings", JSON.stringify(gameSettings));
@@ -83,9 +83,7 @@ function registerOpponent() {
 		if (!guestName)
 			return (null);
 	}
-
-	localStorage.setItem("guestName", guestName);
-	return (1);
+	return (guestName);
 }
 
 function toggleOpponentsField(event) {

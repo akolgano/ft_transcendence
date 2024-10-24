@@ -4,8 +4,9 @@
 	let boardWidth = 800;
 	let boardHeight = 500;
 	let context;
-
+	let guestName;
 	let playerHeight = 50;
+
 	let playerWidth = 10;
 	let playerVelocityY = 0;
 
@@ -29,7 +30,7 @@
 		x: 0,
 		y : boardHeight / 2,
 		width: playerWidth,
-		height: playerHeight,
+		// height: playerHeight,
 		velocityY: playerVelocityY,
 		score: 0
 	}
@@ -38,7 +39,7 @@
 		x: boardWidth - playerWidth - 0,
 		y : boardHeight / 2,
 		width: playerWidth,
-		height: playerHeight,
+		// height: playerHeight,
 		velocityY: playerVelocityY,
 		score: 0
 	}
@@ -89,15 +90,14 @@
 			intervalID = null;
 		}
 		getDuration()
+		console.log("ONE")
 		if (playerGuest.name === "AI" && playerUser.score < playerGuest.score)
 		{
+			console.log("Player AI")
 			const modalElem = document.querySelector(".modalEndOfGameAIWOn")
 			const modal = new bootstrap.Modal(document.querySelector(".modalEndOfGameAIWOn"));
 			document.querySelector(".ai-score").innerHTML = `${playerUser.score} - ${playerGuest.score}`
-			document.querySelector(".play-again-ai").addEventListener("click", event => {
-				modal.hide()
-				urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
-			})
+			document.querySelector(".play-again-ai").addEventListener("click", () => {modal.hide()})
 			modal.show()
 			modalElem.addEventListener('hide.bs.modal', () => {
 				urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
@@ -105,24 +105,23 @@
 		}
 		else
 		{
+			console.log("Player")
 			const modalElem = document.querySelector(".modalEndOfGame")
 			const modal = new bootstrap.Modal(document.querySelector(".modalEndOfGame"));
 			document.querySelector(".modalEndOfGame").style.display = "block"
 			document.querySelector(".modal-title-winner").innerHTML = winner
 			document.querySelector(".modal-score").innerHTML = `${playerUser.score} - ${playerGuest.score}`
 			document.querySelector(".modal-looser").innerHTML = looser
-			document.querySelector(".play-again").addEventListener("click", event => {
-				modal.hide()
-				urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
-			})
+			document.querySelector(".play-again").addEventListener("click", () => {modal.hide()})
 			modal.show()
 			modalElem.addEventListener('hide.bs.modal', () => {
 				urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
 			});
 		}
-
+		console.log("HERE")
 		sendSimpleGameData(playerGuest.name, playerUser.score, playerGuest.score, duration, progression);
-		localStorage.removeItem("guestName");
+		localStorage.removeItem("gameSettings");
+		guestName = null
 	}
 
 	function endTournament(winner, looser) {
@@ -160,11 +159,12 @@
 		const looser = (winner == playerGuest.name ? playerUser.name : playerGuest.name)
 		if (!checkValidToken())
 			return;
-		if (localStorage.getItem("guestName"))
+		if (guestName)
 			endSimpleGame(winner, looser);
 		else if (Object.keys(gameData).length !== 0)
 			endTournament(winner, looser);
-
+		else
+			console.log("elsing")
 		document.removeEventListener("keyup", movePlayerOnce);
 		document.removeEventListener("keydown", movePlayerContinuous);
 		document.querySelectorAll("a").forEach(link => {
@@ -183,19 +183,24 @@
 			intervalID = setInterval(playerAI, 1000);
 		gameLoopId = requestAnimationFrame(update)
 
-		if (localStorage.getItem("guestName"))
+		if (guestName)
 			timeStart = new Date();
 		document.querySelector(".space-start").remove()
 		document.addEventListener("keyup", movePlayerOnce)
 		document.addEventListener("keydown", movePlayerContinuous)
 	}
 
-	function prepareGame() {
+	function prepareGame(gameSettings) {
 		playerUser.name = JSON.parse(localStorage.getItem("user")).username;
-		playerGuest.name = localStorage.getItem("guestName");
+		playerGuest.name = gameSettings.guestName;
+		playerHeight = parseInt(gameSettings.paddleSize)
+		playerGuest.height = playerHeight;
+		playerUser.height = playerHeight;
 	}
 
 	function prepareTournament() {
+		playerGuest.height = playerHeight;
+		playerUser.height = playerHeight;
 		switch (gameData.currentGame) {
 			case SEMI1:
 				playerUser.name = gameData.firstSemi[0];
@@ -220,11 +225,9 @@
 
 	function gameSetUp() {
 
-		if (localStorage.getItem("guestName"))
-			prepareGame();
-		else if (Object.keys(gameData).length !== 0)
-			prepareTournament();
-		else {
+		gameSettings = JSON.parse(localStorage.getItem("gameSettings"))
+		if (!gameSettings && Object.keys(gameData).length === 0)
+		{
 			const content = document.getElementById("content");
 			let error = document.createElement("p");
 			error.setAttribute("data-i18n", "game.not-registered")
@@ -233,6 +236,14 @@
 			translateNewContent(content)
 			return ;
 		}
+		// guestName = gameSettings.guestName
+		if (gameSettings && gameSettings.guestName)
+		{
+			guestName = gameSettings.guestName
+			prepareGame(gameSettings);
+		}
+		else if (Object.keys(gameData).length !== 0)
+			prepareTournament();
 
 		document.getElementById("pongContent").classList.remove("d-none")
 		document.getElementById("playerUser").innerHTML = 0
