@@ -6,12 +6,15 @@ function processGameOptions() {
 	const defaultGame = document.getElementById("default-game").checked;
 
 	if (defaultGame === true)
+	{
+		gameSettings.paddleSize = 50
 		gameSettings.defaultGame = true
+	}
 	else
 	{
 		gameSettings.defaultGame = false
 		gameSettings.powerUp = document.getElementById("power-up").checked;
-		gameSettings.attack = document.getElementById("attack").checked;
+		// gameSettings.attack = document.getElementById("attack").checked;
 		gameSettings.easyMode = document.getElementById("easy-mode").checked;
 		paddleOptions = document.getElementsByName("paddle-size")
 		for (const option of paddleOptions) {
