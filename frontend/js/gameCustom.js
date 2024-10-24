@@ -1,4 +1,5 @@
 console.log("Game customization script")
+
 createTooltip()
 
  function toggleGameOptions(event) {
