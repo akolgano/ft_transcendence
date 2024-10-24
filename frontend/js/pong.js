@@ -14,7 +14,8 @@
 
 	let gameLoopId;
 	let computerLevel = 0.95;
-	let hitLast = false
+	let hitLast = false;
+	let powerLast = false;
 
 	let ball = {
 		x : boardWidth / 2,
@@ -94,10 +95,8 @@
 			intervalID = null;
 		}
 		getDuration()
-		console.log("ONE")
 		if (playerGuest.name === "AI" && playerUser.score < playerGuest.score)
 		{
-			console.log("Player AI")
 			const modalElem = document.querySelector(".modalEndOfGameAIWOn")
 			const modal = new bootstrap.Modal(document.querySelector(".modalEndOfGameAIWOn"));
 			document.querySelector(".ai-score").innerHTML = `${playerUser.score} - ${playerGuest.score}`
@@ -109,7 +108,6 @@
 		}
 		else
 		{
-			console.log("Player")
 			const modalElem = document.querySelector(".modalEndOfGame")
 			const modal = new bootstrap.Modal(document.querySelector(".modalEndOfGame"));
 			document.querySelector(".modalEndOfGame").style.display = "block"
@@ -122,7 +120,6 @@
 				urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
 			});
 		}
-		console.log("HERE")
 		sendSimpleGameData(playerGuest.name, playerUser.score, playerGuest.score, duration, progression);
 		localStorage.removeItem("gameSettings");
 		gameSettings = null;
@@ -226,7 +223,6 @@
 	function gameSetUp() {
 
 		gameSettings = JSON.parse(localStorage.getItem("gameSettings"))
-		console.log("In game set up")
 		console.log(JSON.parse(localStorage.getItem("gameSettings")))
 		if (!gameSettings)
 		{
@@ -239,9 +235,7 @@
 			return ;
 		}
 		if (gameSettings.type == SIMPLE_GAME)
-		{
 			prepareGame();
-		}
 		else if (gameSettings.type === TOURNAMENT)
 			prepareTournament();
 
@@ -261,6 +255,13 @@
 		board.width = boardWidth;
 		context = board.getContext("2d");
 
+		// Power Up
+		if (gameSettings.powerUp)
+		{
+			playerGuest.powerUp = 3
+			playerUser.powerUp = 3
+			document.querySelector(".power-up-count").classList.remove("d-none")
+		}
 		// Draw player 1 and 2
 		context.fillStyle = "white";
 		context.fillRect(playerUser.x, playerUser.y, playerUser.width, playerUser.height)
@@ -326,16 +327,27 @@ function playerAI() {
 		playerGuest.velocityY = 0;
 		return;
 	}
+	if (ball.x > boardWidth * 0.60 && ball.velocityX >= 4.5 && !powerUp && gameSettings.powerUp && playerGuest.powerUp && !powerLast)
+	{
+		let possibilities = [1, 2, 3]
+		let random = possibilities[(Math.floor(Math.random() * possibilities.length))]
+		if (random === 1)
+		{
+			powerUpActivation()
+			updatePowerUpCount(playerGuest)
+			powerLast = true
+		}
+		else
+			powerLast = false
+	}
+	else
+		powerLast = false
 	predictedBallPosition = predictBallPosition();
 
 	if (predictedBallPosition > playerGuest.y + (playerGuest.height * 0.25)) // Ball is higher, go up
-	{
 		playerGuest.velocityY = 3;
-	}
 	if (predictedBallPosition < playerGuest.y + (playerGuest.height * 0.75)) // Ball is lower, go down
-	{
 		playerGuest.velocityY = -3;
-	}
 }
 
 // --------------------------------------------- UPDATE -------------------------------------------------
@@ -352,7 +364,35 @@ function checkPowerUp() {
 		powerUpStart = 0
 		oldSpeedX = 0
 		oldSpeedY = 0
+		document.querySelector(".power-up-activated").innerText = ""
 	}
+}
+
+function handleCollision() {
+	if (!hitLast)
+		{
+			if (Math.abs(ball.velocityX) < 5.5 && !powerUp)
+				ball.velocityX *= -1.05;
+			else
+				ball.velocityX *= -1;
+			hitLast = true
+			console.log("Ball velocity: " + ball.velocityX)
+		}
+}
+
+function paddleBallCollision() {
+	if (ball.x - ball.width <= playerUser.x && ball.x >= playerUser.x - playerUser.width)
+	{
+		if (ball.y <= playerUser.y + playerUser.height && ball.y + ball.height >= playerUser.y)
+			handleCollision();
+	}
+	else if (ball.x - ball.width <= playerGuest.x && ball.x >= playerGuest.x - playerGuest.width)
+	{
+		if (ball.y <= playerGuest.y + playerGuest.height && ball.y + ball.height >= playerGuest.y)
+			handleCollision()
+	}
+	else
+		hitLast = false;
 }
 
 function update() {
@@ -376,45 +416,14 @@ function update() {
 	if (predictedBallPosition >= 0 && playerGuest.velocityY !== 0)
 	{
 		if (predictedBallPosition > (playerGuest.y + playerGuest.height * 0.25) && predictedBallPosition < playerGuest.y + (playerGuest.height * 0.75))
-		{
-			// console.log("AI CAN STOP MOVING. Predicted ball position is " + predictedBallPosition + ". Paddle position: " + playerGuest.y + "-" + (playerGuest.y + playerGuest.height) )
 			playerGuest.velocityY = 0
-		}
 	}
 
 	calculateNewPosition(playerUser);
 	calculateNewPosition(playerGuest);
 
-	if (ball.x - ball.width <= playerUser.x && ball.x >= playerUser.x - playerUser.width) {
-		if (ball.y <= playerUser.y + playerUser.height && ball.y + ball.height >= playerUser.y)
-		{
-			if (!hitLast)
-			{
-				if (Math.abs(ball.velocityX) < 5.5 && !powerUp)
-					ball.velocityX *= -1.05;
-				else
-					ball.velocityX *= -1;
-				hitLast = true
-				console.log("Ball velocity: " + ball.velocityX)
-			}
-		}
-	}
-	else if (ball.x - ball.width <= playerGuest.x && ball.x >= playerGuest.x - playerGuest.width) {
-		if (ball.y <= playerGuest.y + playerGuest.height && ball.y + ball.height >= playerGuest.y)
-		{
-			if (!hitLast)
-			{
-				if (Math.abs(ball.velocityX) < 5.5 && !powerUp)
-					ball.velocityX *= -1.05;
-				else
-					ball.velocityX *= -1;
-				hitLast = true;
-				console.log("Ball velocity: " + ball.velocityX)
-			}
-		}
-	}
-	else
-		hitLast = false;
+	paddleBallCollision();
+
 	if (powerUp)
 		checkPowerUp()
 
@@ -444,6 +453,7 @@ function update() {
 		user.score += 1;
 		document.getElementById(userId).innerHTML = user.score
 		ball.velocityX = speed;
+		document.querySelector(".power-up-activated").innerText = ""
 		ball.x = boardWidth / 2;
 		ball.y = boardHeight / 2;
 		if (!checkValidToken())
@@ -462,6 +472,33 @@ function update() {
 	}
 
 // --------------------------------------------- MOVEMENTS -------------------------------------------------
+
+	function updatePowerUpCount(player) {
+		player.powerUp -= 1;
+		let powerClass;
+
+		powerClass = (player == playerUser ? ".power-up-user" : ".power-up-guest")
+
+		let powerEmoji = ""
+		for (let index = 0; index < player.powerUp; index++) {
+			powerEmoji += "💪"
+		}
+		document.querySelector(powerClass).innerText = powerEmoji;
+		document.querySelector(".power-up-activated").innerText = "POWER UP"
+	}
+
+	function powerUpActivation()
+	{
+		console.log("Activating power up")
+		powerUp = 1;
+		powerUpStart = new Date();
+		oldSpeedX = Math.abs(ball.velocityX);
+		oldSpeedY = Math.abs(ball.velocityY);
+		ball.velocityX = (ball.velocityX > 0 ? 2 : -2);
+		ball.velocityY = (ball.velocityY > 0 ? 2 : -2);
+	}
+
+
 
 	function movePlayerContinuous(event) {
 		// Player 1 - USER
@@ -497,15 +534,16 @@ function update() {
 			}
 		}
 
-		if (event.code == "KeyO" && gameSettings.powerUp && !powerUp)
+		if (event.code == "KeyO" && gameSettings.powerUp && !powerUp && playerGuest.powerUp > 0 && playerGuest.name !== "AI")
 		{
-			console.log("Activating power up")
-			powerUp = 1;
-			powerUpStart = new Date();
-			oldSpeedX = Math.abs(ball.velocityX);
-			oldSpeedY = Math.abs(ball.velocityY);
-			ball.velocityX = (ball.velocityX > 0 ? 2 : -2);
-			ball.velocityY = (ball.velocityY > 0 ? 2 : -2);
+			powerUpActivation()
+			updatePowerUpCount(playerGuest)
+		}
+
+		if (event.code == "KeyA" && gameSettings.powerUp && !powerUp && playerUser.powerUp > 0)
+		{
+			powerUpActivation()
+			updatePowerUpCount(playerUser)
 		}
 
 		if (playerGuest.name !== "AI") {
