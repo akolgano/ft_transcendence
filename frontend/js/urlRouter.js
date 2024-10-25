@@ -73,7 +73,7 @@ const urlRoutes = {
 		template: "/static/gameRegistration.html",
 		title: "Home",
 		description: "Home page",
-		scripts: ["/js/gameRegistration.js"],
+		scripts: ["/js/gameRegistration.js", "/js/gameCustom.js"],
 		auth: true,
 	},
 	"/gameRegistration": {
