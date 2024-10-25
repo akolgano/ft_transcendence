@@ -135,7 +135,8 @@
 	function endOfGame() {
 		const winner = playerGuest.score > playerUser.score ? playerGuest.name : playerUser.name
 		const looser = (winner == playerGuest.name ? playerUser.name : playerGuest.name)
-
+		if (!checkValidToken())
+			return;
 		if (localStorage.getItem("guestName"))
 			endSimpleGame(winner, looser);
 		else if (Object.keys(gameData).length !== 0)
@@ -390,6 +391,11 @@ function update() {
 		ball.velocityX = speed;
 		ball.x = boardWidth / 2;
 		ball.y = boardHeight / 2;
+		if (!checkValidToken())
+		{
+			cancelAnimationFrame(gameLoopId);
+			return;
+		}
 
 	}
 

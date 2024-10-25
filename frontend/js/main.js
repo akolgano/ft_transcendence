@@ -1,3 +1,20 @@
+function checkValidToken() {
+	const expiryDate = new Date(localStorage.getItem("expiry_token"))
+	const now = new Date();
+
+	if (!localStorage.getItem("token") || now >= expiryDate)
+	{
+		localStorage.removeItem("user")
+		localStorage.removeItem("token")
+		localStorage.removeItem("expiry_token")
+		updateNavbar(false)
+		window.location.reload();
+		displayAlert("auth.login-again", "danger")
+		return (0)
+	}
+	return (1);
+}
+
 function formatDate(date) {
 
 	const utcDate = new Date(date)

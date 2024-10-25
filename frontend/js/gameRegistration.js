@@ -35,7 +35,8 @@ function checkGuestName(params) {
 
 function registerOpponent(event) {
 	event.preventDefault();
-
+	if (!checkValidToken())
+		return;
 	resetErrorField(".opponent-error");
 	let guestName;
 	const checkbox = document.getElementById("AI-opponent").checked;
@@ -70,6 +71,7 @@ function toggleOpponentsField(event) {
 
 function SignUpSimpleGame() {
 
+	document.querySelector(".user-versus").innerText = `${JSON.parse(localStorage.getItem("user")).username} vs.`
 	document.getElementById("AI-opponent").addEventListener("click", toggleOpponentsField)
 	const registerGuestName = document.getElementById("opponentsNameForm");
 	registerGuestName.addEventListener("submit", registerOpponent);

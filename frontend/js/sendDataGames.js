@@ -40,7 +40,14 @@ async function sendSimpleGameData(opponent, scoreUser, scoreGuest, duration, pro
 			console.log("Error saving data: " + data.message);
 		}
 	} catch (error) {
-
+		if (error.message === '"Invalid token."') {
+			localStorage.removeItem("user")
+			localStorage.removeItem("token")
+			localStorage.removeItem("expiry_token")
+			updateNavbar(false)
+			urlRoute({ target: { href: '/login' }, preventDefault: () => {} });
+			displayAlert("auth.login-again", "danger");
+		}
 		console.log(error.message)
 	}
 }
@@ -85,6 +92,14 @@ async function sendTournamentData(results, nickname) {
 			console.log("Error saving data: " + data.message);
 		}
 	} catch (error) {
+		if (error.message === '"Invalid token."') {
+			localStorage.removeItem("user")
+			localStorage.removeItem("token")
+			localStorage.removeItem("expiry_token")
+			updateNavbar(false)
+			urlRoute({ target: { href: '/login' }, preventDefault: () => {} });
+			displayAlert("auth.login-again", "danger");
+		}
 		console.log(error.message)
 	}
 }
