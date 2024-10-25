@@ -33,10 +33,7 @@ function toggleGameOptions(event) {
 	options.forEach(option => {
 		const checked = event.target.checked
 		if (checked)
-		{
-			option.value = ""
 			option.disabled = "disabled"
-		}
 		else
 			option.disabled = ""
 	});
