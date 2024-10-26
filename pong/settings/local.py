@@ -231,31 +231,3 @@ LOGGING = {
     },
 }
 
-# With ELK logs are at http://localhost:5601/app/discover
-
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'logstash': {
-#             'level': 'DEBUG', 
-#             'class': 'pong.logging_handlers.LogstashHandler',
-#             'host': 'logstash',
-#             'port': 5044,
-#             'retries': 15,
-#             'retry_delay': 30,
-#         },
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['logstash'],
-#             'level': 'ERROR',
-#             'propagate': True,
-#         },
-#         'pong': {
-#             'handlers': ['logstash'],
-#             'level': 'DEBUG',
-#             'propagate': False,
-#         },
-#     },
-# }
