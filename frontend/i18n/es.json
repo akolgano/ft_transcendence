@@ -72,19 +72,19 @@
 		"game-duration": "Duración de los juegos",
 		"game-intensity": "Intensidad de los juegos",
 		"game-margin": "Distribución del margen de los juegos",
-		"game-progression": "Game Score Progression S",
-		"you": "You S",
-		"opponent": "Opponent S",
-		"yaxis-player-score": "Y-axis: Player's Score S",
-		"xaxis-score-summation": "X-axis: Score summation of the game S",
-		"victories": "Victories S",
-		"losses": "Losses S",
-		"close-games": "Close games (1) S",
-		"moderate-games": "Moderate game (2-3) S",
-		"large-margins": "Large magins (4) S",
-		"date-time": "X-axis: Date/Time of Game S",
-		"duration-in-mins": "Y-axis: Duration (Minutes) S",
-		"score-per-min": "Y-axis: Scores Per Minute S",
+		"game-progression": "Progresión de Puntuación del Juego",
+		"you": "Tú",
+		"opponent": "Oponente",
+		"yaxis-player-score": "Eje Y: Puntuación del Jugador",
+		"xaxis-score-summation": "Eje X: Suma de Puntuaciones del Juego",
+		"victories": "Victorias",
+		"losses": "Derrotas",
+		"close-games": "Partidas Cerradas (1)",
+		"moderate-games": "Partidas Moderadas (2-3)",
+		"large-margins": "Margenes Amplios (4)",
+		"date-time": "Eje X: Fecha/Hora del Juego",
+		"duration-in-mins": "Eje Y: Duración (Minutos)",
+		"score-per-min": "Eje Y: Puntuaciones por Minuto",
 		"player-results": "Resultados del Jugador"
 	},
 	"friends": {
@@ -99,9 +99,7 @@
 		"error-already-friend": "Ya eres amigo de este usuario.",
 		"error-no-user": "No se encontró ningún usuario con este nombre",
 		"error-yourself": "No puedes agregarte a ti mismo como amigo",
-		"error-empty": "Se requiere el nombre de usuario para agregar.",
-		"error-fetch": "Error inesperado al recuperar la información",
-		"level": "puntos"
+		"error-empty": "Se requiere el nombre de usuario para agregar."
 	},
 	"profile": {
 		"error-load": "Error al cargar el perfil.",
@@ -115,11 +113,12 @@
 		"third": "Tercero: ",
 		"fourth": "Cuarto: ",
 		"online": "🟢 en línea",
-		"offline": "🔴 offline S",
-		"tour-no-result": "No tournament result yet S",
-		"game-no-result": "No game result yet S"
+		"offline": "🔴 desconectado",
+		"tour-no-result": "No hay resultado de torneo aún",
+		"game-no-result": "No hay resultado de juego aún"
 	},
 	"game": {
+		"pong-title": "JUEGO PONG",
 		"play": "Jugar 🏓",
 		"opponent-name": "Nombre del oponente (invitado)",
 		"user-name": "Nombre para el usuario",
@@ -166,6 +165,7 @@
 		"easy-mode-description": "<b>Modo de práctica: </b>Este modo te permite acostumbrarte al juego con una bola más lenta que no aumenta de velocidad.",
 		"custom-title": "Personalizaciones del juego",
 		"play-pong": "Jugar pong 🏓",
+		"play-pong-tournament": "Jugar un torneo de pong 🏓",
 		"commands-title": "Comandos",
 		"rules-user": "<b>Usuario:</b> Juega en el lado izquierdo, flechas arriba y abajo para moverse, 'O' para activar el potenciador si es aplicable.",
 		"rules-guest": "<b>Invitado:</b> Juega en el lado derecho, teclas 'W' y 'S' para moverse, 'A' para activar el potenciador si es aplicable.",
@@ -177,5 +177,5 @@
 		"registration": "Registro"
 	},
 	"404": "Error transcendente: Parece que esta página no existe",
-	"error-fetch": "Error inesperado, por favor inténtalo de nuevo más tarde."
+	"error-fetch": "Error inesperado al recuperar la información"
 }

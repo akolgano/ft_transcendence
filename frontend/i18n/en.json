@@ -100,8 +100,7 @@
 		"error-no-user": "No user found with this username",
 		"error-yourself": "You cannot add yourself as a friend",
 		"error-empty": "Username is required.",
-		"error-not-friend": "You are not friend with this user",
-		"level": "points"
+		"error-not-friend": "You are not friend with this user"
 	},
 	"profile": {
 		"error-load": "Error loading profile.",
@@ -120,6 +119,7 @@
 		"game-no-result": "No game result yet"
 	},
 	"game": {
+		"pong-title": "PONG GAME",
 		"play": "Play 🏓",
 		"opponent-name": "Opponent's name (guest)",
 		"user-name": "Name for user",
@@ -166,6 +166,7 @@
 		"easy-mode-description": "<b>Practice mode: </b>This mode allows you to get used to the game with a slower ball that doesn't increase speed.",
 		"custom-title": "Game customizations",
 		"play-pong": "Play pong 🏓",
+		"play-pong-tournament": "Play a pong tournament 🏓",
 		"commands-title": "Commands",
 		"rules-user": "<b>User:</b> Plays on the left side, up and down arrows to move, 'O' to activate power-up if applicable.",
 		"rules-guest": "<b>Guest:</b> Plays on the right side, 'W' and 'S' keys to move, 'A' to activate power-up if applicable.",
