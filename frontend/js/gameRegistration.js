@@ -6,7 +6,6 @@ function checkGuestName(params) {
 	if (guestName.length > 20)
 	{
 		error = 1
-		console.log("HERE")
 		registrationError("game.max-size", ".opponent-error");
 	}
 	if (guestName != guestName.trim())

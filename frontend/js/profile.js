@@ -161,7 +161,14 @@ async function fetchHistory(urlArgument) {
 
 		if (!response.ok) {
 			if (data.error === "User not found")
-				document.querySelector("#content").innerHTML = "<p>No user found with this username</p>"
+			{
+				let content = document.querySelector("#content")
+				content.innerHTML = ""
+				let errorTag = document.createElement("p");
+				errorTag.setAttribute("data-i18n", "friends.error-no-user")
+				content.appendChild(errorTag)
+				translateNewContent(content)
+			}
 			console.log("Error: " + JSON.stringify(data))
 			throw new Error(JSON.stringify(data.detail) || 'An error occurred');
 		}

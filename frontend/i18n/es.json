@@ -38,8 +38,8 @@
 		"email-taken": "El correo electrónico ya está tomado.",
 		"email-invalid": "Introduce una dirección de correo electrónico válida.",
 		"email-space": "El correo electrónico no puede tener espacios al principio o al final.",
-		"login-again": "Session expired. Please log in again ES",
-		"cert-error": "Please accept the certificates first ES"
+		"login-again": "Sesión expirada. Por favor, inicia sesión de nuevo.",
+		"cert-error": "Por favor, acepta los certificados primero."
 	},
 	"account" : {
 		"update": "Actualizar",

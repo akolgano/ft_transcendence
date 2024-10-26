@@ -442,5 +442,3 @@ function renderMarginPieChart(gameResults) {
 
 // Call the fetchDashboardData function to get the data and render the charts
 fetchDashboardData();
-
-//}

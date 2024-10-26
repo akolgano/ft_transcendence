@@ -38,8 +38,8 @@
 		"email-taken": "L'email est déjà pris.",
 		"email-invalid": "Entrez une adresse email valide.",
 		"email-space": "L'email ne peut pas avoir d'espaces au début ou à la fin.",
-		"login-again": "Session expired. Please log in again FR",
-		"cert-error": "Please accept the certificates first FR"
+		"login-again": "Session expirée. Veuillez vous reconnecter.",
+		"cert-error": "Veuillez d'abord accepter les certificats."
 	},
 	"account" : {
 		"update": "Mettre à jour",
