@@ -61,13 +61,8 @@
 	width: 800px;
 }
 
-.mt-200 {
-	margin-top: 200px;
-}
-
-.modal {
-	position: absolute !important;
-	top: 200px !important;
+.pt-200 {
+	padding-top: 200px;
 }
 
 .dotted-underline {
