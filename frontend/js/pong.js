@@ -526,10 +526,10 @@ function update() {
 		// Player 2 - GUEST
 		if (playerGuest.name !== "AI")
 		{
-			if (event.code == "ArrowUp")
+			if (event.code == "KeyO")
 				playerGuest.velocityY = -3;
 
-			if (event.code == "ArrowDown")
+			if (event.code == "KeyL")
 				playerGuest.velocityY = 3;
 		}
 	}
@@ -549,7 +549,7 @@ function update() {
 			}
 		}
 
-		if (event.code == "KeyO" && gameSettings.powerUp && !powerUp && playerGuest.powerUp > 0 && playerGuest.name !== "AI")
+		if (event.code == "KeyP" && gameSettings.powerUp && !powerUp && playerGuest.powerUp > 0 && playerGuest.name !== "AI")
 		{
 			powerUpActivation()
 			updatePowerUpCount(playerGuest)
@@ -563,14 +563,14 @@ function update() {
 
 		if (playerGuest.name !== "AI") {
 
-			if (event.code == "ArrowUp") {
+			if (event.code == "KeyO") {
 				if (!outOfBounds(playerGuest.y - 10)) {
 					playerGuest.y -= 10;
 					playerGuest.velocityY = 0;
 				}
 			}
 
-			if (event.code == "ArrowDown") {
+			if (event.code == "KeyL") {
 				if (!outOfBounds(playerGuest.y + 10)) {
 					playerGuest.y += 10;
 					playerGuest.velocityY = 0;

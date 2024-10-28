@@ -65,6 +65,11 @@
 	margin-top: 200px;
 }
 
+.modal {
+	position: absolute !important;
+	top: 200px !important;
+}
+
 .dotted-underline {
 	text-decoration-style: dotted !important;
 }
