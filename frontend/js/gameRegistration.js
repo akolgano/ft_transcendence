@@ -44,7 +44,8 @@ function gameOptions(event) {
 	let gameSettings = processGameOptions();
 	gameSettings.guestName = guestName;
 	gameSettings.type = SIMPLE_GAME
-
+	gameSettings.scoreUser = 0;
+	gameSettings.scoreGuest = 0;
 	localStorage.setItem("gameSettings", JSON.stringify(gameSettings));
 
 	urlRoute({ target: { href: "/pong" }, preventDefault: () => {} });
