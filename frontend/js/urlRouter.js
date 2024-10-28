@@ -174,7 +174,6 @@ const urlRoute = (event) => {
 const translateNewContent = (node) => {
 	node.querySelectorAll("[data-i18n]").forEach(element => {
 		let data = element.getAttribute('data-i18n')
-		// console.log("Preferred language: " + siteLanguage)
 		let translation = translator.translateForKey(data, siteLanguage)
 		element.innerHTML = translation
 	});
@@ -347,8 +346,8 @@ const updateNavbar = (loggedIn) => {
 	if (loggedIn)
 	{
 		let welcome = translator.translateForKey("navbar.welcome", siteLanguage)
-		navbar.querySelector(".navbar-text").innerHTML = welcome;
-		navbar.querySelector(".navbar-username").innerHTML = `${JSON.parse(localStorage.getItem("user")).username}!`;
+		navbar.querySelector(".navbar-text").innerText = welcome;
+		navbar.querySelector(".navbar-username").innerText = `${JSON.parse(localStorage.getItem("user")).username}!`;
 		navbar.querySelector('.avatar-sm').src = "https://localhost" + JSON.parse(localStorage.getItem("user")).profile_picture;
 
 		// Add logout script

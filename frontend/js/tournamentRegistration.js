@@ -12,7 +12,7 @@ function shuffleArray(array) {
 
 function addErrorForm(message, selector){
 	let errorTag = document.createElement("p");
-	errorTag.innerHTML = message;
+	errorTag.innerText = message;
 	document.querySelector(selector).appendChild(errorTag);
 }
 

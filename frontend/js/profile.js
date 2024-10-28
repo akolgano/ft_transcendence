@@ -17,7 +17,7 @@ function addGameResults(game_results) {
 			if (game.is_ai === true)
 				opponent = "🤖 AI"
 			else
-				opponent = `⛹️‍♀️ ${game.opponent_username}`
+				opponent = `⛹️‍♀️ ${sanitize(game.opponent_username)}`
 
 			const gameHTML = `
 		    <div class="game-card border rounded bg-light w-100 d-inline-block p-1 mb-2 bg-success-subtle">
@@ -52,11 +52,11 @@ function addGameResults(game_results) {
 
 function updateProfileCard(data)
 {
-	document.querySelector('.card-username').innerHTML = data.username
-	document.querySelector(".profile-pic").src = "https://localhost" + data.profile_picture
-	document.querySelector(".user-points").innerHTML = `&nbsp;${data.points}&nbsp;`
-	document.querySelector(".user-victories").innerHTML = `&nbsp;${data.victories}&nbsp`
-	document.querySelector(".user-losses").innerHTML = `&nbsp;${data.losses}&nbsp`
+	document.querySelector('.card-username').innerText = sanitize(data.username)
+	document.querySelector(".profile-pic").src = "https://localhost" + sanitize_picture(data.profile_picture)
+	document.querySelector(".user-points").innerText = data.points
+	document.querySelector(".user-victories").innerText = data.victories
+	document.querySelector(".user-losses").innerText = data.losses
 
 	if (data.username !== JSON.parse(localStorage.getItem("user")).username)
 	{
@@ -89,25 +89,25 @@ function addTournamentResults(tournaments, user) {
 			</div>
 
 			<div class="ranking-container w-70 d-flex flex-column">
-				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[0] === nickname ? "border border-warning border-2" : ""}">
+				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${sanitize(result.results[0]) === sanitize(nickname) ? "border border-warning border-2" : ""}">
 					<p class="my-1">🥇&nbsp;</p>
 					<p class="w-40 my-1" data-i18n="profile.first"></p>
-					<p class="my-1"><b>${result.results[0]}${result.results[0] === nickname ? "&nbsp;(" + user + ")" : ""}</b></p>
+					<p class="my-1"><b>${sanitize(result.results[0])}${sanitize(result.results[0]) === sanitize(nickname) ? "&nbsp;(" + user + ")" : ""}</b></p>
 				</div>
-				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[1] === nickname ? "border border-warning border-2" : ""}">
+				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${sanitize(result.results[1]) === sanitize(nickname) ? "border border-warning border-2" : ""}">
 					<p class="my-1">🥈&nbsp;</p>
 					<p class="w-40 my-1" data-i18n="profile.second"></p>
-					<p class="my-1"><b>${result.results[1]}${result.results[1] === nickname ? "&nbsp;(" + user + ")" : ""}</b></p>
+					<p class="my-1"><b>${sanitize(result.results[1])}${sanitize(result.results[1]) === sanitize(nickname) ? "&nbsp;(" + user + ")" : ""}</b></p>
 				</div>
-				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[2] === nickname ? "border border-warning border-2" : ""}">
+				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${sanitize(result.results[2]) === sanitize(nickname) ? "border border-warning border-2" : ""}">
 					<p class="my-1">🥉&nbsp;</p>
 					<p class="w-40 my-1" data-i18n="profile.third"></p>
-					<p class="my-1"><b>${result.results[2]}${result.results[2] === nickname ? "&nbsp;(" + user + ")" : ""}</b></p>
+					<p class="my-1"><b>${sanitize(result.results[2])}${sanitize(result.results[2]) === sanitize(nickname) ? "&nbsp;(" + user + ")" : ""}</b></p>
 				</div>
-				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${result.results[3] === nickname ? "border border-warning border-2" : ""}">
+				<div class="rounded bg-light mb-2 py-1 px-3 bg-warning-subtle d-flex justify-content-start ${sanitize(result.results[3]) === sanitize(nickname) ? "border border-warning border-2" : ""}">
 					<p class="my-1">🪨&nbsp;</p>
 					<p class="w-40 my-1" data-i18n="profile.fourth"></p>
-					<p class="my-1"><b>${result.results[3]}${result.results[3] === nickname ? "&nbsp;(" + user + ")" : ""}</b></p>
+					<p class="my-1"><b>${sanitize(result.results[3])}${sanitize(result.results[3]) === sanitize(nickname) ? "&nbsp;(" + user + ")" : ""}</b></p>
 				</div>
 			</div>
 		</div>`
@@ -163,7 +163,7 @@ async function fetchHistory(urlArgument) {
 			if (data.error === "User not found")
 			{
 				let content = document.querySelector("#content")
-				content.innerHTML = ""
+				content.innerText = ""
 				let errorTag = document.createElement("p");
 				errorTag.setAttribute("data-i18n", "friends.error-no-user")
 				content.appendChild(errorTag)

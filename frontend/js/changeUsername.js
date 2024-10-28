@@ -9,7 +9,7 @@
 		if (!validUsername())
 			return ;
 
-		const new_username = document.getElementById("username").value
+		const new_username = sanitize(document.getElementById("username").value)
 		if (new_username === JSON.parse(localStorage.getItem("user")).username)
 		{
 			registrationError("account.change-username-same", ".username-error")
@@ -47,7 +47,7 @@
 				user.username = new_username;
 				localStorage.setItem("user", JSON.stringify(user));
 				console.log(JSON.parse(localStorage.getItem("user")))
-				document.querySelector(".navbar-username").innerHTML = `${user.username}!`;
+				document.querySelector(".navbar-username").innerText = `${user.username}!`;
 				displayAlert("account.change-username-success", "success");
 			}
 			else

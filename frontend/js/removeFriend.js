@@ -80,7 +80,7 @@ async function addEventRemoveButton(e) {
 
 }
 
-function removeFriendScript(params) {
+function removeFriendScript() {
 const removeButtons = document.querySelectorAll(".removeFriend");
 removeButtons.forEach(button => {
 	button.addEventListener("click", addEventRemoveButton)

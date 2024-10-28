@@ -36,6 +36,7 @@
 			}
 			if (data.user)
 			{
+				data.user.profile_picture = sanitize_picture(data.user.profile_picture);
 				localStorage.setItem("user", JSON.stringify(data.user));
 				document.querySelector('.avatar-sm').src = "https://localhost" + JSON.parse(localStorage.getItem("user")).profile_picture;
 				document.querySelector(".profile-pic").src = "https://localhost" + JSON.parse(localStorage.getItem("user")).profile_picture;

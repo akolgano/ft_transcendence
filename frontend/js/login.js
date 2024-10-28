@@ -29,7 +29,9 @@ async function login(e) {
 		if (data.token)
 		{
 			console.log("User: " + JSON.stringify(data.user));
-
+			data.user.username = sanitize(data.user.username)
+			data.user.email = sanitize(data.user.email)
+			data.user.profile_picture = sanitize_picture(data.user.profile_picture)
 			localStorage.setItem("user", JSON.stringify(data.user));
 			let expiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
 			localStorage.setItem("expiry_token", expiry)
