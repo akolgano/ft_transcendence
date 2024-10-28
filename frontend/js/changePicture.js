@@ -9,7 +9,7 @@
 		removeAlert();
 
 		try {
-			const response = await fetch("https://localhost/api/change-profile-picture/", {
+			const response = await fetch("https://localhost/api/change_profile_picture/", {
 				headers: {
 					'Authorization': `Token ${localStorage.getItem("token")}`,
 					'Accept': 'application/json',

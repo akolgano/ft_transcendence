@@ -143,7 +143,7 @@ async function fetchHistory(urlArgument) {
 	removeAlert();
 
 	try {
-		const response = await fetch(`https://localhost/api/player/stats/${urlArgument}`, {
+		const response = await fetch(`https://localhost/api/player/stats/${urlArgument}/`, {
 			headers: {
 				'Authorization': `Token ${localStorage.getItem("token")}`,
 				'Accept': 'application/json',

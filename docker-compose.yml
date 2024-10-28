@@ -21,6 +21,7 @@ services:
       dockerfile: docker/Dockerfile
     volumes:
       - .:/app
+      - ./logs:/var/log
     ports:
       - "8000:8000"
     depends_on:
@@ -31,9 +32,9 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PIPELINE: local
-      DJANGO_SUPERUSER_USERNAME: admin
-      DJANGO_SUPERUSER_PASSWORD: admin
-      DJANGO_SUPERUSER_EMAIL: barbayjuliette95@gmail.com
+      DJANGO_SUPERUSER_USERNAME: ${SUPER_USER}
+      DJANGO_SUPERUSER_PASSWORD: ${SUPER_PASSWORD}
+      DJANGO_SUPERUSER_EMAIL: ${SUPER_EMAIL}
   nginx:
     container_name: nginx
     build:
