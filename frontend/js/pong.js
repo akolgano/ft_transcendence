@@ -276,7 +276,7 @@
 			context.fillRect(board.width / 2 - 4, i, 2, 10)
 
 		document.addEventListener("keyup", startGame)
-		document.querySelectorAll("a:not(.change-language):not(.language-link)").forEach(link => {
+		document.querySelectorAll("a:not(.change-language):not(.language-link):not(.account-list)").forEach(link => {
 			link.addEventListener("click", stopGame)
 		})
 		window.addEventListener('popstate', stopGame)
