@@ -28,7 +28,7 @@ function addFriendToHTML(user) {
 					<img src="https://localhost${sanitize_picture(user.profile_picture)}" alt="avatar" class="rounded-circle border-1 avatar-mini object-fit-cover">
 					<a class="mb-0 px-2 spa" href="/profile/${sanitize(user.username)}" id ="friend-username">${sanitize(user.username)}</a>
 				</div>
-				<div><span class="mb-0 me-1">🔥</span><span class="mb-0 me-1">${user.points}</span></div>
+				<div><span class="mb-0 me-1">🔥</span><span class="mb-0 me-1">${user.points || 0}</span></div>
 			</div>
 		</div>
 

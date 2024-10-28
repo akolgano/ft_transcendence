@@ -231,7 +231,3 @@ const MINIFINALS = 3;
 const FINALS = 4;
 const SIMPLE_GAME = 1;
 const TOURNAMENT = 2;
-
-// console.log("sanitized 1: " + sanitize("<script>alert(1)<script>"))
-// console.log("sanitized 2: " + sanitize(`<img src="x" onerror="alert('XSS attacks!')">`))
-// console.log("sanitized 3: " + sanitize("hello juliette"))
