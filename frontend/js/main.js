@@ -34,8 +34,6 @@ function formatDate(date) {
 	return (formattedDate);
 }
 
-let gameData = {};
-
 const togglePassword = (event) => {
 	event.preventDefault()
 
@@ -206,29 +204,9 @@ function resetErrorField(selector) {
 
 const hasDuplicates = (arr) => arr.length !== new Set(arr).size;
 
-function getCurrentGame() {
-
-	let nextGame;
-	switch (gameData.currentGame) {
-		case SEMI1:
-			nextGame = "Semi-finals 1"
-			break;
-		case SEMI2:
-			nextGame =  "Semi-finals 2"
-			break;
-		case MINIFINALS:
-			nextGame =  "Mini finals"
-			break;
-		case FINALS:
-			nextGame = "Finals"
-			break;
-		default: "Others"
-			break;
-	}
-	return (nextGame)
-}
-
 const SEMI1 = 1;
 const SEMI2 = 2;
 const MINIFINALS = 3;
 const FINALS = 4;
+const SIMPLE_GAME = 1;
+const TOURNAMENT = 2;

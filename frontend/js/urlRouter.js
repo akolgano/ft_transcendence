@@ -29,6 +29,18 @@ translator.fetch(["en", "fr", "es"]).then(() => {
 	registerLanguageToggle();
 });
 
+function createTooltip()
+{
+	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+	tooltipTriggerList.map(function (tooltipTriggerEl)
+	{
+		const tooltipText = tooltipTriggerEl.getAttribute('data-i18n2');
+		const translatedText = translator.translateForKey(tooltipText, siteLanguage); // Your translation function
+		tooltipTriggerEl.setAttribute('title', translatedText);
+		return new bootstrap.Tooltip(tooltipTriggerEl)
+	})
+}
+
 function registerLanguageToggle() {
 	let select = document.querySelectorAll(".change-language");
 
@@ -41,6 +53,8 @@ function registerLanguageToggle() {
 		const placeholderUsername = document.getElementById("add-friend-input")
 		if (placeholderUsername)
 			placeholderUsername.placeholder = translator.translateForKey("auth.username", siteLanguage);
+		if (document.querySelector('[data-bs-toggle="tooltip"]'))
+			createTooltip()
 		});
 	})
 }
@@ -59,14 +73,14 @@ const urlRoutes = {
 		template: "/static/gameRegistration.html",
 		title: "Home",
 		description: "Home page",
-		scripts: ["/js/gameRegistration.js"],
+		scripts: ["/js/gameRegistration.js", "/js/gameCustom.js"],
 		auth: true,
 	},
 	"/gameRegistration": {
 		template: "/static/gameRegistration.html",
 		title: "Home",
 		description: "Home page",
-		scripts: ["/js/gameRegistration.js"],
+		scripts: ["/js/gameRegistration.js", "/js/gameCustom.js"],
 		auth: true,
 	},
 	"/friends": {
@@ -129,7 +143,7 @@ const urlRoutes = {
 		template: "/static/tournamentRegistration.html",
 		title: "Tournament",
 		description: "Registration",
-		scripts: ["/js/tournamentRegistration.js"],
+		scripts: ["/js/tournamentRegistration.js", "/js/gameCustom.js"],
 		auth: true,
 	},
 	"/announceGame": {

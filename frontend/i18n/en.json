@@ -145,7 +145,18 @@
 		"reg-duplicate": "Each player needs a different name",
 		"reg-same-user": "Game name cannot be the username of the user",
 		"max-size": "20 char maximum for game name",
-		"trailing-spaces": "Game name cannot have leading or trailing spaces."
+		"trailing-spaces": "Game name cannot have leading or trailing spaces.",
+		"ai-wins-title": "😢 You lost against AI! Maybe next time?",
+		"ai-wins-score": "Score: ",
+		"paddle-size": "Paddle size",
+		"power-up": "Power up",
+		"attack": "Attacks",
+		"default": "Default game",
+		"easy-mode": "Practice mode",
+		"power-up-tooltip": "Power ups allow the players to slow down the ball fo 3 seconds. Each player gets 1 power up.",
+		"attack-tooltip": "Attacks allow the players to freeze their partner's paddle for 1 second.Each player gets 1 attack.",
+		"default-tooltip": "Choose a simpler game experience without customization.",
+		"easy-tooltip": "This mode allows you to get used to the game with a slower ball that doesn't increase speed."
 	},
 	"404": "Transcendent error: page not found",
 	"error-fetch": "Unexpected error, please try again later."

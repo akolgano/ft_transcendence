@@ -145,7 +145,19 @@
 		"reg-duplicate": "Cada jugador necesita un nombre diferente",
 		"reg-same-user": "El nombre del juego no puede ser el nombre de usuario del jugador",
 		"max-size": "Máximo 20 caracteres para el nombre del juego",
-		"trailing-spaces": "El nombre del juego no puede tener espacios al inicio o al final."
+		"trailing-spaces": "El nombre del juego no puede tener espacios al inicio o al final.",
+		"ai-wins-title": "😢 You lost against AI! Maybe next time?SP",
+		"ai-wins-score": "Score: ",
+		"paddle-size": "Paddle size",
+		"power-up": "Power up",
+		"attack": "Attacks",
+		"default": "Default game",
+		"easy-mode": "Practice mode",
+		"power-up-tooltip": "ES Power ups allow the players to slow down the ball fo 3 seconds. Each player gets 1 power up.",
+		"attack-tooltip": "ES Attacks allow the players to freeze their partner's paddle for 1 second.Each player gets 1 attack.",
+		"default-tooltip": "ES Choose a simpler game experience without customization.",
+		"easy-tooltip": "ES This mode allows you to get used to the game with a slower ball that doesn't increase speed."
+
 	},
 	"404": "Error transcendente: Parece que esta página no existe",
 	"error-fetch": "Error inesperado, por favor inténtalo de nuevo más tarde."
