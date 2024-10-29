@@ -102,11 +102,18 @@
 		{
 			const modalElem = document.querySelector(".modalEndOfGameAIWOn")
 			const modal = new bootstrap.Modal(document.querySelector(".modalEndOfGameAIWOn"));
-			document.querySelector(".ai-score").innerHTML = `${playerUser.score} - ${playerGuest.score}`
+			document.querySelector(".ai-score").innerText = `${playerUser.score} - ${playerGuest.score}`
 			document.querySelector(".play-again-ai").addEventListener("click", () => {modal.hide()})
 			modal.show()
 			modalElem.addEventListener('hide.bs.modal', () => {
 				urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
+			});
+			window.addEventListener('popstate', () => {
+				console.log("Event popstate")
+				if (modalElem.classList.contains('show')) {
+					modal.hide();
+					modalElem.style.backgroundColor = '';
+				}
 			});
 		}
 		else
@@ -114,13 +121,20 @@
 			const modalElem = document.querySelector(".modalEndOfGame")
 			const modal = new bootstrap.Modal(document.querySelector(".modalEndOfGame"));
 			document.querySelector(".modalEndOfGame").style.display = "block"
-			document.querySelector(".modal-title-winner").innerHTML = winner
-			document.querySelector(".modal-score").innerHTML = `${playerUser.score} - ${playerGuest.score}`
-			document.querySelector(".modal-looser").innerHTML = looser
+			document.querySelector(".modal-title-winner").innerText = winner
+			document.querySelector(".modal-score").innerText = `${playerUser.score} - ${playerGuest.score}`
+			document.querySelector(".modal-looser").innerText = looser
 			document.querySelector(".play-again").addEventListener("click", () => {modal.hide()})
 			modal.show()
 			modalElem.addEventListener('hide.bs.modal', () => {
 				urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
+			});
+			window.addEventListener('popstate', () => {
+				console.log("Event popstate t")
+				if (modalElem.classList.contains('show')) {
+					modal.hide();
+					modalElem.style.backgroundColor = '';
+				}
 			});
 		}
 		sendSimpleGameData(playerGuest.name, playerUser.score, playerGuest.score, duration, progression);
@@ -233,7 +247,7 @@
 			const content = document.getElementById("content");
 			let error = document.createElement("p");
 			error.setAttribute("data-i18n", "game.not-registered")
-			content.innerHTML = ""
+			content.innerText = ""
 			content.appendChild(error)
 			translateNewContent(content)
 			return ;
@@ -250,10 +264,10 @@
 		playerGuest.score = parseInt(gameSettings.scoreGuest)
 
 		document.getElementById("pongContent").classList.remove("d-none")
-		document.getElementById("playerUser").innerHTML = playerUser.score
-		document.getElementById("playerGuest").innerHTML = playerGuest.score
-		document.querySelector(".name-opponent").innerHTML = playerGuest.name;
-		document.querySelector(".name-user").innerHTML = playerUser.name;
+		document.getElementById("playerUser").innerText = playerUser.score
+		document.getElementById("playerGuest").innerText = playerGuest.score
+		document.querySelector(".name-opponent").innerText = playerGuest.name;
+		document.querySelector(".name-user").innerText = playerUser.name;
 		if (playerGuest.name === "AI")
 			document.querySelector(".opponent-emoji").innerText = "🤖"
 		board = document.getElementById("pongCanvas");
@@ -276,7 +290,7 @@
 			context.fillRect(board.width / 2 - 4, i, 2, 10)
 
 		document.addEventListener("keyup", startGame)
-		document.querySelectorAll("a:not(.change-language):not(.language-link)").forEach(link => {
+		document.querySelectorAll("a:not(.change-language):not(.language-link):not(.account-list)").forEach(link => {
 			link.addEventListener("click", stopGame)
 		})
 		window.addEventListener('popstate', stopGame)
@@ -466,7 +480,7 @@ function update() {
 		}
 		// user.score += 1;
 		localStorage.setItem("gameSettings", JSON.stringify(gameSettings))
-		document.getElementById(userId).innerHTML = user.score
+		document.getElementById(userId).innerText = user.score
 		ball.velocityX = speed;
 		document.querySelector(".power-up-activated").innerText = ""
 		ball.x = boardWidth / 2;
@@ -526,10 +540,10 @@ function update() {
 		// Player 2 - GUEST
 		if (playerGuest.name !== "AI")
 		{
-			if (event.code == "ArrowUp")
+			if (event.code == "KeyO")
 				playerGuest.velocityY = -3;
 
-			if (event.code == "ArrowDown")
+			if (event.code == "KeyL")
 				playerGuest.velocityY = 3;
 		}
 	}
@@ -549,7 +563,7 @@ function update() {
 			}
 		}
 
-		if (event.code == "KeyO" && gameSettings.powerUp && !powerUp && playerGuest.powerUp > 0 && playerGuest.name !== "AI")
+		if (event.code == "KeyP" && gameSettings.powerUp && !powerUp && playerGuest.powerUp > 0 && playerGuest.name !== "AI")
 		{
 			powerUpActivation()
 			updatePowerUpCount(playerGuest)
@@ -563,14 +577,14 @@ function update() {
 
 		if (playerGuest.name !== "AI") {
 
-			if (event.code == "ArrowUp") {
+			if (event.code == "KeyO") {
 				if (!outOfBounds(playerGuest.y - 10)) {
 					playerGuest.y -= 10;
 					playerGuest.velocityY = 0;
 				}
 			}
 
-			if (event.code == "ArrowDown") {
+			if (event.code == "KeyL") {
 				if (!outOfBounds(playerGuest.y + 10)) {
 					playerGuest.y += 10;
 					playerGuest.velocityY = 0;

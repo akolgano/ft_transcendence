@@ -28,7 +28,7 @@ function checkGuestName(params) {
 		error = 1
 		registrationError("game.reg-same-user", ".opponent-error")
 	}
-	return (error ? null : guestName)
+	return (error ? null : sanitize(guestName))
 }
 
 

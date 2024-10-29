@@ -185,7 +185,7 @@ function addErrorToHTML(data) {
 			let errorTag = document.createElement("p");
 			let translation = getTranslation(message)
 			if (translation === null)
-				errorTag.innerHTML = message;
+				errorTag.innerText = message;
 			else
 				errorTag.setAttribute("data-i18n", translation)
 			errorDiv.appendChild(errorTag);
@@ -198,8 +198,29 @@ function resetErrorField(selector) {
 	const errorDivs = document.querySelectorAll(selector);
 
 	errorDivs.forEach(div => {
-		div.innerHTML = ""
+		div.innerText = ""
 	});
+}
+
+const escapeHTML = (str) => str
+.replace(/&/g, '&amp;')
+.replace(/</g, '&lt;')
+.replace(/>/g, '&gt;')
+.replace(/"/g, '&quot;')
+.replace(/'/g, '&#39;');
+
+function sanitize(param) {
+	let parser = new DOMParser();
+	let doc = parser.parseFromString(param, 'text/html');
+	let sanitized = doc.body.textContent || "";
+	return (escapeHTML(sanitized.trim()));  // Return trimmed content
+}
+
+function sanitize_picture(picture) {
+	let profile_pic = picture;
+	if (sanitize(profile_pic) !== profile_pic)
+		profile_pic = "/default.jpg"
+	return (profile_pic);
 }
 
 const hasDuplicates = (arr) => arr.length !== new Set(arr).size;
