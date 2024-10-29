@@ -108,6 +108,13 @@
 			modalElem.addEventListener('hide.bs.modal', () => {
 				urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
 			});
+			window.addEventListener('popstate', () => {
+				console.log("Event popstate")
+				if (modalElem.classList.contains('show')) {
+					modal.hide();
+					modalElem.style.backgroundColor = '';
+				}
+			});
 		}
 		else
 		{
@@ -121,6 +128,13 @@
 			modal.show()
 			modalElem.addEventListener('hide.bs.modal', () => {
 				urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
+			});
+			window.addEventListener('popstate', () => {
+				console.log("Event popstate t")
+				if (modalElem.classList.contains('show')) {
+					modal.hide();
+					modalElem.style.backgroundColor = '';
+				}
 			});
 		}
 		sendSimpleGameData(playerGuest.name, playerUser.score, playerGuest.score, duration, progression);
