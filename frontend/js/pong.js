@@ -4,7 +4,7 @@
 	let boardWidth = 800;
 	let boardHeight = 500;
 	let context;
-	let playerHeight = 50;
+	let playerHeight = 55;
 
 	let playerWidth = 10;
 	let playerVelocityY = 0;
