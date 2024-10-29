@@ -66,5 +66,3 @@
 		}
 	})
 }
-
-// Unexpected error. Unable to change profile picture.

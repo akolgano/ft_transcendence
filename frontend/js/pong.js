@@ -69,6 +69,9 @@
 			clearInterval(intervalID)
 			intervalID = null;
 		}
+		// gameSettings.scoreUser = playerUser.score;
+		// gameSettings.scoreGuest = playerGuest.score;
+		// localStorage.setItem("gameSettings", JSON.stringify(gameSettings))
 		document.removeEventListener("keyup", startGame)
 		window.removeEventListener("popstate", stopGame)
 		document.removeEventListener("keyup", movePlayerOnce);
@@ -126,6 +129,8 @@
 	}
 
 	function endTournament(winner, looser) {
+		gameSettings.scoreUser = 0;
+		gameSettings.scoreGuest = 0;
 		switch (gameSettings.currentGame) {
 
 			case SEMI1:
@@ -166,7 +171,6 @@
 		else if (gameSettings.type == TOURNAMENT)
 			endTournament(winner, looser);
 		else
-			console.log("elsing")
 		document.removeEventListener("keyup", movePlayerOnce);
 		document.removeEventListener("keydown", movePlayerContinuous);
 		document.querySelectorAll("a").forEach(link => {
@@ -242,10 +246,12 @@
 		playerHeight = parseInt(gameSettings.paddleSize)
 		playerGuest.height = playerHeight;
 		playerUser.height = playerHeight;
+		playerUser.score = parseInt(gameSettings.scoreUser)
+		playerGuest.score = parseInt(gameSettings.scoreGuest)
 
 		document.getElementById("pongContent").classList.remove("d-none")
-		document.getElementById("playerUser").innerHTML = 0
-		document.getElementById("playerGuest").innerHTML = 0
+		document.getElementById("playerUser").innerHTML = playerUser.score
+		document.getElementById("playerGuest").innerHTML = playerGuest.score
 		document.querySelector(".name-opponent").innerHTML = playerGuest.name;
 		document.querySelector(".name-user").innerHTML = playerUser.name;
 		if (playerGuest.name === "AI")
@@ -270,7 +276,7 @@
 			context.fillRect(board.width / 2 - 4, i, 2, 10)
 
 		document.addEventListener("keyup", startGame)
-		document.querySelectorAll("a").forEach(link => {
+		document.querySelectorAll("a:not(.change-language):not(.language-link)").forEach(link => {
 			link.addEventListener("click", stopGame)
 		})
 		window.addEventListener('popstate', stopGame)
@@ -447,10 +453,19 @@ function update() {
 
 	function addScore(user, userId, speed) {
 		if (user === playerUser)
+		{
+			playerUser.score += 1
+			gameSettings.scoreUser = playerUser.score
 			progression.push(0);
+		}
 		else
+		{
+			playerGuest.score += 1
+			gameSettings.scoreGuest = playerGuest.score
 			progression.push(1);
-		user.score += 1;
+		}
+		// user.score += 1;
+		localStorage.setItem("gameSettings", JSON.stringify(gameSettings))
 		document.getElementById(userId).innerHTML = user.score
 		ball.velocityX = speed;
 		document.querySelector(".power-up-activated").innerText = ""

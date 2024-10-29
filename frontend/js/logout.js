@@ -70,6 +70,3 @@ function logoutUser(params) {
 }
 
 logoutUser();
-
-
-// CSRF Failed: CSRF token missing.

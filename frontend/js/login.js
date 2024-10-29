@@ -76,5 +76,3 @@ function loginScript () {
 }
 
 loginScript();
-
-// Data from back: {"detail":"No CustomUser matches the given query."}

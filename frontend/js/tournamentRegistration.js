@@ -26,6 +26,8 @@ function setUpTournament(players, gameSettings) {
 	gameSettings.secondSemi = draw.slice(2, 4);
 	gameSettings.miniFinals = [];
 	gameSettings.finals = [];
+	gameSettings.scoreUser = 0;
+	gameSettings.scoreGuest = 0;
 	localStorage.setItem("gameSettings", JSON.stringify(gameSettings));
 }
 

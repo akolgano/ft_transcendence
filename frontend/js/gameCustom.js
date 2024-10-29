@@ -14,7 +14,6 @@ function processGameOptions() {
 	{
 		gameSettings.defaultGame = false
 		gameSettings.powerUp = document.getElementById("power-up").checked;
-		// gameSettings.attack = document.getElementById("attack").checked;
 		gameSettings.easyMode = document.getElementById("easy-mode").checked;
 		paddleOptions = document.getElementsByName("paddle-size")
 		for (const option of paddleOptions) {
