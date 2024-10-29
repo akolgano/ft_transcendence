@@ -7,7 +7,7 @@ function processGameOptions() {
 
 	if (defaultGame === true)
 	{
-		gameSettings.paddleSize = 50
+		gameSettings.paddleSize = 55
 		gameSettings.defaultGame = true
 	}
 	else
@@ -23,6 +23,8 @@ function processGameOptions() {
 				break ;
 			}
 		}
+		if (!gameSettings.paddleSize)
+			gameSettings.paddleSize = 55
 	}
 	return (gameSettings)
 }

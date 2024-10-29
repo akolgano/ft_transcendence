@@ -22,8 +22,8 @@
 		y : boardHeight / 2,
 		width: ballWidth,
 		height: ballHeight,
-		velocityX: -3,
-		velocityY: 3,
+		velocityX: -2.5,
+		velocityY: 2.5,
 	}
 
 	let playerUser = {
@@ -434,22 +434,22 @@ function updateGameState()
 			playerGuest.velocityY = 0
 	}
 		
-	
 	paddleBallCollision();
+
+	calculateNewPosition(playerUser);
+	calculateNewPosition(playerGuest);
 	
 	if (powerUp)
 		checkPowerUp()
 	
 	if (ball.x < 0)
-		addScore(playerGuest, "playerGuest", 3)
+		addScore(playerGuest, "playerGuest", 2.5)
 	else if (ball.x + ball.width > boardWidth)
-		addScore(playerUser, "playerUser", -3)
+		addScore(playerUser, "playerUser", -2.5)
 }
 
-function renderGameElements()
+function renderGameElements(deltaTime)
 {
-	calculateNewPosition(playerUser);
-	calculateNewPosition(playerGuest);
 	context.fillRect(ball.x, ball.y, ball.width, ball.height)
 
 	for (let i = 10; i < board.height; i += 30)
@@ -476,7 +476,9 @@ function update(timestamp) {
 	}
 
 	context.clearRect(0, 0, boardWidth, boardHeight) // CLEAR ball and paddles to update to new position
-	renderGameElements();
+	context.fillRect(playerUser.x, playerUser.y, playerUser.width, playerUser.height)
+	context.fillRect(playerGuest.x, playerGuest.y, playerGuest.width, playerGuest.height)
+	renderGameElements(deltaTime);
 	gameLoopId = requestAnimationFrame(update);
 }
 
@@ -506,6 +508,8 @@ function update(timestamp) {
 		localStorage.setItem("gameSettings", JSON.stringify(gameSettings))
 		document.getElementById(userId).innerText = user.score
 		ball.velocityX = speed;
+		const possibilities = [-2.5, 2.5]
+		ball.velocityY = possibilities[(Math.floor(Math.random() * possibilities.length))]
 		document.querySelector(".power-up-activated").innerText = ""
 		ball.x = boardWidth / 2;
 		ball.y = boardHeight / 2;
