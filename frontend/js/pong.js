@@ -55,6 +55,10 @@
 	let oldSpeedY;
 
 	let predictedBallPosition = -1;
+	let lastTime = 0;
+	const FRAME_RATE = 60;
+	const FRAME_TIME = 1000 / FRAME_RATE
+	let accumulatedTime = 0;
 
 // --------------------------------------------- END GAME -------------------------------------------------
 
@@ -415,45 +419,65 @@ function paddleBallCollision() {
 		hitLast = false;
 }
 
-function update() {
-	if (playerGuest.score == 5 || playerUser.score == 5)
-	{
-		endOfGame();
-		return ;
-	}
-	gameLoopId = requestAnimationFrame(update);
-
-	context.clearRect(0, 0, boardWidth, boardHeight) // CLEAR ball and paddles to update to new position
-
+function updateGameState()
+{
 	// Move ball and check if touch wall
 	ball.x += ball.velocityX;
 	ball.y += ball.velocityY;
 	if (ball.y <= 0 || ball.y + ball.height >= boardHeight)
 		ball.velocityY *= -1
 
-	context.fillRect(ball.x, ball.y, ball.width, ball.height)
-
+	
 	if (predictedBallPosition >= 0 && playerGuest.velocityY !== 0)
 	{
 		if (predictedBallPosition > (playerGuest.y + playerGuest.height * 0.25) && predictedBallPosition < playerGuest.y + (playerGuest.height * 0.75))
 			playerGuest.velocityY = 0
 	}
-
-	calculateNewPosition(playerUser);
-	calculateNewPosition(playerGuest);
-
+		
+	
 	paddleBallCollision();
-
+	
 	if (powerUp)
 		checkPowerUp()
-
+	
 	if (ball.x < 0)
 		addScore(playerGuest, "playerGuest", 3)
 	else if (ball.x + ball.width > boardWidth)
 		addScore(playerUser, "playerUser", -3)
+}
+
+function renderGameElements()
+{
+	calculateNewPosition(playerUser);
+	calculateNewPosition(playerGuest);
+	context.fillRect(ball.x, ball.y, ball.width, ball.height)
 
 	for (let i = 10; i < board.height; i += 30)
 		context.fillRect(board.width / 2 - 4, i, 2, 10)
+}
+
+function update(timestamp) {
+	if (playerGuest.score == 5 || playerUser.score == 5)
+	{
+		endOfGame();
+		return ;
+	}
+	
+	if (lastTime === 0)
+		lastTime = timestamp
+	const deltaTime = timestamp - lastTime;
+	lastTime = timestamp
+	accumulatedTime += deltaTime
+
+	while (accumulatedTime >= FRAME_TIME)
+	{
+		updateGameState();
+		accumulatedTime -= FRAME_TIME
+	}
+
+	context.clearRect(0, 0, boardWidth, boardHeight) // CLEAR ball and paddles to update to new position
+	renderGameElements();
+	gameLoopId = requestAnimationFrame(update);
 }
 
 // --------------------------------------------- GAME HELPERS -------------------------------------------------
