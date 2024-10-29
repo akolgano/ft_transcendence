@@ -97,6 +97,8 @@
 			document.querySelector("body").classList.remove("modal-open")
 		if (document.querySelector(".modal-backdrop"))
 			document.querySelector(".modal-backdrop").remove();
+		document.body.style.overflow = '';
+		document.body.style.paddingRight = '';
 		removeEventListener('popstate', popModal)
 	}
 
