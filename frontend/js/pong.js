@@ -91,6 +91,18 @@
 		const seconds = Math.floor(distance / 1000);
 		duration = `${hours}:${minutes}:${seconds}`
 	}
+
+	function popModal() {
+		if (document.querySelector("body").classList.contains("modal-open"))
+			document.querySelector("body").classList.remove("modal-open")
+		if (document.querySelector(".modal-backdrop"))
+			document.querySelector(".modal-backdrop").remove();
+		document.body.style.overflow = '';
+		document.body.style.paddingRight = '';
+		removeEventListener('popstate', popModal)
+	}
+
+
 	function endSimpleGame(winner, looser) {
 
 		if (intervalID) {
@@ -101,40 +113,30 @@
 		if (playerGuest.name === "AI" && playerUser.score < playerGuest.score)
 		{
 			const modalElem = document.querySelector(".modalEndOfGameAIWOn")
-			const modal = new bootstrap.Modal(document.querySelector(".modalEndOfGameAIWOn"));
+			const modal = new bootstrap.Modal(modalElem);
 			document.querySelector(".ai-score").innerText = `${playerUser.score} - ${playerGuest.score}`
 			document.querySelector(".play-again-ai").addEventListener("click", () => {modal.hide()})
 			modal.show()
+			window.addEventListener('popstate', popModal);
 			modalElem.addEventListener('hide.bs.modal', () => {
+				removeEventListener('popstate', popModal)
 				urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
-			});
-			window.addEventListener('popstate', () => {
-				console.log("Event popstate")
-				if (modalElem.classList.contains('show')) {
-					modal.hide();
-					modalElem.style.backgroundColor = '';
-				}
 			});
 		}
 		else
 		{
 			const modalElem = document.querySelector(".modalEndOfGame")
-			const modal = new bootstrap.Modal(document.querySelector(".modalEndOfGame"));
+			const modal = new bootstrap.Modal(modalElem);
 			document.querySelector(".modalEndOfGame").style.display = "block"
 			document.querySelector(".modal-title-winner").innerText = winner
 			document.querySelector(".modal-score").innerText = `${playerUser.score} - ${playerGuest.score}`
 			document.querySelector(".modal-looser").innerText = looser
 			document.querySelector(".play-again").addEventListener("click", () => {modal.hide()})
 			modal.show()
+			window.addEventListener('popstate', popModal);
 			modalElem.addEventListener('hide.bs.modal', () => {
+				removeEventListener('popstate', popModal)
 				urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
-			});
-			window.addEventListener('popstate', () => {
-				console.log("Event popstate t")
-				if (modalElem.classList.contains('show')) {
-					modal.hide();
-					modalElem.style.backgroundColor = '';
-				}
 			});
 		}
 		sendSimpleGameData(playerGuest.name, playerUser.score, playerGuest.score, duration, progression);
