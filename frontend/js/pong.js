@@ -149,6 +149,11 @@
 	function endTournament(winner, looser) {
 		gameSettings.scoreUser = 0;
 		gameSettings.scoreGuest = 0;
+		if (gameSettings.powerUp)
+		{
+			gameSettings.powerUpGuest = 3
+			gameSettings.powerUpUser = 3
+		}
 		switch (gameSettings.currentGame) {
 
 			case SEMI1:
