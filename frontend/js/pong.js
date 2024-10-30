@@ -282,8 +282,8 @@
 		// Power Up
 		if (gameSettings.powerUp)
 		{
-			playerGuest.powerUp = 3
-			playerUser.powerUp = 3
+			displayPowerEmoji(gameSettings.powerUpGuest, ".power-up-guest");
+			displayPowerEmoji(gameSettings.powerUpUser, ".power-up-user");
 			document.querySelector(".power-up-count").classList.remove("d-none")
 		}
 		// Draw player 1 and 2
@@ -303,22 +303,6 @@
 	gameSetUp()
 
 // --------------------------------------------- AI PLAYER -------------------------------------------------
-
-// function predictBallPosition() {
-// 	let predictedBallY = ball.y + (ball.velocityY * 60);
-// 	let predictedBallX = ball.x + (ball.velocityX * 60)
-
-// 	// Check for wall bounces and adjust the predicted position
-// 	if (predictedBallY <= 0 || predictedBallY >= boardHeight) {
-// 		let remainingDistance = Math.abs(predictedBallY - boardHeight);
-// 		if (predictedBallY < 0) {
-// 			predictedBallY = Math.abs(predictedBallY); // Bounce from top wall
-// 		} else if (predictedBallY > boardHeight) {
-// 			predictedBallY = boardHeight - remainingDistance; // Bounce from bottom wall
-// 		}
-// 	}
-// 	return predictedBallY;
-// }
 
 function predictBallPosition() {
 	let predictedBallY = ball.y;
@@ -351,7 +335,7 @@ function playerAI() {
 		playerGuest.velocityY = 0;
 		return;
 	}
-	if (ball.x > boardWidth * 0.60 && ball.velocityX >= 4.5 && !powerUp && gameSettings.powerUp && playerGuest.powerUp && !powerLast)
+	if (ball.x > boardWidth * 0.60 && ball.velocityX >= 4.5 && !powerUp && gameSettings.powerUp && gameSettings.powerUpGuest > 0 && !powerLast)
 	{
 		let possibilities = [1, 2, 3]
 		let random = possibilities[(Math.floor(Math.random() * possibilities.length))]
@@ -518,7 +502,6 @@ function update(timestamp) {
 			cancelAnimationFrame(gameLoopId);
 			return;
 		}
-
 	}
 
 	function calculateNewPosition(player) {
@@ -530,23 +513,40 @@ function update(timestamp) {
 
 // --------------------------------------------- MOVEMENTS -------------------------------------------------
 
-	function updatePowerUpCount(player) {
-		player.powerUp -= 1;
-		let powerClass;
-
-		powerClass = (player == playerUser ? ".power-up-user" : ".power-up-guest")
-
+	function displayPowerEmoji(points, powerClass)
+	{
 		let powerEmoji = ""
-		for (let index = 0; index < player.powerUp; index++) {
+		for (let index = 0; index < points; index++) {
 			powerEmoji += "💪"
 		}
 		document.querySelector(powerClass).innerText = powerEmoji;
+	}
+
+	function updatePowerUpCount(player) {
+		let powerClass;
+		let total = 0;
+		
+		if (player === playerGuest)
+		{
+			gameSettings.powerUpGuest -= 1;
+			total = gameSettings.powerUpGuest
+		}
+		else if (player === playerUser)
+		{
+			gameSettings.powerUpUser -= 1
+			total = gameSettings.powerUpUser
+		}
+		localStorage.setItem("gameSettings", JSON.stringify(gameSettings))
+		
+
+		powerClass = (player == playerUser ? ".power-up-user" : ".power-up-guest")
+		displayPowerEmoji(total, powerClass)
+		
 		document.querySelector(".power-up-activated").innerText = "POWER UP"
 	}
 
 	function powerUpActivation()
 	{
-		console.log("Activating power up")
 		powerUp = 1;
 		powerUpStart = new Date();
 		oldSpeedX = Math.abs(ball.velocityX);
@@ -591,13 +591,13 @@ function update(timestamp) {
 			}
 		}
 
-		if (event.code == "KeyP" && gameSettings.powerUp && !powerUp && playerGuest.powerUp > 0 && playerGuest.name !== "AI")
+		if (event.code == "KeyP" && gameSettings.powerUp && !powerUp && gameSettings.powerUpGuest > 0 && playerGuest.name !== "AI")
 		{
 			powerUpActivation()
 			updatePowerUpCount(playerGuest)
 		}
 
-		if (event.code == "KeyA" && gameSettings.powerUp && !powerUp && playerUser.powerUp > 0)
+		if (event.code == "KeyA" && gameSettings.powerUp && !powerUp && gameSettings.powerUpUser > 0)
 		{
 			powerUpActivation()
 			updatePowerUpCount(playerUser)
