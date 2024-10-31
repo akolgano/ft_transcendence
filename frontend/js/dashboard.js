@@ -104,19 +104,16 @@ function updateDashboard(data) {
     renderCharts(sortedLabels, sortedPlayerScores, sortedOpponentScores, data.victories, data.losses, gameResults);
 }
 
-
 // This function contains all the chart rendering code
 function renderCharts(labels, playerScores, opponentScores, victories, losses, gameResults) {
     renderLineChart(labels, playerScores, opponentScores);
-    renderPieChart('victoryLossChart', ['Victories', 'Losses'], [victories, losses], [
+    renderPieChart('victoryLossChart', ['', ''], [victories, losses], [
         'rgba(75, 192, 192, 0.6)',
         'rgba(255, 99, 132, 0.6)'
     ]);
     renderBarChart(labels, gameResults);
     renderIntensityChart(labels, gameResults);
     renderMarginPieChart(gameResults);
-
-
 }
 
 // Function to render the line chart (Player vs. Opponent scores)
@@ -244,11 +241,12 @@ function renderPieChart(chartId, labels, data, backgroundColors) {
                     display: false // This will remove the legend
                 },
                 tooltip: {
-                    titleFont: { size: 16 },
-                    bodyFont: { size: 16 }
+                    titleFont: { size: 20 },
+                    bodyFont: { size: 20 }
                 }
             }
         }
+
     });
 }
 
@@ -325,7 +323,7 @@ function renderBarChart(labels, gameResults) {
                             const duration = recentDurations[tooltipItem.dataIndex];
                             const minutes = duration.minutes;
                             const seconds = duration.seconds;
-                            return `Game Duration (MM:SS): ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+                            return `(MM:SS): ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
                         }
                     },
                     titleFont: { size: 16 },
@@ -412,7 +410,7 @@ function renderIntensityChart(labels, gameResults) {
                     callbacks: {
                         label: function (context) {
                             const game = gameResults[context.dataIndex];
-                            return `Intensity: ${context.raw.toFixed(2)} scores/min`;
+                            return ` ${context.raw.toFixed(2)} / min`;
                         }
                     }
                 }
@@ -425,11 +423,11 @@ function renderIntensityChart(labels, gameResults) {
 function renderMarginPieChart(gameResults) {
     const gameMargins = gameResults.map(result => Math.abs(result.score[0] - result.score[1]));
 
-    const marginCategories = { "Close Games (1)": 0, "Moderate Games (2-3)": 0, "Large Margins (4+)": 0 };
+    const marginCategories = { "(1)": 0, "(2-3)": 0, "(4+)": 0 };
     gameMargins.forEach(margin => {
-        if (margin <= 1) marginCategories["Close Games (1)"]++;
-        else if (margin <= 3) marginCategories["Moderate Games (2-3)"]++;
-        else marginCategories["Large Margins (4+)"]++;
+        if (margin <= 1) marginCategories["(1)"]++;
+        else if (margin <= 3) marginCategories["(2-3)"]++;
+        else marginCategories["(4+)"]++;
     });
 
     renderPieChart('gameMarginChart', Object.keys(marginCategories), Object.values(marginCategories), [

@@ -81,7 +81,7 @@
 		"losses": "Losses",
 		"close-games": "Close games (1)",
 		"moderate-games": "Moderate game (2-3)",
-		"large-margins": "Large magins (4)",
+		"large-margins": "Large magins (4+)",
 		"date-time": "X-axis: Date/Time of Game",
 		"duration-in-mins": "Y-axis: Duration (Minutes)",
 		"score-per-min": "Y-axis: Scores Per Minute",
