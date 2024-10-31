@@ -1,4 +1,14 @@
+#elastic is ready
 
+curl -f -u elastic:elastic http://localhost:9200/_cluster/health
+
+
+#kibana is ready
+
+curl -k -u elastic:elastic -X GET "https://localhost:5601/api/status"
+
+#all indices
+curl -f  -u elastic:elastic http://localhost:9200/_cat/indices?v
 
 curl -u elastic:elastic http://localhost:9200/_snapshot/my_backup/_all
 
