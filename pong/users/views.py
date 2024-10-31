@@ -96,9 +96,9 @@ def test_token(request):
 @permission_classes([IsAuthenticated])
 def change_profile_picture(request):
     user = request.user
-    logger.info(f"Change photo attempt for username: {username}")
+    logger.info(f"Change photo attempt for username: {user.username}")
     if 'profile_picture' not in request.FILES:
-        logger.error(f"User {username}: No profile picture uploaded.")
+        logger.error(f"User {user.username}: No profile picture uploaded.")
         return Response({"error": "No profile picture uploaded."}, status=status.HTTP_400_BAD_REQUEST)
 
     profile_picture = request.FILES['profile_picture']
@@ -118,32 +118,32 @@ def get_friends(request):
     serializer = FriendSerializer(friends, many=True)
     return Response({'friends': serializer.data}, status=status.HTTP_200_OK)
 
-# @api_view(['GET'])
-# @authentication_classes([TokenAuthentication])
-# @permission_classes([IsAuthenticated])
-# def get_user_info(request):
-#     user = request.user
-#     serializer = UserSerializer(user)
-#     return Response(serializer.data, status=status.HTTP_200_OK)
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_user_info(request):
+    user = request.user
+    serializer = UserSerializer(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
-# @api_view(['GET'])
-# @authentication_classes([TokenAuthentication])
-# @permission_classes([IsAuthenticated])
-# def get_user_by_id(request, user_id):
-#     try:
-#         user = User.objects.get(id=user_id)
-#     except User.DoesNotExist:
-#         raise NotFound('User not found.')
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_user_by_id(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        raise NotFound('User not found.')
 
-#     serializer = UserSerializer(user)
-#     return Response(serializer.data, status=status.HTTP_200_OK)
-
+    serializer = UserSerializer(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['PATCH'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def change_password(request):
-    logger.info(f"Change password attempt for username: {username}")
+    user = request.user
+    logger.info(f"Change password attempt for username: {user.username}")
     serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
     if serializer.is_valid():
         serializer.save()
@@ -158,7 +158,7 @@ def change_password(request):
 def add_friend(request):
     user = request.user
     username_to_add = request.data.get('username_to_add')
-    logger.info(f"User {user.username} attempts to add a friend - Request data: {request.data}")
+    logger.debug(f"User {user.username} attempts to add a friend - Request data: {request.data}")
 
     if not username_to_add:
         logger.error(f"User {user.username}: Username to add is required.")
@@ -175,11 +175,13 @@ def add_friend(request):
         return Response({'detail': 'You are already friends with this user.'}, status=status.HTTP_400_BAD_REQUEST)
 
     Friendship.objects.create(from_user=user, to_user=user_to_add)
+    player_stats = get_object_or_404(PlayerStats, user=user_to_add)
     serializer = UserSerializer(user_to_add)
     logger.info(f"User {user.username} added a friend {user_to_add.username}")
     return Response({
         'detail': 'Friend added successfully.',
-        'friend': serializer.data
+        'friend': serializer.data,
+        'points': player_stats.points
     }, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
@@ -188,7 +190,7 @@ def add_friend(request):
 def remove_friend(request):
     user = request.user
     username_to_remove = request.data.get('username_to_remove')
-    logger.info(f"User {user.username} attempts to remove a friend - Request data: {request.data}")
+    logger.debug(f"User {user.username} attempts to remove a friend - Request data: {request.data}")
     if not username_to_remove:
         logger.error(f"User {user.username}: Username to remove is required.")
         return Response({'detail': 'Username to remove is required.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -304,15 +306,6 @@ def get_player(request, username):
         logger.error(f"No results for user {username}")
         return Response({"error": "No results for this user"}, status=status.HTTP_404_NOT_FOUND)
 
-
-# @api_view(['GET'])
-# @authentication_classes([TokenAuthentication])
-# @permission_classes([IsAuthenticated])
-# def all_players(request):
-#     stats = PlayerStats.objects.all().order_by("-points")
-#     serializer = PlayerStatsSerializer(stats, many=True)
-#     return Response(serializer.data)
-
 @api_view(['PATCH'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -354,7 +347,7 @@ def change_username(request):
 @permission_classes([IsAuthenticated])
 def save_tournament_result(request):
     user = request.user
-    logger.info(f"User {user.username}: Save tournament result attempt - Request data: {request.data}")
+    logger.info(f"User {user.username}: Save tournament result attempt")
     results = request.data.get('results')
     nickname = request.data.get('nickname')
     if not nickname:

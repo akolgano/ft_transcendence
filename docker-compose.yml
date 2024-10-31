@@ -98,6 +98,7 @@ services:
       #- ./logstash/config:/usr/share/logstash/config
       #- ./logstash/pipeline:/usr/share/logstash/pipeline
       - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logs:/usr/share/logstash/log/nginx_logs
     depends_on:
       - elasticsearch
     environment:
