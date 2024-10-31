@@ -360,6 +360,8 @@ const updateNavbar = (loggedIn) => {
 // ---------------------------------------- EXECUTION ----------------------------------------
 
 const run = async () => {
+	if (localStorage.getItem("token"))
+		siteLanguage = JSON.parse(localStorage.getItem("user")).language
 	await fetchPages();
 
 	if (localStorage.getItem("token"))

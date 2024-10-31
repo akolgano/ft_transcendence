@@ -4,7 +4,7 @@
 	let boardWidth = 800;
 	let boardHeight = 500;
 	let context;
-	let playerHeight = 50;
+	let playerHeight = 55;
 
 	let playerWidth = 10;
 	let playerVelocityY = 0;
@@ -22,8 +22,8 @@
 		y : boardHeight / 2,
 		width: ballWidth,
 		height: ballHeight,
-		velocityX: -3,
-		velocityY: 3,
+		velocityX: -2.5,
+		velocityY: 2.5,
 	}
 
 	let playerUser = {
@@ -55,6 +55,10 @@
 	let oldSpeedY;
 
 	let predictedBallPosition = -1;
+	let lastTime = 0;
+	const FRAME_RATE = 60;
+	const FRAME_TIME = 1000 / FRAME_RATE
+	let accumulatedTime = 0;
 
 // --------------------------------------------- END GAME -------------------------------------------------
 
@@ -147,6 +151,11 @@
 	function endTournament(winner, looser) {
 		gameSettings.scoreUser = 0;
 		gameSettings.scoreGuest = 0;
+		if (gameSettings.powerUp)
+		{
+			gameSettings.powerUpGuest = 3
+			gameSettings.powerUpUser = 3
+		}
 		switch (gameSettings.currentGame) {
 
 			case SEMI1:
@@ -280,8 +289,8 @@
 		// Power Up
 		if (gameSettings.powerUp)
 		{
-			playerGuest.powerUp = 3
-			playerUser.powerUp = 3
+			displayPowerEmoji(gameSettings.powerUpGuest, ".power-up-guest");
+			displayPowerEmoji(gameSettings.powerUpUser, ".power-up-user");
 			document.querySelector(".power-up-count").classList.remove("d-none")
 		}
 		// Draw player 1 and 2
@@ -301,22 +310,6 @@
 	gameSetUp()
 
 // --------------------------------------------- AI PLAYER -------------------------------------------------
-
-// function predictBallPosition() {
-// 	let predictedBallY = ball.y + (ball.velocityY * 60);
-// 	let predictedBallX = ball.x + (ball.velocityX * 60)
-
-// 	// Check for wall bounces and adjust the predicted position
-// 	if (predictedBallY <= 0 || predictedBallY >= boardHeight) {
-// 		let remainingDistance = Math.abs(predictedBallY - boardHeight);
-// 		if (predictedBallY < 0) {
-// 			predictedBallY = Math.abs(predictedBallY); // Bounce from top wall
-// 		} else if (predictedBallY > boardHeight) {
-// 			predictedBallY = boardHeight - remainingDistance; // Bounce from bottom wall
-// 		}
-// 	}
-// 	return predictedBallY;
-// }
 
 function predictBallPosition() {
 	let predictedBallY = ball.y;
@@ -349,7 +342,7 @@ function playerAI() {
 		playerGuest.velocityY = 0;
 		return;
 	}
-	if (ball.x > boardWidth * 0.60 && ball.velocityX >= 4.5 && !powerUp && gameSettings.powerUp && playerGuest.powerUp && !powerLast)
+	if (ball.x > boardWidth * 0.60 && ball.velocityX >= 4.5 && !powerUp && gameSettings.powerUp && gameSettings.powerUpGuest > 0 && !powerLast)
 	{
 		let possibilities = [1, 2, 3]
 		let random = possibilities[(Math.floor(Math.random() * possibilities.length))]
@@ -417,45 +410,67 @@ function paddleBallCollision() {
 		hitLast = false;
 }
 
-function update() {
-	if (playerGuest.score == 5 || playerUser.score == 5)
-	{
-		endOfGame();
-		return ;
-	}
-	gameLoopId = requestAnimationFrame(update);
-
-	context.clearRect(0, 0, boardWidth, boardHeight) // CLEAR ball and paddles to update to new position
-
+function updateGameState()
+{
 	// Move ball and check if touch wall
 	ball.x += ball.velocityX;
 	ball.y += ball.velocityY;
 	if (ball.y <= 0 || ball.y + ball.height >= boardHeight)
 		ball.velocityY *= -1
 
-	context.fillRect(ball.x, ball.y, ball.width, ball.height)
-
+	
 	if (predictedBallPosition >= 0 && playerGuest.velocityY !== 0)
 	{
 		if (predictedBallPosition > (playerGuest.y + playerGuest.height * 0.25) && predictedBallPosition < playerGuest.y + (playerGuest.height * 0.75))
 			playerGuest.velocityY = 0
 	}
+		
+	paddleBallCollision();
 
 	calculateNewPosition(playerUser);
 	calculateNewPosition(playerGuest);
-
-	paddleBallCollision();
-
+	
 	if (powerUp)
 		checkPowerUp()
-
+	
 	if (ball.x < 0)
-		addScore(playerGuest, "playerGuest", 3)
+		addScore(playerGuest, "playerGuest", 2.5)
 	else if (ball.x + ball.width > boardWidth)
-		addScore(playerUser, "playerUser", -3)
+		addScore(playerUser, "playerUser", -2.5)
+}
+
+function renderGameElements(deltaTime)
+{
+	context.fillRect(ball.x, ball.y, ball.width, ball.height)
 
 	for (let i = 10; i < board.height; i += 30)
 		context.fillRect(board.width / 2 - 4, i, 2, 10)
+}
+
+function update(timestamp) {
+	if (playerGuest.score == 5 || playerUser.score == 5)
+	{
+		endOfGame();
+		return ;
+	}
+	
+	if (lastTime === 0)
+		lastTime = timestamp
+	const deltaTime = timestamp - lastTime;
+	lastTime = timestamp
+	accumulatedTime += deltaTime
+
+	while (accumulatedTime >= FRAME_TIME)
+	{
+		updateGameState();
+		accumulatedTime -= FRAME_TIME
+	}
+
+	context.clearRect(0, 0, boardWidth, boardHeight) // CLEAR ball and paddles to update to new position
+	context.fillRect(playerUser.x, playerUser.y, playerUser.width, playerUser.height)
+	context.fillRect(playerGuest.x, playerGuest.y, playerGuest.width, playerGuest.height)
+	renderGameElements(deltaTime);
+	gameLoopId = requestAnimationFrame(update);
 }
 
 // --------------------------------------------- GAME HELPERS -------------------------------------------------
@@ -484,6 +499,8 @@ function update() {
 		localStorage.setItem("gameSettings", JSON.stringify(gameSettings))
 		document.getElementById(userId).innerText = user.score
 		ball.velocityX = speed;
+		const possibilities = [-2.5, 2.5]
+		ball.velocityY = possibilities[(Math.floor(Math.random() * possibilities.length))]
 		document.querySelector(".power-up-activated").innerText = ""
 		ball.x = boardWidth / 2;
 		ball.y = boardHeight / 2;
@@ -492,7 +509,6 @@ function update() {
 			cancelAnimationFrame(gameLoopId);
 			return;
 		}
-
 	}
 
 	function calculateNewPosition(player) {
@@ -504,23 +520,40 @@ function update() {
 
 // --------------------------------------------- MOVEMENTS -------------------------------------------------
 
-	function updatePowerUpCount(player) {
-		player.powerUp -= 1;
-		let powerClass;
-
-		powerClass = (player == playerUser ? ".power-up-user" : ".power-up-guest")
-
+	function displayPowerEmoji(points, powerClass)
+	{
 		let powerEmoji = ""
-		for (let index = 0; index < player.powerUp; index++) {
+		for (let index = 0; index < points; index++) {
 			powerEmoji += "💪"
 		}
 		document.querySelector(powerClass).innerText = powerEmoji;
+	}
+
+	function updatePowerUpCount(player) {
+		let powerClass;
+		let total = 0;
+		
+		if (player === playerGuest)
+		{
+			gameSettings.powerUpGuest -= 1;
+			total = gameSettings.powerUpGuest
+		}
+		else if (player === playerUser)
+		{
+			gameSettings.powerUpUser -= 1
+			total = gameSettings.powerUpUser
+		}
+		localStorage.setItem("gameSettings", JSON.stringify(gameSettings))
+		
+
+		powerClass = (player == playerUser ? ".power-up-user" : ".power-up-guest")
+		displayPowerEmoji(total, powerClass)
+		
 		document.querySelector(".power-up-activated").innerText = "POWER UP"
 	}
 
 	function powerUpActivation()
 	{
-		console.log("Activating power up")
 		powerUp = 1;
 		powerUpStart = new Date();
 		oldSpeedX = Math.abs(ball.velocityX);
@@ -565,13 +598,13 @@ function update() {
 			}
 		}
 
-		if (event.code == "KeyP" && gameSettings.powerUp && !powerUp && playerGuest.powerUp > 0 && playerGuest.name !== "AI")
+		if (event.code == "KeyP" && gameSettings.powerUp && !powerUp && gameSettings.powerUpGuest > 0 && playerGuest.name !== "AI")
 		{
 			powerUpActivation()
 			updatePowerUpCount(playerGuest)
 		}
 
-		if (event.code == "KeyA" && gameSettings.powerUp && !powerUp && playerUser.powerUp > 0)
+		if (event.code == "KeyA" && gameSettings.powerUp && !powerUp && gameSettings.powerUpUser > 0)
 		{
 			powerUpActivation()
 			updatePowerUpCount(playerUser)
