@@ -1,0 +1,20 @@
+
+
+curl -u elastic:elastic http://localhost:9200/_snapshot/my_backup/_all
+
+
+
+curl -X PUT "http://localhost:9200/_snapshot/my_backup" -u elastic:elastic -H 'Content-Type: application/json' -d '{
+  "type": "fs",
+  "settings": {
+    "location": "/usr/share/elasticsearch/backup"
+  }
+}'
+
+
+curl -X PUT "http://localhost:9200/my_index" -u elastic:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0
+  }
+}'

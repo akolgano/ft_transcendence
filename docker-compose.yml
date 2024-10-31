@@ -62,17 +62,40 @@ services:
 
   elasticsearch:
     container_name: elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
+    #image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
+    build:
+      context: ./elasticsearch
     environment:
       - discovery.type=single-node
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - path.repo=/usr/share/elasticsearch/backup
     volumes:
       - esdata:/usr/share/elasticsearch/data
+      - ./elasticsearch/init/setup.sh:/setup.sh
+      - ./backup:/usr/share/elasticsearch/backup
     ports:
       - "9200:9200"
     networks:
       - backend
-
+    healthcheck:
+      test: ["CMD", "curl", "-f", "-u", "elastic:$ELASTIC_PASSWORD", "http://localhost:9200/_cluster/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  setup:
+    container_name: setup
+    image: curlimages/curl:latest
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    volumes:
+      - ./elasticsearch/init/setup.sh:/setup.sh
+      #- ./backup:/usr/share/elasticsearch/backup
+    entrypoint: ["/bin/sh", "/setup.sh"]
+    environment:
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    networks:
+      - backend
   kibana:
     container_name: kibana
     image: docker.elastic.co/kibana/kibana:7.17.0
