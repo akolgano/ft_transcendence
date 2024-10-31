@@ -241,8 +241,8 @@ function renderPieChart(chartId, labels, data, backgroundColors) {
                     display: false // This will remove the legend
                 },
                 tooltip: {
-                    titleFont: { size: 20 },
-                    bodyFont: { size: 20 }
+                    titleFont: { size: 30 },
+                    bodyFont: { size: 30 }
                 }
             }
         }
