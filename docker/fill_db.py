@@ -1,6 +1,8 @@
 import os
 import django
 import sys
+from django.utils import timezone
+from datetime import timedelta
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pong.settings")
 django.setup()
@@ -8,11 +10,11 @@ django.setup()
 from pong.users.models import CustomUser, PlayerStats, GameResult, TournamentResult
 
 sample_data = [
-    ('juliette', 'juliette@example.com', 'password', False, 'en', 'profile_pictures/default.jpg'),
-    ('elina', 'elina@example.com', 'password', False, 'fr', 'profile_pictures/default.jpg'),
-    ('emily', 'emily@example.com', 'password', False, 'es', 'profile_pictures/default.jpg'),
-    ('alice', 'alice@example.com', 'password', False, 'es', 'profile_pictures/default.jpg'),
-    ('alex', 'alex@example.com', 'password', False, 'es', 'profile_pictures/redpanda.jpg'),
+    ('juliette', 'juliette@example.com', 'password', 'en', 'profile_pictures/default.jpg'),
+    ('elina', 'elina@example.com', 'password', 'fr', 'profile_pictures/default.jpg'),
+    ('emily', 'emily@example.com', 'password', 'es', 'profile_pictures/default.jpg'),
+    ('alice', 'alice@example.com', 'password', 'es', 'profile_pictures/default.jpg'),
+    ('alex', 'alex@example.com', 'password', 'es', 'profile_pictures/redpanda.jpg'),
 ]
 
 sample_data_games = [
@@ -53,13 +55,14 @@ def insert_sample_data():
             print("PlayerStats already exists for admin.")
     else:
         print("Admin user not found!")
-    for username, email, password, online, language, profile_picture in sample_data:
+    last_activity = timezone.now() - timedelta(days=1)
+    for username, email, password, language, profile_picture in sample_data:
         try:
             user, created = CustomUser.objects.get_or_create(
                 username=username,
                 defaults={
                     'email': email,
-                    'online': online,
+                    'last_activity': last_activity,
                     'language': language,
                     'profile_picture': profile_picture,
                 }

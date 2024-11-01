@@ -4,10 +4,18 @@
 
 # How to test and etc
 
+###
 
 docker-compose exec django python manage.py inspectdb
 docker-compose exec django python manage.py test pong.tests.tests
 
+###
+
+docker-compose exec postgres sh
+psql -U postgres -h postgres (password=postgres)
+select username, last_activity from users_customuser;
+
+###
 
 curl -k -X POST https://localhost/api/signup \
 -H "Content-Type: application/json" \
@@ -81,10 +89,10 @@ OK
 curl -k -X PATCH https://localhost/api/change_password/ Content-Type: application/json {'old_password': 'wrongpassword', 'new_password': 'newpassword456'}
 
 
-curl -k -X GET https://localhost/api/get_friends/ -H "Content-Type: application/json" -H "Authorization: Token dd5a0ddcf5849520e5c84971e6e0abf70e176b7e"
+curl -k -X GET https://localhost/api/get_friends/ -H "Content-Type: application/json" -H "Authorization: Token b457b1f9f79b039a14899edfbbb8c84497722e08"
 
 ----------------Add friend-----------------------
-curl -k -X POST https://localhost/api/add_friend/ -H "Content-Type: application/json" -H "Authorization: Token 43c11a654c2e9389c05414ae1ceda95cf3375d8b" -d '{"username_to_add": "elina"}'
+curl -k -X POST https://localhost/api/add_friend/ -H "Content-Type: application/json" -H "Authorization: Token b457b1f9f79b039a14899edfbbb8c84497722e08" -d '{"username_to_add": "elina"}'
 
 {"detail":"Friend added successfully.","friend":{"id":3,"username":"elina","email":"elina@example.com","online":false,"language":"fr","profile_picture":"/media/profile_pictures/default.jpg"}} / {"detail":"You are already friends with this user."} / {"detail":"You cannot add yourself as a friend."} / {"detail":"No CustomUser matches the given query."}
 

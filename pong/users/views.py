@@ -19,6 +19,7 @@ from .models import GameResult, PlayerStats, TournamentResult
 from .serializers import GameResultSerializer, PlayerStatsSerializer, TournamentResultSerializer
 from rest_framework.views import APIView
 from django.http import Http404
+from django.utils import timezone
 import logging
 
 logger = logging.getLogger(__name__)
@@ -38,7 +39,7 @@ def login(request):
         return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
     token, created = Token.objects.get_or_create(user=user)
     serializer = UserSerializer(user)
-    user.online = True
+    user.last_activity = timezone.now()
     user.save()
     logger.info(f"User {username} logged in successfully.")
     return Response({'token': token.key, 'user': serializer.data})
@@ -55,7 +56,6 @@ def logout(request):
     except Http404:
         logger.warning(f"Logout failed: User {username} not found.")
         return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
-    user.online = False
     try:
         request.user.auth_token.delete()
         user.save()
@@ -177,11 +177,12 @@ def add_friend(request):
     Friendship.objects.create(from_user=user, to_user=user_to_add)
     player_stats = get_object_or_404(PlayerStats, user=user_to_add)
     serializer = UserSerializer(user_to_add)
+    friend_data = serializer.data
+    friend_data['points'] = player_stats.points
     logger.info(f"User {user.username} added a friend {user_to_add.username}")
     return Response({
         'detail': 'Friend added successfully.',
-        'friend': serializer.data,
-        'points': player_stats.points
+        'friend': friend_data,
     }, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
