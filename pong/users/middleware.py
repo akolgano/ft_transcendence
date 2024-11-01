@@ -24,9 +24,7 @@ class UpdateLastActivityMiddleware:
             request.user = AnonymousUser()
         if not isinstance(request.user, AnonymousUser):
             user = request.user
-            print(request)
             user.last_activity = timezone.now()
-            print(user, user.last_activity)
             user.save(update_fields=['last_activity'])
         response = self.get_response(request)
         return response
