@@ -1,4 +1,3 @@
-console.log("REMOVE FRIEND SCRIPT")
 
 function getErrorKeyRemoveFriend(error)
 {

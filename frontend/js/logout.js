@@ -1,6 +1,4 @@
 
-console.log("SCRIPT LOG OUT")
-
 async function handleLogout(e) {
 	e.preventDefault();
 	if (!checkValidToken())
@@ -41,6 +39,10 @@ async function handleLogout(e) {
 			localStorage.removeItem("expiry_token")
 			localStorage.removeItem("gameSettings")
 			updateNavbar(false)
+			const keepOnline = document.querySelectorAll("a, button");
+			keepOnline.forEach(link => {
+				link.removeEventListener("click", userStillOnline)
+			});
 			urlRoute({ target: { href: '/' }, preventDefault: () => {} });
 		}
 		else

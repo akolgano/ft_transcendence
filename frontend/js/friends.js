@@ -1,6 +1,4 @@
 
-console.log("FRIENDS SCRIPT");
-
 function displayFriends(data) {
 	const friendsList = document.querySelector(".friends-list");
 
