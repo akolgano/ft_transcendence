@@ -19,6 +19,7 @@ from .models import GameResult, PlayerStats, TournamentResult
 from .serializers import GameResultSerializer, PlayerStatsSerializer, TournamentResultSerializer
 from rest_framework.views import APIView
 from django.http import Http404
+from django.utils import timezone
 import logging
 
 logger = logging.getLogger(__name__)
@@ -38,7 +39,7 @@ def login(request):
         return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
     token, created = Token.objects.get_or_create(user=user)
     serializer = UserSerializer(user)
-    user.online = True
+    user.last_activity = timezone.now()
     user.save()
     logger.info(f"User {username} logged in successfully.")
     return Response({'token': token.key, 'user': serializer.data})
@@ -55,7 +56,7 @@ def logout(request):
     except Http404:
         logger.warning(f"Logout failed: User {username} not found.")
         return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
-    user.online = False
+    #user.online = False
     try:
         request.user.auth_token.delete()
         user.save()

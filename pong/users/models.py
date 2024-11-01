@@ -5,12 +5,15 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from django.utils import timezone
+from datetime import timedelta
 import os
 
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True, null=False, blank=False)
     username = models.CharField(max_length = 20, unique=True)
+    last_activity = models.DateTimeField(default=timezone.now)
 
     profile_picture = models.ImageField(
         upload_to='profile_pictures/',
@@ -18,7 +21,7 @@ class CustomUser(AbstractUser):
         null=True,
         default='profile_pictures/default.jpg'
     )
-    online = models.BooleanField(default=False)
+    #online = models.BooleanField(default=False)
     LANGUAGE_CHOICES = [
         ('en', 'English'),
         ('es', 'Spanish'),
@@ -36,7 +39,6 @@ class CustomUser(AbstractUser):
         ).distinct()
 
     def get_friends(self):
-        #return list(self.get_friends())
         return list(self.get_friends_initiated())
 
     def save(self, *args, **kwargs):
@@ -46,8 +48,16 @@ class CustomUser(AbstractUser):
             if old_image and old_image.name != self.profile_picture.name and old_image.name != 'profile_pictures/default.jpg':
                 if os.path.isfile(old_image.path):
                     os.remove(old_image.path)
-        super().save(*args, **kwargs)
+        super().save(*args, **kwargs)    
+
+    def update_activity(self):
+        self.last_activity = timezone.now()
+        self.save()
         
+    @property
+    def online(self):
+        return timezone.now() - self.last_activity < timedelta(minutes=1)
+
 class Friendship(models.Model):
     from_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='friendships_created', on_delete=models.CASCADE)
     to_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='friendships_received', on_delete=models.CASCADE)
