@@ -39,8 +39,6 @@ services:
       DJANGO_SUPERUSER_USERNAME: admin
       DJANGO_SUPERUSER_PASSWORD: admin
       DJANGO_SUPERUSER_EMAIL: barbayjuliette95@gmail.com
-      #ELASTICSEARCH_URL: ${ELASTICSEARCH_URL}
-      #ELASTICSEARCH_URL=http://elastic:${ELASTIC_PASSWORD}@elasticsearch:9200
   nginx:
     container_name: nginx
     build:
@@ -56,13 +54,11 @@ services:
       - "443:443"
     depends_on:
       - django
-      - kibana
     networks:
       - backend
 
   elasticsearch:
     container_name: elasticsearch
-    #image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
     build:
       context: ./elasticsearch
     environment:
@@ -75,20 +71,22 @@ services:
       - ./elasticsearch/init/setup.sh:/setup.sh
       - ./backup:/usr/share/elasticsearch/backup
       - ./elasticsearch/certs:/usr/share/elasticsearch/config/certs
-    ports:
-      - "9200:9200"
+    # ports:
+    #   - "9200:9200"
     networks:
       - backend
     healthcheck:
       test: ["CMD", "curl", "-f", "-u", "elastic:$ELASTIC_PASSWORD", "http://localhost:9200/_cluster/health"]
-      interval: 10s
-      timeout: 5s
+      interval: 30s
+      timeout: 10s
       retries: 10
   setup:
     container_name: setup
     image: curlimages/curl:latest
     depends_on:
       elasticsearch:
+        condition: service_healthy
+      kibana:
         condition: service_healthy
     volumes:
       - ./elasticsearch/init/setup.sh:/setup.sh
@@ -99,7 +97,6 @@ services:
       - backend
   kibana:
     container_name: kibana
-    #image: docker.elastic.co/kibana/kibana:7.17.0
     build:
       context: ./kibana
     restart: always
@@ -108,32 +105,32 @@ services:
     volumes:
       - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
     environment:
-      # - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-      # - ELASTICSEARCH_USERNAME=elastic
-      # - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
       - KIBANA_PASSWORD=${KIBANA_PASSWORD}
       - KIBANA_ENCRYPTION_KEY=${KIBANA_ENCRYPTION_KEY}
-      # - ELASTICSEARCH_URL=https://elastic:${ELASTIC_PASSWORD}@elasticsearch:9200
     depends_on:
-      - elasticsearch
+      elasticsearch:
+        condition: service_healthy
     networks:
       - backend
+    healthcheck:
+        test: ["CMD-SHELL", "until curl -f -k -u elastic:$ELASTIC_PASSWORD https://localhost:5601/api/status | grep -q 'green'; do sleep 5; done"]
+        interval: 30s
+        timeout: 10s
+        retries: 10
+
   logstash:
     container_name: logstash
     restart: always
     image: docker.elastic.co/logstash/logstash:7.17.0
-    ports:
-      - "5044:5044"
+    # ports:
+    #   - "5044:5044"
     volumes:
-      #- ./logstash/config:/usr/share/logstash/config
-      #- ./logstash/pipeline:/usr/share/logstash/pipeline
-      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
       - ./logs:/usr/share/logstash/log/nginx_logs
       - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
     depends_on:
       - elasticsearch
     environment:
-    #   - ELASTICSEARCH_HOST=https://elasticsearch:9200
        - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     networks:
       - backend

@@ -1,0 +1,13 @@
+1) https://localhost:5601 
+
+elastic/elastic
+
+2) Logs are at 
+
+https://localhost:5601/app/discover
+
+
+3) Management 
+
+https://localhost:5601/app/management
+

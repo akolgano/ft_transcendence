@@ -2,18 +2,7 @@
 
 echo "Setup script..."
 
-
-# Wait for Elasticsearch to be healthy
-# until curl -s -u elastic:$ELASTIC_PASSWORD http://localhost:9200/_cluster/health | grep -q '"status":"green\|"status":"yellow"'; do
-#   echo "Waiting for Elasticsearch to be healthy..."
-#   sleep 5
-# done
-
-# Set built-in user passwords
-#curl -X POST "http://localhost:9200/_security/user/elastic/_password" -u elastic:$ELASTIC_PASSWORD -d "$ELASTIC_PASSWORD"
-#curl -X POST "http://localhost:9200/_security/user/logstash_system/_password" -u elastic:$ELASTIC_PASSWORD -d "$ELASTIC_PASSWORD"
-#curl -X POST "http://localhost:9200/_security/user/kibana_system/_password" -u elastic:$ELASTIC_PASSWORD -d "$ELASTIC_PASSWORD"
-
+#ilm policy
 curl -X PUT "http://elasticsearch:9200/_ilm/policy/logs_policy_new" -u elastic:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
   "policy": {
     "phases": {
@@ -49,13 +38,66 @@ curl -X PUT "http://elasticsearch:9200/_ilm/policy/logs_policy_new" -u elastic:$
     }
   }
 }'
-# Create Snapshot Repository
-curl -X PUT "http://elasticsearch:9200/_snapshot/my_backup" -u elastic:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
-  "type": "fs",
-  "settings": {
-    "location": "/usr/share/elasticsearch/backup"
+# create index patterns
+curl -X POST "https://kibana:5601/api/saved_objects/index-pattern" -u elastic:$ELASTIC_PASSWORD \
+  -H 'Content-Type: application/json' \
+  -H 'kbn-xsrf: true' \
+  -k \
+  -d '
+{
+  "attributes": {
+    "title": "nginx-logs-*",
+    "timeFieldName": "timestamp"
+  }
+}
+'
+curl -X POST "https://kibana:5601/api/saved_objects/index-pattern" -u elastic:$ELASTIC_PASSWORD \
+  -H 'Content-Type: application/json' \
+  -H 'kbn-xsrf: true' \
+  -k \
+  -d '
+{
+  "attributes": {
+    "title": "django-logs-*",
+    "timeFieldName": "timestamp"
+  }
+}
+'
+
+# #attach to template
+# curl -X PUT "http://elasticsearch:9200/_template/nginx-logs-template" -u elastic:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
+#   "index_patterns": ["nginx-logs-*"],
+#   "template": {
+#     "settings": {
+#       "index.lifecycle.name": "logs_policy_new"
+#     }
+#   }
+# }'
+#link index to ilm policy 
+curl -X PUT "http://elasticsearch:9200/nginx-logs-*/_settings" -u elastic:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
+  "index": {
+    "lifecycle": {
+      "name": "logs_policy_new"
+    }
   }
 }'
 
-# Wait for the initialization to complete
+# #create a snapshot repository
+# curl -X PUT "http://elasticsearch:9200/_snapshot/my_backup" -u elastic:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
+#   "type": "fs",
+#   "settings": {
+#     "location": "/usr/share/elasticsearch/backup"
+#   }
+# }'
+
+#create a snapshot for index
+curl -X PUT "http://elasticsearch:9200/_snapshot/my_backup/snapshot_nginx_logs" -u elastic:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
+  "indices": "nginx-logs-*",
+  "ignore_unavailable": true,
+  "settings": {
+    "location": "/usr/share/elasticsearch/backup"
+  }
+  "include_global_state": false
+}'
+
 echo "Setup completed."
