@@ -229,22 +229,23 @@ LOGGING = {
             'formatter' : 'simple',
         },
     },
-    'loggers': {
-        # 'django': {
-        #     'handlers': ['console', 'file'],
-        #     'level': 'ERROR',
-        #     'propagate': True,
-        # },
-        'pong': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'django.request': {
-            #'handlers': ['console', 'file'],
-            'handlers': ['file'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-    },
+    # 'loggers': {
+    #     # 'django': {
+    #     #     'handlers': ['console', 'file'],
+    #     #     'level': 'ERROR',
+    #     #     'propagate': True,
+    #     # },
+    #     'pong': {
+    #         'handlers': ['file'],
+    #         'level': 'DEBUG',
+    #         'propagate': False,
+    #     },
+    #     'django.request': {
+    #         #'handlers': ['console', 'file'],
+    #         'handlers': ['file'],
+    #         'level': 'INFO',
+    #         'propagate': False,
+    #     },
+    # },
+    }
 }
