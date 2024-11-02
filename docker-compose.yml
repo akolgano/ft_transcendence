@@ -69,7 +69,7 @@ services:
       - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - esdata:/usr/share/elasticsearch/data
       - ./elasticsearch/init/setup.sh:/setup.sh
-      - ./backup:/usr/share/elasticsearch/backup
+      - backup:/usr/share/elasticsearch/backup
       - ./elasticsearch/certs:/usr/share/elasticsearch/config/certs
     networks:
       - backend
@@ -88,7 +88,7 @@ services:
         condition: service_healthy
     volumes:
       - ./elasticsearch/init/setup.sh:/setup.sh
-      - ./backup:/usr/share/elasticsearch/backup
+      #- backup:/usr/share/elasticsearch/backup
     entrypoint: ["/bin/sh", "/setup.sh"]
     environment:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
@@ -138,8 +138,16 @@ services:
 volumes:
   postgres_data:
   esdata:
-
+  backup:
+         driver: local
+         driver_opts:
+            type: none
+            o: bind
+            device: ~/data/backup
 
 networks:
   backend:
     driver: bridge
+
+
+
