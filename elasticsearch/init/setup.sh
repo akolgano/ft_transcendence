@@ -2,8 +2,11 @@
 
 echo "Setup script..."
 
+mkdir -p ./backup
+chown -R $(id -u):$(id -g) ./backup
+
 #ilm policy
-curl -X PUT "http://elasticsearch:9200/_ilm/policy/logs_policy_new" -u elastic:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
+curl -X PUT "http://elasticsearch:9200/_ilm/policy/logs_policy_new" -u ${ELASTIC_USERNAME}:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
   "policy": {
     "phases": {
       "hot": {
@@ -39,7 +42,7 @@ curl -X PUT "http://elasticsearch:9200/_ilm/policy/logs_policy_new" -u elastic:$
   }
 }'
 # create index patterns
-curl -X POST "https://kibana:5601/api/saved_objects/index-pattern" -u elastic:$ELASTIC_PASSWORD \
+curl -X POST "https://kibana:5601/api/saved_objects/index-pattern" -u ${ELASTIC_USERNAME}:$ELASTIC_PASSWORD \
   -H 'Content-Type: application/json' \
   -H 'kbn-xsrf: true' \
   -k \
@@ -51,7 +54,7 @@ curl -X POST "https://kibana:5601/api/saved_objects/index-pattern" -u elastic:$E
   }
 }
 '
-curl -X POST "https://kibana:5601/api/saved_objects/index-pattern" -u elastic:$ELASTIC_PASSWORD \
+curl -X POST "https://kibana:5601/api/saved_objects/index-pattern" -u ${ELASTIC_USERNAME}:$ELASTIC_PASSWORD \
   -H 'Content-Type: application/json' \
   -H 'kbn-xsrf: true' \
   -k \
@@ -64,25 +67,9 @@ curl -X POST "https://kibana:5601/api/saved_objects/index-pattern" -u elastic:$E
 }
 '
 
-# #attach to template
-# curl -X PUT "http://elasticsearch:9200/_template/nginx-logs-template" -u elastic:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
-#   "index_patterns": ["nginx-logs-*"],
-#   "template": {
-#     "settings": {
-#       "index.lifecycle.name": "logs_policy_new"
-#     }
-#   }
-# }'
+
 #link index to ilm policy 
-curl -X PUT "http://elasticsearch:9200/nginx-logs-*/_settings" -u elastic:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
-  "index": {
-    "lifecycle": {
-      "name": "logs_policy_new"
-    }
-  }
-}'
-#link index to ilm policy 
-curl -X PUT "http://elasticsearch:9200/django-logs-*/_settings" -u elastic:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
+curl -X PUT "http://elasticsearch:9200/nginx-logs-*/_settings" -u ${ELASTIC_USERNAME}:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
   "index": {
     "lifecycle": {
       "name": "logs_policy_new"
@@ -91,7 +78,7 @@ curl -X PUT "http://elasticsearch:9200/django-logs-*/_settings" -u elastic:$ELAS
 }'
 
 #create a snapshot repository
-curl -X PUT "http://elasticsearch:9200/_snapshot/my_backup" -u elastic:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
+curl -X PUT "http://elasticsearch:9200/_snapshot/my_backup" -u ${ELASTIC_USERNAME}:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
   "type": "fs",
   "settings": {
     "location": "/usr/share/elasticsearch/backup"
@@ -99,13 +86,37 @@ curl -X PUT "http://elasticsearch:9200/_snapshot/my_backup" -u elastic:$ELASTIC_
 }'
 
 #create a snapshot for index
-curl -X PUT "http://elasticsearch:9200/_snapshot/my_backup/snapshot_nginx_logs" -u elastic:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
+curl -X PUT "http://elasticsearch:9200/_snapshot/my_backup/snapshot_nginx_logs" -u ${ELASTIC_USERNAME}:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
   "indices": "nginx-logs-*",
   "ignore_unavailable": true,
   "settings": {
     "location": "/usr/share/elasticsearch/backup"
-  }
+  },
   "include_global_state": false
 }'
+
+# # create snapshot
+# curl -X PUT "http://elasticsearch:9200/_snapshot/my_backup/snapshot_1" -u ${ELASTIC_USERNAME}:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
+#   "indices": "nginx-logs-*",
+#   "ignore_unavailable": true,
+#   "include_global_state": false
+# }'
+
+
+#create snapshot policy
+curl -X PUT "http://elasticsearch:9200/_slm/policy/my_snapshot_policy" -u ${ELASTIC_USERNAME}:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
+  "schedule": "0 30 1 * * ?",  // At 01:30 AM every day
+  "name": "<daily-snap-{now/d}>", // name pattern
+  "repository": "my_backup",
+  "config": {
+    "indices": "nginx-logs-*",
+    "ignore_unavailable": true,
+    "include_global_state": false
+  },
+  "retention": {
+    "expire": "30d"
+  }
+}'
+
 
 echo "Setup completed."
