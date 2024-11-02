@@ -53,8 +53,8 @@
 }
 
 #gameMarginChart, #victoryLossChart {
-	width: 600px !important;
-	height: 600px !important;
+    width: 80vw; /* 80% of the viewport width */
+    height: 80vh; /* 80% of the viewport height */
 }
 
 #pongContent {
