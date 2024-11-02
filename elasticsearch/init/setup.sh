@@ -81,14 +81,22 @@ curl -X PUT "http://elasticsearch:9200/nginx-logs-*/_settings" -u elastic:$ELAST
     }
   }
 }'
+#link index to ilm policy 
+curl -X PUT "http://elasticsearch:9200/django-logs-*/_settings" -u elastic:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
+  "index": {
+    "lifecycle": {
+      "name": "logs_policy_new"
+    }
+  }
+}'
 
-# #create a snapshot repository
-# curl -X PUT "http://elasticsearch:9200/_snapshot/my_backup" -u elastic:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
-#   "type": "fs",
-#   "settings": {
-#     "location": "/usr/share/elasticsearch/backup"
-#   }
-# }'
+#create a snapshot repository
+curl -X PUT "http://elasticsearch:9200/_snapshot/my_backup" -u elastic:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
+  "type": "fs",
+  "settings": {
+    "location": "/usr/share/elasticsearch/backup"
+  }
+}'
 
 #create a snapshot for index
 curl -X PUT "http://elasticsearch:9200/_snapshot/my_backup/snapshot_nginx_logs" -u elastic:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{

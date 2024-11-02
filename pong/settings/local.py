@@ -219,6 +219,7 @@ LOGGING = {
         },
         'pong': {
             'handlers': ['logstash'],
+            'level': 'DEBUG',
         'console': {
             'class': 'logging.StreamHandler',
         },
