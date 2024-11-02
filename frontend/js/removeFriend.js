@@ -23,8 +23,9 @@ function removeFriendFromHTML(username) {
 }
 
 async function addEventRemoveButton(e) {
-
 	e.preventDefault();
+	if (!checkValidToken())
+		return;
 	const button = e.target;
 	const username = button.getAttribute("data-username");
 	const formData = new FormData();
@@ -64,13 +65,22 @@ async function addEventRemoveButton(e) {
 			console.log(data.message);
 		}
 	} catch (error) {
-		displayAlert(getErrorKeyRemoveFriend(error.message), "danger");
+		if (error.message === '"Invalid token."') {
+			localStorage.removeItem("user")
+			localStorage.removeItem("token")
+			localStorage.removeItem("expiry_token")
+			updateNavbar(false)
+			urlRoute({ target: { href: '/login' }, preventDefault: () => {} });
+			displayAlert("auth.login-again", "danger");
+		}
+		else
+			displayAlert(getErrorKeyRemoveFriend(error.message), "danger");
 		console.log(error.message)
 	}
 
 }
 
-function removeFriendScript(params) {
+function removeFriendScript() {
 const removeButtons = document.querySelectorAll(".removeFriend");
 removeButtons.forEach(button => {
 	button.addEventListener("click", addEventRemoveButton)

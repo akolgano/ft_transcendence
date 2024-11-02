@@ -1,6 +1,8 @@
 import os
 import django
 import sys
+from django.utils import timezone
+from datetime import timedelta
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pong.settings")
 django.setup()
@@ -8,11 +10,11 @@ django.setup()
 from pong.users.models import CustomUser, PlayerStats, GameResult, TournamentResult
 
 sample_data = [
-    ('computer', 'computer@example.com', 'password', False, 'en', 'profile_pictures/default.jpg'),
-    ('elina', 'elina@example.com', 'password', False, 'fr', 'profile_pictures/default.jpg'),
-    ('emily', 'emily@example.com', 'password', False, 'es', 'profile_pictures/default.jpg'),
-    ('alice', 'alice@example.com', 'password', False, 'es', 'profile_pictures/default.jpg'),
-    ('alex', 'alex@example.com', 'password', False, 'es', 'profile_pictures/redpanda.jpg'),
+    ('juliette', 'juliette@example.com', 'password', 'en', 'profile_pictures/default.jpg'),
+    ('elina', 'elina@example.com', 'password', 'fr', 'profile_pictures/default.jpg'),
+    ('emily', 'emily@example.com', 'password', 'es', 'profile_pictures/default.jpg'),
+    ('alice', 'alice@example.com', 'password', 'es', 'profile_pictures/default.jpg'),
+    ('alex', 'alex@example.com', 'password', 'es', 'profile_pictures/redpanda.jpg'),
 ]
 
 sample_data_games = [
@@ -29,11 +31,11 @@ sample_data_games = [
 ]
 
 sample_data_tournaments = [
-    {"nickname": "mynickname", "results": ["mynickname", "guest1", "guest2", "guest3"]},
-    {"nickname": "mynickname", "results": ["mynickname", "guest1", "guest2", "guest3"]},
-    {"nickname": "mynickname", "results": ["guest3", "guest1", "mynickname", "guest2"]},
-    {"nickname": "mynickname", "results": ["guest3", "mynickname", "guest2", "guest1"]},
-    {"nickname": "mynickname", "results": ["guest3", "guest1", "guest2", "mynickname"]},
+    {"nickname": "alejandro", "results": ["alejandro", "juju", "juliette", "anna"]},
+    {"nickname": "alex", "results": ["alex", "test", "chanika", "chris"]},
+    {"nickname": "me", "results": ["john", "jessica", "me", "ted"]},
+    {"nickname": "aleja", "results": ["julia", "aleja", "frank", "lisa"]},
+    {"nickname": "alexander", "results": ["mariana", "elisa", "elsa", "alexander"]},
 
 ]
 def insert_sample_data():
@@ -53,13 +55,14 @@ def insert_sample_data():
             print("PlayerStats already exists for admin.")
     else:
         print("Admin user not found!")
-    for username, email, password, online, language, profile_picture in sample_data:
+    last_activity = timezone.now() - timedelta(days=1)
+    for username, email, password, language, profile_picture in sample_data:
         try:
             user, created = CustomUser.objects.get_or_create(
                 username=username,
                 defaults={
                     'email': email,
-                    'online': online,
+                    'last_activity': last_activity,
                     'language': language,
                     'profile_picture': profile_picture,
                 }
@@ -101,7 +104,7 @@ def insert_sample_data_games():
             )
             if created_game:
                 print(f"Inserted GameResult for: {username}")
-                
+
                 player_stats, created_stats = PlayerStats.objects.get_or_create(user=user)
                 score = record['score']
                 if score[0] > score[1]:
@@ -116,7 +119,7 @@ def insert_sample_data_games():
                 print(f"GameResult already exists for: {username}")
 
         except Exception as e:
-            print(f"Error inserting game data: {e}")      
+            print(f"Error inserting game data: {e}")
 
 def insert_sample_data_tournaments():
 
@@ -126,7 +129,7 @@ def insert_sample_data_tournaments():
         print(f"TournamentResults already exist for: {username}. Skipping insertion.")
         return
     for record in sample_data_tournaments:
-        try:        
+        try:
             tournament = TournamentResult(
                 user=user,
                 nickname=record.get('nickname'),
@@ -135,7 +138,7 @@ def insert_sample_data_tournaments():
             tournament.save()
             print(f"Inserted TournamentResult for: {username}")
 
-                
+
             player_stats, created = PlayerStats.objects.get_or_create(user=user)
             results = record.get('results')
             nickname=record.get('nickname')
@@ -150,7 +153,7 @@ def insert_sample_data_tournaments():
             print(f"Updated TournamentResult for: {username}")
 
         except Exception as e:
-            print(f"Error inserting tournament data: {e}")  
+            print(f"Error inserting tournament data: {e}")
 
 def main():
     try:

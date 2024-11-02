@@ -29,6 +29,18 @@ translator.fetch(["en", "fr", "es"]).then(() => {
 	registerLanguageToggle();
 });
 
+function createTooltip()
+{
+	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+	tooltipTriggerList.map(function (tooltipTriggerEl)
+	{
+		const tooltipText = tooltipTriggerEl.getAttribute('data-i18n2');
+		const translatedText = translator.translateForKey(tooltipText, siteLanguage); // Your translation function
+		tooltipTriggerEl.setAttribute('title', translatedText);
+		return new bootstrap.Tooltip(tooltipTriggerEl)
+	})
+}
+
 function registerLanguageToggle() {
 	let select = document.querySelectorAll(".change-language");
 
@@ -41,6 +53,8 @@ function registerLanguageToggle() {
 		const placeholderUsername = document.getElementById("add-friend-input")
 		if (placeholderUsername)
 			placeholderUsername.placeholder = translator.translateForKey("auth.username", siteLanguage);
+		if (document.querySelector('[data-bs-toggle="tooltip"]'))
+			createTooltip()
 		});
 	})
 }
@@ -59,14 +73,14 @@ const urlRoutes = {
 		template: "/static/gameRegistration.html",
 		title: "Home",
 		description: "Home page",
-		scripts: ["/js/gameRegistration.js"],
+		scripts: ["/js/gameRegistration.js", "/js/gameCustom.js"],
 		auth: true,
 	},
 	"/gameRegistration": {
 		template: "/static/gameRegistration.html",
 		title: "Home",
 		description: "Home page",
-		scripts: ["/js/gameRegistration.js"],
+		scripts: ["/js/gameRegistration.js", "/js/gameCustom.js"],
 		auth: true,
 	},
 	"/friends": {
@@ -129,7 +143,7 @@ const urlRoutes = {
 		template: "/static/tournamentRegistration.html",
 		title: "Tournament",
 		description: "Registration",
-		scripts: ["/js/tournamentRegistration.js"],
+		scripts: ["/js/tournamentRegistration.js", "/js/gameCustom.js"],
 		auth: true,
 	},
 	"/announceGame": {
@@ -160,7 +174,6 @@ const urlRoute = (event) => {
 const translateNewContent = (node) => {
 	node.querySelectorAll("[data-i18n]").forEach(element => {
 		let data = element.getAttribute('data-i18n')
-		// console.log("Preferred language: " + siteLanguage)
 		let translation = translator.translateForKey(data, siteLanguage)
 		element.innerHTML = translation
 	});
@@ -185,6 +198,24 @@ function handleDynamicRoutes(location) {
 		return null;
 }
 
+function checkExpiryToken() {
+	if (!localStorage.getItem("token"))
+		return (1)
+	const expiryDate = new Date(localStorage.getItem("expiry_token"))
+	const now = new Date();
+
+	if (now >= expiryDate)
+	{
+		localStorage.removeItem("user")
+		localStorage.removeItem("token")
+		localStorage.removeItem("expiry_token")
+		updateNavbar(false)
+		displayAlert("auth.login-again", "danger")
+		return (0)
+	}
+	return (1);
+}
+
 // Function that handles the url location
 const urlLocationHandler = () => {
 
@@ -202,6 +233,16 @@ const urlLocationHandler = () => {
 
 	if (location.length == 0)
 		location = "/";
+
+	if (localStorage.getItem("token") == null && document.querySelector(".navbar-username"))
+	{
+		window.location.reload();
+		displayAlert("auth.login-again", "danger")
+		return ;
+	}
+
+	if (!checkExpiryToken())
+		location = "/login" ;
 
 	// Not logged in and route needs authentication
 	if (localStorage.getItem("token") == null && urlRoutes[location] && urlRoutes[location].auth == true)
@@ -292,7 +333,7 @@ const updateNavbar = (loggedIn) => {
 	// HTML
 	let navContent;
 	if (loggedIn)
-		navContent = `<li class="nav-item"><p class="navbar-text d-inline" data-i18n="navbar.welcome"></p><p class="navbar-text navbar-username d-inline m-0 pe-4"></p></li><li class="nav-item dropdown"><a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="./images/profile_pic.jpeg" alt="avatar" class="rounded-circle border-1 avatar-sm object-fit-cover"></a><ul class="dropdown-menu dropdown-menu-end"><li><a class="dropdown-item spa" href="/account" data-i18n="account.title">Account</a></li><li><a class="dropdown-item" href="#">Another action</a></li><li><a class="dropdown-item" href="#" id="logout" data-i18n="auth.log-out"></a></li></ul>`
+		navContent = `<li class="nav-item"><p class="navbar-text d-inline" data-i18n="navbar.welcome"></p><p class="navbar-text navbar-username d-inline m-0 pe-4"></p></li><li class="nav-item dropdown"><a href="#" role="button" class="account-list" data-bs-toggle="dropdown" aria-expanded="false"><img src="./images/profile_pic.jpeg" alt="avatar" class="rounded-circle border-1 avatar-sm object-fit-cover"></a><ul class="dropdown-menu dropdown-menu-end"><li><a class="dropdown-item spa" href="/account" data-i18n="account.title">Account</a></li><li><a class="dropdown-item" href="#" id="logout" data-i18n="auth.log-out"></a></li></ul>`
 	else
 		navContent = '<a class="btn btn-outline-secondary spa" type="button" href="/signup" data-i18n="auth.sign-up"></a><a class="btn btn-outline-secondary spa mx-2" type="button" href="/login" data-i18n="auth.log-in"></a>'
 
@@ -305,8 +346,8 @@ const updateNavbar = (loggedIn) => {
 	if (loggedIn)
 	{
 		let welcome = translator.translateForKey("navbar.welcome", siteLanguage)
-		navbar.querySelector(".navbar-text").innerHTML = welcome;
-		navbar.querySelector(".navbar-username").innerHTML = `${JSON.parse(localStorage.getItem("user")).username}!`;
+		navbar.querySelector(".navbar-text").innerText = welcome;
+		navbar.querySelector(".navbar-username").innerText = `${JSON.parse(localStorage.getItem("user")).username}!`;
 		navbar.querySelector('.avatar-sm').src = "https://localhost" + JSON.parse(localStorage.getItem("user")).profile_picture;
 
 		// Add logout script
@@ -319,6 +360,8 @@ const updateNavbar = (loggedIn) => {
 // ---------------------------------------- EXECUTION ----------------------------------------
 
 const run = async () => {
+	if (localStorage.getItem("token"))
+		siteLanguage = JSON.parse(localStorage.getItem("user")).language
 	await fetchPages();
 
 	if (localStorage.getItem("token"))

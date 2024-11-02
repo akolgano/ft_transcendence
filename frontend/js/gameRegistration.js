@@ -3,51 +3,68 @@ console.log("GAME SCRIPT")
 function checkGuestName(params) {
 	const guestName = document.getElementById("opponent-name").value;
 	let error = 0
-
-	if (guestName.size > 20)
+	if (guestName.length > 20)
 	{
 		error = 1
-		return registrationError("game.max-size", ".opponent-error");
+		registrationError("game.max-size", ".opponent-error");
 	}
-	if ((!guestName.match(/^[0-9a-zA-Z_]+$/)))
+	if (guestName != guestName.trim())
 	{
 		error = 1
-		return registrationError("game.reg-alphanum", ".opponent-error");
+		registrationError("game.trailing-spaces", ".opponent-error");
+	}
+	if ((!guestName.match(/^[\p{L}\d_]+$/u)))
+	{
+		error = 1
+		registrationError("game.reg-alphanum", ".opponent-error");
 	}
 	if ( guestName === "AI")
 	{
 		error = 1
-		return registrationError("game.reg-no-ai", ".opponent-error");
+		registrationError("game.reg-no-ai", ".opponent-error");
 	}
 	if (guestName === JSON.parse(localStorage.getItem("user")).username)
 	{
 		error = 1
-		return registrationError("game.reg-same-user", ".opponent-error")
+		registrationError("game.reg-same-user", ".opponent-error")
 	}
-	return guestName;
+	return (error ? null : sanitize(guestName))
 }
 
-function registerOpponent(event) {
-	event.preventDefault();
 
-	resetErrorField();
+function gameOptions(event) {
+	event.preventDefault();
+	if (!checkValidToken())
+		return;
+	localStorage.removeItem("gameSettings")
+	guestName = registerOpponent()
+	if (!guestName)
+		return;
+
+	let gameSettings = processGameOptions();
+	gameSettings.guestName = guestName;
+	gameSettings.type = SIMPLE_GAME
+	gameSettings.scoreUser = 0;
+	gameSettings.scoreGuest = 0;
+	localStorage.setItem("gameSettings", JSON.stringify(gameSettings));
+
+	urlRoute({ target: { href: "/pong" }, preventDefault: () => {} });
+}
+
+function registerOpponent() {
+
+	resetErrorField(".opponent-error");
 	let guestName;
 	const checkbox = document.getElementById("AI-opponent").checked;
-	console.log("Checkbox: " + checkbox)
 
 	if (checkbox === true)
 		guestName = "AI"
 	else {
 		guestName = checkGuestName()
 		if (!guestName)
-			return ;
+			return (null);
 	}
-
-	localStorage.setItem("guestName", guestName);
-	urlRoute({ target: { href: "/pong" }, preventDefault: () => {} });
-
-	// opponentsNameForm = document.getElementById("opponentsNameForm")
-	// const formData = new FormData(opponentsNameForm);
+	return (guestName);
 }
 
 function toggleOpponentsField(event) {
@@ -65,9 +82,10 @@ function toggleOpponentsField(event) {
 
 function SignUpSimpleGame() {
 
+	document.querySelector(".user-versus").innerText = `${JSON.parse(localStorage.getItem("user")).username} vs.`
 	document.getElementById("AI-opponent").addEventListener("click", toggleOpponentsField)
 	const registerGuestName = document.getElementById("opponentsNameForm");
-	registerGuestName.addEventListener("submit", registerOpponent);
+	registerGuestName.addEventListener("submit", gameOptions);
 }
 
 SignUpSimpleGame();

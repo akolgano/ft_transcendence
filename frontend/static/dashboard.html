@@ -1,49 +1,92 @@
-<div class="container dashboard-container"> <!-- Use Bootstrap container and your custom class for width -->
-    <h2 data-i18n="navbar.dashboard" class="mb-4"></h2> <!-- Bootstrap margin-bottom -->
-    <div id="dashboardContent" class="d-none">
-        <h4 data-i18n="dash.player-results"></h4>
-        <div style="display: flex; align-items: center; margin: 10px 0;">
-        <hr style="border: 2px solid rgba(75, 192, 192, 1); width: 5%; margin: 0; opacity: 1;">
-        <h6 style="margin-left: 10px;" data-i18n="dash.you"></h6>
-        </div>
-        <div style="display: flex; align-items: center; margin: 10px 0;">
-        <hr style="border: 2px solid rgba(255, 99, 132, 1); width: 5%; margin: 0; opacity: 1;">
-        <h6 style="margin-left: 10px;" data-i18n="dash.opponent"></h6>
-        </div>
-        <canvas id="gameResultsChart" class="w-100 mb-4"></canvas> <!-- Bootstrap width and margin-bottom -->
+<div class="container-fluid dashboard-container">
+    <div class="row">
+        <div class="col-12 col-md-6"> <!-- Adjust this column size based on your layout -->
+            <h2 data-i18n="navbar.dashboard" class="mb-4"></h2> <!-- Bootstrap margin-bottom -->
+            <div id="dashboardContent" class="d-none">
+                <h4 data-i18n="dash.player-results"></h4>
+                <div style="display: flex; align-items: center; margin: 10px 0;">
+                    <hr style="border: 2px solid rgba(75, 192, 192, 1); width: 5%; margin: 0; opacity: 1;">
+                    <h6 style="margin-left: 10px;" data-i18n="dash.you"></h6>
+                </div>
+                <div style="display: flex; align-items: center; margin: 10px 0;">
+                    <hr style="border: 2px solid rgba(255, 99, 132, 1); width: 5%; margin: 0; opacity: 1;">
+                    <h6 style="margin-left: 10px;" data-i18n="dash.opponent"></h6>
+                </div>
 
-        <!-- New section for victory/loss pie chart -->
-        <h4 data-i18n="dash.player-distri" class="mt-5 mb-3"></h4> <!-- Add top and bottom margin -->
-        <div style="display: flex; align-items: center; margin: 10px 0;">
-        <hr style="border: 10px solid rgba(75, 192, 192, 0.6); width: 2%; margin: 0; opacity: 1;">
-        <h6 style="margin-left: 10px;" data-i18n="dash.victories"></h6>
-        </div>
-        <div style="display: flex; align-items: center; margin: 10px 0;">
-        <hr style="border: 10px solid rgba(255, 99, 132, 0.6); width: 2%; margin: 0; opacity: 1;">
-        <h6 style="margin-left: 10px;" data-i18n="dash.losses"></h6>
-        </div>
-        <canvas id="victoryLossChart" class="w-100 mb-4"></canvas> <!-- Equal width and height -->
+                <div class="row">
+                    <div class="col">
+                        <p class="text-start" data-i18n="dash.yaxis-player-score"></p>
+                    </div>
+                </div>
 
-        <h4 data-i18n="dash.game-duration" class="mt-5 mb-3"></h4> <!-- Add top and bottom margin -->
-        <canvas id="gameDurationChart" class="w-100 mb-4"></canvas> <!-- Bootstrap width and margin-bottom -->
+                <canvas id="gameResultsChart" class="w-100 mb-2"></canvas> <!-- Bootstrap width and margin-bottom -->
 
-        <h4 data-i18n="dash.game-intensity" class="mt-5 mb-3"></h4> <!-- Add top and bottom margin -->
-        <canvas id="gameIntensityChart" class="w-100 mb-4"></canvas> <!-- Bootstrap width and margin-bottom -->
+                <div class="row">
+                    <div class="col text-center">
+                      <p data-i18n="dash.date-time"></p>
+                    </div>
+                </div>
 
-        <h4 data-i18n="dash.game-margin" class="mt-5 mb-3"></h4> <!-- Add top and bottom margin -->
-        <div style="display: flex; align-items: center; margin: 10px 0;">
-        <hr style="border: 10px solid rgba(54, 162, 235, 0.6); width: 2%; margin: 0; opacity: 1;">
-        <h6 style="margin-left: 10px;" data-i18n="dash.close-games"></h6>
+                <!-- New section for victory/loss pie chart -->
+                <h4 data-i18n="dash.player-distri" class="mt-5 mb-3"></h4> <!-- Add top and bottom margin -->
+                <div style="display: flex; align-items: center; margin: 10px 0;">
+                    <hr style="border: 10px solid rgba(75, 192, 192, 0.6); width: 2%; margin: 0; opacity: 1;">
+                    <h6 style="margin-left: 10px;" data-i18n="dash.victories"></h6>
+                </div>
+                <div style="display: flex; align-items: center; margin: 10px 0;">
+                    <hr style="border: 10px solid rgba(255, 99, 132, 0.6); width: 2%; margin: 0; opacity: 1;">
+                    <h6 style="margin-left: 10px;" data-i18n="dash.losses"></h6>
+                </div>
+                <canvas id="victoryLossChart" class="w-100 mb-4"></canvas> <!-- Equal width and height -->
+
+                <h4 data-i18n="dash.game-duration" class="mt-5 mb-3"></h4> <!-- Add top and bottom margin -->
+
+                <div class="row">
+                    <div class="col">
+                        <p class="text-start" data-i18n="dash.duration-in-mins"></p>
+                    </div>
+                </div>
+
+                <canvas id="gameDurationChart" class="w-100 mb-2"></canvas> <!-- Bootstrap width and margin-bottom -->
+
+                <div class="row">
+                    <div class="col text-center">
+                      <p data-i18n="dash.date-time"></p>
+                    </div>
+                </div>
+
+                <h4 data-i18n="dash.game-intensity" class="mt-5 mb-3"></h4> <!-- Add top and bottom margin -->
+
+                <div class="row">
+                    <div class="col">
+                        <p class="text-start" data-i18n="dash.score-per-min"></p>
+                    </div>
+                </div>
+
+                <canvas id="gameIntensityChart" class="w-100 mb-2"></canvas> <!-- Bootstrap width and margin-bottom -->
+
+                <div class="row">
+                    <div class="col text-center">
+                      <p data-i18n="dash.date-time"></p>
+                    </div>
+                </div>
+
+                <h4 data-i18n="dash.game-margin" class="mt-5 mb-3"></h4> <!-- Add top and bottom margin -->
+                <div style="display: flex; align-items: center; margin: 10px 0;">
+                    <hr style="border: 10px solid rgba(54, 162, 235, 0.6); width: 2%; margin: 0; opacity: 1;">
+                    <h6 style="margin-left: 10px;" data-i18n="dash.close-games"></h6>
+                </div>
+                <div style="display: flex; align-items: center; margin: 10px 0;">
+                    <hr style="border: 10px solid rgba(255, 205, 86, 0.6); width: 2%; margin: 0; opacity: 1;">
+                    <h6 style="margin-left: 10px;" data-i18n="dash.moderate-games"></h6>
+                </div>
+                <div style="display: flex; align-items: center; margin: 10px 0;">
+                    <hr style="border: 10px solid rgba(255, 99, 132, 0.6); width: 2%; margin: 0; opacity: 1;">
+                    <h6 style="margin-left: 10px;" data-i18n="dash.large-margins"></h6>
+                </div>
+                <canvas id="gameMarginChart" class="w-100 mb-4"></canvas> <!-- Bootstrap width and margin-bottom -->
+            </div>
+            <div id="noDataMessage" class="d-none text-left mt-4 text-dark" data-i18n="profile.game-no-result"></div>
         </div>
-        <div style="display: flex; align-items: center; margin: 10px 0;">
-        <hr style="border: 10px solid rgba(255, 205, 86, 0.6); width: 2%; margin: 0; opacity: 1;">
-        <h6 style="margin-left: 10px;" data-i18n="dash.moderate-games"></h6>
-        </div>
-        <div style="display: flex; align-items: center; margin: 10px 0;">
-        <hr style="border: 10px solid rgba(255, 99, 132, 0.6); width: 2%; margin: 0; opacity: 1;">
-        <h6 style="margin-left: 10px;" data-i18n="dash.large-margins"></h6>
-        </div>
-        <canvas id="gameMarginChart" class="w-100 mb-4"></canvas> <!-- Bootstrap width and margin-bottom -->
     </div>
-    <div id="noDataMessage" class="d-none text-center mt-4 text-muted">No game results yet</div>
 </div>

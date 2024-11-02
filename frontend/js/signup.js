@@ -2,8 +2,15 @@
 async function addEventSignUpForm(e) {
 
 	e.preventDefault();
-	resetErrorField();
+	resetErrorField(".form-error");
+	let error = 0
 	if (!checkPasswordMatch())
+		error = 1
+	if (!validUsername())
+		error = 1
+	if (!validEmail())
+		error = 1
+	if (error)
 		return ;
 
 	const formData = new FormData(signupForm);
@@ -44,7 +51,15 @@ async function addEventSignUpForm(e) {
 	} catch (error) {
 		console.log(error.message)
 		if (!formErrors)
-			displayAlert("error-fetch", "danger");
+		{
+			if (error instanceof TypeError && error.message.includes('Failed to fetch'))
+			{
+				displayAlert("auth.cert-error", "danger");
+				location.reload();
+			}
+			else
+				displayAlert("error-fetch", "danger");
+		}
 	}
 }
 

@@ -3,13 +3,18 @@
 
 	changeUsername.addEventListener("submit", async (e) => {
 		e.preventDefault();
+		if (!checkValidToken())
+			return;
+		resetErrorField(".username-error")
+		if (!validUsername())
+			return ;
 
-		const new_username = document.getElementById("username").value
+		const new_username = sanitize(document.getElementById("username").value)
 		if (new_username === JSON.parse(localStorage.getItem("user")).username)
-			{
-				displayAlert("account.change-username-same", "danger");
-				return ;
-			}
+		{
+			registrationError("account.change-username-same", ".username-error")
+			return ;
+		}
 		const formData = new FormData();
 		formData.append("new_username", new_username);
 		removeAlert();
@@ -34,7 +39,7 @@
 
 			if (!response.ok) {
 				console.log("Data json: " + JSON.stringify(data))
-				throw new Error(data.error || 'An error occurred');
+				throw new Error(data.new_username || 'An error occurred');
 			}
 			if (data.detail)
 			{
@@ -42,7 +47,7 @@
 				user.username = new_username;
 				localStorage.setItem("user", JSON.stringify(user));
 				console.log(JSON.parse(localStorage.getItem("user")))
-				document.querySelector(".navbar-username").innerHTML = `${user.username}!`;
+				document.querySelector(".navbar-username").innerText = `${user.username}!`;
 				displayAlert("account.change-username-success", "success");
 			}
 			else
@@ -51,10 +56,18 @@
 				console.log(data.message);
 			}
 		} catch (error) {
-			if (error.message == "Username already taken.")
-				displayAlert("account.change-username-taken", "danger");
+			if (error.message === '"Invalid token."') {
+				localStorage.removeItem("user")
+				localStorage.removeItem("token")
+				localStorage.removeItem("expiry_token")
+				updateNavbar(false)
+				urlRoute({ target: { href: '/login' }, preventDefault: () => {} });
+				displayAlert("auth.login-again", "danger");
+			}
+			else if (error.message == "Username already taken.")
+				registrationError("account.change-username-taken", ".username-error")
 			else if (error.message == "New username is required.")
-				displayAlert("account.change-username-empty", "danger");
+				registrationError("account.change-username-empty", ".username-error")
 			else
 				displayAlert("account.change-username-error", "danger");
 			console.log(error.message)

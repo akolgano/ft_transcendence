@@ -61,6 +61,8 @@ class UserAdmin(BaseUserAdmin):
     def get_friends_list(self, obj):
         return ", ".join([friend.to_user.username for friend in obj.get_friends()])
     get_friends_list.short_description = 'Friends'
+    def online(self, obj):
+        return "Yes" if obj.online else "No"
 
 admin.site.register(CustomUser, UserAdmin)
 

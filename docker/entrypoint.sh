@@ -1,4 +1,9 @@
 #!/bin/sh
+mkdir -p /var/log
+
+: > /var/log/django.log
+
+echo "$(date): Starting the Django service..." >> /var/log/django.log
 
 echo "Waiting for database..."
 while ! nc -z $POSTGRES_HOST 5432; do

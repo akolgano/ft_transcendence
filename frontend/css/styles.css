@@ -32,8 +32,12 @@
 	margin-bottom: 0 !important;
 }
 
-.w-20 {
-	width: 20%;
+.w-40 {
+	width: 40%;
+}
+
+.w-60 {
+	width: 60%;
 }
 
 .w-70 {
@@ -48,40 +52,19 @@
 	font-size: 10px;
 }
 
-/* Container width */
-.dashboard-container {
-	max-width: 800px;
-	margin-left: 0; /* Align the container to the left */
-}
-
-/* Game Margin Chart custom size */
-#gameMarginChart {
-    width: 600px !important;
-    height: 600px !important;
-}
-
-/* Game Margin Chart custom size */
-#victoryLossChart {
-    width: 600px !important;
-    height: 600px !important;
-}
-
-.show-chart-btn {
-    background: none;
-    border: none; /* Remove the border */
-    outline: none; /* Remove any default button outline (like when focused) */
-    padding: 0;
-    color: inherit; /* Inherit the text color from the parent */
-    font-size: 1.5rem; /* Adjust the icon size */
-    cursor: pointer;
+#gameMarginChart, #victoryLossChart {
+	width: 600px !important;
+	height: 600px !important;
 }
 
 #pongContent {
 	width: 800px;
 }
 
-.modalEndOfGame {
-	display: none;
-	margin-top: 200px;
+.pt-200 {
+	padding-top: 200px;
 }
 
+.dotted-underline {
+	text-decoration-style: dotted !important;
+}

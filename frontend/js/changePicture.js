@@ -3,12 +3,13 @@
 
 	changeProfilePic.addEventListener("submit", async (e) => {
 		e.preventDefault();
-
+		if (!checkValidToken())
+			return;
 		const formData = new FormData(changeProfilePic);
 		removeAlert();
 
 		try {
-			const response = await fetch("https://localhost/api/change-profile-picture/", {
+			const response = await fetch("https://localhost/api/change_profile_picture/", {
 				headers: {
 					'Authorization': `Token ${localStorage.getItem("token")}`,
 					'Accept': 'application/json',
@@ -35,6 +36,7 @@
 			}
 			if (data.user)
 			{
+				data.user.profile_picture = sanitize_picture(data.user.profile_picture);
 				localStorage.setItem("user", JSON.stringify(data.user));
 				document.querySelector('.avatar-sm').src = "https://localhost" + JSON.parse(localStorage.getItem("user")).profile_picture;
 				document.querySelector(".profile-pic").src = "https://localhost" + JSON.parse(localStorage.getItem("user")).profile_picture;
@@ -47,7 +49,15 @@
 				console.log(data.message);
 			}
 		} catch (error) {
-			if (error.message == "No profile picture uploaded.")
+			if (error.message === '"Invalid token."') {
+				localStorage.removeItem("user")
+				localStorage.removeItem("token")
+				localStorage.removeItem("expiry_token")
+				updateNavbar(false)
+				urlRoute({ target: { href: '/login' }, preventDefault: () => {} });
+				displayAlert("auth.login-again", "danger");
+			}
+			else if (error.message == "No profile picture uploaded.")
 				displayAlert("account.change-pic-empty", "danger");
 			else if (error.message == "File too large")
 				displayAlert("account.change-pic-too-large", "danger");
@@ -57,5 +67,3 @@
 		}
 	})
 }
-
-// Unexpected error. Unable to change profile picture.
