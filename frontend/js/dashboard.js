@@ -23,20 +23,20 @@ async function fetchDashboardData() {
 
         // If the request failed (response not ok)
         if (!response.ok) {
-            console.log("Error: " + JSON.stringify(data));
+            //console.log("Error: " + JSON.stringify(data));
             throw new Error(JSON.stringify(data.detail) || 'An error occurred');
         }
         // If data is received successfully
         if (data)
         {
-            console.log("Dashboard data: " + JSON.stringify(data)); // dash log
+            //console.log("Dashboard data: " + JSON.stringify(data)); // dash log
             updateDashboard(data); // Pass data to updateDashboard function
         }
         else
         {
             removeAlert();
             displayAlert("dash.error-load", "danger"); // check
-            console.log(data.message);
+            //console.log(data.message);
         }
     } catch (error) {
         removeAlert();
@@ -50,7 +50,7 @@ async function fetchDashboardData() {
 		}
 		else
         	displayAlert("dash.error-load", "danger"); // check
-        console.log(error.message)
+        //console.log(error.message)
     }
 }
 
@@ -241,8 +241,8 @@ function renderPieChart(chartId, labels, data, backgroundColors) {
                     display: false // This will remove the legend
                 },
                 tooltip: {
-                    titleFont: { size: 30 },
-                    bodyFont: { size: 30 }
+                    titleFont: { size: 20 },
+                    bodyFont: { size: 20 }
                 }
             }
         }
