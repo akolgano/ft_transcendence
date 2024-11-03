@@ -14,7 +14,7 @@ import logging
 import logging.config
 from pathlib import Path
 import os
-#from pong.logging_handlers import LogstashHandler
+from pong.logging_handlers import LogstashHandler
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -202,6 +202,24 @@ LOGGING = {
         },
     },
     'handlers': {
+        'logstash': {
+            'level': 'DEBUG', 
+            'class': 'pong.logging_handlers.LogstashHandler',
+            'host': 'logstash',
+            'port': 5044,
+            'retries': 15,
+            'retry_delay': 30,
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['logstash'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'pong': {
+            'handlers': ['logstash'],
+            'level': 'DEBUG',
         'console': {
             'class': 'logging.StreamHandler',
         },
@@ -212,23 +230,23 @@ LOGGING = {
             'formatter' : 'simple',
         },
     },
-    'loggers': {
-        # 'django': {
-        #     'handlers': ['console', 'file'],
-        #     'level': 'ERROR',
-        #     'propagate': True,
-        # },
-        'pong': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'django.request': {
-            #'handlers': ['console', 'file'],
-            'handlers': ['file'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-    },
+    # 'loggers': {
+    #     # 'django': {
+    #     #     'handlers': ['console', 'file'],
+    #     #     'level': 'ERROR',
+    #     #     'propagate': True,
+    #     # },
+    #     'pong': {
+    #         'handlers': ['file'],
+    #         'level': 'DEBUG',
+    #         'propagate': False,
+    #     },
+    #     'django.request': {
+    #         #'handlers': ['console', 'file'],
+    #         'handlers': ['file'],
+    #         'level': 'INFO',
+    #         'propagate': False,
+    #     },
+    # },
+    }
 }
-

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:13
@@ -13,6 +11,8 @@ services:
            POSTGRES_DB: ${POSTGRES_DB}
            POSTGRES_USER: ${POSTGRES_USER}
            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - backend
 
   django:
     container_name: django
@@ -26,6 +26,9 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
+      - logstash
+    networks:
+      - backend
     environment:
       POSTGRES_HOST: ${POSTGRES_HOST}
       POSTGRES_DB: ${POSTGRES_DB}
@@ -50,9 +53,101 @@ services:
       - "443:443"
     depends_on:
       - django
+    networks:
+      - backend
+
+  elasticsearch:
+    container_name: elasticsearch
+    build:
+      context: ./elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
+      - path.repo=/usr/share/elasticsearch/backup
+    volumes:
+      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - esdata:/usr/share/elasticsearch/data
+      - ./elasticsearch/init/setup.sh:/setup.sh
+      - backup:/usr/share/elasticsearch/backup
+      - ./elasticsearch/certs:/usr/share/elasticsearch/config/certs
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "-u", "${ELASTIC_USERNAME}:$ELASTIC_PASSWORD", "http://localhost:9200/_cluster/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+  setup:
+    container_name: setup
+    image: curlimages/curl:latest
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      kibana:
+        condition: service_healthy
+    volumes:
+      - ./elasticsearch/init/setup.sh:/setup.sh
+      #- backup:/usr/share/elasticsearch/backup
+    entrypoint: ["/bin/sh", "/setup.sh"]
+    environment:
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
+    networks:
+      - backend
+  kibana:
+    container_name: kibana
+    build:
+      context: ./kibana
+    restart: always
+    ports:
+      - "5601:5601"
+    volumes:
+      - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+    environment:
+      - KIBANA_PASSWORD=${KIBANA_PASSWORD}
+      - KIBANA_USERNAME=${KIBANA_USERNAME}
+      - KIBANA_ENCRYPTION_KEY=${KIBANA_ENCRYPTION_KEY}
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    networks:
+      - backend
+    healthcheck:
+        test: ["CMD-SHELL", "until curl -f -k -u ${KIBANA_USERNAME}:$KIBANA_PASSWORD https://localhost:5601/api/status | grep -q 'green'; do sleep 5; done"]
+        interval: 30s
+        timeout: 10s
+        retries: 10
+
+  logstash:
+    container_name: logstash
+    restart: always
+    image: docker.elastic.co/logstash/logstash:7.17.0
+    volumes:
+      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logs:/usr/share/logstash/log/nginx_logs
+      - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
+    depends_on:
+      - elasticsearch
+    environment:
+       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+       - ELASTIC_USERNAME=${ELASTIC_USERNAME}
+    networks:
+      - backend
+
 volumes:
   postgres_data:
+  esdata:
+  backup:
+         driver: local
+         driver_opts:
+            type: none
+            o: bind
+            device: ~/data/backup
 
 networks:
-  default:
+  backend:
     driver: bridge
+
+
+

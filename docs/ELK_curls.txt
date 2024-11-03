@@ -1,0 +1,66 @@
+#elastic is ready
+
+curl -f -u elastic:elastic http://localhost:9200/_cluster/health
+
+
+#kibana is ready
+
+curl -k -u elastic:elastic -X GET "https://localhost:5601/api/status"
+
+#all indices
+curl -f  -u elastic:elastic http://localhost:9200/_cat/indices?v
+
+#create index pattern
+curl -X POST "https://localhost:5601/api/saved_objects/index-pattern" -u elastic:elastic \
+  -H 'Content-Type: application/json' \
+  -H 'kbn-xsrf: true' \
+  -k \
+  -d '
+{
+  "attributes": {
+    "title": "nginx-logs-*",
+    "timeFieldName": "timestamp"
+  }
+}
+'
+
+
+
+curl -u elastic:elastic http://localhost:9200/_snapshot/my_backup/_all
+
+
+
+curl -X PUT "http://localhost:9200/_snapshot/my_backup" -u elastic:elastic -H 'Content-Type: application/json' -d '{
+  "type": "fs",
+  "settings": {
+    "location": "/usr/share/elasticsearch/backup"
+  }
+}'
+
+
+curl -X PUT "http://localhost:9200/my_index" -u elastic:$ELASTIC_PASSWORD -H 'Content-Type: application/json' -d '{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0
+  }
+}'
+
+
+#check if teplate is created:
+curl -X GET "http://localhost:9200/_template/nginx-logs-template" -u elastic:elastic
+
+#check index settings
+curl -X GET "http://localhost:9200/nginx-logs-*/_settings" -u elastic:elastic
+
+#check policy is exist
+curl -X GET "http://localhost:9200/_ilm/policy" -u elastic:elastic
+
+
+#link index to ilm policy
+curl -X PUT "http://localhost:9200/nginx-logs-*/_settings" -u elastic:elastic -H 'Content-Type: application/json' -d '{
+  "index": {
+    "lifecycle": {
+      "name": "logs_policy_new"
+    }
+  }
+}'
