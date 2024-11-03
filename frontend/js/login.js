@@ -1,5 +1,4 @@
 
-console.log("SCRIPT LOG IN")
 async function login(e) {
 
 	e.preventDefault();
@@ -35,6 +34,7 @@ async function login(e) {
 			localStorage.setItem("user", JSON.stringify(data.user));
 			let expiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
 			localStorage.setItem("expiry_token", expiry)
+
 
 			siteLanguage = data.user.language;
 			localStorage.setItem("token", data.token);

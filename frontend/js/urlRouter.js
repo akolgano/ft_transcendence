@@ -1,10 +1,3 @@
-// To make it SPA
-// ADD your new page in the urlRoutes, and and the spa class to link.
-
-// Make it more efficient by NOT putting the event listener on every click of the document.
-// BUT make sure the content added to the DOM will be inside the class we used for capturing events.
-// --> When I add an element to the DOM, I add an eventListener to it
-// console.log("ROUTER");
 
 // ---------------------------------------- TRANSLATOR ----------------------------------------
 
@@ -25,7 +18,6 @@ var translator = new Translator({
 
 translator.fetch(["en", "fr", "es"]).then(() => {
 	translator.translatePageTo(siteLanguage);
-	console.log("Translating page start");
 	registerLanguageToggle();
 });
 
@@ -48,7 +40,6 @@ function registerLanguageToggle() {
 		link.addEventListener("click", event => {
 		event.preventDefault();
 		siteLanguage = event.target.getAttribute('data-language');
-		console.log("Translating page to: " + siteLanguage);
 		translator.translatePageTo(siteLanguage);
 		const placeholderUsername = document.getElementById("add-friend-input")
 		if (placeholderUsername)
@@ -78,8 +69,8 @@ const urlRoutes = {
 	},
 	"/gameRegistration": {
 		template: "/static/gameRegistration.html",
-		title: "Home",
-		description: "Home page",
+		title: "Game registration",
+		description: "Register to play pong",
 		scripts: ["/js/gameRegistration.js", "/js/gameCustom.js"],
 		auth: true,
 	},
@@ -92,14 +83,14 @@ const urlRoutes = {
 	},
 	"/profile": {
 		template: "/static/profile.html",
-		title: "profile",
+		title: "Profile",
 		description: "Game profile",
 		scripts: ["/js/profile.js"],
 		auth: true,
 	},
 	"/profile/:username": {
 		template: "/static/profile.html",
-		title: "profile",
+		title: "Profile",
 		description: "Game profile",
 		scripts: ["/js/profile.js"],
 		auth: true,
@@ -127,7 +118,7 @@ const urlRoutes = {
 	},
 	"/dashboard": {
 		template: "/static/dashboard.html",
-		title: "dashboard",
+		title: "Dashboard",
 		description: "Your dashboard",
 		scripts: ["/js/dashboard.js"],
 		auth: true,
@@ -135,21 +126,21 @@ const urlRoutes = {
 	"/pong": {
 		template: "/static/pong.html",
 		title: "Pong game",
-		description: "Your pong",
+		description: "Pong game",
 		scripts: ["/js/pong.js", "/js/sendDataGames.js"],
 		auth: true,
 	},
 	"/tournamentRegistration": {
 		template: "/static/tournamentRegistration.html",
-		title: "Tournament",
-		description: "Registration",
+		title: "Tournament registration",
+		description: "Register to play a tournament",
 		scripts: ["/js/tournamentRegistration.js", "/js/gameCustom.js"],
 		auth: true,
 	},
 	"/announceGame": {
 		template: "/static/announceGame.html",
-		title: "Tournament",
-		description: "Registration",
+		title: "Tournament breakdown",
+		description: "Details of tournament matches",
 		scripts: ["/js/announceGame.js"],
 		auth: true,
 	}
@@ -163,6 +154,28 @@ function spaHandler(e) {
 	const target = e.target;
 	e.preventDefault();
 	urlRoute(e);
+}
+
+async function userStillOnline()
+{
+	console.log("User online call")
+	if (!localStorage.getItem("token"))
+		return ;
+
+	try {
+		const response = await fetch("https://localhost/api/test_token", {
+		headers: {
+			'Authorization': `Token ${localStorage.getItem("token")}`,
+			'Accept': 'application/json',
+		},
+		method: 'GET',
+		})
+	}
+	catch (error)
+	{
+		console.log(error.message)
+	}
+
 }
 
 // Function that watches the url and calls the urlLocationHandler
@@ -225,8 +238,6 @@ const urlLocationHandler = () => {
 	if (location[location.length -1] === "/")
 		location[location.length -1] = "";
 
-	console.log("Location: " + location)
-
 	// Logged in but user tries to go to login or sign up
 	if (localStorage.getItem("token") && (location == "/login" || location == "/signup"))
 		location = "/";
@@ -264,6 +275,15 @@ const urlLocationHandler = () => {
 		let profileDiv = document.querySelector(".profile-page");
 		if (profileDiv)
 			profileDiv.setAttribute("data-username", dynamic.param);
+	}
+
+	if (localStorage.getItem("token"))
+	{
+		const keepOnline = document.querySelectorAll("a, button");
+		keepOnline.forEach(link => {
+			if (link.id != "logout")
+			link.addEventListener("click", userStillOnline)
+		});
 	}
 
 	// Translate only new content.
@@ -317,7 +337,6 @@ const fetchTemplate = async (route) => {
 }
 
 const fetchPages = async () => {
-	console.log("FETCHING PAGES")
 	for (let route in urlRoutes) {
 		await fetchTemplate(urlRoutes[route])
 	}
