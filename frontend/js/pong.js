@@ -388,6 +388,7 @@ function handleCollision() {
 		else
 			ball.velocityX *= -1;
 		hitLast = true
+		userStillOnline()
 		console.log("Ball velocity: " + ball.velocityX)
 	}
 }
