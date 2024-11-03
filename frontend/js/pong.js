@@ -73,9 +73,6 @@
 			clearInterval(intervalID)
 			intervalID = null;
 		}
-		// gameSettings.scoreUser = playerUser.score;
-		// gameSettings.scoreGuest = playerGuest.score;
-		// localStorage.setItem("gameSettings", JSON.stringify(gameSettings))
 		document.removeEventListener("keyup", startGame)
 		window.removeEventListener("popstate", stopGame)
 		document.removeEventListener("keyup", movePlayerOnce);
@@ -391,6 +388,7 @@ function handleCollision() {
 		else
 			ball.velocityX *= -1;
 		hitLast = true
+		userStillOnline()
 		console.log("Ball velocity: " + ball.velocityX)
 	}
 }
@@ -418,25 +416,32 @@ function updateGameState()
 	if (ball.y <= 0 || ball.y + ball.height >= boardHeight)
 		ball.velocityY *= -1
 
-	
+
 	if (predictedBallPosition >= 0 && playerGuest.velocityY !== 0)
 	{
 		if (predictedBallPosition > (playerGuest.y + playerGuest.height * 0.25) && predictedBallPosition < playerGuest.y + (playerGuest.height * 0.75))
 			playerGuest.velocityY = 0
 	}
-		
+
 	paddleBallCollision();
 
 	calculateNewPosition(playerUser);
 	calculateNewPosition(playerGuest);
-	
+
 	if (powerUp)
 		checkPowerUp()
-	
+
 	if (ball.x < 0)
 		addScore(playerGuest, "playerGuest", 2.5)
 	else if (ball.x + ball.width > boardWidth)
 		addScore(playerUser, "playerUser", -2.5)
+
+	if (playerGuest.score >= 5 || playerUser.score >= 5)
+	{
+		endOfGame();
+		return (1);
+	}
+	return (0);
 }
 
 function renderGameElements(deltaTime)
@@ -448,12 +453,6 @@ function renderGameElements(deltaTime)
 }
 
 function update(timestamp) {
-	if (playerGuest.score == 5 || playerUser.score == 5)
-	{
-		endOfGame();
-		return ;
-	}
-	
 	if (lastTime === 0)
 		lastTime = timestamp
 	const deltaTime = timestamp - lastTime;
@@ -462,7 +461,8 @@ function update(timestamp) {
 
 	while (accumulatedTime >= FRAME_TIME)
 	{
-		updateGameState();
+		if (updateGameState())
+			return ;
 		accumulatedTime -= FRAME_TIME
 	}
 
@@ -495,7 +495,6 @@ function update(timestamp) {
 			gameSettings.scoreGuest = playerGuest.score
 			progression.push(1);
 		}
-		// user.score += 1;
 		localStorage.setItem("gameSettings", JSON.stringify(gameSettings))
 		document.getElementById(userId).innerText = user.score
 		ball.velocityX = speed;
@@ -532,7 +531,7 @@ function update(timestamp) {
 	function updatePowerUpCount(player) {
 		let powerClass;
 		let total = 0;
-		
+
 		if (player === playerGuest)
 		{
 			gameSettings.powerUpGuest -= 1;
@@ -544,11 +543,11 @@ function update(timestamp) {
 			total = gameSettings.powerUpUser
 		}
 		localStorage.setItem("gameSettings", JSON.stringify(gameSettings))
-		
+
 
 		powerClass = (player == playerUser ? ".power-up-user" : ".power-up-guest")
 		displayPowerEmoji(total, powerClass)
-		
+
 		document.querySelector(".power-up-activated").innerText = "POWER UP"
 	}
 
@@ -627,5 +626,4 @@ function update(timestamp) {
 			}
 		}
 	}
-
 }
