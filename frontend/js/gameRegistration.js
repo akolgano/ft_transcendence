@@ -1,4 +1,3 @@
-console.log("GAME SCRIPT")
 
 function checkGuestName(params) {
 	const guestName = document.getElementById("opponent-name").value;

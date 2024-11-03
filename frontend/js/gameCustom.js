@@ -1,4 +1,3 @@
-console.log("Game customization script")
 
 createTooltip()
 function processGameOptions() {
@@ -30,7 +29,7 @@ function processGameOptions() {
 		}
 		if (!gameSettings.paddleSize)
 			gameSettings.paddleSize = 55
-	
+
 	}
 	return (gameSettings)
 }

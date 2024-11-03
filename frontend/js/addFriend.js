@@ -1,4 +1,3 @@
-console.log("ADD FRIEND SCRIPT")
 
 function getErrorKeyAddFriend(error)
 {

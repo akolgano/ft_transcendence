@@ -174,7 +174,6 @@ async function fetchHistory(urlArgument) {
 		}
 		if (data)
 		{
-			console.log("History data: " + JSON.stringify(data))
 			addResultsToHTML(data);
 		}
 		else
@@ -195,13 +194,11 @@ async function fetchHistory(urlArgument) {
 		}
 		else
 			displayAlert("profile.error-load", "danger");
-		// console.log(error.message)
 	}
 }
 
 function profileScript() {
 	const urlArgument = getArgument();
-	// console.log("urlArgument: " +  urlArgument);
 	fetchHistory(urlArgument);
 }
 

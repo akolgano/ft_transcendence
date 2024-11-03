@@ -1,4 +1,3 @@
-console.log("DEFAULT LANG SCRIPT")
 
 {
 	const defaultLanguage = document.getElementById("defaultLanguage");
