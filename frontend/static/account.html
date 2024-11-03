@@ -13,7 +13,7 @@
 			<div class="account-username mb-3">
 				<p class="d-inline-block mb-0" data-i18n="auth.username"></p>
 				<form id="changeUsername">
-					<input type="text" id="username" name="username" class="align-middle form-control input-username d-inline-block w-50" autocomplete="on" required>
+					<input type="text" id="username" name="username" class="align-middle form-control input-username d-inline-block w-50" autocomplete="off" required>
 					<button type="submit" class="btn btn-success d-inline-block" data-i18n="account.update"></button>
 					<div class="username-error form-error"></div>
 				</form>
@@ -28,7 +28,7 @@
 				<form id="changePassword">
 					<p data-i18n="auth.password"></p>
 					<p data-i18n="auth.old-password" class="mb-0 mt-3"></p>
-					<input type="password" id="old-password" name="old-password" class="form-control w-50" required>
+					<input type="password" id="old-password" name="old-password" class="form-control w-50" required autocomplete="new-password">
 					<a href="/account" class="toggle-password text-reset" data-password-field="old-password" data-i18n="auth.password-show"></a>
 					<div class="old-password-error form-error password-reset-error"></div>
 					<p data-i18n="auth.new-password" class="mb-0 mt-3"></p>
