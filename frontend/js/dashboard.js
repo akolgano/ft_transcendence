@@ -430,6 +430,18 @@ function renderMarginPieChart(gameResults) {
         else marginCategories["(4+)"]++;
     });
 
+    // Check if all categories are zero except one
+    const nonZeroCategories = Object.keys(marginCategories).filter(key => marginCategories[key] > 0);
+    if (nonZeroCategories.length === 1) {
+        // Add a small dummy value to one of the zero categories
+        for (let key in marginCategories) {
+            if (marginCategories[key] === 0) {
+                marginCategories[key] = 0.0001; // Small dummy value
+                break;
+            }
+        }
+    }
+
     renderPieChart('gameMarginChart', Object.keys(marginCategories), Object.values(marginCategories), [
         'rgba(54, 162, 235, 0.6)',
         'rgba(255, 205, 86, 0.6)',

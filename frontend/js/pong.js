@@ -42,7 +42,7 @@
 		score: 0
 	}
 
-	let progression = [];
+	let progression;
 	let timeStart;
 	let duration;
 	let intervalID = null;
@@ -139,7 +139,7 @@
 				urlRoute({ target: { href: "/gameRegistration" }, preventDefault: () => {} });
 			});
 		}
-		sendSimpleGameData(playerGuest.name, playerUser.score, playerGuest.score, duration, progression);
+		sendSimpleGameData(playerGuest.name, playerUser.score, playerGuest.score, duration, gameSettings.progression);
 		localStorage.removeItem("gameSettings");
 		gameSettings = null;
 	}
@@ -268,6 +268,7 @@
 		playerUser.height = playerHeight;
 		playerUser.score = parseInt(gameSettings.scoreUser)
 		playerGuest.score = parseInt(gameSettings.scoreGuest)
+		progression = gameSettings.progression
 
 		document.getElementById("pongContent").classList.remove("d-none")
 		document.getElementById("playerUser").innerText = playerUser.score
@@ -483,13 +484,13 @@ function update(timestamp) {
 		{
 			playerUser.score += 1
 			gameSettings.scoreUser = playerUser.score
-			progression.push(0);
+			gameSettings.progression.push(0);
 		}
 		else
 		{
 			playerGuest.score += 1
 			gameSettings.scoreGuest = playerGuest.score
-			progression.push(1);
+			gameSettings.progression.push(1);
 		}
 		localStorage.setItem("gameSettings", JSON.stringify(gameSettings))
 		document.getElementById(userId).innerText = user.score
