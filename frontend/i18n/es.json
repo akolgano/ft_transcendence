@@ -39,7 +39,10 @@
 		"email-invalid": "Introduce una dirección de correo electrónico válida.",
 		"email-space": "El correo electrónico no puede tener espacios al principio o al final.",
 		"login-again": "Sesión expirada. Por favor, inicia sesión de nuevo.",
-		"cert-error": "Por favor, acepta los certificados primero."
+		"cert-error": "Por favor, acepta los certificados primero.",
+		"password-too-common": "Contraseña demasiado común.",
+		"password-spaces-error": "La contraseña no puede tener espacios.",
+		"password-numeric-error": "La contraseña no puede contener solamente numeros"
 	},
 	"account" : {
 		"update": "Actualizar",
@@ -146,7 +149,7 @@
 		"reg-alphanum": "Usa solo caracteres alfanuméricos",
 		"reg-duplicate": "Cada jugador necesita un nombre diferente",
 		"reg-same-user": "El nombre del juego no puede ser el nombre de usuario",
-		"max-size": "Máximo de 20 caracteres para el nombre del juego",
+		"max-size": "Máximo de 20 caracteres para el nombre del jugador",
 		"trailing-spaces": "El nombre del juego no puede tener espacios al principio o al final.",
 		"ai-wins-title": "😢 ¡Perdiste contra la IA! ¿Quizás la próxima vez?",
 		"ai-wins-score": "Puntuación: ",
@@ -167,13 +170,13 @@
 		"play-pong": "Jugar pong 🏓",
 		"play-pong-tournament": "Jugar un torneo de pong 🏓",
 		"commands-title": "Comandos",
-		"rules-user": "<b>Usuario:</b> Juega en el lado izquierdo, teclas 'O' y 'L' para moverse, 'P' para activar el power-up si es aplicable.",
-		"rules-guest": "<b>Invitado:</b> Juega en el lado derecho, teclas 'W' y 'S' para moverse, 'A' para activar el power-up si es aplicable.",
+		"rules-user": "<b>Usuario:</b> Juega en el lado izquierdo, teclas 'W' y 'S' para moverse, 'A' para activar el power-up si es aplicable.",
+		"rules-guest": "<b>Invitado:</b> Juega en el lado derecho, teclas 'O' y 'L' para moverse, 'P' para activar el power-up si es aplicable.",
 		"rules": "Mueve tu paleta arriba y abajo para golpear la bola y marcar en el lado de tu oponente. Marca 5 puntos para ganar. La velocidad de la bola aumenta con el tiempo.",
 		"how-to": "Reglas del juego",
 		"tournament-rules": "Reglas del torneo",
 		"tournament-details": "La estructura del torneo se anunciará antes de cada juego. Habrá un total de 4 juegos. Se aplican las mismas reglas, comandos y personalizaciones que en el juego 1v1.",
-		"tournament-commands": "El jugador en el lado izquierdo usa las teclas 'O' y 'L' para moverse, 'P' para activar el power-up si es aplicable. El jugador en el lado derecho usa las teclas 'W' y 'S' para moverse, 'A' para activar el power-up si es aplicable.",
+		"tournament-commands": "El jugador en el lado izquierdo usa las teclas 'W' y 'S' para moverse, 'A' para activar el power-up si es aplicable. El jugador en el lado derecho usa las teclas 'O' y 'L' para moverse, 'P' para activar el power-up si es aplicable.",
 		"registration": "Registro"
 	},
 	"404": "Error transcendente: Parece que esta página no existe",

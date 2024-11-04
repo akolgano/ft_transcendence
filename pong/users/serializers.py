@@ -72,7 +72,8 @@ class FriendSerializer(serializers.ModelSerializer):
 
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True, write_only=True)
-    new_password = serializers.CharField(required=True, write_only=True)
+    #new_password = serializers.CharField(required=True, write_only=True)
+    new_password = NoStripCharField(write_only=True, required=True, min_length=8)
 
     def validate(self, attrs):
         user = self.context['request'].user

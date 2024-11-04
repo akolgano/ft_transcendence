@@ -14,7 +14,7 @@ sample_data = [
     ('elina', 'elina@example.com', 'password', 'fr', 'profile_pictures/default.jpg'),
     ('emily', 'emily@example.com', 'password', 'es', 'profile_pictures/default.jpg'),
     ('alice', 'alice@example.com', 'password', 'es', 'profile_pictures/default.jpg'),
-    ('alex', 'alex@example.com', 'password', 'es', 'profile_pictures/redpanda.jpg'),
+    ('alex', 'alex@example.com', 'password', 'es', 'profile_pictures/default.jpg'),
 ]
 
 sample_data_games = [

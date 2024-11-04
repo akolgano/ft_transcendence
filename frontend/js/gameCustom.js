@@ -3,11 +3,13 @@ createTooltip()
 function processGameOptions() {
 	let gameSettings = {};
 	const defaultGame = document.getElementById("default-game").checked;
+	gameSettings.progression = []
 
 	if (defaultGame === true)
 	{
 		gameSettings.paddleSize = 55
 		gameSettings.defaultGame = true
+		gameSettings.powerUp = false
 	}
 	else
 	{

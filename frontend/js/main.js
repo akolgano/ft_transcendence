@@ -143,6 +143,12 @@ function registrationError(translation, selector) {
 function getTranslation(message) {
 	if (message === "Username is already taken.")
 		return ("auth.username-taken")
+	else if (message === "This password is entirely numeric.")
+		return ("auth.password-numeric-error")
+	else if (message === "The password must not contain spaces.")
+		return ("auth.password-spaces-error")
+	else if (message === "This password is too common.")
+		return ("auth.password-too-common")
 	else if (message === "Username can only contain letters, numbers, and underscores.")
 		return ("auth.username-invalid-char")
 	else if (message === "Username cannot have leading or trailing spaces.")
