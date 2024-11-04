@@ -81,7 +81,7 @@
 		"losses": "Derrotas",
 		"close-games": "Partidas Cerradas (1)",
 		"moderate-games": "Partidas Moderadas (2-3)",
-		"large-margins": "Margenes Amplios (4)",
+		"large-margins": "Margenes Amplios (4+)",
 		"date-time": "Eje X: Fecha/Hora del Juego",
 		"duration-in-mins": "Eje Y: Duración (Minutos)",
 		"score-per-min": "Eje Y: Puntuaciones por Minuto",

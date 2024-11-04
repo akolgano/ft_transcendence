@@ -52,11 +52,6 @@
 	font-size: 10px;
 }
 
-#gameMarginChart, #victoryLossChart {
-	width: 600px !important;
-	height: 600px !important;
-}
-
 #pongContent {
 	width: 800px;
 }
