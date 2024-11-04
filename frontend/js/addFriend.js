@@ -2,7 +2,6 @@
 function getErrorKeyAddFriend(error)
 {
 	let errorKey;
-	console.log("Error: " + error);
 	if (error == '"You are already friends with this user."')
 		errorKey = "friends.error-already-friend";
 	else if (error == '"You cannot add yourself as a friend."')
@@ -74,19 +73,16 @@ function addFriendEvent() {
 			}
 
 			if (!response.ok) {
-				console.log("Error: " + JSON.stringify(data))
 				throw new Error(JSON.stringify(data.detail) || 'An error occurred');
 			}
 			if (data.detail)
 			{
 				addFriendToHTML(data.friend);
 				displayAlert("friends.add-success", "success");
-				console.log("Data: " + JSON.stringify(data));
 			}
 			else
 			{
 				displayAlert("friends.add-error", "danger");
-				console.log(data.message);
 			}
 		} catch (error) {
 			if (error.message === '"Invalid token."') {
@@ -99,7 +95,6 @@ function addFriendEvent() {
 			}
 			else
 				displayAlert(getErrorKeyAddFriend(error.message), "danger");
-			console.log(error.message)
 		}
 	})
 }

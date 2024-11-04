@@ -44,7 +44,6 @@ async function fetchFriends() {
 		}
 
 		if (!response.ok) {
-			console.log("Error: " + JSON.stringify(data))
 			throw new Error(JSON.stringify(data.detail) || 'An error occurred');
 		}
 		if (data)
@@ -55,7 +54,6 @@ async function fetchFriends() {
 		{
 			removeAlert();
 			displayAlert("friends.error-load", "danger");
-			console.log(data.message);
 		}
 	} catch (error) {
 		removeAlert();
@@ -69,7 +67,6 @@ async function fetchFriends() {
 		}
 		else
 			displayAlert("friends.error-load", "danger");
-		console.log(error.message)
 	}
 }
 

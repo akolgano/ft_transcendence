@@ -169,7 +169,6 @@ async function fetchHistory(urlArgument) {
 				content.appendChild(errorTag)
 				translateNewContent(content)
 			}
-			console.log("Error: " + JSON.stringify(data))
 			throw new Error(JSON.stringify(data.detail) || 'An error occurred');
 		}
 		if (data)
@@ -180,7 +179,6 @@ async function fetchHistory(urlArgument) {
 		{
 			removeAlert();
 			displayAlert("profile.error-load", "danger");
-			console.log(data.message);
 		}
 	} catch (error) {
 		removeAlert();

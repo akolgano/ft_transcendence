@@ -28,17 +28,16 @@ async function sendSimpleGameData(opponent, scoreUser, scoreGuest, duration, pro
 		}
 
 		if (!response.ok) {
-			console.log("Error: " + JSON.stringify(data))
 			throw new Error(JSON.stringify(data.detail) || 'An error occurred');
 		}
-		if (data.detail)
-		{
-			console.log("Data saved successfully: " + JSON.stringify(data));
-		}
-		else
-		{
-			console.log("Error saving data: " + data.message);
-		}
+		// if (data.detail)
+		// {
+		// 	console.log("Data saved successfully: " + JSON.stringify(data));
+		// }
+		// else
+		// {
+		// 	console.log("Error saving data: " + data.message);
+		// }
 	} catch (error) {
 		if (error.message === '"Invalid token."') {
 			localStorage.removeItem("user")
@@ -48,7 +47,6 @@ async function sendSimpleGameData(opponent, scoreUser, scoreGuest, duration, pro
 			urlRoute({ target: { href: '/login' }, preventDefault: () => {} });
 			displayAlert("auth.login-again", "danger");
 		}
-		console.log(error.message)
 	}
 }
 

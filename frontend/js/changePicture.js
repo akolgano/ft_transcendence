@@ -31,7 +31,6 @@
 				throw new Error("File too large");
 			}
 			if (!response.ok) {
-				console.log("Data json: " + JSON.stringify(data))
 				throw new Error(data.error || 'An error occurred');
 			}
 			if (data.user)
@@ -46,7 +45,6 @@
 			else
 			{
 				displayAlert("account.change-pic-error", "danger");
-				console.log(data.message);
 			}
 		} catch (error) {
 			if (error.message === '"Invalid token."') {
@@ -63,7 +61,6 @@
 				displayAlert("account.change-pic-too-large", "danger");
 			else
 				displayAlert("account.change-pic-error", "danger");
-			console.log(error.message)
 		}
 	})
 }

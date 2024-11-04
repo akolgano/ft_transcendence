@@ -37,7 +37,6 @@
 			}
 
 			if (!response.ok) {
-				// console.log("Data json: " + JSON.stringify(data))
 				addErrorToHTML(data);
 				formErrors = 1;
 				throw new Error(JSON.stringify(data) || 'An error occurred');
@@ -52,7 +51,6 @@
 			else
 			{
 				displayAlert("account.change-password-error", "danger");
-				console.log(data.message);
 			}
 		} catch (error) {
 			if (error.message === '"Invalid token."') {
@@ -65,7 +63,6 @@
 			}
 			else if (!formErrors)
 				displayAlert("account.change-password-error", "danger");
-			console.log(error.message)
 		}
 	})
 }

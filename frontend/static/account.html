@@ -26,17 +26,21 @@
 
 			<div class="account-password mb-3 set-password">
 				<form id="changePassword">
+					<div class="visually-hidden">
+						<label for="username" class="form-label" data-i18n="auth.username">Username</label>
+						<input type="text" id="username-hidden" name="username" autocomplete="username">
+					</div>
 					<p data-i18n="auth.password"></p>
 					<p data-i18n="auth.old-password" class="mb-0 mt-3"></p>
 					<input type="password" id="old-password" name="old-password" class="form-control w-50" required autocomplete="new-password">
 					<a href="/account" class="toggle-password text-reset" data-password-field="old-password" data-i18n="auth.password-show"></a>
 					<div class="old-password-error form-error password-reset-error"></div>
 					<p data-i18n="auth.new-password" class="mb-0 mt-3"></p>
-					<input type="password" id="password" name="password" class="form-control w-50" required>
+					<input type="password" id="password" name="password" class="form-control w-50" required autocomplete="new-password">
 					<a href="/account" class="toggle-password text-reset" data-password-field="password" data-i18n="auth.password-show"></a>
 					<div class="password-error form-error password-reset-error"></div>
 					<p data-i18n="auth.repeat-password" class="mb-0 mt-3"></p>
-					<input type="password" id="confirm-password" name="confirm-password" class="form-control w-50 d-inline-block v-align" required>
+					<input type="password" id="confirm-password" name="confirm-password" class="form-control w-50 d-inline-block v-align" required autocomplete="new-password">
 					<button type="submit" class="btn btn-success" data-i18n="account.update"></button><br>
 					<a href="/account" class="toggle-password text-reset" data-password-field="confirm-password" data-i18n="auth.password-show"></a>
 					<div class="repeat-password-error form-error password-reset-error"></div>
