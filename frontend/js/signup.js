@@ -34,7 +34,6 @@ async function addEventSignUpForm(e) {
 		}
 
 		if (!response.ok) {
-			// console.log("Data from back: " + JSON.stringify(data));
 			addErrorToHTML(data);
 			formErrors = 1;
 			throw new Error(JSON.stringify(data) || 'An error occurred');
@@ -49,7 +48,6 @@ async function addEventSignUpForm(e) {
 			displayAlert("auth.error", "danger");
 		}
 	} catch (error) {
-		console.log(error.message)
 		if (!formErrors)
 		{
 			if (error instanceof TypeError && error.message.includes('Failed to fetch'))
@@ -64,7 +62,6 @@ async function addEventSignUpForm(e) {
 }
 
 function signUpScript() {
-	console.log("SCRIPT SIGN UP")
 
 	const signupForm = document.getElementById("signupForm");
 

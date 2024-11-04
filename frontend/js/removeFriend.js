@@ -50,18 +50,15 @@ async function addEventRemoveButton(e) {
 		}
 
 		if (!response.ok) {
-			console.log("Error: " + JSON.stringify(data))
 			throw new Error(data.detail || 'An error occurred');
 		}
 		if (data.detail)
 		{
 			removeFriendFromHTML(username);
-			console.log("Data: " + JSON.stringify(data));
 		}
 		else
 		{
 			displayAlert("friends.remove-error", "danger");
-			console.log(data.message);
 		}
 	} catch (error) {
 		if (error.message === '"Invalid token."') {
@@ -74,7 +71,6 @@ async function addEventRemoveButton(e) {
 		}
 		else
 			displayAlert(getErrorKeyRemoveFriend(error.message), "danger");
-		console.log(error.message)
 	}
 
 }

@@ -27,7 +27,6 @@ async function login(e) {
 		}
 		if (data.token)
 		{
-			console.log("User: " + JSON.stringify(data.user));
 			data.user.username = sanitize(data.user.username)
 			data.user.email = sanitize(data.user.email)
 			data.user.profile_picture = sanitize_picture(data.user.profile_picture)

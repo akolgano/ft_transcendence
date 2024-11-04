@@ -26,12 +26,10 @@ async function handleLogout(e) {
 		}
 
 		if (!response.ok) {
-			console.log("Error: " + JSON.stringify(data))
 			throw new Error(JSON.stringify(data.detail) || 'An error occurred');
 		}
 		if (data)
 		{
-			console.log("Data: " + JSON.stringify(data));
 			displayAlert("auth.logout-success", "success");
 
 			localStorage.removeItem("user")
@@ -48,7 +46,6 @@ async function handleLogout(e) {
 		else
 		{
 			displayAlert("auth.logout-error", "danger");
-			console.log(data.message);
 		}
 	} catch (error) {
 		if (error.message === '"Invalid token."') {
@@ -61,7 +58,6 @@ async function handleLogout(e) {
 		}
 		else
 			displayAlert("auth.logout-error", "danger");
-		console.log(error.message)
 	}
 }
 

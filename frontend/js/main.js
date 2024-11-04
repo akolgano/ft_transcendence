@@ -159,7 +159,6 @@ function getTranslation(message) {
 }
 
 function addErrorToHTML(data) {
-	console.log("IN addErrorToHTML()")
 	for (const key in data)
 	{
 		let errorClass;
@@ -171,7 +170,6 @@ function addErrorToHTML(data) {
 		{
 			removeAlert();
 			displayAlert("error-fetch", "danger");
-			console.log(data)
 			return ;
 		}
 		else

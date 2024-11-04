@@ -38,7 +38,6 @@
 			}
 
 			if (!response.ok) {
-				// console.log("Data json: " + JSON.stringify(data))
 				throw new Error(data.error || 'An error occurred');
 			}
 			if (data.detail)
@@ -53,12 +52,10 @@
 				let user = JSON.parse(localStorage.getItem('user'));
 				user.language = selectedLanguage;
 				localStorage.setItem("user", JSON.stringify(user));
-				console.log("USER: " + user);
 			}
 			else
 			{
 				displayAlert("account.change-language-error", "danger");
-				console.log(data.message);
 			}
 		} catch (error) {
 			if (error.message === '"Invalid token."') {
@@ -75,7 +72,6 @@
 				displayAlert("account.change-language-unsupported", "danger");
 			else
 				displayAlert("account.change-language-error", "danger");
-			console.log(error.message)
 		}
 	})
 }

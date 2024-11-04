@@ -38,7 +38,6 @@
 			}
 
 			if (!response.ok) {
-				console.log("Data json: " + JSON.stringify(data))
 				throw new Error(data.new_username || 'An error occurred');
 			}
 			if (data.detail)
@@ -46,14 +45,12 @@
 				let user = JSON.parse(localStorage.getItem("user"));
 				user.username = new_username;
 				localStorage.setItem("user", JSON.stringify(user));
-				console.log(JSON.parse(localStorage.getItem("user")))
 				document.querySelector(".navbar-username").innerText = `${user.username}!`;
 				displayAlert("account.change-username-success", "success");
 			}
 			else
 			{
 				displayAlert("account.change-username-error", "danger");
-				console.log(data.message);
 			}
 		} catch (error) {
 			if (error.message === '"Invalid token."') {
@@ -70,7 +67,6 @@
 				registrationError("account.change-username-empty", ".username-error")
 			else
 				displayAlert("account.change-username-error", "danger");
-			console.log(error.message)
 		}
 	})
 }

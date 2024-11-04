@@ -63,7 +63,6 @@
 // --------------------------------------------- END GAME -------------------------------------------------
 
 	function stopGame() {
-		console.log("Canceling Animation frame")
 		if (gameLoopId) {
 
 			cancelAnimationFrame(gameLoopId);
@@ -249,7 +248,6 @@
 	function gameSetUp() {
 
 		gameSettings = JSON.parse(localStorage.getItem("gameSettings"))
-		console.log(JSON.parse(localStorage.getItem("gameSettings")))
 		if (!gameSettings)
 		{
 			const content = document.getElementById("content");
@@ -369,7 +367,6 @@ function checkPowerUp() {
 	const difference = (now - powerUpStart) / 1000; // Result in seconds
 	if (difference >= 3)
 	{
-		console.log("Desactivating power up")
 		ball.velocityX = (ball.velocityX > 0 ? oldSpeedX : -oldSpeedX);
 		ball.velocityY = (ball.velocityY > 0 ? oldSpeedY : -oldSpeedY);
 		powerUp = 0
@@ -389,7 +386,6 @@ function handleCollision() {
 			ball.velocityX *= -1;
 		hitLast = true
 		userStillOnline()
-		console.log("Ball velocity: " + ball.velocityX)
 	}
 }
 

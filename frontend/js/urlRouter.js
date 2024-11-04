@@ -158,7 +158,6 @@ function spaHandler(e) {
 
 async function userStillOnline()
 {
-	console.log("User online call")
 	if (!localStorage.getItem("token"))
 		return ;
 
