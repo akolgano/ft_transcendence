@@ -1,48 +1,34 @@
-# How to run
+# Transcendence
+
+This is our final project for 42 Singapore (core curriculum).
+This is a platform where users can play pong.
+
+Here are some of the features we implemented:
+- AI opponent (with the restriction that the AI can only refresh its view of the game once per second and has to replicate human behavior)
+- Game customizations
+- User registration, user profiles, and friends functionality
+- Dashboard to see game statistics
+- Multiple languages (English, French, Spanish)
+- Log management and analysis system using the ELK stack
+
+## How to run
+
+1. Make sure you have docker installed
+2. Run
+   ```
+   docker-compose up --build
+   ```
+3. Go to https://localhost and have fun!
 
 ## Backend
 
-
-```
-docker-compose down
-docker-compose build --no-cache
-docker-compose up
-```
-
-## Migrations
-
-```
-docker exec -it django python3 manage.py makemigrations
-docker exec -it django python3 manage.py migrate
-```
-
-If there were any migrations, you have to stop the container (CONTROL-C) and start it again (docker-compose up).
+The backend was all done by [@akolgano](https://github.com/akolgano)
+The backend is written in Django.
+We also used Docker and ELK.
 
 ## Frontend
 
-```
-Just go to https://localhost
-```
+The frontend was all done by [@barbayjuliette](https://github.com/barbayjuliette), except the dashboard [(@chinwenkai)](https://github.com/chinwenkai).
+The frontend is written in vanilla JavaScript.
+We used a simple library for translations, Chart.js for the dashboard, and Bootstrap for styling. 
 
-Example: https://localhost/login
-
-## Check the database for tests
-
-You can go to https://localhost/api/admin/ to manage the database.
-User and password: admin
-
-## Translations
-When adding some text to the html, add the attribute data-i18n with a key.
-Then add that key to the English dictionary (i18n folder), and I will add the translations later for other languages
-
-Example:
-- HTML:
-```
-<h1 data-i18n="navbar.friends"></h1>
-```
-- In en.json:
-```
-"navbar" : {
-	"friends": "Friends"
-},
-```
